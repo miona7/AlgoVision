@@ -1,0 +1,18 @@
+BasedOnStyle: LLVM
+
+# indentacija
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+AccessModifierOffset: -4
+NamespaceIndentation: All
+
+# otvorena zagrada u istom redu
+BreakBeforeBraces: Attach
+SpaceBeforeCpp11BracedList: true
+
+# obavezne zagrade za if / else / petlje
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
