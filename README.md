@@ -1,4 +1,4 @@
-## Formatiranje koda i provera stila
+#### Formatiranje koda i provera stila
 
 Ovaj projekat koristi **clang-format** i **clang-tidy** za formatiranje i proveru stila koda.
 **Važno:** Uputstvo je prilagođeno Linux-u i Windows-u.
@@ -8,8 +8,8 @@ Ovaj projekat koristi **clang-format** i **clang-tidy** za formatiranje i prover
 ### Linux
 
 # Build projekat i generisanje `compile_commands.json`
-cd /putanja/do/projekta
-cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cd /putanja/do/projekta     
+cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON   
 
 # Omogućiti globbing ako koristite bash
 shopt -s globstar
@@ -25,8 +25,8 @@ clang-tidy Source/**/*.cpp -p build
 ### Windows (Command Prompt ili PowerShell)
 
 # Build projekat i generisanje `compile_commands.json`
-cd C:\putanja\do\projekta
-cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cd C:\putanja\do\projekta    
+cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON    
 
 # Formatiranje svih cpp i h fajlova
 clang-format -i Source\**\*.cpp Headers\**\*.h
@@ -51,21 +51,3 @@ clang-tidy Source\**\*.cpp -p build
 - Bez `compile_commands.json`, clang-tidy neće moći da analizira kod ispravno.
 
 ---
-
-# Pokretanje clang-tidy
-clang-tidy Source/**/*.cpp -p build
-
-**Windows (`format.bat`):**
-@echo off
-
-REM Build sa compile_commands.json
-cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
-REM Formatiranje
-clang-format -i Source\**\*.cpp Headers\**\*.h
-
-REM Pokretanje clang-tidy
-clang-tidy Source\**\*.cpp -p build
-
-- Tim može samo da pokrene skriptu (`./format.sh` ili `format.bat`) i sve se automatski formatira i proverava.
-- Olakšava održavanje istog stila koda za sve članove tima.
