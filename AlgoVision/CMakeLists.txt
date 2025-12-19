@@ -13,11 +13,10 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        src/main.cpp
-        src/mainwindow.cpp
-        src/mainwindow.ui
-        include/mainwindow.h
-
+        Source/main.cpp
+        Source/mainwindow.cpp
+        Headers/mainwindow.h
+        Forms/mainwindow.ui
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
@@ -26,7 +25,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AlgoVision
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        src/mainwindow.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET AlgoVision APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -46,10 +44,14 @@ else()
     endif()
 endif()
 
+set_target_properties(AlgoVision PROPERTIES
+    AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/Forms"
+)
+
 target_link_libraries(AlgoVision PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_include_directories(AlgoVision PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
