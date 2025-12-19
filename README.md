@@ -22,6 +22,7 @@ clang-format -i Source/**/*.cpp Headers/**/*.h
 ### Analiza svih cpp fajlova sa clang-tidy
 clang-tidy Source/**/*.cpp -p build
 
+```
 ---
 
 ## Windows (Command Prompt ili PowerShell)
@@ -53,5 +54,5 @@ clang-tidy Source\**\*.cpp -p build
   - Sve flags koje projekat koristi
 
 - Bez `compile_commands.json`, clang-tidy neće moći da analizira kod ispravno.
-
+```
 ---
