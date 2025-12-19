@@ -13,10 +13,10 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        src/main.cpp
-        src/mainwindow.cpp
-        include/mainwindow.h
-        forms/mainwindow.ui
+        Source/main.cpp
+        Source/mainwindow.cpp
+        Headers/mainwindow.h
+        Forms/mainwindow.ui
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
@@ -44,10 +44,14 @@ else()
     endif()
 endif()
 
+set_target_properties(AlgoVision PROPERTIES
+    AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/Forms"
+)
+
 target_link_libraries(AlgoVision PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_include_directories(AlgoVision PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
