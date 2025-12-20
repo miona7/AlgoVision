@@ -16,7 +16,9 @@ set(PROJECT_SOURCES
         Source/Node.cpp
         Source/main.cpp
         Source/MainWindow.cpp
+        Source/Graph.cpp
         Headers/MainWindow.h
+        Headers/Graph.h
         Headers/Node.h
         Forms/MainWindow.ui
 )
