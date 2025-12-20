@@ -13,13 +13,15 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        Source/Node.cpp
         Source/main.cpp
         Source/MainWindow.cpp
         Source/Graph.cpp
+        Source/Node.cpp
+        Source/Edge.cpp
         Headers/MainWindow.h
         Headers/Graph.h
         Headers/Node.h
+        Headers/Edge.h
         Forms/MainWindow.ui
 )
 
