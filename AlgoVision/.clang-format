@@ -16,3 +16,15 @@ SpaceBeforeCpp11BracedList: true
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
+
+SpaceBeforeParens: Never
+SpaceBeforeRangeBasedForLoopColon: false
+
+SpacesInParentheses: false
+SpaceBeforeParensOptions:
+  AfterControlStatements: false
+  BeforeNonEmptyParentheses: false
+
+BraceWrapping:
+  AfterControlStatement: false
+  BeforeElse: false
