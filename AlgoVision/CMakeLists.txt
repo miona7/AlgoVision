@@ -16,7 +16,7 @@ set(PROJECT_SOURCES
         Source/main.cpp
         Source/MainWindow.cpp
         Headers/MainWindow.h
-        Forms/mainwindow.ui
+        Forms/MainWindow.ui
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
