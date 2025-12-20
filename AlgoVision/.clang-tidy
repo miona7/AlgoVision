@@ -1,0 +1,19 @@
+Checks: >
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  hicpp-*,
+  bugprone-*
+
+CheckOptions:
+  # m_ prefiksi za clanove klasa
+  - key:             cppcoreguidelines-naming.MemberCase
+    value:           CamelCase
+  - key:             cppcoreguidelines-naming.MemberPrefix
+    value:           m_
+
+HeaderFilterRegex: 'Headers/.*'
+FormatStyle: file
+WarningsAsErrors: '*'
