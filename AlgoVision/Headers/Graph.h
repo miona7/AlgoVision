@@ -9,30 +9,27 @@
 
 class Graph {
 public:
-    // Graph();
-    Graph(bool directed = false, bool weighted = false);
-    Graph(const Graph *);
-    ~Graph();
+    Graph();
+    Graph(const Graph&);
+    virtual ~Graph();
 
     void addNode(Node *);
-    void addEdge(Node *, Node *);
-    void addEdge(Node *, Node *, bool d = false, int w = 1);
-
     void removeNode(Node *);
-    void removeEdge(Node *, Node *);
 
-    bool isDirected() const;
-    bool isWeighted() const;
+    virtual void addEdge(Node *, Node *, int w = 1) = 0;
+    virtual void removeEdge(Node *, Node *) = 0;
 
     QVector<Node*> getNodes() const;
     QVector<Edge*> getEdges() const;
 
-private:
-    bool m_directed;
-    bool m_weighted;
+    void setNodes(QVector<Node*>&);
+    void setEdges(QVector<Edge*>&);
+
+    void clear();
+
+protected:
     QVector<Node *> m_nodes;
     QVector<Edge *> m_edges;
-    QSet<Node *> m_nodesIds;
 };
 
 #endif // GRAPH_H

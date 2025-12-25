@@ -14,15 +14,15 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         Source/main.cpp
-        Source/MainWindow.cpp
-        Source/Graph.cpp
-        Source/Node.cpp
-        Source/Edge.cpp
-        Headers/MainWindow.h
-        Headers/Graph.h
-        Headers/Node.h
-        Headers/Edge.h
         Forms/MainWindow.ui
+        Headers/MainWindow.h Source/MainWindow.cpp
+        Headers/Graph.h Source/Graph.cpp
+        Headers/Node.h Source/Node.cpp
+        Headers/Edge.h Source/Edge.cpp
+        Headers/UnweightedUndirectedGraph.h Source/UnweightedUndirectedGraph.cpp
+        Headers/UnweightedDirectedGraph.h Source/UnweightedDirectedGraph.cpp
+        Headers/WeightedUndirectedGraph.h Source/WeightedUndirectedGraph.cpp
+        Headers/WeightedDirectedGraph.h Source/WeightedDirectedGraph.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
@@ -31,9 +31,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AlgoVision
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-
-
-
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET AlgoVision APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
