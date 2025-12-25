@@ -16,13 +16,13 @@ set(PROJECT_SOURCES
         Source/main.cpp
         Forms/MainWindow.ui
         Headers/MainWindow.h Source/MainWindow.cpp
-        Headers/Graph.h Source/Graph.cpp
-        Headers/Node.h Source/Node.cpp
-        Headers/Edge.h Source/Edge.cpp
-        Headers/UnweightedUndirectedGraph.h Source/UnweightedUndirectedGraph.cpp
-        Headers/UnweightedDirectedGraph.h Source/UnweightedDirectedGraph.cpp
-        Headers/WeightedUndirectedGraph.h Source/WeightedUndirectedGraph.cpp
-        Headers/WeightedDirectedGraph.h Source/WeightedDirectedGraph.cpp
+        Headers/Graph/Graph.h Source/Graph/Graph.cpp
+        Headers/Graph/Node.h Source/Graph/Node.cpp
+        Headers/Graph/Edge.h Source/Graph/Edge.cpp
+        Headers/Graph/UnweightedUndirectedGraph.h Source/Graph/UnweightedUndirectedGraph.cpp
+        Headers/Graph/UnweightedDirectedGraph.h Source/Graph/UnweightedDirectedGraph.cpp
+        Headers/Graph/WeightedUndirectedGraph.h Source/Graph/WeightedUndirectedGraph.cpp
+        Headers/Graph/WeightedDirectedGraph.h Source/Graph/WeightedDirectedGraph.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
@@ -58,6 +58,7 @@ target_link_libraries(AlgoVision PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
