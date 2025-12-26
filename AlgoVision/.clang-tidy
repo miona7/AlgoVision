@@ -2,17 +2,24 @@ Checks: >
   clang-analyzer-*,
   cppcoreguidelines-*,
   modernize-*,
+  -modernize-use-trailing-return-type,
   performance-*,
+  -performance-avoid-endl,
   readability-*,
+  -readability-identifier-length,
   hicpp-*,
   bugprone-*
 
 CheckOptions:
-  # m_ prefiksi za clanove klasa
-  - key:             cppcoreguidelines-naming.MemberCase
-    value:           CamelCase
-  - key:             cppcoreguidelines-naming.MemberPrefix
-    value:           m_
+  # kamilja notacija
+  - { key: readability-identifier-naming.ClassCase, value: CamelCase }  
+  
+  - { key: readability-identifier-naming.MemberPrefix, value: m_ } # m_ prefiksi za clanove klasa
+  - { key: readability-identifier-naming.MemberCase, value: camelBack }
+  
+  - { key: readability-identifier-naming.VariableCase, value: camelBack }
+  - { key: readability-identifier-naming.ParameterCase, value: camelBack }
+  - { key: readability-identifier-naming.FunctionCase, value: camelBack }
 
 HeaderFilterRegex: 'Headers/.*'
 FormatStyle: file
