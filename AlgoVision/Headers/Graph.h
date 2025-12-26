@@ -24,6 +24,8 @@ public:
     bool isDirected() const;
     bool isWeighted() const;
 
+    int size() const;
+
 private:
     bool m_directed;
     bool m_weighted;

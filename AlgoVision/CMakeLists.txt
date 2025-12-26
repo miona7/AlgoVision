@@ -22,6 +22,7 @@ set(PROJECT_SOURCES
         Headers/Node.h
         Forms/MainWindow.ui
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
+        Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})

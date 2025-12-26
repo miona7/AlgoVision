@@ -51,3 +51,6 @@ bool Graph::isWeighted() const {
     return m_weighted;
 }
 
+int Graph::size() const {
+    return m_nodes.size();
+}
