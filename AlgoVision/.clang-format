@@ -28,3 +28,14 @@ SpaceBeforeParensOptions:
 BraceWrapping:
   AfterControlStatement: false
   BeforeElse: false
+
+# linije
+ColumnLimit: 100
+
+# pokazivaci i reference uz tip
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# poravnanja
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
