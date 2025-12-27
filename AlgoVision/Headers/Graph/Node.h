@@ -50,4 +50,4 @@ private:
 
 std::ostream &operator<<(std::ostream &, const Node &);
 
-#endif
+#endif // NODE_H

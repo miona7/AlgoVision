@@ -13,16 +13,20 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        Source/Node.cpp
         Source/main.cpp
-        Source/MainWindow.cpp
-        Source/Graph.cpp
-        Headers/MainWindow.h
-        Headers/Graph.h
-        Headers/Node.h
         Forms/MainWindow.ui
+        Headers/MainWindow.h Source/MainWindow.cpp
+
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
+        
+        Headers/Graph/Graph.h Source/Graph/Graph.cpp
+        Headers/Graph/Node.h Source/Graph/Node.cpp
+        Headers/Graph/Edge.h Source/Graph/Edge.cpp
+        Headers/Graph/UnweightedUndirectedGraph.h Source/Graph/UnweightedUndirectedGraph.cpp
+        Headers/Graph/UnweightedDirectedGraph.h Source/Graph/UnweightedDirectedGraph.cpp
+        Headers/Graph/WeightedUndirectedGraph.h Source/Graph/WeightedUndirectedGraph.cpp
+        Headers/Graph/WeightedDirectedGraph.h Source/Graph/WeightedDirectedGraph.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
@@ -31,9 +35,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AlgoVision
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-
-
-
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET AlgoVision APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -61,8 +62,8 @@ target_link_libraries(AlgoVision PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers
-
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Algorithm
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
