@@ -2,37 +2,40 @@
 
 // Graph::Graph() {}
 
-Graph::Graph(bool directed, bool weighted) : m_directed(directed), m_weighted(weighted) {}
+Graph::Graph(bool directed, bool weighted)
+    : m_directed(directed), m_weighted(weighted) {
+}
 
-Graph::Graph(const Graph* g) : Graph(g->isDirected(), g->isWeighted()) {}
+Graph::Graph(const Graph *g) : Graph(g->isDirected(), g->isWeighted()) {
+}
 
 Graph::~Graph() {
-    for(auto n : m_nodes) {
+    for(auto n: m_nodes) {
         delete n;
     }
 
-    for(auto e : m_edges) {
+    for(auto e: m_edges) {
         delete e;
     }
 }
 
-void Graph::addNode(Node* n) {
+void Graph::addNode(Node *n) {
     m_nodes.append(n);
 }
 
-void Graph::addEdge(Node* u, Node* v) {
+void Graph::addEdge(Node *u, Node *v) {
     m_edges.append(new Edge(u, v));
 }
 
-void Graph::addEdge(Node* u, Node* v, int w) {
+void Graph::addEdge(Node *u, Node *v, int w) {
     m_edges.append(new Edge(u, v, w));
 }
 
-void Graph::removeNode(Node* n) {
+void Graph::removeNode(Node *n) {
     if(n == nullptr) {
         return;
     }
-    for(auto it = m_nodes.begin(); it != m_nodes.end(); ) {
+    for(auto it = m_nodes.begin(); it != m_nodes.end();) {
         if(*it == n) {
             it = m_nodes.erase(it);
         } else {
