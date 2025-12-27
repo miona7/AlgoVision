@@ -19,6 +19,8 @@ private:
     QAction* m_saveImageAction;
     QAction* m_changeThemeAction;
     QAction* m_helpAction;
+
+    void setStyle();
 };
 
 #endif //MENUTOOLBAR

@@ -15,4 +15,12 @@ MenuToolBar::MenuToolBar(QWidget* parent)
     addAction(m_saveImageAction);
     addAction(m_changeThemeAction);
     addAction(m_helpAction);
+
+    setStyle();
+}
+
+void MenuToolBar::setStyle() {
+    setIconSize(QSize(64, 64));
+    QString style = QString("QToolButton {width: %1px; height: %2px;}").arg(90).arg(90);
+    setStyleSheet(style);
 }
