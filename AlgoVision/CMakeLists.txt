@@ -16,6 +16,10 @@ set(PROJECT_SOURCES
         Source/main.cpp
         Forms/MainWindow.ui
         Headers/MainWindow.h Source/MainWindow.cpp
+
+        Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
+        Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
+        
         Headers/Graph/Graph.h Source/Graph/Graph.cpp
         Headers/Graph/Node.h Source/Graph/Node.cpp
         Headers/Graph/Edge.h Source/Graph/Edge.cpp
@@ -58,6 +62,7 @@ target_link_libraries(AlgoVision PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
 )
 
