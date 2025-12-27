@@ -16,6 +16,7 @@ set(PROJECT_SOURCES
         Source/main.cpp
         Forms/MainWindow.ui
         Headers/MainWindow.h Source/MainWindow.cpp
+        Headers/UI/AppConstants.h
         Headers/Graph/Graph.h Source/Graph/Graph.cpp
         Headers/Graph/Node.h Source/Graph/Node.cpp
         Headers/Graph/Edge.h Source/Graph/Edge.cpp
