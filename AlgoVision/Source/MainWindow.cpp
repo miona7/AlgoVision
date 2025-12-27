@@ -8,6 +8,10 @@
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), m_ui(new Ui::MainWindow) {
     m_ui->setupUi(this);
 
+    this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
+    this->setMinimumWidth(AppConstants::windowMinWidth);
+    this->setMinimumHeight(AppConstants::windowMinHeight);
+    this->resize(QSize(AppConstants::windowWidth, AppConstants::windowHeight));
 
     QWidget* startPage = m_ui->startPage;
     std::cout << "current page: " << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
@@ -44,6 +48,7 @@ void MainWindow::onOpenGraphTriggered()
 void MainWindow::onCreateGraphTriggered()
 {
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
+    this->setWindowTitle(QString::fromLatin1(AppConstants::graphPageDefaultTitle));
     std::cout << "btnCreateGraph clicked: " << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
     /*TODO: logic*/
 }
