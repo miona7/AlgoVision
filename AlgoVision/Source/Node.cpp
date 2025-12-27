@@ -2,12 +2,12 @@
 
 #include <algorithm>
 
-namespace {
-    int g_nextId = 1;
+namespace nodeId {
+    int m_nextId = 0;
 }
 
 int Node::nextId() {
-    return g_nextId++;
+    return nodeId::m_nextId++;
 }
 
 Node::Node()
@@ -102,10 +102,9 @@ void Node::removeNeighbour(Node* node){
 
 std::ostream& operator<<(std::ostream& os, const Node& node)
 {
-    os << "{id = " << node.m_id
-       << ", name = " << node.m_name.toStdString()
-       << ", pos = (" << node.m_position.x() << ", " << node.m_position.y() << ")"
-       << "}"
-       << "\n";
-    return os;
+    return os << "{id = " << node.m_id
+              << ", name = " << node.m_name.toStdString()
+              << ", pos = (" << node.m_position.x() << ", " << node.m_position.y() << ")"
+              << "}"
+              << std::endl;
 }
