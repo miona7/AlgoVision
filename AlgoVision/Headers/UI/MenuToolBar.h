@@ -21,6 +21,7 @@ private:
     QAction* m_helpAction;
 
     void setStyle();
+    void setOptionShortcuts();
 };
 
 #endif //MENUTOOLBAR
