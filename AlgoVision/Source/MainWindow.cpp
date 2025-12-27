@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "UI/AppConstants.h"
+#include "UI/MenuToolBar.h"
 
 #include <iostream>
 #include <QPushButton>
@@ -38,17 +39,21 @@ MainWindow::~MainWindow() {
     delete m_ui;
 }
 
-void MainWindow::onOpenGraphTriggered()
-{
+void MainWindow::onOpenGraphTriggered() {
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     std::cout << "btnOpenGraph clicked: " << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
-    /*TODO: logic*/
+
+    auto* menuToolBar = new MenuToolBar(this);
+    menuToolBar->setMovable(false);
+    addToolBar(Qt::TopToolBarArea, menuToolBar);
 }
 
-void MainWindow::onCreateGraphTriggered()
-{
+void MainWindow::onCreateGraphTriggered() {
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     this->setWindowTitle(QString::fromLatin1(AppConstants::graphPageDefaultTitle));
     std::cout << "btnCreateGraph clicked: " << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
-    /*TODO: logic*/
+
+    auto* menuToolBar = new MenuToolBar(this);
+    menuToolBar->setMovable(false);
+    addToolBar(Qt::TopToolBarArea, menuToolBar);
 }
