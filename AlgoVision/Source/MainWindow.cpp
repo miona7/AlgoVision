@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include "UI/AppConstants.h"
 
 #include <iostream>
 #include <QPushButton>
@@ -13,16 +14,16 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), m_ui(new Ui::Main
 
     auto* startLayout = new QHBoxLayout(startPage);
     startLayout->setAlignment(Qt::AlignCenter);
-    startLayout->setSpacing(24);
+    startLayout->setSpacing(AppConstants::btnSpacing);
 
     auto* btnOpenGraph = new QPushButton("open graph", startPage);
     btnOpenGraph->setObjectName("newOpenGraph");
-    btnOpenGraph->setFixedSize(QSize(100, 100));
+    btnOpenGraph->setFixedSize(QSize(AppConstants::btnSize, AppConstants::btnSize));
     startLayout->addWidget(btnOpenGraph);
 
     auto* btnCreateGraph = new QPushButton("create graph", startPage);
     btnCreateGraph->setObjectName("newCreateGraph");
-    btnCreateGraph->setFixedSize(QSize(100, 100));
+    btnCreateGraph->setFixedSize(QSize(AppConstants::btnSize, AppConstants::btnSize));
     startLayout->addWidget(btnCreateGraph);
 
     connect(btnOpenGraph, &QPushButton::clicked, this, &MainWindow::onOpenGraphTriggered);
