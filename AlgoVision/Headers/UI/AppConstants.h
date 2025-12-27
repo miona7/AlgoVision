@@ -13,6 +13,10 @@ namespace AppConstants {
     constexpr int btnSpacing = 24;
     constexpr auto startPageTitle = "AlgoVision";
 
+    // menubar element's attributes
+    constexpr int optionBtnSize = 90;
+    constexpr int optionIconSize = 64;
+
     // graph page element's attributes
     constexpr auto graphPageDefaultTitle = "Untilted";
 }

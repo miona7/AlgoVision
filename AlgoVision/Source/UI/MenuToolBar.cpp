@@ -1,5 +1,5 @@
 #include "../Headers/UI/MenuToolBar.h"
-
+#include "../Headers/UI/AppConstants.h"
 
 MenuToolBar::MenuToolBar(QWidget* parent)
     : QToolBar{parent},
@@ -21,8 +21,10 @@ MenuToolBar::MenuToolBar(QWidget* parent)
 }
 
 void MenuToolBar::setStyle() {
-    setIconSize(QSize(64, 64));
-    QString style = QString("QToolButton {width: %1px; height: %2px;}").arg(90).arg(90);
+    setIconSize(QSize(AppConstants::optionIconSize, AppConstants::optionIconSize));
+    QString style = QString("QToolButton {width: %1px; height: %2px;}")
+                        .arg(AppConstants::optionBtnSize)
+                        .arg(AppConstants::optionBtnSize);
     setStyleSheet(style);
 }
 
