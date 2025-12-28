@@ -14,7 +14,8 @@ void UnweightedUndirectedGraph::removeEdge(Node* u, Node* v) {
     }
     for(auto it = m_edges.begin(); it != m_edges.end();) {
         Edge* e = *it;
-        if((e->startNode() == u && e->endNode() == v) || (e->startNode() == v && e->endNode() == u)) {
+        if((e->startNode() == u && e->endNode() == v) ||
+           (e->startNode() == v && e->endNode() == u)) {
             delete e;
             it = m_edges.erase(it);
         } else {

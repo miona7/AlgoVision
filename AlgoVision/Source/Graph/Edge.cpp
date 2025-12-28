@@ -1,11 +1,10 @@
 #include "Edge.h"
 
-Edge::Edge(Node *u, Node *v, bool directed, int weight)
+Edge::Edge(Node* u, Node* v, bool directed, int weight)
     : m_connectedNodes({u, v}), m_directed(directed), m_weight(weight) {
 }
 
-Edge::Edge(const Edge &e)
-    : Edge(e.startNode(), e.endNode(), e.isDirected(), e.getWeight()) {
+Edge::Edge(const Edge& e) : Edge(e.startNode(), e.endNode(), e.isDirected(), e.getWeight()) {
 }
 
 Edge::~Edge() = default;
@@ -30,7 +29,7 @@ void Edge::setWeight(int w) {
     m_weight = w;
 }
 
-std::ostream &operator<<(std::ostream & s, const Edge &e) {
+std::ostream& operator<<(std::ostream& s, const Edge& e) {
     return s << "Edge from " << e.startNode()->getName().toStdString() << " to "
-            << e.endNode()->getName().toStdString() << ", weight = " << e.getWeight() << std::endl;
+             << e.endNode()->getName().toStdString() << ", weight = " << e.getWeight() << std::endl;
 }

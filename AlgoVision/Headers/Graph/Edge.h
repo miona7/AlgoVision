@@ -6,25 +6,25 @@
 
 class Edge {
 public:
-    Edge(Node *, Node *, bool directed = false, int weight = 1);
-    Edge(const Edge &);
+    Edge(Node*, Node*, bool directed = false, int weight = 1);
+    Edge(const Edge&);
     ~Edge();
 
-    bool isDirected() const;
-    int getWeight() const;
-    Node *startNode() const;
-    Node *endNode() const;
+    bool  isDirected() const;
+    int   getWeight() const;
+    Node* startNode() const;
+    Node* endNode() const;
 
     void setWeight(int);
 
-    friend std::ostream &operator<<(std::ostream &, const Edge &);
+    friend std::ostream& operator<<(std::ostream&, const Edge&);
 
 private:
-    bool m_directed;
-    int m_weight;
-    std::pair<Node *, Node *> m_connectedNodes;
+    bool                    m_directed;
+    int                     m_weight;
+    std::pair<Node*, Node*> m_connectedNodes;
 };
 
-std::ostream &operator<<(std::ostream &, const Edge &);
+std::ostream& operator<<(std::ostream&, const Edge&);
 
 #endif // EDGE_H
