@@ -1,7 +1,5 @@
 #include "DFS.h"
 
-#include "Node.h"
-
 bool DFS::checkConditions() const {
     if(m_graph == nullptr) {
         return false;
@@ -11,7 +9,7 @@ bool DFS::checkConditions() const {
         return false;
     }
 
-    for(const auto& node : m_graph->getNodes()) {
+    for(const auto& node: m_graph->getNodes()) {
         if(node == nullptr) {
             return false;
         }

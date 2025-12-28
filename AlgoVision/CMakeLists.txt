@@ -16,9 +16,6 @@ set(PROJECT_SOURCES
         Source/main.cpp
         Forms/MainWindow.ui
         Headers/MainWindow.h Source/MainWindow.cpp
-
-        Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
-        Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
         
         Headers/Graph/Graph.h Source/Graph/Graph.cpp
         Headers/Graph/Node.h Source/Graph/Node.cpp
@@ -27,6 +24,10 @@ set(PROJECT_SOURCES
         Headers/Graph/UnweightedDirectedGraph.h Source/Graph/UnweightedDirectedGraph.cpp
         Headers/Graph/WeightedUndirectedGraph.h Source/Graph/WeightedUndirectedGraph.cpp
         Headers/Graph/WeightedDirectedGraph.h Source/Graph/WeightedDirectedGraph.cpp
+
+        Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
+        Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
+        Headers/Algorithm/Tarjan.h Source/Algorithm/Tarjan.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
