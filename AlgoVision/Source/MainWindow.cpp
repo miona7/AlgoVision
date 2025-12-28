@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "UI/AppConstants.h"
-#include "UI/MenuToolBar.h"
+#include "AppConstants.h"
+#include "MenuToolBar.h"
 
 #include <iostream>
 #include <QPushButton>

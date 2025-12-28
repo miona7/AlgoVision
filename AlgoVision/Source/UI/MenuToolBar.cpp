@@ -1,5 +1,5 @@
-#include "../Headers/UI/MenuToolBar.h"
-#include "../Headers/UI/AppConstants.h"
+#include "MenuToolBar.h"
+#include "AppConstants.h"
 
 MenuToolBar::MenuToolBar(QWidget* parent)
     : QToolBar{parent},

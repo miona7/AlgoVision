@@ -61,6 +61,7 @@ target_link_libraries(AlgoVision PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/UI
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
