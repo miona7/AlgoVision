@@ -5,9 +5,11 @@
 #include "Graph.h"
 #include "Node.h"
 
+// #include <memory>
+
 class Algorithm {
 public:
-    virtual ~Algorithm();
+    virtual ~Algorithm() = default;
 
     virtual bool checkConditions() const = 0;
 
@@ -17,6 +19,9 @@ public:
     // getStates
 
 protected:
+    // std::unique_ptr<Graph> m_graph
+    // std::shared_ptr<Graph> m_graph
+
     Graph* m_graph;
     // states
 };

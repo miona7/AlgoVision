@@ -3,11 +3,14 @@ Checks: >
   cppcoreguidelines-*,
   modernize-*,
   -modernize-use-trailing-return-type,
+  -modernize-use-nodiscard,
   performance-*,
   -performance-avoid-endl,
   readability-*,
   -readability-identifier-length,
+  -readability-named-parameter,
   hicpp-*,
+  -hicpp-named-parameter,
   bugprone-*
 
 CheckOptions:
