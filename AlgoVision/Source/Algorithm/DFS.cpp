@@ -3,10 +3,28 @@
 #include "Node.h"
 
 bool DFS::checkConditions() const {
-    return true; // TODO
+    if(m_graph == nullptr) {
+        return false;
+    }
+
+    if(m_graph->size() == 0) {
+        return false;
+    }
+
+    for(const auto& node : m_graph->getNodes()) {
+        if(node == nullptr) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void DFS::execute(Node* startNode = nullptr, Node* endNode = nullptr) {
+    if(!checkConditions()) {
+        throw std::runtime_error("Graph is not initialized or invalid!");
+    }
+
     int start;
     if(startNode) {
         start = startNode->getId();

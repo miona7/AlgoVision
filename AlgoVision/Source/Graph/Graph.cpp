@@ -23,6 +23,10 @@ Graph::~Graph() {
 }
 
 void Graph::addNode(Node* n) {
+    if(std::find(m_nodes.begin(), m_nodes.end(), n) != m_nodes.end()) {
+        return; // cvor vec postoji
+    }
+
     m_nodes.append(n);
 }
 
@@ -86,4 +90,8 @@ void Graph::clear() {
 
     m_nodes.clear();
     m_edges.clear();
+}
+
+int Graph::size() const {
+    return m_nodes.size();
 }

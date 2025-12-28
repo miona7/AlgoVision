@@ -3,9 +3,13 @@
 
 #include "Algorithm.h"
 
+#include <stdexcept>
+
 class DFS : public Algorithm {
 public:
     bool checkConditions() const override;
+
+    // razmisliti da bude private
     void execute(Node* startNode = nullptr, Node* endNode = nullptr) override;
 
 private:

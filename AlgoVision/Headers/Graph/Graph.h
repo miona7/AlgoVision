@@ -27,6 +27,8 @@ public:
 
     void clear();
 
+    int size() const;
+
 protected:
     QVector<Node*> m_nodes;
     QVector<Edge*> m_edges;

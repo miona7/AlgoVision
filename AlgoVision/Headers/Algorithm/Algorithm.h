@@ -9,7 +9,9 @@ class Algorithm {
 public:
     virtual ~Algorithm();
 
-    virtual bool checkConditions() const                                     = 0;
+    virtual bool checkConditions() const = 0;
+
+    // razmisliti da bude protected
     virtual void execute(Node* startNode = nullptr, Node* endNode = nullptr) = 0;
 
     // getStates
