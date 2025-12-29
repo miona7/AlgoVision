@@ -2,8 +2,8 @@
 #define DIJKSTRA_H
 
 #include <map>
-#include <numeric>
 #include <queue>
+#include <numeric>
 
 #include "Algorithm.h"
 

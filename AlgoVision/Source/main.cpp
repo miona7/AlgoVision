@@ -1,9 +1,5 @@
-#include "Edge.h"
-#include "Graph.h"
-#include "MainWindow.h"
-#include "Node.h"
-
 #include <QApplication>
+
 #include <iostream>
 
 int main(int argc, char* argv[]) {

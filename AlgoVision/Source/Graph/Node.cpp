@@ -1,7 +1,5 @@
 #include "Node.h"
 
-#include <algorithm>
-
 Node::Node(unsigned id) : m_id(id) {
 }
 
