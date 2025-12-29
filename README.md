@@ -15,7 +15,7 @@ cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 shopt -s globstar
 
 # Formatiranje svih cpp i h fajlova
-clang-format -i Source/**/*.cpp Headers/**/*.h
+clang-format -i Source/**/*.cpp Headers/**/*.h Tests/**/*.cpp
 
 # Analiza svih cpp fajlova sa clang-tidy
 clang-tidy Source/**/*.cpp -p build
@@ -29,7 +29,7 @@ cd C:\putanja\do\projekta
 cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON    
 
 # Formatiranje svih cpp i h fajlova
-clang-format -i Source\**\*.cpp Headers\**\*.h
+clang-format -i Source\**\*.cpp Headers\**\*.h Tests\**\*.cpp
 
 # Analiza svih cpp fajlova sa clang-tidy
 clang-tidy Source\**\*.cpp -p build
