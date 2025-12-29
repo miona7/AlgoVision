@@ -1,6 +1,7 @@
 #include "Edge.h"
 
-Edge::Edge(const unsigned id, const unsigned idStartNode, const unsigned idEndNode, const int weight)
+Edge::Edge(const unsigned id, const unsigned idStartNode, const unsigned idEndNode,
+           const int weight)
     : m_id(id), m_idStartNode(idStartNode), m_idEndNode(idEndNode), m_weight(weight) {
 }
 
@@ -25,6 +26,6 @@ void Edge::setWeight(int w) {
 }
 
 std::ostream& operator<<(std::ostream& s, const Edge& e) {
-    return s << "Edge {id = " << e.m_id << ", from node " << e.m_idStartNode
-             << " to node " << e.m_idEndNode << ", with weight = " << e.m_weight << "}" << std::endl;
+    return s << "Edge {id = " << e.m_id << ", from node " << e.m_idStartNode << " to node "
+             << e.m_idEndNode << ", with weight = " << e.m_weight << "}" << std::endl;
 }

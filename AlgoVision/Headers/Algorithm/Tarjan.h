@@ -1,11 +1,11 @@
 #ifndef TARJAN_H
 #define TARJAN_H
 
+#include <map>
+#include <memory>
 #include <stack>
 #include <stdexcept>
-#include <map>
 #include <vector>
-#include <memory>
 
 #include "Algorithm.h"
 
@@ -17,12 +17,12 @@ public:
     void execute(const unsigned idStartNode = 0, const unsigned idEndNode = 0) override;
 
 private:
-    int m_arrivalTime; // vreme dolaska
-    std::map<unsigned, int> m_incomingNumbering; // dolazna numeracija
-    std::map<unsigned, int> m_lowLink; // lowlink vrednost
-    std::stack<unsigned> m_tourOrder; // redosled u obilasku
+    int                      m_arrivalTime;       // vreme dolaska
+    std::map<unsigned, int>  m_incomingNumbering; // dolazna numeracija
+    std::map<unsigned, int>  m_lowLink;           // lowlink vrednost
+    std::stack<unsigned>     m_tourOrder;         // redosled u obilasku
     std::map<unsigned, bool> m_onStack;
-    std::map<unsigned, int>  m_components; // id cvora -> komponenta kojoj pripada
+    std::map<unsigned, int>  m_components;        // id cvora -> komponenta kojoj pripada
 
     void tarjan(unsigned, int&);
     void init();

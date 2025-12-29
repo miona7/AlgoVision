@@ -9,7 +9,7 @@ public:
     ~Edge() = default;
 
     unsigned getId() const;
-    int getWeight() const;
+    int      getWeight() const;
     unsigned startNode() const;
     unsigned endNode() const;
 
@@ -18,7 +18,7 @@ public:
     friend std::ostream& operator<<(std::ostream&, const Edge&);
 
 private:
-    int m_weight;
+    int      m_weight;
     unsigned m_id;
     unsigned m_idStartNode;
     unsigned m_idEndNode;

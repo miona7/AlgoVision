@@ -1,16 +1,16 @@
 #include <iostream>
 #include <memory>
 
+#include "DFS.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
-#include "DFS.h"
 
 void testUDG() {
     auto graph = std::make_shared<UnweightedDirectedGraph>();
 
-    for (unsigned i = 1; i <= 5; ++i)
+    for(unsigned i = 1; i <= 5; ++i)
         graph->addNode(i);
 
     graph->addEdge(1, 2);
@@ -22,7 +22,7 @@ void testUDG() {
     DFS dfs(graph);
     try {
         dfs.execute(1);
-    } catch (const std::exception& e) {
+    } catch(const std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
     std::cout << "------------------------------------------" << std::endl;
@@ -31,7 +31,7 @@ void testUDG() {
 void testUUG() {
     auto graph = std::make_shared<UnweightedUndirectedGraph>();
 
-    for (unsigned i = 1; i <= 5; ++i)
+    for(unsigned i = 1; i <= 5; ++i)
         graph->addNode(i);
 
     graph->addEdge(1, 2);
@@ -43,7 +43,7 @@ void testUUG() {
     DFS dfs(graph);
     try {
         dfs.execute(1);
-    } catch (const std::exception& e) {
+    } catch(const std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
     std::cout << "------------------------------------------" << std::endl;
@@ -52,7 +52,7 @@ void testUUG() {
 void testWDG() {
     auto graph = std::make_shared<WeightedDirectedGraph>();
 
-    for (unsigned i = 1; i <= 4; ++i)
+    for(unsigned i = 1; i <= 4; ++i)
         graph->addNode(i);
 
     graph->addEdge(1, 2, 10);
@@ -64,7 +64,7 @@ void testWDG() {
     DFS dfs(graph);
     try {
         dfs.execute(1);
-    } catch (const std::exception& e) {
+    } catch(const std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
     std::cout << "------------------------------------------" << std::endl;
@@ -73,7 +73,7 @@ void testWDG() {
 void testWUG() {
     auto graph = std::make_shared<WeightedUndirectedGraph>();
 
-    for (unsigned i = 1; i <= 4; ++i)
+    for(unsigned i = 1; i <= 4; ++i)
         graph->addNode(i);
 
     graph->addEdge(1, 2, 3);
@@ -85,7 +85,7 @@ void testWUG() {
     DFS dfs(graph);
     try {
         dfs.execute(1);
-    } catch (const std::exception& e) {
+    } catch(const std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
     std::cout << "------------------------------------------" << std::endl;

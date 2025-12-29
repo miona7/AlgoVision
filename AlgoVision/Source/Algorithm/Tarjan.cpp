@@ -15,9 +15,9 @@ void Tarjan::execute(const unsigned idStartNode, const unsigned idEndNode) {
 
     init();
 
-    int component = 0;
-    auto nodes = m_graph->getNodes();
-    for(const auto& [id, node] : nodes) {
+    int  component = 0;
+    auto nodes     = m_graph->getNodes();
+    for(const auto& [id, node]: nodes) {
         if(m_components[id] == -1) {
             tarjan(id, component);
         }
@@ -25,13 +25,13 @@ void Tarjan::execute(const unsigned idStartNode, const unsigned idEndNode) {
 
     std::cout << "Strongly connected components:" << std::endl;
     std::map<int, std::vector<unsigned>> comps;
-    for(const auto& [nodeId, compId] : m_components) {
+    for(const auto& [nodeId, compId]: m_components) {
         comps[compId].emplace_back(nodeId);
     }
 
-    for(const auto& [compId, nodesVec] : comps) {
+    for(const auto& [compId, nodesVec]: comps) {
         std::cout << "Component " << compId << ": ";
-        for (auto id : nodesVec) {
+        for(auto id: nodesVec) {
             std::cout << id << " ";
         }
         std::cout << "\n";
@@ -45,7 +45,7 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
 
     auto adjList = m_graph->getAdjacencyList();
     if(adjList.find(nodeId) != adjList.end()) {
-        for(const auto& [_, neighbourId] : adjList[nodeId]) {
+        for(const auto& [_, neighbourId]: adjList[nodeId]) {
             if(m_incomingNumbering[neighbourId] == -1) {
                 tarjan(neighbourId, component);
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_lowLink[neighbourId]);
@@ -62,7 +62,7 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
             m_tourOrder.pop();
 
             m_components[componentNodeId] = component;
-            m_onStack[componentNodeId] = false;
+            m_onStack[componentNodeId]    = false;
 
             if(componentNodeId == nodeId) {
                 break;
@@ -87,10 +87,10 @@ void Tarjan::init() {
     }
 
     auto nodes = m_graph->getNodes();
-    for(const auto& [id, _] : nodes) {
-        m_incomingNumbering[id] = -1;  // jos nije posecen
-        m_lowLink[id] = -1;            // lowlink vrednost nepoznata
-        m_onStack[id] = false;
-        m_components[id] = -1;         // komponenta nije dodeljena
+    for(const auto& [id, _]: nodes) {
+        m_incomingNumbering[id] = -1; // jos nije posecen
+        m_lowLink[id]           = -1; // lowlink vrednost nepoznata
+        m_onStack[id]           = false;
+        m_components[id]        = -1; // komponenta nije dodeljena
     }
 }

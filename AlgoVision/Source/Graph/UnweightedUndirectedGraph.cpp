@@ -7,7 +7,7 @@ void UnweightedUndirectedGraph::addEdge(const unsigned from, const unsigned to, 
     unsigned edgeId = ++m_numOfEdges;
     m_edges.emplace(edgeId, Edge(edgeId, from, to, w));
     m_adjacencyList[from][edgeId] = to;
-    m_adjacencyList[to][edgeId] = from;
+    m_adjacencyList[to][edgeId]   = from;
 }
 
 void UnweightedUndirectedGraph::removeEdge(const unsigned edgeId) {
@@ -17,7 +17,7 @@ void UnweightedUndirectedGraph::removeEdge(const unsigned edgeId) {
     }
 
     unsigned from = it->second.startNode();
-    unsigned to = it->second.endNode();
+    unsigned to   = it->second.endNode();
 
     m_adjacencyList[from].erase(edgeId);
     m_adjacencyList[to].erase(edgeId);

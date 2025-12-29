@@ -1,16 +1,17 @@
 #include <iostream>
 #include <memory>
 
+#include "Dijkstra.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
-#include "Dijkstra.h"
 
 void testUDG() {
 
     auto udg = std::make_shared<UnweightedDirectedGraph>();
-    for(unsigned i = 1; i <= 5; ++i) udg->addNode(i);
+    for(unsigned i = 1; i <= 5; ++i)
+        udg->addNode(i);
     udg->addEdge(1, 2);
     udg->addEdge(1, 3);
     udg->addEdge(2, 4);
@@ -29,7 +30,8 @@ void testUDG() {
 
 void testUUG() {
     auto uug = std::make_shared<UnweightedUndirectedGraph>();
-    for(unsigned i = 1; i <= 5; ++i) uug->addNode(i);
+    for(unsigned i = 1; i <= 5; ++i)
+        uug->addNode(i);
     uug->addEdge(1, 2);
     uug->addEdge(1, 3);
     uug->addEdge(2, 4);
@@ -48,7 +50,8 @@ void testUUG() {
 
 void testWDG() {
     auto wdg = std::make_shared<WeightedDirectedGraph>();
-    for(unsigned i = 1; i <= 6; ++i) wdg->addNode(i);
+    for(unsigned i = 1; i <= 6; ++i)
+        wdg->addNode(i);
     wdg->addEdge(1, 2, 2);
     wdg->addEdge(1, 3, 5);
     wdg->addEdge(2, 4, 1);
@@ -68,7 +71,8 @@ void testWDG() {
 
 void testWUG() {
     auto wug = std::make_shared<WeightedUndirectedGraph>();
-    for(unsigned i = 1; i <= 5; ++i) wug->addNode(i);
+    for(unsigned i = 1; i <= 5; ++i)
+        wug->addNode(i);
     wug->addEdge(1, 2, 2);
     wug->addEdge(1, 3, 4);
     wug->addEdge(2, 4, 1);

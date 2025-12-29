@@ -3,9 +3,9 @@
 
 #include <memory>
 
+#include "Edge.h"
 #include "Graph.h"
 #include "Node.h"
-#include "Edge.h"
 
 class Algorithm {
 public:

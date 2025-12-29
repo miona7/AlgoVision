@@ -1,8 +1,8 @@
 #ifndef DFS_H
 #define DFS_H
 
-#include <stdexcept>
 #include <map>
+#include <stdexcept>
 
 #include "Algorithm.h"
 

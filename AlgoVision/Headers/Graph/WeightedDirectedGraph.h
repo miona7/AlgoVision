@@ -5,7 +5,7 @@
 
 class WeightedDirectedGraph : public Graph {
 public:
-    WeightedDirectedGraph() = default;
+    WeightedDirectedGraph()  = default;
     ~WeightedDirectedGraph() = default;
 
     void addEdge(const unsigned, const unsigned, const int w) override;

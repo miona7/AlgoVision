@@ -1,9 +1,9 @@
 #include <iostream>
 #include <memory>
 
-#include "WeightedDirectedGraph.h"
-#include "UnweightedDirectedGraph.h"
 #include "Tarjan.h"
+#include "UnweightedDirectedGraph.h"
+#include "WeightedDirectedGraph.h"
 
 void testUDG() {
     auto udg = std::make_shared<UnweightedDirectedGraph>();
@@ -21,7 +21,7 @@ void testUDG() {
     Tarjan tarjan(udg);
     try {
         tarjan.execute();
-    } catch (const std::exception& e) {
+    } catch(const std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
     std::cout << "------------------------------------------" << std::endl;
@@ -45,7 +45,7 @@ void testWDG() {
     Tarjan tarjan(wdg);
     try {
         tarjan.execute();
-    } catch (const std::exception& e) {
+    } catch(const std::exception& e) {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
     std::cout << "------------------------------------------" << std::endl;

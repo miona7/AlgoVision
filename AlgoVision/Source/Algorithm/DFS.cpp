@@ -19,7 +19,7 @@ void DFS::execute(const unsigned idStartNode, const unsigned idEndNode) {
     }
 
     std::map<unsigned, bool> visited;
-    for (const auto& [id, node] : nodes) {
+    for(const auto& [id, node]: nodes) {
         visited[id] = false;
     }
 
@@ -37,7 +37,7 @@ void DFS::dfs(unsigned nodeId, std::map<unsigned, bool>& visited) {
 
     auto adjList = m_graph->getAdjacencyList();
     if(adjList.find(nodeId) != adjList.end()) {
-        for(const auto& [_, neighbourId] : adjList[nodeId]) {
+        for(const auto& [_, neighbourId]: adjList[nodeId]) {
             if(!visited[neighbourId]) {
                 dfs(neighbourId, visited);
             }

@@ -15,12 +15,12 @@ void Graph::removeNode(const unsigned id) {
     }
 
     // ukloni sve grane koje izlaze iz cvora
-    for (const auto& [edgeId, _] : m_adjacencyList[id]) {
+    for(const auto& [edgeId, _]: m_adjacencyList[id]) {
         removeEdge(edgeId);
     }
 
     // ukloni sve grane koje ulaze u cvor
-    for (auto& [nodeId, neighbors] : m_adjacencyList) {
+    for(auto& [nodeId, neighbors]: m_adjacencyList) {
         neighbors.erase(id);
     }
 
