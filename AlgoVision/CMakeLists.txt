@@ -13,9 +13,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        Source/main.cpp
-        Forms/MainWindow.ui
-        Headers/MainWindow.h Source/MainWindow.cpp
+        # Source/main.cpp
+        Forms/MainWindow.ui Headers/MainWindow.h Source/MainWindow.cpp
         
         Headers/Graph/Graph.h Source/Graph/Graph.cpp
         Headers/Graph/Node.h Source/Graph/Node.cpp
@@ -28,9 +27,11 @@ set(PROJECT_SOURCES
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
         Headers/Algorithm/Tarjan.h Source/Algorithm/Tarjan.cpp
+        Headers/Algorithm/Dijkstra.h Source/Algorithm/Dijkstra.cpp
 
         # Tests/Algorithm/dfsTest.cpp
         # Tests/Algorithm/tarjanTest.cpp
+        Tests/Algorithm/dijkstraTest.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})

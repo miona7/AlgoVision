@@ -4,7 +4,7 @@ Tarjan::Tarjan(std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 bool Tarjan::checkConditions() const {
-    // umsreni graf postoji i ima bar 1 cvor
+    // usmereni graf postoji i ima bar 1 cvor
     return m_graph && !m_graph->getNodes().empty() && m_graph->isDirected();
 }
 
@@ -25,11 +25,11 @@ void Tarjan::execute(const unsigned idStartNode, const unsigned idEndNode) {
 
     std::cout << "Strongly connected components:" << std::endl;
     std::map<int, std::vector<unsigned>> comps;
-    for (const auto& [nodeId, compId] : m_components) {
+    for(const auto& [nodeId, compId] : m_components) {
         comps[compId].emplace_back(nodeId);
     }
 
-    for (const auto& [compId, nodesVec] : comps) {
+    for(const auto& [compId, nodesVec] : comps) {
         std::cout << "Component " << compId << ": ";
         for (auto id : nodesVec) {
             std::cout << id << " ";
@@ -87,7 +87,7 @@ void Tarjan::init() {
     }
 
     auto nodes = m_graph->getNodes();
-    for (const auto& [id, node] : nodes) {
+    for(const auto& [id, _] : nodes) {
         m_incomingNumbering[id] = -1;  // jos nije posecen
         m_lowLink[id] = -1;            // lowlink vrednost nepoznata
         m_onStack[id] = false;
