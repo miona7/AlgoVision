@@ -1,37 +1,35 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <QSet>
 #include <QVector>
+
+#include <vector>
+#include <map>
 
 #include "Edge.h"
 #include "Node.h"
 
 class Graph {
 public:
-    Graph();
-    Graph(const Graph&);
-    virtual ~Graph();
+    Graph() = default;
+    virtual ~Graph() = default;
 
-    void addNode(Node*);
-    void removeNode(Node*);
+    void addNode(const unsigned);
+    void removeNode(const unsigned);
 
-    virtual void addEdge(Node*, Node*, int w = 1) = 0;
-    virtual void removeEdge(Node*, Node*)         = 0;
+    virtual void addEdge(const unsigned, const unsigned, const int w = 1) = 0;
+    virtual void removeEdge(const unsigned) = 0;
 
-    QVector<Node*> getNodes() const;
-    QVector<Edge*> getEdges() const;
-
-    void setNodes(QVector<Node*>&);
-    void setEdges(QVector<Edge*>&);
-
-    void clear();
-
-    int size() const;
+    std::map<unsigned, Node> getNodes() const;
+    std::map<unsigned, Edge> getEdges() const;
 
 protected:
-    QVector<Node*> m_nodes;
-    QVector<Edge*> m_edges;
+    unsigned m_numOfNodes = 0;
+    unsigned m_numOfEdges = 0;
+    std::map<unsigned, std::map<unsigned, unsigned>> m_adjacencyList;
+
+    std::map<unsigned, Node> m_nodes;
+    std::map<unsigned, Edge> m_edges;
 };
 
 #endif // GRAPH_H

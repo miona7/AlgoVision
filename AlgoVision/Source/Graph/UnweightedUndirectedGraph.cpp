@@ -1,25 +1,27 @@
 #include "UnweightedUndirectedGraph.h"
 
-void UnweightedUndirectedGraph::addEdge(Node* u, Node* v, int w) {
-    if(u == nullptr || v == nullptr) {
+void UnweightedUndirectedGraph::addEdge(const unsigned from, const unsigned to, const int w) {
+    if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
         return;
     }
-
-    m_edges.push_back(new Edge(u, v, false, w));
+    unsigned edgeId = ++m_numOfEdges;
+    m_edges[edgeId] = Edge(edgeId, from, to, w);
+    m_adjacencyList[from][edgeId] = to;
+    m_adjacencyList[to][edgeId] = from;
 }
 
-void UnweightedUndirectedGraph::removeEdge(Node* u, Node* v) {
-    if(u == nullptr || v == nullptr) {
-        return;
+void UnweightedUndirectedGraph::removeEdge(const unsigned edgeId) {
+    auto it = m_edges.find(edgeId);
+    if(it == m_edges.end()) {
+        return; // grana ne postoji
     }
-    for(auto it = m_edges.begin(); it != m_edges.end();) {
-        Edge* e = *it;
-        if((e->startNode() == u && e->endNode() == v) ||
-           (e->startNode() == v && e->endNode() == u)) {
-            delete e;
-            it = m_edges.erase(it);
-        } else {
-            ++it;
-        }
-    }
+
+    unsigned from = it->second.startNode();
+    unsigned to = it->second.endNode();
+
+    m_adjacencyList[from].erase(edgeId);
+    m_adjacencyList[to].erase(edgeId);
+
+    m_edges.erase(edgeId);
+    --m_numOfEdges;
 }

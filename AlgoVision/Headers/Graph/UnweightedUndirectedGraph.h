@@ -4,8 +4,12 @@
 #include "Graph.h"
 
 class UnweightedUndirectedGraph : public Graph {
-    void addEdge(Node*, Node*, int w = 1) override;
-    void removeEdge(Node*, Node*) override;
+public:
+    UnweightedUndirectedGraph() = default;
+    ~UnweightedUndirectedGraph() = default;
+
+    void addEdge(const unsigned, const unsigned, const int w = 1) override;
+    void removeEdge(const unsigned) override;
 };
 
 #endif // UUG_H
