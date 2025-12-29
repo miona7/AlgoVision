@@ -10,6 +10,7 @@ public:
 
     void addEdge(const unsigned, const unsigned, const int w) override;
     void removeEdge(const unsigned) override;
+    bool isDirected() const override;
 };
 
 #endif // WUG_H

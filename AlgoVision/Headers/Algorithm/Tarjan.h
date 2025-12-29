@@ -1,21 +1,26 @@
-#include "Algorithm.h"
-
 #include <stack>
 #include <stdexcept>
+#include <map>
 #include <vector>
+#include <memory>
+
+#include "Algorithm.h"
 
 class Tarjan : public Algorithm {
 public:
+    explicit Tarjan(std::shared_ptr<Graph> g);
+
     bool checkConditions() const override;
-    void execute(Node* startNode = nullptr, Node* endNode = nullptr) override;
+    void execute(const unsigned idStartNode = 0, const unsigned idEndNode = 0) override;
 
 private:
-    int               m_arrivalTime = 1;
-    std::vector<int>  m_incomingNumbering;
-    std::vector<int>  m_lowLink;
-    std::stack<int>   m_tourOrder;
-    std::vector<bool> m_onStack;
-    std::vector<int>  m_components;
+    int m_arrivalTime; // vreme dolaska
+    std::map<unsigned, int> m_incomingNumbering; // dolazna numeracija
+    std::map<unsigned, int> m_lowLink; // lowlink vrednost
+    std::stack<unsigned> m_tourOrder; // redosled u obilasku
+    std::map<unsigned, bool> m_onStack;
+    std::map<unsigned, int>  m_components; // id cvora -> komponenta kojoj pripada
 
-    void tarjan(int, Node*, int&);
+    void tarjan(unsigned, int&);
+    void init();
 };

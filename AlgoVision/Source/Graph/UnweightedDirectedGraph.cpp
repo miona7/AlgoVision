@@ -20,3 +20,7 @@ void UnweightedDirectedGraph::removeEdge(const unsigned edgeId) {
     m_edges.erase(edgeId);
     --m_numOfEdges;
 }
+
+bool UnweightedDirectedGraph::isDirected() const {
+    return true;
+}

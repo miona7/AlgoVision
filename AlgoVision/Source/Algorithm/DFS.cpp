@@ -5,7 +5,7 @@ DFS::DFS(std::shared_ptr<Graph> g) : Algorithm(g) {
 
 bool DFS::checkConditions() const {
     // graf postoji i ima bar 1 cvor
-    return m_graph && m_graph->getNodes().size() > 0;
+    return m_graph && !m_graph->getNodes().empty();
 }
 
 void DFS::execute(const unsigned idStartNode, const unsigned idEndNode) {
@@ -37,7 +37,7 @@ void DFS::dfs(unsigned nodeId, std::map<unsigned, bool>& visited) {
 
     auto adjList = m_graph->getAdjacencyList();
     if(adjList.find(nodeId) != adjList.end()) {
-        for(const auto& [edgeId, neighbourId] : adjList[nodeId]) {
+        for(const auto& [_, neighbourId] : adjList[nodeId]) {
             if(!visited[neighbourId]) {
                 dfs(neighbourId, visited);
             }

@@ -20,6 +20,8 @@ public:
     virtual void addEdge(const unsigned, const unsigned, const int w = 1) = 0;
     virtual void removeEdge(const unsigned) = 0;
 
+    virtual bool isDirected() const = 0;
+
     std::map<unsigned, std::map<unsigned, unsigned>> getAdjacencyList() const;
     std::map<unsigned, Node> getNodes() const;
     std::map<unsigned, Edge> getEdges() const;
