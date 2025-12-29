@@ -1,44 +1,46 @@
 #include "DFS.h"
 
-bool DFS::checkConditions() const {
-    if(m_graph == nullptr) {
-        return false;
-    }
-
-    if(m_graph->size() == 0) {
-        return false;
-    }
-
-    for(const auto& node: m_graph->getNodes()) {
-        if(node == nullptr) {
-            return false;
-        }
-    }
-
-    return true;
+DFS::DFS(std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void DFS::execute(Node* startNode, Node* endNode) {
+bool DFS::checkConditions() const {
+    // graf postoji i ima bar 1 cvor
+    return m_graph && m_graph->getNodes().size() > 0;
+}
+
+void DFS::execute(const unsigned idStartNode, const unsigned idEndNode) {
     if(!checkConditions()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
 
-    int start = 0;
-    if(startNode != nullptr) {
-        start = startNode->getId();
-    } else {
-        startNode = m_graph->getNodes()[0];
+    auto nodes = m_graph->getNodes();
+    if(nodes.find(idStartNode) == nodes.end()) {
+        throw std::runtime_error("Start node does not exist in graph!");
     }
-    std::vector<bool> visited(m_graph->size(), false);
-    dfs(start, startNode, visited);
+
+    std::map<unsigned, bool> visited;
+    for (const auto& [id, node] : nodes) {
+        visited[id] = false;
+    }
+
+    std::cout << "DFS traversal starting from node " << idStartNode << ":" << std::endl;
+    dfs(idStartNode, visited);
+    std::cout << "DFS finished." << std::endl;
 }
 
-void DFS::dfs(int nodeId, Node* node, std::vector<bool>& visited) {
+void DFS::dfs(unsigned nodeId, std::map<unsigned, bool>& visited) {
+    if(visited[nodeId]) {
+        return;
+    }
     visited[nodeId] = true;
-    for(auto* neighbour: node->getNeighbours()) {
-        int id = neighbour->getId();
-        if(!visited[id]) {
-            dfs(id, neighbour, visited);
+    std::cout << "visiting node with id " << nodeId << std::endl;
+
+    auto adjList = m_graph->getAdjacencyList();
+    if(adjList.find(nodeId) != adjList.end()) {
+        for(const auto& [edgeId, neighbourId] : adjList[nodeId]) {
+            if(!visited[neighbourId]) {
+                dfs(neighbourId, visited);
+            }
         }
     }
     // TODO: ispis kroz spdlog

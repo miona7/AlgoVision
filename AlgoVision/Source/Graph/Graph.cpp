@@ -31,6 +31,10 @@ void Graph::removeNode(const unsigned id) {
     --m_numOfNodes;
 }
 
+std::map<unsigned, std::map<unsigned, unsigned>> Graph::getAdjacencyList() const {
+    return m_adjacencyList;
+}
+
 std::map<unsigned, Node> Graph::getNodes() const {
     return m_nodes;
 }

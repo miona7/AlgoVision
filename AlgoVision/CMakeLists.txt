@@ -27,7 +27,9 @@ set(PROJECT_SOURCES
 
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
-        Headers/Algorithm/Tarjan.h Source/Algorithm/Tarjan.cpp
+        # Headers/Algorithm/Tarjan.h Source/Algorithm/Tarjan.cpp
+
+        # Tests/Algorithm/dfsTest.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
