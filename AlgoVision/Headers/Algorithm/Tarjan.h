@@ -1,3 +1,6 @@
+#ifndef TARJAN_H
+#define TARJAN_H
+
 #include <stack>
 #include <stdexcept>
 #include <map>
@@ -24,3 +27,5 @@ private:
     void tarjan(unsigned, int&);
     void init();
 };
+
+#endif // TARJAN_H
