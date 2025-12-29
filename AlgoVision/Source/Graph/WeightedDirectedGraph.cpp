@@ -5,7 +5,7 @@ void WeightedDirectedGraph::addEdge(const unsigned from, const unsigned to, cons
         return;
     }
     unsigned edgeId = ++m_numOfEdges;
-    m_edges[edgeId] = Edge(edgeId, from, to, w);
+    m_edges.emplace(edgeId, Edge(edgeId, from, to, w));
     m_adjacencyList[from][edgeId] = to;
 }
 

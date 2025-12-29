@@ -1,11 +1,11 @@
 #include "WeightedUndirectedGraph.h"
 
-void WeightedUndirectedGraph::addEdge(const unsigned from, const unsigned to, int w) {
+void WeightedUndirectedGraph::addEdge(const unsigned from, const unsigned to, const int w) {
     if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
         return;
     }
     unsigned edgeId = ++m_numOfEdges;
-    m_edges[edgeId] = Edge(edgeId, from, to, w);
+    m_edges.emplace(edgeId, Edge(edgeId, from, to, w));
     m_adjacencyList[from][edgeId] = to;
     m_adjacencyList[to][edgeId] = from;
 }

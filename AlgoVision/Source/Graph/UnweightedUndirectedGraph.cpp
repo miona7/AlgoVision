@@ -5,7 +5,7 @@ void UnweightedUndirectedGraph::addEdge(const unsigned from, const unsigned to, 
         return;
     }
     unsigned edgeId = ++m_numOfEdges;
-    m_edges[edgeId] = Edge(edgeId, from, to, w);
+    m_edges.emplace(edgeId, Edge(edgeId, from, to, w));
     m_adjacencyList[from][edgeId] = to;
     m_adjacencyList[to][edgeId] = from;
 }

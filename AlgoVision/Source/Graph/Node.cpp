@@ -10,5 +10,5 @@ unsigned Node::getId() const {
 }
 
 std::ostream& operator<<(std::ostream& os, const Node& node) {
-    return os << "Node {id = " << m_id << "}" << std::endl;
+    return os << "Node {id = " << node.m_id << "}" << std::endl;
 }
