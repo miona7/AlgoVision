@@ -10,8 +10,9 @@
 void testUDG() {
     auto graph = std::make_shared<UnweightedDirectedGraph>();
 
-    for(unsigned i = 1; i <= 5; ++i)
+    for(unsigned i = 1; i <= 5; ++i) {
         graph->addNode(i);
+    }
 
     graph->addEdge(1, 2);
     graph->addEdge(1, 3);
@@ -31,8 +32,9 @@ void testUDG() {
 void testUUG() {
     auto graph = std::make_shared<UnweightedUndirectedGraph>();
 
-    for(unsigned i = 1; i <= 5; ++i)
+    for(unsigned i = 1; i <= 5; ++i) {
         graph->addNode(i);
+    }
 
     graph->addEdge(1, 2);
     graph->addEdge(1, 3);
@@ -52,8 +54,9 @@ void testUUG() {
 void testWDG() {
     auto graph = std::make_shared<WeightedDirectedGraph>();
 
-    for(unsigned i = 1; i <= 4; ++i)
+    for(unsigned i = 1; i <= 4; ++i) {
         graph->addNode(i);
+    }
 
     graph->addEdge(1, 2, 10);
     graph->addEdge(1, 3, 5);
@@ -73,8 +76,9 @@ void testWDG() {
 void testWUG() {
     auto graph = std::make_shared<WeightedUndirectedGraph>();
 
-    for(unsigned i = 1; i <= 4; ++i)
+    for(unsigned i = 1; i <= 4; ++i) {
         graph->addNode(i);
+    }
 
     graph->addEdge(1, 2, 3);
     graph->addEdge(1, 3, 7);
