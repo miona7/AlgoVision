@@ -28,10 +28,13 @@ set(PROJECT_SOURCES
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
         Headers/Algorithm/Tarjan.h Source/Algorithm/Tarjan.cpp
         Headers/Algorithm/Dijkstra.h Source/Algorithm/Dijkstra.cpp
+        Headers/Algorithm/BellmanFord.h Source/Algorithm/BellmanFord.cpp
+        Headers/Algorithm/FloydWarshall.h Source/Algorithm/FloydWarshall.cpp
 
         # Tests/Algorithm/dfsTest.cpp
         # Tests/Algorithm/tarjanTest.cpp
         # Tests/Algorithm/dijkstraTest.cpp
+        # Tests/Algorithm/bellmanFordTest.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
