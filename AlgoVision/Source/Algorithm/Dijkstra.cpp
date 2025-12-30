@@ -1,6 +1,6 @@
 #include "Dijkstra.h"
 
-Dijkstra::Dijkstra(std::shared_ptr<Graph> g) : Algorithm(g) {
+Dijkstra::Dijkstra(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
 bool Dijkstra::checkConditions() const {
@@ -18,7 +18,7 @@ bool Dijkstra::checkConditions() const {
     return true;
 }
 
-void Dijkstra::execute(const unsigned idStartNode, const unsigned idEndNode) {
+void Dijkstra::execute(unsigned idStartNode, unsigned idEndNode) {
     if(!checkConditions()) {
         throw std::runtime_error(
             "Graph is not initialized or invalid, or has negative weight edges!");
@@ -37,8 +37,7 @@ void Dijkstra::dijkstra(unsigned start) {
     }
 
     // min-hip: pair<rastojanje, cvor>
-    std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
-                        std::greater<std::pair<int, unsigned>>> pq;
+    std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>, std::greater<>> pq;
     pq.emplace(0, start);
     minDistance[start] = 0;
 

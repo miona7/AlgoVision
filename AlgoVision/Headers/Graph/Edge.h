@@ -5,7 +5,7 @@
 
 class Edge {
 public:
-    Edge(const unsigned, const unsigned, const unsigned, const int weight = 1);
+    Edge(unsigned, unsigned, unsigned, int weight = 1);
     ~Edge() = default;
 
     unsigned getId() const;

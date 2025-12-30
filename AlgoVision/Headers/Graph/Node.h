@@ -10,7 +10,7 @@
 
 class Node {
 public:
-    Node(unsigned);
+    explicit Node(unsigned);
     ~Node() = default;
 
     unsigned getId() const;

@@ -11,10 +11,10 @@
 
 class Tarjan : public Algorithm {
 public:
-    explicit Tarjan(std::shared_ptr<Graph> g);
+    explicit Tarjan(const std::shared_ptr<Graph>&);
 
     bool checkConditions() const override;
-    void execute(const unsigned idStartNode = 0, const unsigned idEndNode = 0) override;
+    void execute(unsigned idStartNode = 0, unsigned idEndNode = 0) override;
 
 private:
     int                      m_arrivalTime;       // vreme dolaska

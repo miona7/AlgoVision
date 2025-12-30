@@ -1,6 +1,6 @@
 #include "Graph.h"
 
-void Graph::addNode(const unsigned id) {
+void Graph::addNode(unsigned id) {
     if(m_nodes.find(id) != m_nodes.end()) {
         return; // cvor vec postoji
     }
@@ -9,7 +9,7 @@ void Graph::addNode(const unsigned id) {
     m_nodes.emplace(id, Node(id));
 }
 
-void Graph::removeNode(const unsigned id) {
+void Graph::removeNode(unsigned id) {
     if(m_nodes.find(id) == m_nodes.end()) {
         return; // cvor ne postoji
     }

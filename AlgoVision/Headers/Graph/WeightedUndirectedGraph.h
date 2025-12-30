@@ -6,10 +6,10 @@
 class WeightedUndirectedGraph : public Graph {
 public:
     WeightedUndirectedGraph()  = default;
-    ~WeightedUndirectedGraph() = default;
+    ~WeightedUndirectedGraph() override = default;
 
-    void addEdge(const unsigned, const unsigned, const int w) override;
-    void removeEdge(const unsigned) override;
+    void addEdge(unsigned, unsigned, int w) override;
+    void removeEdge(unsigned) override;
     bool isDirected() const override;
 };
 

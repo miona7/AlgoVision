@@ -1,6 +1,6 @@
 #include "Tarjan.h"
 
-Tarjan::Tarjan(std::shared_ptr<Graph> g) : Algorithm(g) {
+Tarjan::Tarjan(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
 bool Tarjan::checkConditions() const {
@@ -8,7 +8,7 @@ bool Tarjan::checkConditions() const {
     return m_graph && !m_graph->getNodes().empty() && m_graph->isDirected();
 }
 
-void Tarjan::execute(const unsigned idStartNode, const unsigned idEndNode) {
+void Tarjan::execute(unsigned idStartNode, unsigned idEndNode) {
     if(!checkConditions()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }

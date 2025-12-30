@@ -1,7 +1,6 @@
 #include "Edge.h"
 
-Edge::Edge(const unsigned id, const unsigned idStartNode, const unsigned idEndNode,
-           const int weight)
+Edge::Edge(unsigned id, unsigned idStartNode, unsigned idEndNode, int weight)
     : m_id(id), m_idStartNode(idStartNode), m_idEndNode(idEndNode), m_weight(weight) {
 }
 

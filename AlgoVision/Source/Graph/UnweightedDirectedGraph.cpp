@@ -1,6 +1,6 @@
 #include "UnweightedDirectedGraph.h"
 
-void UnweightedDirectedGraph::addEdge(const unsigned from, const unsigned to, const int w) {
+void UnweightedDirectedGraph::addEdge(unsigned from, unsigned to, int w) {
     if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
         return;
     }
@@ -9,7 +9,7 @@ void UnweightedDirectedGraph::addEdge(const unsigned from, const unsigned to, co
     m_adjacencyList[from][edgeId] = to;
 }
 
-void UnweightedDirectedGraph::removeEdge(const unsigned edgeId) {
+void UnweightedDirectedGraph::removeEdge(unsigned edgeId) {
     auto it = m_edges.find(edgeId);
     if(it == m_edges.end()) {
         return;

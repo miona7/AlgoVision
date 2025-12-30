@@ -1,6 +1,6 @@
 #include "DFS.h"
 
-DFS::DFS(std::shared_ptr<Graph> g) : Algorithm(g) {
+DFS::DFS(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
 bool DFS::checkConditions() const {
@@ -8,7 +8,7 @@ bool DFS::checkConditions() const {
     return m_graph && !m_graph->getNodes().empty();
 }
 
-void DFS::execute(const unsigned idStartNode, const unsigned idEndNode) {
+void DFS::execute(unsigned idStartNode, unsigned idEndNode) {
     if(!checkConditions()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }

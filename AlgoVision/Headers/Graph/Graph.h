@@ -14,11 +14,11 @@ public:
     Graph()          = default;
     virtual ~Graph() = default;
 
-    void addNode(const unsigned);
-    void removeNode(const unsigned);
+    void addNode(unsigned);
+    void removeNode(unsigned);
 
-    virtual void addEdge(const unsigned, const unsigned, const int w = 1) = 0;
-    virtual void removeEdge(const unsigned)                               = 0;
+    virtual void addEdge(unsigned, unsigned, int w = 1) = 0;
+    virtual void removeEdge(unsigned)                               = 0;
 
     virtual bool isDirected() const = 0;
 

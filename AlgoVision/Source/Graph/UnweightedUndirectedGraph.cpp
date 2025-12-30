@@ -1,6 +1,6 @@
 #include "UnweightedUndirectedGraph.h"
 
-void UnweightedUndirectedGraph::addEdge(const unsigned from, const unsigned to, const int w) {
+void UnweightedUndirectedGraph::addEdge(unsigned from, unsigned to, int w) {
     if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
         return;
     }
@@ -10,7 +10,7 @@ void UnweightedUndirectedGraph::addEdge(const unsigned from, const unsigned to, 
     m_adjacencyList[to][edgeId]   = from;
 }
 
-void UnweightedUndirectedGraph::removeEdge(const unsigned edgeId) {
+void UnweightedUndirectedGraph::removeEdge(unsigned edgeId) {
     auto it = m_edges.find(edgeId);
     if(it == m_edges.end()) {
         return; // grana ne postoji
