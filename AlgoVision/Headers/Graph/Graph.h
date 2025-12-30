@@ -21,6 +21,7 @@ public:
     virtual void removeEdge(unsigned)                               = 0;
 
     virtual bool isDirected() const = 0;
+    virtual bool isWeighted() const = 0;
 
     std::map<unsigned, std::map<unsigned, unsigned>> getAdjacencyList() const;
     std::map<unsigned, Node>                         getNodes() const;

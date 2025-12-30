@@ -29,3 +29,7 @@ void UnweightedUndirectedGraph::removeEdge(unsigned edgeId) {
 bool UnweightedUndirectedGraph::isDirected() const {
     return false;
 }
+
+bool UnweightedUndirectedGraph::isWeighted() const {
+    return false;
+}
