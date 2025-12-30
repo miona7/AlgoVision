@@ -1,6 +1,7 @@
 #ifndef TARJAN_H
 #define TARJAN_H
 
+#include <iostream>
 #include <vector>
 #include <map>
 #include <stack>

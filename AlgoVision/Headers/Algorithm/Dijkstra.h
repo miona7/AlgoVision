@@ -1,9 +1,10 @@
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
+#include <iostream>
 #include <map>
 #include <queue>
-#include <numeric>
+#include <limits>
 
 #include "Algorithm.h"
 
