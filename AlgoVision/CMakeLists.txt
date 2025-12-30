@@ -35,6 +35,7 @@ set(PROJECT_SOURCES
         # Tests/Algorithm/tarjanTest.cpp
         # Tests/Algorithm/dijkstraTest.cpp
         # Tests/Algorithm/bellmanFordTest.cpp
+        # Tests/Algorithm/floydWarshallTest.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
