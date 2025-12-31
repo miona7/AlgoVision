@@ -3,16 +3,18 @@
 FloydWarshall::FloydWarshall(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
-bool FloydWarshall::checkConditions() const {
-    return m_graph && !m_graph->getNodes().empty() && m_graph->isDirected();
-}
-
-void FloydWarshall::execute(unsigned idStartNode, unsigned idEndNode) {
-    if(!checkConditions()) {
+void FloydWarshall::checkConditions() const {
+    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
+}
 
+void FloydWarshall::execute(unsigned, unsigned) {
+    checkConditions();
+
+    std::cout << "Starting Floyd Warshall." << std::endl;
     floydWarshall();
+    std::cout << "Floyd Warshall finished." << std::endl;
 
     std::cout << "All-pairs shortest distances:" << std::endl;
     for(const auto& [u, row] : m_distances) {

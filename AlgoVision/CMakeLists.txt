@@ -122,12 +122,12 @@ add_executable(AlgoVisionTests
     Source/Algorithm/BellmanFord.cpp
     Source/Algorithm/FloydWarshall.cpp
 
-    # Tests/Algorithm/dfsTest.cpp
+    Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp
-    # Tests/Algorithm/tarjanTest.cpp
-    # Tests/Algorithm/dijkstraTest.cpp
-    # Tests/Algorithm/bellmanFordTest.cpp
-    # Tests/Algorithm/floydWarshallTest.cpp
+    Tests/Algorithm/tarjanTest.cpp
+    Tests/Algorithm/dijkstraTest.cpp
+    Tests/Algorithm/bellmanFordTest.cpp
+    Tests/Algorithm/floydWarshallTest.cpp
 )
 
 target_link_libraries(AlgoVisionTests
