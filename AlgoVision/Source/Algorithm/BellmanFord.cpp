@@ -3,16 +3,23 @@
 BellmanFord::BellmanFord(const std::shared_ptr<Graph>& g) : Algorithm(g), m_hasNegativeCycle(false) {
 }
 
-bool BellmanFord::checkConditions() const {
-    return m_graph && !m_graph->getNodes().empty() && m_graph->isDirected() && m_graph->isWeighted();
-}
-
-void BellmanFord::execute(unsigned idStartNode, unsigned idEndNode) {
-    if(!checkConditions()) {
+void BellmanFord::checkConditions(unsigned start) const {
+    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected() || !m_graph->isWeighted()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
 
+    auto nodes = m_graph->getNodes();
+    if(nodes.find(start) == nodes.end()) {
+        throw std::runtime_error("Start node does not exist in graph!");
+    }
+}
+
+void BellmanFord::execute(unsigned idStartNode, unsigned) {
+    checkConditions(idStartNode);
+
+    std::cout << "Starting Bellman Ford." << std::endl;
     bellmanFord(idStartNode);
+    std::cout << "Bellman Ford finished." << std::endl;
 
     std::cout << "Shortest distances from node " << idStartNode << ":" << std::endl;
     for(const auto& [node, dist] : m_minDistance) {
@@ -50,8 +57,7 @@ void BellmanFord::bellmanFord(unsigned start) {
             unsigned u = edge.startNode();
             unsigned v = edge.endNode();
             int w = edge.getWeight();
-            if(nodes.find(u) != nodes.end() && nodes.find(v) != nodes.end() &&
-               m_minDistance[u] != std::numeric_limits<int>::max() && m_minDistance[u] + w < m_minDistance[v]) {
+            if(m_minDistance[u] != std::numeric_limits<int>::max() && m_minDistance[u] + w < m_minDistance[v]) {
                 m_minDistance[v] = m_minDistance[u] + w;
                 wasRelaxed = true;
             }

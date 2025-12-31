@@ -1,12 +1,11 @@
-#include <iostream>
-#include <memory>
+#define CATCH_CONFIG_MAIN
+#include <catch2/catch_all.hpp>
 
 #include "BellmanFord.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 
-void noNegativeCycle() {
-    std::cout << "Test: Bellman-Ford without negative cycle" << std::endl;
+TEST_CASE("Bellman-Ford without negative cycle", "[BF]") {
     auto graph = std::make_shared<WeightedDirectedGraph>();
 
     for(unsigned i = 1; i <= 5; ++i) {
@@ -20,17 +19,11 @@ void noNegativeCycle() {
     graph->addEdge(4, 5, 2);
 
     BellmanFord bf(graph);
-    bf.execute(1);
-
-    if(bf.hasNegativeCycle()) {
-        std::cout << "Unexpected negative cycle detected!" << std::endl;
-    }
-
-    std::cout << "------------------------------------------" << std::endl;
+    REQUIRE_NOTHROW(bf.execute(1));
+    REQUIRE_FALSE(bf.hasNegativeCycle());
 }
 
-void negativeCycle() {
-    std::cout << "Test: Bellman-Ford with negative cycle" << std::endl;
+TEST_CASE("Bellman-Ford with negative cycle", "[BF]") {
     auto graph = std::make_shared<WeightedDirectedGraph>();
 
     for(unsigned i = 1; i <= 3; ++i) {
@@ -42,38 +35,46 @@ void negativeCycle() {
     graph->addEdge(3, 1, -2);
 
     BellmanFord bf(graph);
-    bf.execute(1);
-
-    if(bf.hasNegativeCycle()) {
-        std::cout << "Negative cycle correctly detected!" << std::endl;
-    } else {
-        std::cout << "Failed to detect negative cycle!" << std::endl;
-    }
-
-    std::cout << "------------------------------------------" << std::endl;
+    REQUIRE_NOTHROW(bf.execute(1));
+    REQUIRE(bf.hasNegativeCycle());
 }
 
-
-void invalidGraph() {
-    std::cout << "Test: Bellman-Ford on invalid graphs" << std::endl;
-
+TEST_CASE("Bellman-Ford on invalid graph", "[BF]") {
     auto wud = std::make_shared<WeightedUndirectedGraph>();
     wud->addNode(1);
     wud->addNode(2);
     wud->addEdge(1, 2, 6);
 
-    try {
-        BellmanFord bf(wud);
-        bf.execute(1);
-        std::cout << "Error: Bellman-Ford should not run on unweighted graph!" << std::endl;
-    } catch(const std::runtime_error& e) {
-        std::cout << "Correctly caught exception: " << e.what() << std::endl;
-    }
+    BellmanFord bf(wud);
+
+    REQUIRE_THROWS_AS(bf.execute(1), std::runtime_error);
 }
 
-int main() {
-    noNegativeCycle();
-    negativeCycle();
-    invalidGraph();
-    return 0;
+TEST_CASE("Bellman-Ford: start node does not exist", "[BF]") {
+    auto graph = std::make_shared<WeightedDirectedGraph>();
+    for(unsigned i = 1; i <= 2; ++i) {
+        graph->addNode(i);
+    }
+
+    BellmanFord bf(graph);
+    REQUIRE_THROWS_AS(bf.execute(0), std::runtime_error);
+}
+
+TEST_CASE("Bellman-Ford: empty graph", "[BF]") {
+    auto graph = std::make_shared<WeightedDirectedGraph>();
+    BellmanFord bf(graph);
+    REQUIRE_THROWS_AS(bf.execute(0), std::runtime_error);
+}
+
+TEST_CASE("Bellman-Ford: graph with disconnected nodes", "[BF]") {
+    auto graph = std::make_shared<WeightedDirectedGraph>();
+    for(unsigned i = 1; i <= 4; ++i) {
+        graph->addNode(i);
+    }
+
+    graph->addEdge(1, 2, 3);
+    graph->addEdge(2, 3, 2);
+
+    BellmanFord bf(graph);
+    REQUIRE_NOTHROW(bf.execute(1));
 }
