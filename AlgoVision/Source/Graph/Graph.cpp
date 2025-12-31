@@ -1,12 +1,12 @@
 #include "Graph.h"
 
-void Graph::addNode(unsigned id) {
+void Graph::addNode(unsigned id, double x, double y) {
     if(m_nodes.find(id) != m_nodes.end()) {
         return; // cvor vec postoji
     }
     ++m_numOfNodes;
     m_adjacencyList[id] = {};
-    m_nodes.emplace(id, Node(id));
+    m_nodes.emplace(id, Node(id, x, y));
 }
 
 void Graph::removeNode(unsigned id) {

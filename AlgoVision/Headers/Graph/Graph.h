@@ -14,7 +14,7 @@ public:
     Graph()          = default;
     virtual ~Graph() = default;
 
-    void addNode(unsigned);
+    void addNode(unsigned, double x = 0.0, double y = 0.0);
     void removeNode(unsigned);
 
     virtual void addEdge(unsigned, unsigned, int w = 1) = 0;
