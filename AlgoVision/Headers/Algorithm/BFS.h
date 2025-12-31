@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <queue>
+#include <map>
 #include <stdexcept>
 
 #include "Algorithm.h"
@@ -14,7 +15,11 @@ public:
     void checkConditions(unsigned) const;
     void execute(unsigned, unsigned idEndNode = 0) override;
 
+    const std::map<unsigned, bool>& getVisited() const;
+
 private:
+    std::map<unsigned, bool> m_visited;
+
     void bfs(unsigned);
 };
 

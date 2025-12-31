@@ -23,15 +23,16 @@ void BFS::execute(unsigned idStartNode, unsigned) {
 }
 
 void BFS::bfs(unsigned start) {
+    m_visited.clear();
+
     auto nodes = m_graph->getNodes();
-    std::map<unsigned, bool> visited;
     for(const auto& [id, _]: nodes) {
-        visited[id] = false;
+        m_visited[id] = false;
     }
 
     auto adjList = m_graph->getAdjacencyList();
 
-    visited[start] = true;
+    m_visited[start] = true;
     std::queue<unsigned> q;
     q.push(start);
 
@@ -40,11 +41,15 @@ void BFS::bfs(unsigned start) {
         std::cout << "visiting node with id " << current << std::endl;
         if(adjList.find(current) != adjList.end()) {
             for(const auto& [_, neighbourId] : adjList[current]) {
-                if(!visited[neighbourId]) {
-                    visited[neighbourId] = true;
+                if(!m_visited[neighbourId]) {
+                    m_visited[neighbourId] = true;
                     q.push(neighbourId);
                 }
             }
         }
     }
+}
+
+const std::map<unsigned, bool>& BFS::getVisited() const {
+    return m_visited;
 }
