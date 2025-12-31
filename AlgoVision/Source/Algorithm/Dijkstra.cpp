@@ -30,10 +30,10 @@ void Dijkstra::execute(unsigned idStartNode, unsigned) {
 }
 
 void Dijkstra::dijkstra(unsigned start) {
-    auto                     nodes = m_graph->getNodes();
     std::map<unsigned, bool> finished;    // da li smo nasli rastojanje do cvora
     std::map<unsigned, int>  minDistance; // minimalna rastojanja za svaki cvor
 
+    auto nodes = m_graph->getNodes();
     for(const auto& [nodeId, _]: nodes) {
         finished[nodeId]    = false;
         minDistance[nodeId] = std::numeric_limits<int>::max();
