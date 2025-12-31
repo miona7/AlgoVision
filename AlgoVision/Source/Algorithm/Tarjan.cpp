@@ -8,13 +8,14 @@ bool Tarjan::checkConditions() const {
     return m_graph && !m_graph->getNodes().empty() && m_graph->isDirected();
 }
 
-void Tarjan::execute(unsigned idStartNode, unsigned idEndNode) {
+void Tarjan::execute(unsigned, unsigned) {
     if(!checkConditions()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
 
     init();
 
+    std::cout << "Starting Tarjan for strongly connected component." << std::endl;
     int  component = 0;
     auto nodes     = m_graph->getNodes();
     for(const auto& [id, node]: nodes) {
@@ -22,6 +23,7 @@ void Tarjan::execute(unsigned idStartNode, unsigned idEndNode) {
             tarjan(id, component);
         }
     }
+    std::cout << "Tarjan finished." << std::endl;
 
     std::cout << "Strongly connected components:" << std::endl;
     std::map<int, std::vector<unsigned>> comps;
@@ -45,7 +47,7 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
 
     auto adjList = m_graph->getAdjacencyList();
     if(adjList.find(nodeId) != adjList.end()) {
-        for(const auto& [_, neighbourId]: adjList[nodeId]) {
+        for(const auto& [_, neighbourId] : adjList[nodeId]) {
             if(m_incomingNumbering[neighbourId] == -1) {
                 tarjan(neighbourId, component);
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_lowLink[neighbourId]);
@@ -88,9 +90,9 @@ void Tarjan::init() {
 
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
-        m_incomingNumbering[id] = -1; // jos nije posecen
-        m_lowLink[id]           = -1; // lowlink vrednost nepoznata
+        m_incomingNumbering[id] = -1;         // jos nije posecen
+        m_lowLink[id]           = -1;         // lowlink vrednost nepoznata
         m_onStack[id]           = false;
-        m_components[id]        = -1; // komponenta nije dodeljena
+        m_components[id]        = -1;         // komponenta nije dodeljena
     }
 }

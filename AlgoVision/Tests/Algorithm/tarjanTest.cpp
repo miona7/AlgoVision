@@ -1,11 +1,12 @@
-#include <iostream>
-#include <memory>
+#define CATCH_CONFIG_MAIN
+#include <catch2/catch_all.hpp>
 
 #include "Tarjan.h"
 #include "UnweightedDirectedGraph.h"
 #include "WeightedDirectedGraph.h"
+#include "UnweightedUndirectedGraph.h"
 
-void testUDG() {
+TEST_CASE("Tarjan on Unweighted Directed Graph", "[TARJAN]") {
     auto udg = std::make_shared<UnweightedDirectedGraph>();
     for(unsigned i = 1; i <= 5; ++i) {
         udg->addNode(i);
@@ -17,17 +18,12 @@ void testUDG() {
     udg->addEdge(3, 4);
     udg->addEdge(4, 5);
 
-    std::cout << "UDG" << std::endl;
     Tarjan tarjan(udg);
-    try {
-        tarjan.execute();
-    } catch(const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-    std::cout << "------------------------------------------" << std::endl;
+
+    REQUIRE_NOTHROW(tarjan.execute());
 }
 
-void testWDG() {
+TEST_CASE("Tarjan on Weighted Directed Graph", "[TARJAN]") {
     auto wdg = std::make_shared<WeightedDirectedGraph>();
     for(unsigned i = 1; i <= 6; ++i) {
         wdg->addNode(i);
@@ -41,18 +37,22 @@ void testWDG() {
     wdg->addEdge(5, 6, 1);
     wdg->addEdge(6, 4, 3);
 
-    std::cout << "WDG" << std::endl;
     Tarjan tarjan(wdg);
-    try {
-        tarjan.execute();
-    } catch(const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-    std::cout << "------------------------------------------" << std::endl;
+
+    REQUIRE_NOTHROW(tarjan.execute());
 }
 
-int main() {
-    testUDG();
-    testWDG();
-    return 0;
+TEST_CASE("Tarjan fails on Undirected Graph", "[TARJAN]") {
+    auto uug = std::make_shared<UnweightedUndirectedGraph>();
+    for(unsigned i = 1; i <= 4; ++i) {
+        uug->addNode(i);
+    }
+
+    uug->addEdge(1, 2);
+    uug->addEdge(2, 3);
+    uug->addEdge(3, 4);
+
+    Tarjan tarjan(uug);
+
+    REQUIRE_THROWS_AS(tarjan.execute(), std::runtime_error);
 }
