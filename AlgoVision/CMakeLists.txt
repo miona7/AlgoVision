@@ -39,6 +39,7 @@ set(PROJECT_SOURCES
         Headers/Algorithm/BFS.h Source/Algorithm/BFS.cpp
         Headers/Algorithm/Tarjan.h Source/Algorithm/Tarjan.cpp
         Headers/Algorithm/Dijkstra.h Source/Algorithm/Dijkstra.cpp
+        Headers/Algorithm/Prim.h Source/Algorithm/Prim.cpp
         Headers/Algorithm/BellmanFord.h Source/Algorithm/BellmanFord.cpp
         Headers/Algorithm/FloydWarshall.h Source/Algorithm/FloydWarshall.cpp
 )
@@ -119,6 +120,7 @@ add_executable(AlgoVisionTests
     Source/Algorithm/BFS.cpp
     Source/Algorithm/Tarjan.cpp
     Source/Algorithm/Dijkstra.cpp
+    Source/Algorithm/Prim.cpp
     Source/Algorithm/BellmanFord.cpp
     Source/Algorithm/FloydWarshall.cpp
 
@@ -126,6 +128,7 @@ add_executable(AlgoVisionTests
     Tests/Algorithm/bfsTest.cpp
     Tests/Algorithm/tarjanTest.cpp
     Tests/Algorithm/dijkstraTest.cpp
+    Tests/Algorithm/primTest.cpp
     Tests/Algorithm/bellmanFordTest.cpp
     Tests/Algorithm/floydWarshallTest.cpp
 )
