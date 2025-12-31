@@ -35,6 +35,7 @@ set(PROJECT_SOURCES
         Headers/Graph/WeightedDirectedGraph.h Source/Graph/WeightedDirectedGraph.cpp
 
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
+        Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
         Headers/Algorithm/BFS.h Source/Algorithm/BFS.cpp
         Headers/Algorithm/Tarjan.h Source/Algorithm/Tarjan.cpp
@@ -116,6 +117,7 @@ add_executable(AlgoVisionTests
     Source/Graph/WeightedDirectedGraph.cpp
 
     Source/Algorithm/Algorithm.cpp
+    Source/Algorithm/AStar.cpp
     Source/Algorithm/DFS.cpp
     Source/Algorithm/BFS.cpp
     Source/Algorithm/Tarjan.cpp
@@ -124,6 +126,7 @@ add_executable(AlgoVisionTests
     Source/Algorithm/BellmanFord.cpp
     Source/Algorithm/FloydWarshall.cpp
 
+    Tests/Algorithm/astarTest.cpp
     Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp
     Tests/Algorithm/tarjanTest.cpp
