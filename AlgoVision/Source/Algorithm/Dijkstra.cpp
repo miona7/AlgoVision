@@ -11,19 +11,26 @@ bool Dijkstra::checkConditions() const {
     auto edges = m_graph->getEdges();
     for(const auto& [id, edge]: edges) {
         if(edge.getWeight() < 0) {
-            return false; // negativna tezina grane, Dijkstra ne radi
+            return false; // negativna tezina grane
         }
     }
 
     return true;
 }
 
-void Dijkstra::execute(unsigned idStartNode, unsigned idEndNode) {
+void Dijkstra::execute(unsigned idStartNode, unsigned) {
     if(!checkConditions()) {
-        throw std::runtime_error(
-            "Graph is not initialized or invalid, or has negative weight edges!");
+        throw std::runtime_error("Graph is not initialized or invalid!");
     }
+
+    auto nodes = m_graph->getNodes();
+    if(nodes.find(idStartNode) == nodes.end()) {
+        throw std::runtime_error("Start node does not exist in graph!");
+    }
+
+    std::cout << "Starting Dijkstra." << std::endl;
     dijkstra(idStartNode);
+    std::cout << "Dijkstra finished." << std::endl;
 }
 
 void Dijkstra::dijkstra(unsigned start) {
@@ -48,12 +55,9 @@ void Dijkstra::dijkstra(unsigned start) {
         auto [currentDistance, currentNode] = pq.top();
         pq.pop();
 
-        if(finished[currentNode]) {
-            continue;
-        }
-        finished[currentNode] = true;
+        if(!finished[currentNode]) {
+            finished[currentNode] = true;
 
-        if(adjList.find(currentNode) != adjList.end()) {
             for(const auto& [edgeId, neighbourId]: adjList[currentNode]) {
                 auto it = edges.find(edgeId);
                 if(it != edges.end()) {
