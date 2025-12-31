@@ -19,7 +19,7 @@ void DFS::execute(unsigned idStartNode, unsigned idEndNode) {
     }
 
     std::map<unsigned, bool> visited;
-    for(const auto& [id, node]: nodes) {
+    for(const auto& [id, _]: nodes) {
         visited[id] = false;
     }
 
@@ -29,9 +29,6 @@ void DFS::execute(unsigned idStartNode, unsigned idEndNode) {
 }
 
 void DFS::dfs(unsigned nodeId, std::map<unsigned, bool>& visited) {
-    if(visited[nodeId]) {
-        return;
-    }
     visited[nodeId] = true;
     std::cout << "visiting node with id " << nodeId << std::endl;
 

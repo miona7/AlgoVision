@@ -1,5 +1,5 @@
-#include <iostream>
-#include <memory>
+#define CATCH_CONFIG_MAIN
+#include <catch2/catch_all.hpp>
 
 #include "DFS.h"
 #include "UnweightedDirectedGraph.h"
@@ -7,7 +7,7 @@
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 
-void testUDG() {
+TEST_CASE("DFS on Unweighted Directed Graph", "[DFS]") {
     auto graph = std::make_shared<UnweightedDirectedGraph>();
 
     for(unsigned i = 1; i <= 5; ++i) {
@@ -19,17 +19,11 @@ void testUDG() {
     graph->addEdge(2, 4);
     graph->addEdge(3, 5);
 
-    std::cout << "UDG" << std::endl;
     DFS dfs(graph);
-    try {
-        dfs.execute(1);
-    } catch(const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-    std::cout << "------------------------------------------" << std::endl;
+    REQUIRE_NOTHROW(dfs.execute(1));
 }
 
-void testUUG() {
+TEST_CASE("DFS on Unweighted Undirected Graph", "[DFS]") {
     auto graph = std::make_shared<UnweightedUndirectedGraph>();
 
     for(unsigned i = 1; i <= 5; ++i) {
@@ -41,17 +35,11 @@ void testUUG() {
     graph->addEdge(2, 4);
     graph->addEdge(3, 5);
 
-    std::cout << "UUG" << std::endl;
     DFS dfs(graph);
-    try {
-        dfs.execute(1);
-    } catch(const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-    std::cout << "------------------------------------------" << std::endl;
+    REQUIRE_NOTHROW(dfs.execute(1));
 }
 
-void testWDG() {
+TEST_CASE("DFS on Weighted Directed Graph", "[DFS]") {
     auto graph = std::make_shared<WeightedDirectedGraph>();
 
     for(unsigned i = 1; i <= 4; ++i) {
@@ -63,17 +51,11 @@ void testWDG() {
     graph->addEdge(2, 4, 1);
     graph->addEdge(3, 4, 2);
 
-    std::cout << "WDG" << std::endl;
     DFS dfs(graph);
-    try {
-        dfs.execute(1);
-    } catch(const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-    std::cout << "------------------------------------------" << std::endl;
+    REQUIRE_NOTHROW(dfs.execute(1));
 }
 
-void testWUG() {
+TEST_CASE("DFS on Weighted Undirected Graph", "[DFS]") {
     auto graph = std::make_shared<WeightedUndirectedGraph>();
 
     for(unsigned i = 1; i <= 4; ++i) {
@@ -85,22 +67,15 @@ void testWUG() {
     graph->addEdge(2, 4, 1);
     graph->addEdge(3, 4, 2);
 
-    std::cout << "WUG" << std::endl;
     DFS dfs(graph);
-    try {
-        dfs.execute(1);
-    } catch(const std::exception& e) {
-        std::cerr << "Exception: " << e.what() << std::endl;
-    }
-    std::cout << "------------------------------------------" << std::endl;
+    REQUIRE_NOTHROW(dfs.execute(1));
 }
 
-int main() {
+TEST_CASE("DFS throws for invalid start node", "[DFS]") {
+    auto graph = std::make_shared<UnweightedDirectedGraph>();
+    graph->addNode(1);
+    graph->addNode(2);
 
-    testUDG();
-    testUUG();
-    testWDG();
-    testWUG();
-
-    return 0;
+    DFS dfs(graph);
+    REQUIRE_THROWS_AS(dfs.execute(0), std::runtime_error);
 }
