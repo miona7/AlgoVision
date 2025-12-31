@@ -1,90 +1,44 @@
 #include "Graph.h"
 
-Graph::Graph() = default;
-
-Graph::Graph(const Graph& g) {
-    for(auto* n: g.m_nodes) {
-        m_nodes.push_back(new Node(*n));
+void Graph::addNode(unsigned id, double x, double y) {
+    if(m_nodes.find(id) != m_nodes.end()) {
+        return; // cvor vec postoji
     }
-
-    for(auto* e: g.m_edges) {
-        m_edges.push_back(new Edge(*e));
-    }
+    ++m_numOfNodes;
+    m_adjacencyList[id] = {};
+    m_nodes.emplace(id, Node(id, x, y));
 }
 
-Graph::~Graph() {
-    for(auto* n: m_nodes) {
-        delete n;
+void Graph::removeNode(unsigned id) {
+    if(m_nodes.find(id) == m_nodes.end()) {
+        return; // cvor ne postoji
     }
 
-    for(auto* e: m_edges) {
-        delete e;
+    // ukloni sve grane koje izlaze iz cvora
+    for(const auto& [edgeId, _]: m_adjacencyList[id]) {
+        removeEdge(edgeId);
     }
+
+    // ukloni sve grane koje ulaze u cvor
+    for(auto& [nodeId, neighbors]: m_adjacencyList) {
+        neighbors.erase(id);
+    }
+
+    // obrisi cvor
+    m_adjacencyList.erase(id);
+    m_nodes.erase(id);
+
+    --m_numOfNodes;
 }
 
-void Graph::addNode(Node *n) {
-    m_nodes.append(n);
+std::map<unsigned, std::map<unsigned, unsigned>> Graph::getAdjacencyList() const {
+    return m_adjacencyList;
 }
 
-void Graph::removeNode(Node *n) {
-    if(n == nullptr) {
-        return;
-    }
-
-    // brise sve grane
-    for(auto it = m_edges.begin(); it != m_edges.end();) {
-        Edge* e = *it;
-        if(e->startNode() == n || e->endNode() == n) {
-            delete e;
-            it = m_edges.erase(it);
-        } else {
-            ++it;
-        }
-    }
-
-    // brise cvor
-    for(auto it = m_nodes.begin(); it != m_nodes.end();) {
-        if(*it == n) {
-            delete *it;
-            it = m_nodes.erase(it);
-        } else {
-            ++it;
-        }
-    }
-}
-
-QVector<Node*> Graph::getNodes() const {
+std::map<unsigned, Node> Graph::getNodes() const {
     return m_nodes;
 }
 
-QVector<Edge*> Graph::getEdges() const {
+std::map<unsigned, Edge> Graph::getEdges() const {
     return m_edges;
 }
-
-void Graph::setNodes(QVector<Node*>& nodes) {
-    clear();
-    for(auto* n : nodes) {
-        m_nodes.push_back(new Node(*n));
-    }
-}
-
-void Graph::setEdges(QVector<Edge*>& edges) {
-    clear();
-    for(auto* e : edges) {
-        m_edges.push_back(new Edge(*e));
-    }
-}
-
-void Graph::clear() {
-    for(auto* n: m_nodes) {
-        delete n;
-    }
-
-    for(auto* e: m_edges) {
-        delete e;
-    }
-
-    m_nodes.clear();
-    m_edges.clear();
-}
-

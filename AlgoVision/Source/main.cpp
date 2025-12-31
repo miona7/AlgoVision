@@ -1,10 +1,8 @@
-#include "MainWindow.h"
-#include "Graph.h"
-#include "Node.h"
-#include "Edge.h"
-
 #include <QApplication>
+
 #include <iostream>
+
+#include "MainWindow.h"
 
 int main(int argc, char* argv[]) {
     std::cout << "test" << std::endl;

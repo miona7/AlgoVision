@@ -1,53 +1,26 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <QPointF>
-#include <QString>
-#include <QVector>
-
-#include <ostream>
+#include <iostream>
 #include <string>
 
 class Node {
 public:
-    Node();
-    Node(const std::string &);
-    Node(const Node &);
-    ~Node();
+    explicit Node(unsigned, double x = 0.0, double y = 0.0);
+    ~Node() = default;
 
-    QString getName() const;
-    int getId() const;
+    unsigned                         getId() const;
+    const std::pair<double, double>& getPosition() const;
 
-    QVector<Node *> getNeighbours() const;
+    void setPosition(double, double);
 
-    QPointF getPosition() const;
-
-    void setName(const std::string &);
-    void setName(const QString &);
-
-    void translate(float, float);
-    void setPosition(float, float);
-    void setPosition(const QPointF &);
-
-    bool operator==(const Node &) const;
-    bool operator<(const Node &) const;
-
-    void addNeighbour(Node *);
-    void removeNeighbour(Node *);
-
-    friend std::ostream &operator<<(std::ostream &, const Node &);
+    friend std::ostream& operator<<(std::ostream&, const Node&);
 
 private:
-    QString m_name;
-    int m_id;
-
-    static int nextId();
-
-    QVector<Node *> m_neighbours;
-
-    QPointF m_position;
+    unsigned                  m_id;
+    std::pair<double, double> m_position; // x, y koordinata cvora
 };
 
-std::ostream &operator<<(std::ostream &, const Node &);
+std::ostream& operator<<(std::ostream&, const Node&);
 
 #endif // NODE_H

@@ -1,35 +1,39 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <QSet>
 #include <QVector>
+
+#include <map>
+#include <vector>
 
 #include "Edge.h"
 #include "Node.h"
 
 class Graph {
 public:
-    Graph();
-    Graph(const Graph&);
-    virtual ~Graph();
+    Graph()          = default;
+    virtual ~Graph() = default;
 
-    void addNode(Node *);
-    void removeNode(Node *);
+    void addNode(unsigned, double x = 0.0, double y = 0.0);
+    void removeNode(unsigned);
 
-    virtual void addEdge(Node *, Node *, int w = 1) = 0;
-    virtual void removeEdge(Node *, Node *) = 0;
+    virtual void addEdge(unsigned, unsigned, int w = 1) = 0;
+    virtual void removeEdge(unsigned)                   = 0;
 
-    QVector<Node*> getNodes() const;
-    QVector<Edge*> getEdges() const;
+    virtual bool isDirected() const = 0;
+    virtual bool isWeighted() const = 0;
 
-    void setNodes(QVector<Node*>&);
-    void setEdges(QVector<Edge*>&);
-
-    void clear();
+    std::map<unsigned, std::map<unsigned, unsigned>> getAdjacencyList() const;
+    std::map<unsigned, Node>                         getNodes() const;
+    std::map<unsigned, Edge>                         getEdges() const;
 
 protected:
-    QVector<Node *> m_nodes;
-    QVector<Edge *> m_edges;
+    unsigned                                         m_numOfNodes = 0;
+    unsigned                                         m_numOfEdges = 0;
+    std::map<unsigned, std::map<unsigned, unsigned>> m_adjacencyList;
+
+    std::map<unsigned, Node> m_nodes;
+    std::map<unsigned, Edge> m_edges;
 };
 
 #endif // GRAPH_H

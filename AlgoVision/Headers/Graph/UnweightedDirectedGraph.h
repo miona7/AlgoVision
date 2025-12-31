@@ -4,8 +4,14 @@
 #include "Graph.h"
 
 class UnweightedDirectedGraph : public Graph {
-    void addEdge(Node*, Node*, int w = 1) override;
-    void removeEdge(Node*, Node*) override;
+public:
+    UnweightedDirectedGraph()           = default;
+    ~UnweightedDirectedGraph() override = default;
+
+    void addEdge(unsigned, unsigned, int w = 1) override;
+    void removeEdge(unsigned) override;
+    bool isDirected() const override;
+    bool isWeighted() const override;
 };
 
 #endif // UDG_H

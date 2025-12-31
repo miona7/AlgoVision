@@ -1,22 +1,23 @@
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 
+#include <memory>
+
 #include "Edge.h"
 #include "Graph.h"
 #include "Node.h"
 
 class Algorithm {
 public:
-    virtual ~Algorithm();
+    explicit Algorithm(const std::shared_ptr<Graph>&);
+    virtual ~Algorithm() = default;
 
-    virtual bool checkConditions() const = 0;
-    virtual void execute(Node *startNode = nullptr,
-                         Node *endNode = nullptr) = 0;
+    virtual void execute(unsigned = 0, unsigned = 0) = 0;
 
     // getStates
 
 protected:
-    Graph *m_graph;
+    std::shared_ptr<Graph> m_graph;
     // states
 };
 

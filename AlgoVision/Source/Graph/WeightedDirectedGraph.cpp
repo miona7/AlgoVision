@@ -1,24 +1,29 @@
 #include "WeightedDirectedGraph.h"
 
-void WeightedDirectedGraph::addEdge(Node* u, Node* v, int w) {
-    if(u == nullptr || v == nullptr) {
+void WeightedDirectedGraph::addEdge(unsigned from, unsigned to, int w) {
+    if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
         return;
     }
-
-    m_edges.push_back(new Edge(u, v, true, w));
+    unsigned edgeId = ++m_numOfEdges;
+    m_edges.emplace(edgeId, Edge(edgeId, from, to, w));
+    m_adjacencyList[from][edgeId] = to;
 }
 
-void WeightedDirectedGraph::removeEdge(Node* u, Node* v) {
-    if(u == nullptr || v == nullptr) {
+void WeightedDirectedGraph::removeEdge(unsigned edgeId) {
+    auto it = m_edges.find(edgeId);
+    if(it == m_edges.end()) {
         return;
     }
-    for(auto it = m_edges.begin(); it != m_edges.end();) {
-        Edge* e = *it;
-        if(e->startNode() == u && e->endNode() == v) {
-            delete e;
-            it = m_edges.erase(it);
-        } else {
-            ++it;
-        }
-    }
+    unsigned from = it->second.startNode();
+    m_adjacencyList[from].erase(edgeId);
+    m_edges.erase(edgeId);
+    --m_numOfEdges;
+}
+
+bool WeightedDirectedGraph::isDirected() const {
+    return true;
+}
+
+bool WeightedDirectedGraph::isWeighted() const {
+    return true;
 }

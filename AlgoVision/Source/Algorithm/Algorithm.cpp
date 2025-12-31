@@ -1,3 +1,4 @@
 #include "Algorithm.h"
 
-// TODO
+Algorithm::Algorithm(const std::shared_ptr<Graph>& g) : m_graph(g) {
+}

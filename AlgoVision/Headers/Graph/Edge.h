@@ -1,30 +1,29 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-#include "Node.h"
 #include <iostream>
 
 class Edge {
 public:
-    Edge(Node *, Node *, bool directed = false, int weight = 1);
-    Edge(const Edge &);
-    ~Edge();
+    Edge(unsigned, unsigned, unsigned, int weight = 1);
+    ~Edge() = default;
 
-    bool isDirected() const;
-    int getWeight() const;
-    Node *startNode() const;
-    Node *endNode() const;
+    unsigned getId() const;
+    int      getWeight() const;
+    unsigned startNode() const;
+    unsigned endNode() const;
 
     void setWeight(int);
 
-    friend std::ostream &operator<<(std::ostream &, const Edge &);
+    friend std::ostream& operator<<(std::ostream&, const Edge&);
 
 private:
-    bool m_directed;
-    int m_weight;
-    std::pair<Node *, Node *> m_connectedNodes;
+    int      m_weight;
+    unsigned m_id;
+    unsigned m_idStartNode;
+    unsigned m_idEndNode;
 };
 
-std::ostream &operator<<(std::ostream &, const Edge &);
+std::ostream& operator<<(std::ostream&, const Edge&);
 
 #endif // EDGE_H

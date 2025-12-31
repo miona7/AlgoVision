@@ -1,30 +1,46 @@
 #include "DFS.h"
 
-#include "Node.h"
-
-bool DFS::checkConditions() const {
-    return true; // TODO
+DFS::DFS(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
-void DFS::execute(Node *startNode = nullptr, Node *endNode = nullptr) {
-    int start;
-    if(startNode) {
-        start = startNode->getId();
-    } else {
-        start = 0;
-        startNode = m_graph->getNodes()[0];
-        // TODO: kazi ogiju da promeni da id krecu od 0, zbog pristupa nizu
+void DFS::checkConditions(unsigned start) const {
+    // graf postoji i ima bar 1 cvor
+
+    if(!m_graph || m_graph->getNodes().empty()) {
+        throw std::runtime_error("Graph is not initialized or invalid!");
     }
-    std::vector<bool> visited(m_graph->size(), false);
-    dfs(start, startNode, visited);
+
+    auto nodes = m_graph->getNodes();
+    if(nodes.find(start) == nodes.end()) {
+        throw std::runtime_error("Start node does not exist in graph!");
+    }
 }
 
-void DFS::dfs(int nodeId, Node *node, std::vector<bool> &visited) {
+void DFS::execute(unsigned idStartNode, unsigned) {
+    checkConditions(idStartNode);
+
+    auto                     nodes = m_graph->getNodes();
+    std::map<unsigned, bool> visited;
+    for(const auto& [id, _]: nodes) {
+        visited[id] = false;
+    }
+
+    std::cout << "DFS traversal starting from node " << idStartNode << ":" << std::endl;
+    dfs(idStartNode, visited);
+    std::cout << "DFS finished." << std::endl;
+}
+
+void DFS::dfs(unsigned nodeId, std::map<unsigned, bool>& visited) {
     visited[nodeId] = true;
-    for(auto neighbour: node->getNeighbours()) {
-        int id = neighbour->getId();
-        if(!visited[id]) {
-            dfs(id, neighbour, visited);
+    std::cout << "visiting node with id " << nodeId << std::endl;
+
+    auto adjList = m_graph->getAdjacencyList();
+    if(adjList.find(nodeId) != adjList.end()) {
+        for(const auto& [_, neighbourId]: adjList[nodeId]) {
+            if(!visited[neighbourId]) {
+                dfs(neighbourId, visited);
+            }
         }
     }
+    // TODO: ispis kroz spdlog
 }
