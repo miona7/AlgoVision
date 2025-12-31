@@ -9,10 +9,10 @@
 
 class Algorithm {
 public:
-    explicit Algorithm(const std::shared_ptr<Graph>& g);
+    explicit Algorithm(const std::shared_ptr<Graph>&);
     virtual ~Algorithm() = default;
 
-    virtual void execute(unsigned idStartNode = 0, unsigned idEndNode = 0) = 0;
+    virtual void execute(unsigned = 0, unsigned = 0) = 0;
 
     // getStates
 
