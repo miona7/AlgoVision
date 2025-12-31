@@ -38,6 +38,7 @@ set(PROJECT_SOURCES
         Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
         Headers/Algorithm/BFS.h Source/Algorithm/BFS.cpp
+        Headers/Algorithm/Kahn.h Source/Algorithm/Kahn.cpp
         Headers/Algorithm/Tarjan.h Source/Algorithm/Tarjan.cpp
         Headers/Algorithm/Dijkstra.h Source/Algorithm/Dijkstra.cpp
         Headers/Algorithm/Prim.h Source/Algorithm/Prim.cpp
@@ -120,6 +121,7 @@ add_executable(AlgoVisionTests
     Source/Algorithm/AStar.cpp
     Source/Algorithm/DFS.cpp
     Source/Algorithm/BFS.cpp
+    Source/Algorithm/Kahn.cpp
     Source/Algorithm/Tarjan.cpp
     Source/Algorithm/Dijkstra.cpp
     Source/Algorithm/Prim.cpp
@@ -129,6 +131,7 @@ add_executable(AlgoVisionTests
     Tests/Algorithm/astarTest.cpp
     Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp
+    Tests/Algorithm/kahnTest.cpp
     Tests/Algorithm/tarjanTest.cpp
     Tests/Algorithm/dijkstraTest.cpp
     Tests/Algorithm/primTest.cpp
