@@ -12,9 +12,6 @@ public:
     explicit Algorithm(const std::shared_ptr<Graph>& g);
     virtual ~Algorithm() = default;
 
-    virtual bool checkConditions() const = 0;
-
-    // razmisliti da bude protected
     virtual void execute(unsigned idStartNode = 0, unsigned idEndNode = 0) = 0;
 
     // getStates

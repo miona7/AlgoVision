@@ -3,21 +3,23 @@
 DFS::DFS(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
-bool DFS::checkConditions() const {
+void DFS::checkConditions(unsigned start) const {
     // graf postoji i ima bar 1 cvor
-    return m_graph && !m_graph->getNodes().empty();
-}
 
-void DFS::execute(unsigned idStartNode, unsigned idEndNode) {
-    if(!checkConditions()) {
+    if(!m_graph || m_graph->getNodes().empty()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
 
     auto nodes = m_graph->getNodes();
-    if(nodes.find(idStartNode) == nodes.end()) {
+    if(nodes.find(start) == nodes.end()) {
         throw std::runtime_error("Start node does not exist in graph!");
     }
+}
 
+void DFS::execute(unsigned idStartNode, unsigned) {
+    checkConditions(idStartNode);
+
+    auto nodes = m_graph->getNodes();
     std::map<unsigned, bool> visited;
     for(const auto& [id, _]: nodes) {
         visited[id] = false;

@@ -3,30 +3,26 @@
 Dijkstra::Dijkstra(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
-bool Dijkstra::checkConditions() const {
+void Dijkstra::checkConditions(unsigned start) const {
     if(!m_graph || m_graph->getNodes().empty()) {
-        return false;
-    }
-
-    auto edges = m_graph->getEdges();
-    for(const auto& [id, edge]: edges) {
-        if(edge.getWeight() < 0) {
-            return false; // negativna tezina grane
-        }
-    }
-
-    return true;
-}
-
-void Dijkstra::execute(unsigned idStartNode, unsigned) {
-    if(!checkConditions()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
 
     auto nodes = m_graph->getNodes();
-    if(nodes.find(idStartNode) == nodes.end()) {
+    if(nodes.find(start) == nodes.end()) {
         throw std::runtime_error("Start node does not exist in graph!");
     }
+
+    auto edges = m_graph->getEdges();
+    for(const auto& [_, edge]: edges) {
+        if(edge.getWeight() < 0) {
+            throw std::runtime_error("Graph contains edge with negative weight!");
+        }
+    }
+}
+
+void Dijkstra::execute(unsigned idStartNode, unsigned) {
+    checkConditions(idStartNode);
 
     std::cout << "Starting Dijkstra." << std::endl;
     dijkstra(idStartNode);

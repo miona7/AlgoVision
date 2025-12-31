@@ -14,7 +14,7 @@ class FloydWarshall : public Algorithm {
 public:
     explicit FloydWarshall(const std::shared_ptr<Graph>&);
 
-    bool checkConditions() const override;
+    void checkConditions() const;
     void execute(unsigned idStartNode = 0, unsigned idEndNode = 0) override;
 
 private:

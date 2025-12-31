@@ -3,19 +3,19 @@
 BFS::BFS(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
-bool BFS::checkConditions() const {
-    return m_graph && !m_graph->getNodes().empty();
-}
-
-void BFS::execute(unsigned idStartNode, unsigned idEndNode) {
-    if(!checkConditions()) {
+void BFS::checkConditions(unsigned start) const {
+    if(!m_graph || m_graph->getNodes().empty()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
 
     auto nodes = m_graph->getNodes();
-    if(nodes.find(idStartNode) == nodes.end()) {
+    if(nodes.find(start) == nodes.end()) {
         throw std::runtime_error("Start node does not exist in graph!");
     }
+}
+
+void BFS::execute(unsigned idStartNode, unsigned) {
+    checkConditions(idStartNode);
 
     std::cout << "BFS traversal starting from node " << idStartNode << ":" << std::endl;
     bfs(idStartNode);

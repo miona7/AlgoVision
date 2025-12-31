@@ -12,8 +12,8 @@ class Dijkstra : public Algorithm {
 public:
     explicit Dijkstra(const std::shared_ptr<Graph>&);
 
-    bool checkConditions() const override;
-    void execute(unsigned idStartNode = 0, unsigned idEndNode = 0) override;
+    void checkConditions(unsigned) const;
+    void execute(unsigned, unsigned idEndNode = 0) override;
 
 private:
     void dijkstra(unsigned);

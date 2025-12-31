@@ -14,8 +14,8 @@ class BellmanFord : public Algorithm {
 public:
     explicit BellmanFord(const std::shared_ptr<Graph>&);
 
-    bool checkConditions() const override;
-    void execute(unsigned idStartNode = 0, unsigned idEndNode = 0) override;
+    void checkConditions(unsigned) const;
+    void execute(unsigned, unsigned idEndNode = 0) override;
 
     bool hasNegativeCycle() const;
 

@@ -3,15 +3,15 @@
 Tarjan::Tarjan(const std::shared_ptr<Graph>& g) : Algorithm(g), m_arrivalTime(0) {
 }
 
-bool Tarjan::checkConditions() const {
+void Tarjan::checkConditions() const {
     // usmereni graf postoji i ima bar 1 cvor
-    return m_graph && !m_graph->getNodes().empty() && m_graph->isDirected();
+    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected()) {
+        throw std::runtime_error("Graph is not initialized or invalid!");
+    }
 }
 
 void Tarjan::execute(unsigned, unsigned) {
-    if(!checkConditions()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
-    }
+    checkConditions();
 
     init();
 

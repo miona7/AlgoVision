@@ -11,10 +11,8 @@ class DFS : public Algorithm {
 public:
     explicit DFS(const std::shared_ptr<Graph>&);
 
-    bool checkConditions() const override;
-
-    // razmisliti da bude private
-    void execute(unsigned idStartNode = 0, unsigned idEndNode = 0) override;
+    void checkConditions(unsigned) const;
+    void execute(unsigned, unsigned idEndNode = 0) override;
 
 private:
     void dfs(unsigned, std::map<unsigned, bool>&);
