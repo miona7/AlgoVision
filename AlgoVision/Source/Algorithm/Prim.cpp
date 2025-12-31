@@ -8,11 +8,11 @@ void Prim::checkConditions() const {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
 
-    BFS bfs(m_graph);
+    BFS      bfs(m_graph);
     unsigned start = m_graph->getNodes().begin()->first;
     bfs.execute(start);
 
-    for(const auto& [_, visited] : bfs.getVisited()) {
+    for(const auto& [_, visited]: bfs.getVisited()) {
         if(!visited) {
             throw std::runtime_error("Graph is not connected!");
         }
@@ -28,18 +28,20 @@ void Prim::execute(unsigned, unsigned) {
 }
 
 void Prim::prim() {
-    std::map<unsigned, bool> inTree;        // da li je cvor vec u drvetu
-    std::map<unsigned, int>  minDistance;   // minimalno rastojanje cvora do drveta
-    std::map<unsigned, int> parent;         // za svaki cvor pamtimo iz kog cvora smo dosli do njeg
+    std::map<unsigned, bool> inTree;      // da li je cvor vec u drvetu
+    std::map<unsigned, int>  minDistance; // minimalno rastojanje cvora do drveta
+    std::map<unsigned, int>  parent;      // za svaki cvor pamtimo iz kog cvora smo dosli do njeg
 
     auto nodes = m_graph->getNodes();
     for(const auto& [nodeId, _]: nodes) {
-        inTree[nodeId] = false;
+        inTree[nodeId]      = false;
         minDistance[nodeId] = std::numeric_limits<int>::max();
-        parent[nodeId] = -1;
+        parent[nodeId]      = -1;
     }
 
-    std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>, std::greater<>> pq;
+    std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
+                        std::greater<>>
+             pq;
     unsigned start = nodes.begin()->first;
     pq.emplace(0, start);
     minDistance[start] = 0;
@@ -61,7 +63,7 @@ void Prim::prim() {
                         int weight = it->second.getWeight();
                         if(weight < minDistance[neighbourId]) {
                             minDistance[neighbourId] = weight;
-                            parent[neighbourId] = currentNode;
+                            parent[neighbourId]      = currentNode;
                             pq.emplace(minDistance[neighbourId], neighbourId);
                         }
                     }
@@ -73,7 +75,7 @@ void Prim::prim() {
     int totalWeight = 0;
 
     std::cout << "Minimum Spanning Tree:" << std::endl;
-    for(const auto& [u, v] : parent) {
+    for(const auto& [u, v]: parent) {
         if(v != -1) {
             std::cout << v << " -> " << u << " edge = " << minDistance[u] << std::endl;
             totalWeight += minDistance[u];

@@ -2,8 +2,8 @@
 #include <catch2/catch_all.hpp>
 
 #include "Prim.h"
-#include "WeightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
 
 TEST_CASE("Prim works on connected undirected weighted graph", "[PRIM]") {
     auto g = std::make_shared<WeightedUndirectedGraph>();

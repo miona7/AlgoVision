@@ -2,8 +2,8 @@
 #define BFS_H
 
 #include <iostream>
-#include <queue>
 #include <map>
+#include <queue>
 #include <stdexcept>
 
 #include "Algorithm.h"

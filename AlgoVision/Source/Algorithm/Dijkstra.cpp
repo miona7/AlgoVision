@@ -40,7 +40,9 @@ void Dijkstra::dijkstra(unsigned start) {
     }
 
     // min-hip: pair<rastojanje, cvor>
-    std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>, std::greater<>> pq;
+    std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
+                        std::greater<>>
+        pq;
     pq.emplace(0, start);
     minDistance[start] = 0;
 

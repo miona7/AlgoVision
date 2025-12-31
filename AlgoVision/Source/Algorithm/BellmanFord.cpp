@@ -1,10 +1,11 @@
 #include "BellmanFord.h"
 
-BellmanFord::BellmanFord(const std::shared_ptr<Graph>& g) : Algorithm(g), m_hasNegativeCycle(false) {
+BellmanFord::BellmanFord(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
 void BellmanFord::checkConditions(unsigned start) const {
-    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected() || !m_graph->isWeighted()) {
+    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected() ||
+       !m_graph->isWeighted()) {
         throw std::runtime_error("Graph is not initialized or invalid!");
     }
 
@@ -22,7 +23,7 @@ void BellmanFord::execute(unsigned idStartNode, unsigned) {
     std::cout << "Bellman Ford finished." << std::endl;
 
     std::cout << "Shortest distances from node " << idStartNode << ":" << std::endl;
-    for(const auto& [node, dist] : m_minDistance) {
+    for(const auto& [node, dist]: m_minDistance) {
         std::cout << "Node " << node << ": ";
         if(dist == std::numeric_limits<int>::max()) {
             std::cout << "unreachable" << std::endl;
@@ -42,24 +43,25 @@ void BellmanFord::bellmanFord(unsigned start) {
     auto nodes = m_graph->getNodes();
     auto edges = m_graph->getEdges();
 
-    for(const auto& [node, _] : nodes) {
+    for(const auto& [node, _]: nodes) {
         m_minDistance[node] = std::numeric_limits<int>::max();
     }
 
     m_minDistance[start] = 0;
 
-    unsigned V = nodes.size();
+    unsigned v = nodes.size();
 
-    // relaksiraj grane V-1 put
-    for(int k = 0; k < V-1; ++k) {
+    // relaksiraj grane v-1 put
+    for(int k = 0; k < v - 1; ++k) {
         bool wasRelaxed = false;
-        for(const auto& [_, edge] : edges) {
+        for(const auto& [_, edge]: edges) {
             unsigned u = edge.startNode();
             unsigned v = edge.endNode();
-            int w = edge.getWeight();
-            if(m_minDistance[u] != std::numeric_limits<int>::max() && m_minDistance[u] + w < m_minDistance[v]) {
+            int      w = edge.getWeight();
+            if(m_minDistance[u] != std::numeric_limits<int>::max() &&
+               m_minDistance[u] + w < m_minDistance[v]) {
                 m_minDistance[v] = m_minDistance[u] + w;
-                wasRelaxed = true;
+                wasRelaxed       = true;
             }
         }
         if(!wasRelaxed) {
@@ -68,12 +70,13 @@ void BellmanFord::bellmanFord(unsigned start) {
     }
 
     m_hasNegativeCycle = false;
-    for(const auto& [_, edge] : edges) {
+    for(const auto& [_, edge]: edges) {
         unsigned u = edge.startNode();
         unsigned v = edge.endNode();
-        int w = edge.getWeight();
+        int      w = edge.getWeight();
         if(nodes.find(u) != nodes.end() && nodes.find(v) != nodes.end() &&
-            m_minDistance[u] != std::numeric_limits<int>::max() && m_minDistance[u] + w < m_minDistance[v]) {
+           m_minDistance[u] != std::numeric_limits<int>::max() &&
+           m_minDistance[u] + w < m_minDistance[v]) {
             m_hasNegativeCycle = true;
             break;
         }
@@ -83,4 +86,3 @@ void BellmanFord::bellmanFord(unsigned start) {
 bool BellmanFord::hasNegativeCycle() const {
     return m_hasNegativeCycle;
 }
-

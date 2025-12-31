@@ -2,10 +2,10 @@
 #define FW_H
 
 #include <iostream>
+#include <limits>
 #include <map>
 #include <memory>
 #include <stdexcept>
-#include <limits>
 
 #include "Algorithm.h"
 #include "BellmanFord.h"

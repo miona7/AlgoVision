@@ -2,11 +2,11 @@
 #define BF_H
 
 #include <iostream>
-#include <vector>
+#include <limits>
 #include <map>
 #include <memory>
 #include <stdexcept>
-#include <limits>
+#include <vector>
 
 #include "Algorithm.h"
 
@@ -20,7 +20,7 @@ public:
     bool hasNegativeCycle() const;
 
 private:
-    bool m_hasNegativeCycle;
+    bool                    m_hasNegativeCycle = false;
     std::map<unsigned, int> m_minDistance;
 
     void bellmanFord(unsigned);

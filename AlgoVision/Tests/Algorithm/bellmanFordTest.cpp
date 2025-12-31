@@ -61,7 +61,7 @@ TEST_CASE("Bellman-Ford: start node does not exist", "[BF]") {
 }
 
 TEST_CASE("Bellman-Ford: empty graph", "[BF]") {
-    auto graph = std::make_shared<WeightedDirectedGraph>();
+    auto        graph = std::make_shared<WeightedDirectedGraph>();
     BellmanFord bf(graph);
     REQUIRE_THROWS_AS(bf.execute(0), std::runtime_error);
 }

@@ -1,6 +1,6 @@
 #include "Tarjan.h"
 
-Tarjan::Tarjan(const std::shared_ptr<Graph>& g) : Algorithm(g), m_arrivalTime(0) {
+Tarjan::Tarjan(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
 void Tarjan::checkConditions() const {
@@ -47,7 +47,7 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
 
     auto adjList = m_graph->getAdjacencyList();
     if(adjList.find(nodeId) != adjList.end()) {
-        for(const auto& [_, neighbourId] : adjList[nodeId]) {
+        for(const auto& [_, neighbourId]: adjList[nodeId]) {
             if(m_incomingNumbering[neighbourId] == -1) {
                 tarjan(neighbourId, component);
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_lowLink[neighbourId]);
@@ -90,9 +90,9 @@ void Tarjan::init() {
 
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
-        m_incomingNumbering[id] = -1;         // jos nije posecen
-        m_lowLink[id]           = -1;         // lowlink vrednost nepoznata
+        m_incomingNumbering[id] = -1; // jos nije posecen
+        m_lowLink[id]           = -1; // lowlink vrednost nepoznata
         m_onStack[id]           = false;
-        m_components[id]        = -1;         // komponenta nije dodeljena
+        m_components[id]        = -1; // komponenta nije dodeljena
     }
 }

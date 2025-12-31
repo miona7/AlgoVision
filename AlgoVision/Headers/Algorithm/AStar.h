@@ -1,13 +1,13 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
+#include <cmath>
 #include <iostream>
+#include <limits>
 #include <map>
+#include <memory>
 #include <queue>
 #include <vector>
-#include <limits>
-#include <memory>
-#include <cmath>
 
 #include "Algorithm.h"
 
@@ -19,14 +19,14 @@ public:
     void execute(unsigned, unsigned) override;
 
     const std::vector<unsigned>& getPath() const;
-    int getTotalCost() const;
+    int                          getTotalCost() const;
 
 private:
     void aStar(unsigned, unsigned);
-    int heuristic(unsigned, unsigned) const;
+    int  heuristic(unsigned, unsigned) const;
 
     std::vector<unsigned> m_path;
-    int m_totalCost;
+    int                   m_totalCost = 0;
 };
 
 #endif // ASTAR_H

@@ -5,7 +5,7 @@
 
 class UnweightedUndirectedGraph : public Graph {
 public:
-    UnweightedUndirectedGraph()  = default;
+    UnweightedUndirectedGraph()           = default;
     ~UnweightedUndirectedGraph() override = default;
 
     void addEdge(unsigned, unsigned, int w = 1) override;

@@ -37,10 +37,11 @@ void BFS::bfs(unsigned start) {
     q.push(start);
 
     while(!q.empty()) {
-        unsigned current = q.front(); q.pop();
+        unsigned current = q.front();
+        q.pop();
         std::cout << "visiting node with id " << current << std::endl;
         if(adjList.find(current) != adjList.end()) {
-            for(const auto& [_, neighbourId] : adjList[current]) {
+            for(const auto& [_, neighbourId]: adjList[current]) {
                 if(!m_visited[neighbourId]) {
                     m_visited[neighbourId] = true;
                     q.push(neighbourId);

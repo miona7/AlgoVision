@@ -3,8 +3,8 @@
 
 #include "Tarjan.h"
 #include "UnweightedDirectedGraph.h"
-#include "WeightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
+#include "WeightedDirectedGraph.h"
 
 TEST_CASE("Tarjan on Unweighted Directed Graph", "[TARJAN]") {
     auto udg = std::make_shared<UnweightedDirectedGraph>();

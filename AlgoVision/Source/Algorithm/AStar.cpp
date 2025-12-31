@@ -1,6 +1,6 @@
 #include "AStar.h"
 
-AStar::AStar(const std::shared_ptr<Graph>& g) : Algorithm(g), m_totalCost(0) {
+AStar::AStar(const std::shared_ptr<Graph>& g) : Algorithm(g) {
 }
 
 void AStar::checkConditions(unsigned start, unsigned goal) const {
@@ -17,7 +17,7 @@ void AStar::checkConditions(unsigned start, unsigned goal) const {
     }
 
     auto edges = m_graph->getEdges();
-    for(const auto& [id, edge] : edges) {
+    for(const auto& [id, edge]: edges) {
         if(edge.getWeight() < 0) {
             throw std::runtime_error("Graph contains negative edge weights!");
         }
@@ -37,19 +37,18 @@ void AStar::execute(unsigned start, unsigned goal) {
         if(i != m_path.size() - 1) {
             std::cout << " -> ";
         }
-
     }
     std::cout << std::endl << "Total cost: " << m_totalCost << std::endl;
 }
 
 void AStar::aStar(unsigned start, unsigned goal) {
     m_path.clear();
-    std::map<unsigned, int> gScore;        // stvarni trosak puta od startnog do trenutnog cvora
-    std::map<unsigned, int> fScore;        // procena ukupnog troska od startnog do ciljnog preko trenutnog
+    std::map<unsigned, int> gScore; // stvarni trosak puta od startnog do trenutnog cvora
+    std::map<unsigned, int> fScore; // procena ukupnog troska od startnog do ciljnog preko trenutnog
     std::map<unsigned, unsigned> parent;
 
     auto nodes = m_graph->getNodes();
-    for(const auto& [id, _] : nodes) {
+    for(const auto& [id, _]: nodes) {
         gScore[id] = std::numeric_limits<int>::max();
         fScore[id] = std::numeric_limits<int>::max();
     }
@@ -57,14 +56,17 @@ void AStar::aStar(unsigned start, unsigned goal) {
     gScore[start] = 0;
     fScore[start] = heuristic(start, goal);
 
-    std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>, std::greater<>> pq;
+    std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
+                        std::greater<>>
+        pq;
     pq.emplace(fScore[start], start);
 
     auto adjList = m_graph->getAdjacencyList();
-    auto edges = m_graph->getEdges();
+    auto edges   = m_graph->getEdges();
 
     while(!pq.empty()) {
-        auto [_, current] = pq.top(); pq.pop();
+        auto [_, current] = pq.top();
+        pq.pop();
 
         if(current == goal) {
             // rekonstruisemo put
@@ -79,7 +81,7 @@ void AStar::aStar(unsigned start, unsigned goal) {
         }
 
         if(adjList.find(current) != adjList.end()) {
-            for(const auto& [edgeId, neighbour] : adjList[current]) {
+            for(const auto& [edgeId, neighbour]: adjList[current]) {
                 auto it = edges.find(edgeId);
                 if(it != edges.end()) {
                     int tentativeG = gScore[current] + it->second.getWeight();
@@ -100,7 +102,7 @@ void AStar::aStar(unsigned start, unsigned goal) {
 int AStar::heuristic(unsigned node, unsigned goal) const {
     // euklidsko rastojanje izmedju koordinata cvorova
 
-    auto nodes = m_graph->getNodes();
+    auto nodes  = m_graph->getNodes();
     auto itNode = nodes.find(node);
     auto itGoal = nodes.find(goal);
 
@@ -108,7 +110,7 @@ int AStar::heuristic(unsigned node, unsigned goal) const {
         auto [x1, y1] = itNode->second.getPosition();
         auto [x2, y2] = itGoal->second.getPosition();
 
-        return static_cast<int>(std::sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)));
+        return static_cast<int>(std::sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
 
     return 0; // fallback heuristika

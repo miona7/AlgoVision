@@ -20,7 +20,6 @@ TEST_CASE("BFS on Unweighted Directed Graph", "[BFS]") {
     REQUIRE_NOTHROW(bfs.execute(0));
 }
 
-
 TEST_CASE("BFS on Unweighted Undirected Graph", "[BFS]") {
     auto g = std::make_shared<UnweightedUndirectedGraph>();
     g->addNode(0);

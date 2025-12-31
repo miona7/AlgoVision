@@ -19,7 +19,7 @@ void DFS::checkConditions(unsigned start) const {
 void DFS::execute(unsigned idStartNode, unsigned) {
     checkConditions(idStartNode);
 
-    auto nodes = m_graph->getNodes();
+    auto                     nodes = m_graph->getNodes();
     std::map<unsigned, bool> visited;
     for(const auto& [id, _]: nodes) {
         visited[id] = false;

@@ -39,7 +39,7 @@ TEST_CASE("A* finds shortest path in simple graph", "[AStar]") {
     AStar astar(graph);
     REQUIRE_NOTHROW(astar.execute(1, 4));
 
-    std::vector<unsigned> expectedPath = {1, 2, 4};     // {1, 3, 4}
+    std::vector<unsigned> expectedPath = {1, 2, 4}; // {1, 3, 4}
     REQUIRE(astar.getPath() == expectedPath);
     REQUIRE(astar.getTotalCost() == 3);
 }

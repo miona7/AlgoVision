@@ -18,7 +18,7 @@ public:
     void removeNode(unsigned);
 
     virtual void addEdge(unsigned, unsigned, int w = 1) = 0;
-    virtual void removeEdge(unsigned)                               = 0;
+    virtual void removeEdge(unsigned)                   = 0;
 
     virtual bool isDirected() const = 0;
     virtual bool isWeighted() const = 0;
