@@ -1,0 +1,267 @@
+======================================================================
+
+UC1: Load graph
+
+• Kratak opis: Korisnik ucitava graf iz fajla. Aplikacija parsira i validira podatke, konstruise model grafa i prikazuje ga na sceni.
+
+• Akteri:
+– Korisnik 
+
+• Preduslovi:
+– Aplikacija je pokrenuta i prikazuje glavni prozor.
+– Korisnik ima pristup sistemu datoteka.
+
+• Postuslovi:
+– Graf je učitan u memoriju i prikazan na sceni.
+– Cvorovi su rasporedjeni tako da nema ociglednog preklapanja.
+– Ako je graf velik (npr. oko 1000+ cvorova), prikaz je prilagodjen: smanjena velicina cvorova/labela, omogucen pan/zoom i po potrebi fit-to-view.
+
+• Osnovni tok:
+1. Korisnik bira opciju „Import”.
+2. Aplikacija prikazuje prozor za izbor fajla.
+3. Korisnik bira fajl i potvrđuje.
+4. Aplikacija učitava sadržaj fajla.
+5. Aplikacija parsira strukturu grafa.
+6. Aplikacija validira podatke (unikatni ID čvorova, validne reference grana, ispravnost težina).
+7. Aplikacija konstruiše model grafa u memoriji.
+8. Aplikacija priprema raspored u sceni.
+    8.1. Ukoliko fajl sadrži validne koordinate (x, y) za čvorove:
+        8.1.1. Aplikacija postavlja čvorove na učitane koordinate.
+    8.2. Ukoliko koordinate ne postoje ili su nekonzistentne:
+        8.2.1. Aplikacija primenjuje auto-layout (raspored bez preklapanja).
+        8.2.2. Prelazi se na korak 9.
+9. Aplikacija prikazuje graf.
+
+• Alternativni tokovi:
+– A1: Korisnik otkaze izbor fajla. U koraku 2 korisnik bira „Cancel”, aplikacija ne menja stanje i slucaj upotrebe se zavrsava.
+– A2: Neuspesno citanje fajla. Aplikacija prikazuje poruku o gresci i slucaj upotrebe se zavrsava.
+– A3: Neuspešno parsiranje fajla. U koraku 5 parsiranje strukture grafa nije uspelo. Aplikacija prikazuje poruku o grešci i slučaj upotrebe se završava.
+– A4: Neuspešna validacija podataka. U koraku 6 validacija podataka nije uspela. Aplikacija prikazuje poruku o grešci i slučaj upotrebe se završava.
+
+• Specijalni zahtevi:
+– Auto-layout mora minimizovati preklapanje.
+
+======================================================================
+
+UC2: Export // abstraktan
+
+• Kratak opis: Korisnik izvozi trenutni graf u odabrani format.
+
+• Akteri:
+– Korisnik
+
+• Preduslovi:
+– U aplikaciji postoji graf koji je prikazan.
+
+• Postuslovi:
+– Izvoz je uspešno izvršen u odabranom formatu.
+
+• Osnovni tok:
+1. Korisnik bira opciju „Export”.
+2. Aplikacija prikazuje izbor formata izvoza.
+3. Korisnik bira format izvoza.
+4. Aktivira se odgovarajući specijalizovani slučaj upotrebe.
+5. Slučaj upotrebe se završava.
+
+• Alternativni tokovi:
+– A1: Korisnik otkazuje izbor formata. Aplikacija ne menja stanje i slučaj upotrebe se završava.
+
+======================================================================
+
+UC3: Save as picture  // specijalizacija UC2
+
+• Kratak opis: Aplikacija čuva vizuelni prikaz grafa kao sliku.
+
+• Akteri:
+– Korisnik
+
+• Preduslovi:
+– Graf je prikazan na sceni.
+
+• Postuslovi:
+– Slika grafa je sačuvana na disku.
+
+• Osnovni tok:
+
+1. Korisnik bira opciju „Save as picture”.
+2. Aplikacija prikazuje prozor za izbor lokacije, imena i formata slike.
+3. Korisnik potvrđuje čuvanje.
+4. Aplikacija renderuje kompletnu scenu.
+5. Aplikacija upisuje sliku na disk.
+6. Slučaj upotrebe se završava.
+
+• Alternativni tokovi:
+– A1: Korisnik otkazuje čuvanje u koraku 2. Aplikacija ne menja stanje i slučaj upotrebe se završava.
+– A2: Greška pri upisu slike na disk. Aplikacija prikazuje poruku o grešci i slučaj upotrebe se završava.
+
+======================================================================
+
+UC4: Save as .json // specijalizacija UC2
+
+• Kratak opis: Aplikacija serijalizuje strukturu grafa u JSON format i čuva fajl.
+
+• Akteri:
+– Korisnik
+
+• Preduslovi:
+– Graf postoji na sceni.
+
+• Postuslovi:
+– JSON fajl je sačuvan i može se kasnije učitati putem UC1.
+
+• Osnovni tok:
+1. Korisnik bira opciju „Save as .json”.
+2. Aplikacija prikazuje prozor za izbor lokacije i imena fajla.
+3. Korisnik potvrđuje čuvanje.
+4. Aplikacija serijalizuje graf.
+5. Aplikacija upisuje JSON fajl na disk.
+6. Slučaj upotrebe se završava.
+
+• Alternativni tokovi:
+– A1: Korisnik otkazuje čuvanje u koraku 2. Aplikacija ne menja stanje i slučaj upotrebe se završava.
+– A2: Greška pri upisu JSON fajla na disk. Aplikacija prikazuje poruku o grešci i slučaj upotrebe se završava.
+
+======================================================================
+
+UC5: Run algorithm
+
+• Kratak opis: Korisnik pokreće algoritam nad grafom i prati vizualizaciju (animacija ili korak-po-korak).
+
+• Akteri:
+– Korisnik
+
+• Preduslovi:
+– Graf postoji.
+– Algoritam je primenljiv na trenutni graf.
+
+• Postuslovi:
+– Prikazan je rezultat algoritma.
+– Struktura grafa nije promenjena (menja se samo vizuelno stanje).
+
+• Osnovni tok:
+1. Korisnik bira mod „izvršavanja algoritma”.
+2. Korisnik bira algoritam u panelu algoritama.
+3. Aplikacija validira graf za izabrani algoritam.
+4. Aplikacija inicijalizuje izvršavanje algoritma.
+5. Korisnik bira režim prikaza (Animation ili Step-by-step).
+6. Aplikacija započinje prikaz izvršavanja.
+7. Dok algoritam nije završen i korisnik nije prekinuo izvršavanje:
+    7.1. Aplikacija primenjuje sledeći korak vizualizacije.
+    7.2. Aplikacija proverava da li je tekući čvor u centralnoj zoni prikaza i pomera ga po potrebi.
+    7.3. Ako je režim Animation, aplikacija čeka sledeći otkucaj tajmera; korisnik može izabrati „Pause“ ili „Play“.
+    7.4. Ako je režim Step-by-step, aplikacija čeka korisničku akciju (Next / Previous / Reset) i reaguje u skladu sa izborom:
+        7.4.1. Ukoliko je korisnik pritisnuo „Next“:
+            7.4.1.1. Prelazi se na sledeći korak vizualizacije.
+        7.4.2. Ukoliko je korisnik pritisnuo „Previous“:
+            7.4.2.1. Vraća se prethodni korak i nastavlja izvršavanje.
+        7.4.3. Ukoliko je korisnik pritisnuo „Reset“:
+            7.4.3.1. Vraća se na korak 5.
+8. Po završetku algoritma, aplikacija prikazuje konačni rezultat.
+9. Slučaj upotrebe se završava.
+
+• Alternativni tokovi:
+– A1: Validacija grafa nije prošla. Aplikacija prikazuje poruku o grešci i slučaj upotrebe se završava.
+– A2: Korisnik prekine izvršavanje algoritma. Izvršavanje se zaustavlja, graf ostaje u trenutnom vizuelnom stanju.
+
+======================================================================
+
+UC6: Edit graph // abstraktan
+
+• Kratak opis: Korisnik uredjuje strukturu grafa. 
+
+• Akteri:
+– Korisnik
+
+• Preduslovi:
+– Graf je prikazan na sceni.
+
+• Postuslovi:
+– Graf je izmenjen.
+– Prikaz je osvezen.
+
+• Osnovni tok:
+1. Korisnik aktivira rezim „Graph editing”.
+2. Aplikacija omogućava interakciju sa grafom.
+3. Aktivira se odgovarajući specijalizovani ili proširujući slučaj upotrebe. 
+4. Aplikacija beleži izvršenu izmenu.
+5. Slucaj upotrebe se zavrsava.
+
+• Alternativni tokovi:
+– A1: Nevazeca izmena (dupli ID). Aplikacija prikazuje poruku o gresci i stanje grafa ostaje nepromenjeno.
+
+======================================================================
+
+UC7: Add elements (Edit node, edit edge) // specijalizacija UC6
+
+• Kratak opis: Korisnik dodaje čvorove i/ili grane u graf.
+
+• Akteri:
+– Korisnik
+
+• Preduslovi:
+– Aktiviran je režim „Graph editing/Pencil”.
+
+• Postuslovi:
+– Elementi su dodati u graf.
+– Prikaz je osvežen.
+
+• Osnovni tok:
+1. Korisnik bira opciju za dodavanje elemenata - "Pencil”.
+2. Aplikacija omogućava unos elemenata.
+3. Aplikacija dodaje elemente u graf.
+4. Aplikacija osvežava prikaz.
+5. Slučaj upotrebe se završava.
+
+• Alternativni tokovi:
+– A1: Pokušaj dodavanja nevažećeg elementa (dupli ID). Aplikacija prikazuje poruku o grešci i stanje ostaje nepromenjeno.
+
+======================================================================
+
+UC8: Delete elements (Edit node, edit edge) // specijalizacija UC6
+
+• Kratak opis: Korisnik briše čvor ili granu iz grafa.
+
+• Akteri:
+– Korisnik
+
+• Preduslovi:
+– Aktiviran je režim „Graph editing/Eraser”.
+– Postoji graf na sceni.
+
+• Postuslovi:
+– Izabrani element je uklonjen iz grafa.
+– Prikaz je osvežen.
+
+• Osnovni tok:
+1. Korisnik bira opciju za brisanje elemenata - "Eraser”.
+2. Korisnik selektuje element grafa.
+3. Aplikacija uklanja izabrani element.
+4. Aplikacija osvežava prikaz.
+5. Slučaj upotrebe se završava.
+
+======================================================================
+
+UC10: Create graph
+
+• Kratak opis: Korisnik pre pocetka kreiranja grafa bira da li ce graf biti usmeren ili neusmeren, i da li je tezinski ili netezinski. 
+
+• Akteri:
+– Korisnik
+
+• Preduslovi:
+– Aplikacija je pokrenuta.
+
+• Postuslovi:
+– U odnosu na izbor vrste grafa, podesen je prikaz dostupnih interakcija sa grafom; prikaz grana je prilagodjen.
+
+• Osnovni tok:
+1. Korisnik bira vrstu grafa.
+2. Aplikacija prikazuje izbore „Directed / Undirected” i "Weighted / Unweighted".
+3. Korisnik bira opciju i potvrdjuje.
+4. Aplikacija prilagodjava prikaz okruzenja i nudi dostupne interakcije nad grafom u odnosu na odabranu vrstu.
+5. Slucaj upotrebe se zavrsava.
+
+• Alternativni tokovi:
+– A1: Korisnik otkazuje kreiranje. Aplikacija ne menja stanje i slučaj upotrebe se završava.
+
+======================================================================
