@@ -33,15 +33,15 @@ public:
     void fromVariant(const QVariant&) override;
 
 protected:
-    void clear();
-    void addEdgeSerialized(unsigned, unsigned, unsigned, int );
-
     unsigned                                         m_numOfNodes = 0;
     unsigned                                         m_numOfEdges = 0;
     std::map<unsigned, std::map<unsigned, unsigned>> m_adjacencyList;
 
     std::map<unsigned, Node> m_nodes;
     std::map<unsigned, Edge> m_edges;
+
+    void clear();
+    void addEdgeSerialized(unsigned, unsigned, unsigned, int);
 };
 
 #endif // GRAPH_H

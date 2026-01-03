@@ -1,9 +1,5 @@
 #include "Serializer.h"
 
-#include <QFile>
-#include <QJsonDocument>
-#include <QVariantMap>
-
 void Serializer::save(const Serializable& s, const QString& filePath, const bool isWeighted,
                       const bool isDirected) {
 

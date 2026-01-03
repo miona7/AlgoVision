@@ -1,6 +1,4 @@
 #include "SaveFile.h"
-#include "Serializable.h"
-#include "Serializer.h"
 
 SaveFile::SaveFile(Serializer* serializer, Serializable* serializable, const QString& filePath,
                    bool isWeighted, bool isDirected, QObject* parent)

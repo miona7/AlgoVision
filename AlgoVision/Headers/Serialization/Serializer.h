@@ -1,8 +1,12 @@
 #ifndef SERIALIZER_H
 #define SERIALIZER_H
 
-#include "Serializable.h"
 #include <QString>
+#include <QFile>
+#include <QJsonDocument>
+#include <QVariantMap>
+
+#include "Serializable.h"
 
 class Serializer {
 public:

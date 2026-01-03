@@ -1,6 +1,4 @@
 #include "LoadFile.h"
-#include "Serializable.h"
-#include "Serializer.h"
 
 LoadFile::LoadFile(Serializer* serializer, Serializable* serializable, const QString& filePath,
                    QObject* parent)
