@@ -7,14 +7,13 @@
 class Serializer;
 class Serializable;
 
-class SaveFile : public QThread
-{
+class SaveFile : public QThread {
 public:
-    SaveFile(Serializer *serializer,
-             Serializable *serializable,
-             const QString &filePath,
-             bool isWeighted,
-             bool isDirected,
+    SaveFile(Serializer *,
+             Serializable *,
+             const QString &,
+             bool,
+             bool,
              QObject *parent = nullptr);
 
     void run() override;

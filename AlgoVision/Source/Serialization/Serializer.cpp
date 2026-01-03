@@ -1,4 +1,4 @@
-#include "Serialization/Serializer.h"
+#include "Serializer.h"
 
 #include <QFile>
 #include <QJsonDocument>
@@ -7,8 +7,8 @@
 void Serializer::save(const Serializable &s,
                       const QString &filePath,
                       const bool isWeighted,
-                      const bool isDirected)
-{
+                      const bool isDirected) {
+
     if (filePath.isEmpty()) {
         return;
     }
@@ -33,8 +33,8 @@ void Serializer::save(const Serializable &s,
 void Serializer::load(Serializable &s,
                       const QString &filePath,
                       bool &isWeighted,
-                      bool &isDirected)
-{
+                      bool &isDirected) {
+
     if (filePath.isEmpty()) {
         return;
     }

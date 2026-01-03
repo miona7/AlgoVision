@@ -1,14 +1,13 @@
 #include <catch2/catch_test_macros.hpp>
 
-#include "Serialization/Serializer.h"
-#include "Graph/WeightedDirectedGraph.h"
+#include "Serializer.h"
+#include "WeightedDirectedGraph.h"
 
 #include <QDir>
 #include <QFile>
 #include <iostream>
 
-TEST_CASE("SerializationTest - Graph save/load", "[serialization]")
-{
+TEST_CASE("SerializationTest - Graph save/load", "[serialization]") {
     std::cout << "\n==============================\n";
     std::cout << "STARTING SERIALIZATION TEST\n";
     std::cout << "==============================\n";
@@ -17,6 +16,7 @@ TEST_CASE("SerializationTest - Graph save/load", "[serialization]")
     graph.addNode(1, 10.0, 20.0);
     graph.addNode(2, 30.0, 40.0);
     graph.addNode(3, 50.0, 60.0);
+    graph.addNode(4, 12.0, 45.0);
 
     graph.addEdge(1, 2, 5);
     graph.addEdge(2, 3, 7);

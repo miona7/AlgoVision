@@ -7,12 +7,11 @@
 class Serializer;
 class Serializable;
 
-class LoadFile : public QThread
-{
+class LoadFile : public QThread {
 public:
-    LoadFile(Serializer *serializer,
-             Serializable *serializable,
-             const QString &filePath,
+    LoadFile(Serializer *,
+             Serializable *,
+             const QString &,
              QObject *parent = nullptr);
 
     void run() override;
