@@ -34,6 +34,7 @@ set(PROJECT_SOURCES
         Headers/Graph/WeightedUndirectedGraph.h Source/Graph/WeightedUndirectedGraph.cpp
         Headers/Graph/WeightedDirectedGraph.h Source/Graph/WeightedDirectedGraph.cpp
 
+        Headers/Algorithm/AlgorithmStep.h
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
