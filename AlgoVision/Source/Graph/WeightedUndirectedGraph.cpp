@@ -1,25 +1,35 @@
 #include "WeightedUndirectedGraph.h"
 
-void WeightedUndirectedGraph::addEdge(Node* u, Node* v, int w) {
-    if(u == nullptr || v == nullptr) {
+void WeightedUndirectedGraph::addEdge(unsigned from, unsigned to, int w) {
+    if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
         return;
     }
-
-    m_edges.push_back(new Edge(u, v, false, w));
+    unsigned edgeId = ++m_numOfEdges;
+    m_edges.emplace(edgeId, Edge(edgeId, from, to, w));
+    m_adjacencyList[from][edgeId] = to;
+    m_adjacencyList[to][edgeId]   = from;
 }
 
-void WeightedUndirectedGraph::removeEdge(Node* u, Node* v) {
-    if(u == nullptr || v == nullptr) {
+void WeightedUndirectedGraph::removeEdge(unsigned edgeId) {
+    auto it = m_edges.find(edgeId);
+    if(it == m_edges.end()) {
         return;
     }
-    for(auto it = m_edges.begin(); it != m_edges.end();) {
-        Edge* e = *it;
-        if((e->startNode() == u && e->endNode() == v) ||
-           (e->startNode() == v && e->endNode() == u)) {
-            delete e;
-            it = m_edges.erase(it);
-        } else {
-            ++it;
-        }
-    }
+
+    unsigned from = it->second.startNode();
+    unsigned to   = it->second.endNode();
+
+    m_adjacencyList[from].erase(edgeId);
+    m_adjacencyList[to].erase(edgeId);
+
+    m_edges.erase(edgeId);
+    --m_numOfEdges;
+}
+
+bool WeightedUndirectedGraph::isDirected() const {
+    return false;
+}
+
+bool WeightedUndirectedGraph::isWeighted() const {
+    return false;
 }

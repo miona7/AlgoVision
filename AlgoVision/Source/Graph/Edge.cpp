@@ -1,28 +1,23 @@
 #include "Edge.h"
 
-Edge::Edge(Node* u, Node* v, bool directed, int weight)
-    : m_connectedNodes({u, v}), m_directed(directed), m_weight(weight) {
+Edge::Edge(unsigned id, unsigned idStartNode, unsigned idEndNode, int weight)
+    : m_id(id), m_idStartNode(idStartNode), m_idEndNode(idEndNode), m_weight(weight) {
 }
 
-Edge::Edge(const Edge& e) : Edge(e.startNode(), e.endNode(), e.isDirected(), e.getWeight()) {
-}
-
-Edge::~Edge() = default;
-
-bool Edge::isDirected() const {
-    return m_directed;
+unsigned Edge::getId() const {
+    return m_id;
 }
 
 int Edge::getWeight() const {
     return m_weight;
 }
 
-Node* Edge::startNode() const {
-    return m_connectedNodes.first;
+unsigned Edge::startNode() const {
+    return m_idStartNode;
 }
 
-Node* Edge::endNode() const {
-    return m_connectedNodes.second;
+unsigned Edge::endNode() const {
+    return m_idEndNode;
 }
 
 void Edge::setWeight(int w) {
@@ -30,6 +25,6 @@ void Edge::setWeight(int w) {
 }
 
 std::ostream& operator<<(std::ostream& s, const Edge& e) {
-    return s << "Edge from " << e.startNode()->getName().toStdString() << " to "
-             << e.endNode()->getName().toStdString() << ", weight = " << e.getWeight() << std::endl;
+    return s << "Edge {id = " << e.m_id << ", from node " << e.m_idStartNode << " to node "
+             << e.m_idEndNode << ", with weight = " << e.m_weight << "}" << std::endl;
 }

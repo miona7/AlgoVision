@@ -25,6 +25,10 @@ SpaceBeforeParensOptions:
   AfterControlStatements: false
   BeforeNonEmptyParentheses: false
 
+# razmaci oko operatora
+SpaceBeforeAssignmentOperators: true
+# SpaceAroundOperators: true
+
 BraceWrapping:
   AfterControlStatement: false
   BeforeElse: false

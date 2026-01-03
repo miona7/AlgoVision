@@ -7,7 +7,7 @@ Ovaj projekat koristi **clang-format** i **clang-tidy** za formatiranje i prover
 
 ## Linux
 ```bash
-# Build projekat i generisanje `compile_commands.json`
+# Build projekta i generisanje `compile_commands.json`
 cd /putanja/do/projekta     
 cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON   
 
@@ -15,24 +15,30 @@ cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 shopt -s globstar
 
 # Formatiranje svih cpp i h fajlova
-clang-format -i Source/**/*.cpp Headers/**/*.h
+clang-format -i Source/**/*.cpp Headers/**/*.h Tests/**/*.cpp
 
 # Analiza svih cpp fajlova sa clang-tidy
-clang-tidy Source/**/*.cpp -p build
+clang-tidy Source/**/*.cpp Tests/**/*.cpp -p build
+
+# Automatska primena popravki uz pomoc clang-tidy
+clang-tidy Source/**/*.cpp Tests/**/*.cpp -p build --fix
 ```
 ---
 
-## Windows (Command Prompt ili PowerShell)
-```cmd
-# Build projekat i generisanje `compile_commands.json`
+## Windows (PowerShell)
+```powershell
+# Build projekta i generisanje `compile_commands.json`
 cd C:\putanja\do\projekta    
 cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON    
 
 # Formatiranje svih cpp i h fajlova
-clang-format -i Source\**\*.cpp Headers\**\*.h
+clang-format -i Source\**\*.cpp Headers\**\*.h Tests\**\*.cpp
 
 # Analiza svih cpp fajlova sa clang-tidy
-clang-tidy Source\**\*.cpp -p build
+clang-tidy Source\**\*.cpp Tests\**\*.cpp -p build
+
+# Automatska primena popravki uz pomoc clang-tidy
+clang-tidy Source\**\*.cpp Tests\**\*.cpp -p build --fix
 ```
 ---
 

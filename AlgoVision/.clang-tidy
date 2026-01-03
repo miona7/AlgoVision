@@ -1,14 +1,20 @@
 Checks: >
   clang-analyzer-*,
   cppcoreguidelines-*,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
   modernize-*,
   -modernize-use-trailing-return-type,
+  -modernize-use-nodiscard,
   performance-*,
   -performance-avoid-endl,
   readability-*,
   -readability-identifier-length,
+  -readability-named-parameter,
+  -readability-use-anyofallof,
   hicpp-*,
-  bugprone-*
+  -hicpp-named-parameter,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters
 
 CheckOptions:
   # kamilja notacija
