@@ -24,4 +24,4 @@ private:
     void setOptionShortcuts();
 };
 
-#endif //MENUTOOLBAR
+#endif // MENUTOOLBAR

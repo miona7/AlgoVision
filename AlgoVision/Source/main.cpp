@@ -1,7 +1,7 @@
-#include "MainWindow.h"
-#include "Graph.h"
-#include "Node.h"
 #include "Edge.h"
+#include "Graph.h"
+#include "MainWindow.h"
+#include "Node.h"
 
 #include <QApplication>
 #include <iostream>

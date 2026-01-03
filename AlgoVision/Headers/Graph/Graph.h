@@ -13,11 +13,11 @@ public:
     Graph(const Graph&);
     virtual ~Graph();
 
-    void addNode(Node *);
-    void removeNode(Node *);
+    void addNode(Node*);
+    void removeNode(Node*);
 
-    virtual void addEdge(Node *, Node *, int w = 1) = 0;
-    virtual void removeEdge(Node *, Node *) = 0;
+    virtual void addEdge(Node*, Node*, int w = 1) = 0;
+    virtual void removeEdge(Node*, Node*)         = 0;
 
     QVector<Node*> getNodes() const;
     QVector<Edge*> getEdges() const;
@@ -28,8 +28,8 @@ public:
     void clear();
 
 protected:
-    QVector<Node *> m_nodes;
-    QVector<Edge *> m_edges;
+    QVector<Node*> m_nodes;
+    QVector<Edge*> m_edges;
 };
 
 #endif // GRAPH_H

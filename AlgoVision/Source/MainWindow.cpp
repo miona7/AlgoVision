@@ -1,10 +1,10 @@
 #include "MainWindow.h"
-#include "ui_MainWindow.h"
 #include "AppConstants.h"
 #include "MenuToolBar.h"
+#include "ui_MainWindow.h"
 
-#include <iostream>
 #include <QPushButton>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), m_ui(new Ui::MainWindow) {
     m_ui->setupUi(this);
@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), m_ui(new Ui::Main
     this->resize(QSize(AppConstants::windowWidth, AppConstants::windowHeight));
 
     QWidget* startPage = m_ui->startPage;
-    std::cout << "current page: " << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
+    std::cout << "current page: "
+              << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
 
     auto* startLayout = new QHBoxLayout(startPage);
     startLayout->setAlignment(Qt::AlignCenter);
@@ -41,7 +42,8 @@ MainWindow::~MainWindow() {
 
 void MainWindow::onOpenGraphTriggered() {
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
-    std::cout << "btnOpenGraph clicked: " << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
+    std::cout << "btnOpenGraph clicked: "
+              << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
 
     auto* menuToolBar = new MenuToolBar(this);
     menuToolBar->setMovable(false);
@@ -51,7 +53,8 @@ void MainWindow::onOpenGraphTriggered() {
 void MainWindow::onCreateGraphTriggered() {
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     this->setWindowTitle(QString::fromLatin1(AppConstants::graphPageDefaultTitle));
-    std::cout << "btnCreateGraph clicked: " << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
+    std::cout << "btnCreateGraph clicked: "
+              << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
 
     auto* menuToolBar = new MenuToolBar(this);
     menuToolBar->setMovable(false);

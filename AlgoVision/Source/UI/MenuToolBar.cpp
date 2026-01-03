@@ -2,8 +2,7 @@
 #include "AppConstants.h"
 
 MenuToolBar::MenuToolBar(QWidget* parent)
-    : QToolBar{parent},
-      m_createGraphAction(new QAction("create graph", this)),
+    : QToolBar {parent}, m_createGraphAction(new QAction("create graph", this)),
       m_openGraphAction(new QAction("open graph", this)),
       m_saveGraphAction(new QAction("save graph", this)),
       m_saveImageAction(new QAction("save image", this)),

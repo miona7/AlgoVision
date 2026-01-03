@@ -22,11 +22,11 @@ Graph::~Graph() {
     }
 }
 
-void Graph::addNode(Node *n) {
+void Graph::addNode(Node* n) {
     m_nodes.append(n);
 }
 
-void Graph::removeNode(Node *n) {
+void Graph::removeNode(Node* n) {
     if(n == nullptr) {
         return;
     }
@@ -63,14 +63,14 @@ QVector<Edge*> Graph::getEdges() const {
 
 void Graph::setNodes(QVector<Node*>& nodes) {
     clear();
-    for(auto* n : nodes) {
+    for(auto* n: nodes) {
         m_nodes.push_back(new Node(*n));
     }
 }
 
 void Graph::setEdges(QVector<Edge*>& edges) {
     clear();
-    for(auto* e : edges) {
+    for(auto* e: edges) {
         m_edges.push_back(new Edge(*e));
     }
 }
@@ -87,4 +87,3 @@ void Graph::clear() {
     m_nodes.clear();
     m_edges.clear();
 }
-

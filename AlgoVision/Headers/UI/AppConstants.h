@@ -3,22 +3,22 @@
 
 namespace AppConstants {
     // window size
-    constexpr int windowMinWidth = 800;
+    constexpr int windowMinWidth  = 800;
     constexpr int windowMinHeight = 600;
-    constexpr int windowWidth = 1200;
-    constexpr int windowHeight = 900;
+    constexpr int windowWidth     = 1200;
+    constexpr int windowHeight    = 900;
 
     // start page element's attributes
-    constexpr int btnSize = 120;
-    constexpr int btnSpacing = 24;
+    constexpr int  btnSize        = 120;
+    constexpr int  btnSpacing     = 24;
     constexpr auto startPageTitle = "AlgoVision";
 
     // menubar element's attributes
-    constexpr int optionBtnSize = 90;
+    constexpr int optionBtnSize  = 90;
     constexpr int optionIconSize = 64;
 
     // graph page element's attributes
     constexpr auto graphPageDefaultTitle = "Untilted";
-}
+} // namespace AppConstants
 
 #endif // APPCONSTANT
