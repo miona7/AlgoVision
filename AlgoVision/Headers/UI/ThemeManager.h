@@ -17,7 +17,7 @@ public:
     void setTheme(Theme);
 
 private:
-    Theme     m_currentTheme;
+    Theme     m_currentTheme {Theme::DARK};
     QSettings m_settings; // naredno pokretanje -> sacuvana tema
 
     void loadTheme();

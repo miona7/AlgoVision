@@ -8,10 +8,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), m_ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()) {
     m_ui->setupUi(this);
 
-    this->m_themeManager = new ThemeManager();
     this->setStyleSheet(m_themeManager->styleSheet());
 
     this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
