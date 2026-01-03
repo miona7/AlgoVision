@@ -1,0 +1,17 @@
+#ifndef WUG_H
+#define WUG_H
+
+#include "Graph.h"
+
+class WeightedUndirectedGraph : public Graph {
+public:
+    WeightedUndirectedGraph()           = default;
+    ~WeightedUndirectedGraph() override = default;
+
+    void addEdge(unsigned, unsigned, int) override;
+    void removeEdge(unsigned) override;
+    bool isDirected() const override;
+    bool isWeighted() const override;
+};
+
+#endif // WUG_H

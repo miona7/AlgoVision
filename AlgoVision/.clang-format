@@ -1,0 +1,45 @@
+BasedOnStyle: LLVM
+
+# indentacija
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+AccessModifierOffset: -4
+NamespaceIndentation: All
+
+# otvorena zagrada u istom redu
+BreakBeforeBraces: Attach
+SpaceBeforeCpp11BracedList: true
+
+# obavezne zagrade za if / else / petlje
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+
+SpaceBeforeParens: Never
+SpaceBeforeRangeBasedForLoopColon: false
+
+SpacesInParentheses: false
+SpaceBeforeParensOptions:
+  AfterControlStatements: false
+  BeforeNonEmptyParentheses: false
+
+# razmaci oko operatora
+SpaceBeforeAssignmentOperators: true
+# SpaceAroundOperators: true
+
+BraceWrapping:
+  AfterControlStatement: false
+  BeforeElse: false
+
+# linije
+ColumnLimit: 100
+
+# pokazivaci i reference uz tip
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# poravnanja
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true

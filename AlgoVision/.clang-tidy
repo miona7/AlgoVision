@@ -1,0 +1,32 @@
+Checks: >
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  -modernize-use-nodiscard,
+  performance-*,
+  -performance-avoid-endl,
+  readability-*,
+  -readability-identifier-length,
+  -readability-named-parameter,
+  -readability-use-anyofallof,
+  hicpp-*,
+  -hicpp-named-parameter,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters
+
+CheckOptions:
+  # kamilja notacija
+  - { key: readability-identifier-naming.ClassCase, value: CamelCase }  
+  
+  - { key: readability-identifier-naming.MemberPrefix, value: m_ } # m_ prefiksi za clanove klasa
+  - { key: readability-identifier-naming.MemberCase, value: camelBack }
+  
+  - { key: readability-identifier-naming.VariableCase, value: camelBack }
+  - { key: readability-identifier-naming.ParameterCase, value: camelBack }
+  - { key: readability-identifier-naming.FunctionCase, value: camelBack }
+
+HeaderFilterRegex: 'Headers/.*'
+FormatStyle: file
+WarningsAsErrors: '*'
