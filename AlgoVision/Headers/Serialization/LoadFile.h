@@ -1,18 +1,15 @@
 #ifndef LOADFILE_H
 #define LOADFILE_H
 
-#include <QThread>
 #include <QString>
+#include <QThread>
 
 class Serializer;
 class Serializable;
 
 class LoadFile : public QThread {
 public:
-    LoadFile(Serializer *,
-             Serializable *,
-             const QString &,
-             QObject *parent = nullptr);
+    LoadFile(Serializer*, Serializable*, const QString&, QObject* parent = nullptr);
 
     void run() override;
 
@@ -20,10 +17,10 @@ public:
     bool isDirected() const;
 
 private:
-    Serializer *m_serializer = nullptr;
-    QString m_filePath;
+    Serializer* m_serializer = nullptr;
+    QString     m_filePath;
 
-    Serializable *m_serializable = nullptr;
+    Serializable* m_serializable = nullptr;
 
     bool m_isWeighted = false;
     bool m_isDirected = false;
