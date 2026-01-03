@@ -1,23 +1,16 @@
 #ifndef SERIALIZER_H
 #define SERIALIZER_H
 
-#include "Serialization/Serializable.h"
+#include "Serializable.h"
 #include <QString>
 
-class Serializer
-{
+class Serializer {
 public:
     virtual ~Serializer() = default;
 
-    virtual void save(const Serializable &s,
-                      const QString &filePath,
-                      const bool isWeighted,
-                      const bool isDirected);
+    virtual void save(const Serializable&, const QString&, const bool, const bool);
 
-    virtual void load(Serializable &s,
-                      const QString &filePath,
-                      bool &isWeighted,
-                      bool &isDirected);
+    virtual void load(Serializable&, const QString&, bool&, bool&);
 };
 
 #endif // SERIALIZER_H

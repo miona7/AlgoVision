@@ -1,29 +1,23 @@
 #ifndef SAVEFILE_H
 #define SAVEFILE_H
 
-#include <QThread>
 #include <QString>
+#include <QThread>
 
 class Serializer;
 class Serializable;
 
-class SaveFile : public QThread
-{
+class SaveFile : public QThread {
 public:
-    SaveFile(Serializer *serializer,
-             Serializable *serializable,
-             const QString &filePath,
-             bool isWeighted,
-             bool isDirected,
-             QObject *parent = nullptr);
+    SaveFile(Serializer*, Serializable*, const QString&, bool, bool, QObject* parent = nullptr);
 
     void run() override;
 
 private:
-    Serializer *m_serializer = nullptr;
-    QString m_filePath;
+    Serializer* m_serializer = nullptr;
+    QString     m_filePath;
 
-    Serializable *m_serializable = nullptr;
+    Serializable* m_serializable = nullptr;
 
     bool m_isWeighted = false;
     bool m_isDirected = false;

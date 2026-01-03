@@ -9,9 +9,9 @@
 
 #include "Edge.h"
 #include "Node.h"
-#include "Serialization/Serializable.h"
+#include "Serializable.h"
 
-class Graph : public Serializable{
+class Graph : public Serializable {
 public:
     Graph()          = default;
     virtual ~Graph() = default;
@@ -30,11 +30,11 @@ public:
     std::map<unsigned, Edge>                         getEdges() const;
 
     QVariant toVariant() const override;
-    void fromVariant(const QVariant& variant) override;
+    void fromVariant(const QVariant&) override;
 
 protected:
     void clear();
-    void addEdgeSerialized(unsigned edgeId, unsigned from, unsigned to, int w);
+    void addEdgeSerialized(unsigned, unsigned, unsigned, int );
 
     unsigned                                         m_numOfNodes = 0;
     unsigned                                         m_numOfEdges = 0;

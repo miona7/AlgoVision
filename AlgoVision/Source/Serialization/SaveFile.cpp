@@ -1,25 +1,15 @@
-#include "Serialization/SaveFile.h"
-#include "Serialization/Serializer.h"
-#include "Serialization/Serializable.h"
+#include "SaveFile.h"
+#include "Serializable.h"
+#include "Serializer.h"
 
-SaveFile::SaveFile(Serializer *serializer,
-                   Serializable *serializable,
-                   const QString &filePath,
-                   bool isWeighted,
-                   bool isDirected,
-                   QObject *parent)
-    : QThread(parent),
-      m_serializer(serializer),
-      m_filePath(filePath),
-      m_serializable(serializable),
-      m_isWeighted(isWeighted),
-      m_isDirected(isDirected)
-{
+SaveFile::SaveFile(Serializer* serializer, Serializable* serializable, const QString& filePath,
+                   bool isWeighted, bool isDirected, QObject* parent)
+    : QThread(parent), m_serializer(serializer), m_filePath(filePath), m_serializable(serializable),
+      m_isWeighted(isWeighted), m_isDirected(isDirected) {
 }
 
-void SaveFile::run()
-{
-    if (!m_serializer || !m_serializable) {
+void SaveFile::run() {
+    if(!m_serializer || !m_serializable) {
         return;
     }
 

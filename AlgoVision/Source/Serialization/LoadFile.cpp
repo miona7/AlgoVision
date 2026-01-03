@@ -1,31 +1,23 @@
-#include "Serialization/LoadFile.h"
-#include "Serialization/Serializer.h"
-#include "Serialization/Serializable.h"
+#include "LoadFile.h"
+#include "Serializable.h"
+#include "Serializer.h"
 
-LoadFile::LoadFile(Serializer *serializer,
-                   Serializable *serializable,
-                   const QString &filePath,
-                   QObject *parent)
-    : QThread(parent),
-      m_serializer(serializer),
-      m_filePath(filePath),
-      m_serializable(serializable)
-{
+LoadFile::LoadFile(Serializer* serializer, Serializable* serializable, const QString& filePath,
+                   QObject* parent)
+    : QThread(parent), m_serializer(serializer), m_filePath(filePath),
+      m_serializable(serializable) {
 }
 
-bool LoadFile::isWeighted() const
-{
+bool LoadFile::isWeighted() const {
     return m_isWeighted;
 }
 
-bool LoadFile::isDirected() const
-{
+bool LoadFile::isDirected() const {
     return m_isDirected;
 }
 
-void LoadFile::run()
-{
-    if (!m_serializer || !m_serializable) {
+void LoadFile::run() {
+    if(!m_serializer || !m_serializable) {
         return;
     }
 
