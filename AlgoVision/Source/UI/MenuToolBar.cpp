@@ -27,6 +27,22 @@ QAction* MenuToolBar::createGraphAction() const {
     return m_createGraphAction;
 }
 
+QAction* MenuToolBar::saveGraphAction() const {
+    return m_saveGraphAction;
+}
+
+QAction* MenuToolBar::saveImageAction() const {
+    return m_saveImageAction;
+}
+
+QAction* MenuToolBar::changeThemeAction() const {
+    return m_changeThemeAction;
+}
+
+QAction* MenuToolBar::helpAction() const {
+    return m_helpAction;
+}
+
 void MenuToolBar::setStyle() {
     setIconSize(QSize(AppConstants::optionIconSize, AppConstants::optionIconSize));
     QString style = QString("QToolButton {width: %1px; height: %2px;}")

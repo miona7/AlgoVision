@@ -22,6 +22,8 @@ public:
 private slots:
     void onOpenGraphTriggered();
     void onCreateGraphTriggered();
+    void onSaveGraphTriggered();
+    void onSaveImageTriggered();
 
 private:
     Ui::MainWindow* m_ui;

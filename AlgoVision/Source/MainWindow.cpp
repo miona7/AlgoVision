@@ -43,7 +43,6 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::onOpenGraphTriggered() {
-
     QString filePath = QFileDialog::getOpenFileName(this, "open graph", "", "graph files (*.json)");
 
     // cancel -> vracamo se
@@ -69,6 +68,52 @@ void MainWindow::onCreateGraphTriggered() {
     initMenuToolBar();
 }
 
+void MainWindow::onSaveGraphTriggered() {
+    QString filePath = QFileDialog::getSaveFileName(this, "save graph", "", "graph files (*.json)");
+
+    if(filePath.isEmpty()) {
+        return;
+    }
+
+    if(!filePath.endsWith(".json")) {
+        filePath += ".json";
+    }
+
+    // kreiranje fajla
+    QFile file(filePath);
+    if(file.open(QIODevice::WriteOnly)) {
+        QTextStream out(&file);
+        out << "{}";
+        file.close();
+        QMessageBox::information(this, "saved", "graph saved to: " + filePath);
+    } else {
+        QMessageBox::warning(this, "error", "could not save file: " + filePath);
+    }
+}
+
+void MainWindow::onSaveImageTriggered() {
+    QString filePath = QFileDialog::getSaveFileName(this, "save image", "", "image files (*.png)");
+
+    if(filePath.isEmpty()) {
+        return;
+    }
+
+    if(!filePath.endsWith(".png")) {
+        filePath += ".png";
+    }
+
+    // TODO: cuvati samo scenu grafa, ne ceo widget
+
+    QPixmap pixmap = m_ui->graphPage->grab();
+
+    // cuvamo pix mapu u fajl
+    if(pixmap.save(filePath, "PNG")) {
+        QMessageBox::information(this, "saved", "image saved to: " + filePath);
+    } else {
+        QMessageBox::warning(this, "error", "could not save image: " + filePath);
+    }
+}
+
 void MainWindow::initMenuToolBar() {
     // dodajemo menu tool bar samo 1, akcije povezujemo samo 1
 
@@ -82,4 +127,6 @@ void MainWindow::initMenuToolBar() {
 
     connect(m_menuToolBar->openGraphAction(), &QAction::triggered, this, &MainWindow::onOpenGraphTriggered);
     connect(m_menuToolBar->createGraphAction(), &QAction::triggered, this, &MainWindow::onCreateGraphTriggered);
+    connect(m_menuToolBar->saveGraphAction(), &QAction::triggered, this, &MainWindow::onSaveGraphTriggered);
+    connect(m_menuToolBar->saveImageAction(), &QAction::triggered, this, &MainWindow::onSaveImageTriggered);
 }

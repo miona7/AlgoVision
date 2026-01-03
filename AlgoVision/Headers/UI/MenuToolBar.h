@@ -16,6 +16,10 @@ public:
 
     QAction* createGraphAction() const;
     QAction* openGraphAction() const;
+    QAction* saveGraphAction() const;
+    QAction* saveImageAction() const;
+    QAction* changeThemeAction() const;
+    QAction* helpAction() const;
 
 private:
     QAction* m_createGraphAction;
