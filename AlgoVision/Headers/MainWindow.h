@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "MenuToolBar.h"
+#include "AppConstants.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class MainWindow;
@@ -22,5 +25,6 @@ private slots:
 
 private:
     Ui::MainWindow* m_ui;
+    MenuToolBar* m_menuToolBar = nullptr;
 };
 #endif // MAINWINDOW_H
