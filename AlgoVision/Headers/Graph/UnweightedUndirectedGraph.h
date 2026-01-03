@@ -8,7 +8,7 @@ public:
     UnweightedUndirectedGraph()           = default;
     ~UnweightedUndirectedGraph() override = default;
 
-    void addEdge(unsigned, unsigned, int w = 1) override;
+    void addEdge(unsigned, unsigned, int = 1) override;
     void removeEdge(unsigned) override;
     bool isDirected() const override;
     bool isWeighted() const override;
