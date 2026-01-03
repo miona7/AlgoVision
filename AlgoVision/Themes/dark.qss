@@ -2,7 +2,8 @@ QWidget {
     background-color: #121212;
     color: #ffffff;
 }
-QPushButton {
+
+QToolButton {
     background-color: #333333;
     color: #ffffff;
 }
