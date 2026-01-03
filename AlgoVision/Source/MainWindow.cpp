@@ -43,6 +43,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::onOpenGraphTriggered() {
+
     QString filePath = QFileDialog::getOpenFileName(this, "open graph", "", "graph files (*.json)");
 
     // cancel -> vracamo se
@@ -50,20 +51,13 @@ void MainWindow::onOpenGraphTriggered() {
         return;
     }
 
+    QMessageBox::information(this, "graph opened", "selected file: " + filePath);
+
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     std::cout << "btnOpenGraph clicked: "
               << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
 
-    // dodajemo menu tool bar samo 1
-    if(m_menuToolBar == nullptr) {
-        m_menuToolBar = new MenuToolBar(this);
-        m_menuToolBar->setMovable(false);
-        addToolBar(Qt::TopToolBarArea, m_menuToolBar);
-
-    }
-
-    QMessageBox::information(this, "graph opened", "selected file: " + filePath);
-
+    initMenuToolBar();
 }
 
 void MainWindow::onCreateGraphTriggered() {
@@ -72,11 +66,20 @@ void MainWindow::onCreateGraphTriggered() {
     std::cout << "btnCreateGraph clicked: "
               << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
 
-    // dodajemo menu tool bar samo 1
-    if(m_menuToolBar == nullptr) {
-        m_menuToolBar = new MenuToolBar(this);
-        m_menuToolBar->setMovable(false);
-        addToolBar(Qt::TopToolBarArea, m_menuToolBar);
+    initMenuToolBar();
+}
 
+void MainWindow::initMenuToolBar() {
+    // dodajemo menu tool bar samo 1, akcije povezujemo samo 1
+
+    if(m_menuToolBar != nullptr) {
+        return;
     }
+
+    m_menuToolBar = new MenuToolBar(this);
+    m_menuToolBar->setMovable(false);
+    addToolBar(Qt::TopToolBarArea, m_menuToolBar);
+
+    connect(m_menuToolBar->openGraphAction(), &QAction::triggered, this, &MainWindow::onOpenGraphTriggered);
+    connect(m_menuToolBar->createGraphAction(), &QAction::triggered, this, &MainWindow::onCreateGraphTriggered);
 }

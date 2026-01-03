@@ -14,6 +14,9 @@ public:
     explicit MenuToolBar(QWidget* parent = nullptr);
     ~MenuToolBar() override = default;
 
+    QAction* createGraphAction() const;
+    QAction* openGraphAction() const;
+
 private:
     QAction* m_createGraphAction;
     QAction* m_openGraphAction;

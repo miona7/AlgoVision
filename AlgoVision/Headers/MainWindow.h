@@ -26,5 +26,7 @@ private slots:
 private:
     Ui::MainWindow* m_ui;
     MenuToolBar* m_menuToolBar = nullptr;
+
+    void initMenuToolBar();
 };
 #endif // MAINWINDOW_H

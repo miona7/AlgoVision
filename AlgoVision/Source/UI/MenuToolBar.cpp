@@ -19,6 +19,14 @@ MenuToolBar::MenuToolBar(QWidget* parent)
     setOptionShortcuts();
 }
 
+QAction* MenuToolBar::openGraphAction() const {
+    return m_openGraphAction;
+}
+
+QAction* MenuToolBar::createGraphAction() const {
+    return m_createGraphAction;
+}
+
 void MenuToolBar::setStyle() {
     setIconSize(QSize(AppConstants::optionIconSize, AppConstants::optionIconSize));
     QString style = QString("QToolButton {width: %1px; height: %2px;}")
@@ -46,3 +54,5 @@ void MenuToolBar::setOptionShortcuts() {
     m_changeThemeAction->setShortcut(Qt::CTRL | Qt::Key_T);
     m_changeThemeAction->setToolTip("change theme (Ctrl + T)");
 }
+
+
