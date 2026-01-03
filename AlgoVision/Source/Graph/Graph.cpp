@@ -1,5 +1,8 @@
 #include "Graph.h"
 
+#include <QVariantList>
+#include <QVariantMap>
+
 void Graph::addNode(unsigned id, double x, double y) {
     if(m_nodes.find(id) != m_nodes.end()) {
         return; // cvor vec postoji
@@ -29,6 +32,96 @@ void Graph::removeNode(unsigned id) {
     m_nodes.erase(id);
 
     --m_numOfNodes;
+}
+
+void Graph::clear() {
+    m_numOfNodes = 0;
+    m_numOfEdges = 0;
+    m_adjacencyList.clear();
+    m_nodes.clear();
+    m_edges.clear();
+}
+
+// razlikuje se od obicnog dodavanja grane
+void Graph::addEdgeSerialized(unsigned edgeId, unsigned from, unsigned to, int w) {
+    if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
+        return;
+    }
+
+    m_edges.emplace(edgeId, Edge(edgeId, from, to, w));
+
+    m_adjacencyList[from][edgeId] = to;
+    if(!isDirected()) {
+        m_adjacencyList[to][edgeId] = from;
+    }
+
+    if(edgeId > m_numOfEdges) {
+        m_numOfEdges = edgeId;
+    }
+}
+
+QVariant Graph::toVariant() const {
+    QVariantList nodes;
+    nodes.reserve(static_cast<int>(m_nodes.size()));
+
+    for(const auto& [id, node] : m_nodes) {
+        const auto& pos = node.getPosition();
+
+        QVariantMap n;
+        n["id"] = id;
+        n["x"]  = pos.first;
+        n["y"]  = pos.second;
+
+        nodes.push_back(n);
+    }
+
+    QVariantList edges;
+    edges.reserve(static_cast<int>(m_edges.size()));
+
+    for(const auto& [id, edge] : m_edges) {
+        QVariantMap e;
+        e["id"]     = edge.getId();
+        e["from"]   = edge.startNode();
+        e["to"]     = edge.endNode();
+        e["weight"] = edge.getWeight();
+
+        edges.push_back(e);
+    }
+
+    QVariantMap graph;
+    graph["nodes"] = nodes;
+    graph["edges"] = edges;
+    return graph;
+}
+
+void Graph::fromVariant(const QVariant& variant) {
+    const QVariantMap graph = variant.toMap();
+    if(graph.isEmpty()) {
+        return;
+    }
+
+    clear();
+
+    const QVariantList nodes = graph.value("nodes").toList();
+    for(const QVariant& v : nodes) {
+        const QVariantMap n = v.toMap();
+        const unsigned id = n.value("id").toUInt();
+        const double x = n.value("x").toDouble();
+        const double y = n.value("y").toDouble();
+        addNode(id, x, y);
+    }
+
+    const QVariantList edges = graph.value("edges").toList();
+    for(const QVariant& v : edges) {
+        const QVariantMap e = v.toMap();
+
+        const unsigned edgeId = e.value("id").toUInt();
+        const unsigned from   = e.value("from").toUInt();
+        const unsigned to     = e.value("to").toUInt();
+        const int w           = e.value("weight", 1).toInt();
+
+        addEdgeSerialized(edgeId, from, to, w);
+    }
 }
 
 std::map<unsigned, std::map<unsigned, unsigned>> Graph::getAdjacencyList() const {

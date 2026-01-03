@@ -45,6 +45,11 @@ set(PROJECT_SOURCES
         Headers/Algorithm/BellmanFord.h Source/Algorithm/BellmanFord.cpp
         Headers/Algorithm/FloydWarshall.h Source/Algorithm/FloydWarshall.cpp
 
+        Headers/Serialization/Serializable.h
+        Headers/Serialization/Serializer.h Source/Serialization/Serializer.cpp
+        Headers/Serialization/SaveFile.h Source/Serialization/SaveFile.cpp
+        Headers/Serialization/LoadFile.h Source/Serialization/LoadFile.cpp
+
         Headers/UI/AppConstants.h
         Headers/UI/MenuToolBar.h Source/UI/MenuToolBar.cpp
 )
@@ -85,6 +90,7 @@ target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/UI
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Serialization
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -132,6 +138,10 @@ add_executable(AlgoVisionTests
     Source/Algorithm/BellmanFord.cpp
     Source/Algorithm/FloydWarshall.cpp
 
+    Source/Serialization/Serializer.cpp
+    Source/Serialization/SaveFile.cpp
+    Source/Serialization/LoadFile.cpp
+
     Tests/Algorithm/astarTest.cpp
     Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp
@@ -141,6 +151,7 @@ add_executable(AlgoVisionTests
     Tests/Algorithm/primTest.cpp
     Tests/Algorithm/bellmanFordTest.cpp
     Tests/Algorithm/floydWarshallTest.cpp
+    Tests/Serialization/SerializationTest.cpp
 )
 
 target_link_libraries(AlgoVisionTests
@@ -152,4 +163,5 @@ target_include_directories(AlgoVisionTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Serialization
 )
