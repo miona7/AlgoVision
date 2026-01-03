@@ -1,5 +1,4 @@
 #include "MenuToolBar.h"
-#include "AppConstants.h"
 
 MenuToolBar::MenuToolBar(QWidget* parent)
     : QToolBar {parent}, m_createGraphAction(new QAction("create graph", this)),
@@ -8,6 +7,7 @@ MenuToolBar::MenuToolBar(QWidget* parent)
       m_saveImageAction(new QAction("save image", this)),
       m_changeThemeAction(new QAction("change theme", this)),
       m_helpAction(new QAction("help", this)) {
+
     addAction(m_createGraphAction);
     addAction(m_openGraphAction);
     addAction(m_saveGraphAction);
@@ -17,6 +17,30 @@ MenuToolBar::MenuToolBar(QWidget* parent)
 
     setStyle();
     setOptionShortcuts();
+}
+
+QAction* MenuToolBar::openGraphAction() const {
+    return m_openGraphAction;
+}
+
+QAction* MenuToolBar::createGraphAction() const {
+    return m_createGraphAction;
+}
+
+QAction* MenuToolBar::saveGraphAction() const {
+    return m_saveGraphAction;
+}
+
+QAction* MenuToolBar::saveImageAction() const {
+    return m_saveImageAction;
+}
+
+QAction* MenuToolBar::changeThemeAction() const {
+    return m_changeThemeAction;
+}
+
+QAction* MenuToolBar::helpAction() const {
+    return m_helpAction;
 }
 
 void MenuToolBar::setStyle() {

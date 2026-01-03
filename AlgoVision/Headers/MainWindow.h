@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 
+#include "AppConstants.h"
+#include "MenuToolBar.h"
+#include "ThemeManager.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
     class MainWindow;
@@ -16,11 +20,18 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
 
-private slots:
-    void onOpenGraphTriggered();
-    void onCreateGraphTriggered();
-
 private:
     Ui::MainWindow* m_ui;
+    MenuToolBar*    m_menuToolBar = nullptr;
+    ThemeManager*   m_themeManager;
+
+    void initMenuToolBar();
+
+    // slotovi
+    void onOpenGraphTriggered();
+    void onCreateGraphTriggered();
+    void onSaveGraphTriggered();
+    void onSaveImageTriggered();
+    void onChangeThemeTriggered();
 };
 #endif // MAINWINDOW_H

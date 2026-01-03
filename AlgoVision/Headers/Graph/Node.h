@@ -6,7 +6,7 @@
 
 class Node {
 public:
-    explicit Node(unsigned, double x = 0.0, double y = 0.0);
+    explicit Node(unsigned, double = 0.0, double = 0.0);
     ~Node() = default;
 
     unsigned                         getId() const;

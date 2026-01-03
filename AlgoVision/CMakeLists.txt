@@ -52,6 +52,11 @@ set(PROJECT_SOURCES
 
         Headers/UI/AppConstants.h
         Headers/UI/MenuToolBar.h Source/UI/MenuToolBar.cpp
+        Headers/UI/ThemeManager.h Source/UI/ThemeManager.cpp
+)
+
+qt_add_resources(RESOURCES
+    Themes/resources.qrc
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
@@ -60,6 +65,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(AlgoVision
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        ${RESOURCES}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET AlgoVision APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -69,12 +75,14 @@ else()
     if(ANDROID)
         add_library(AlgoVision SHARED
             ${PROJECT_SOURCES}
+            ${RESOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(AlgoVision
             ${PROJECT_SOURCES}
+            ${RESOURCES}
         )
     endif()
 endif()

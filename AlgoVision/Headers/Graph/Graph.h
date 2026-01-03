@@ -16,11 +16,11 @@ public:
     Graph()          = default;
     virtual ~Graph() = default;
 
-    void addNode(unsigned, double x = 0.0, double y = 0.0);
+    void addNode(unsigned, double = 0.0, double = 0.0);
     void removeNode(unsigned);
 
-    virtual void addEdge(unsigned, unsigned, int w = 1) = 0;
-    virtual void removeEdge(unsigned)                   = 0;
+    virtual void addEdge(unsigned, unsigned, int = 1) = 0;
+    virtual void removeEdge(unsigned)                 = 0;
 
     virtual bool isDirected() const = 0;
     virtual bool isWeighted() const = 0;

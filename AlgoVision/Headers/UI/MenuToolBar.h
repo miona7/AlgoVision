@@ -3,6 +3,8 @@
 
 #include <QToolBar>
 
+#include "AppConstants.h"
+
 class QAction;
 
 class MenuToolBar : public QToolBar {
@@ -10,7 +12,14 @@ class MenuToolBar : public QToolBar {
 
 public:
     explicit MenuToolBar(QWidget* parent = nullptr);
-    ~MenuToolBar() = default;
+    ~MenuToolBar() override = default;
+
+    QAction* createGraphAction() const;
+    QAction* openGraphAction() const;
+    QAction* saveGraphAction() const;
+    QAction* saveImageAction() const;
+    QAction* changeThemeAction() const;
+    QAction* helpAction() const;
 
 private:
     QAction* m_createGraphAction;
@@ -24,4 +33,4 @@ private:
     void setOptionShortcuts();
 };
 
-#endif // MENUTOOLBAR
+#endif // MENUTOOLBAR_H

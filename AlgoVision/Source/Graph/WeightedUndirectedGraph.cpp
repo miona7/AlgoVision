@@ -31,5 +31,5 @@ bool WeightedUndirectedGraph::isDirected() const {
 }
 
 bool WeightedUndirectedGraph::isWeighted() const {
-    return false;
+    return true;
 }
