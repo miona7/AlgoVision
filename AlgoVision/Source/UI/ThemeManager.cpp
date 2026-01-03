@@ -24,7 +24,7 @@ QString ThemeManager::styleSheet() const {
 
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Could not open QSS file:" << path;
+        qWarning() << "could not open QSS file:" << path;
         return "";
     }
 
