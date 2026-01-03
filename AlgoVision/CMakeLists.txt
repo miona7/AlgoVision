@@ -44,6 +44,9 @@ set(PROJECT_SOURCES
         Headers/Algorithm/Prim.h Source/Algorithm/Prim.cpp
         Headers/Algorithm/BellmanFord.h Source/Algorithm/BellmanFord.cpp
         Headers/Algorithm/FloydWarshall.h Source/Algorithm/FloydWarshall.cpp
+
+        Headers/UI/AppConstants.h
+        Headers/UI/MenuToolBar.h Source/UI/MenuToolBar.cpp
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
@@ -81,6 +84,7 @@ target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/UI
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

@@ -16,6 +16,10 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
 
+private slots:
+    void onOpenGraphTriggered();
+    void onCreateGraphTriggered();
+
 private:
     Ui::MainWindow* m_ui;
 };
