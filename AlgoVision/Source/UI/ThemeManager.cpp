@@ -12,13 +12,13 @@ QString ThemeManager::styleSheet() const {
     QString path;
     switch(m_currentTheme) {
         case Theme::DARK:
-            path = ":/themes/dark.qss";
+            path = ":themes/dark.qss";
             break;
         case Theme::LIGHT:
-            path = ":/themes/light.qss";
+            path = ":themes/light.qss";
             break;
         case Theme::PURPLE:
-            path = ":/themes/purple.qss";
+            path = ":themes/purple.qss";
             break;
     }
 
