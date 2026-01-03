@@ -2,8 +2,8 @@
 #define KAHN_H
 
 #include <iostream>
-#include <memory>
 #include <map>
+#include <memory>
 #include <queue>
 #include <vector>
 

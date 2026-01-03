@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include <QPushButton>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QPushButton>
 #include <QString>
 
 #include "MainWindow.h"
@@ -120,15 +120,15 @@ void MainWindow::onSaveImageTriggered() {
 void MainWindow::onChangeThemeTriggered() {
     // rotira teme: DARK -> LIGHT -> PURPLE -> DARK
     switch(m_themeManager->currentTheme()) {
-        case ThemeManager::Theme::DARK:
-            m_themeManager->setTheme(ThemeManager::Theme::LIGHT);
-            break;
-        case ThemeManager::Theme::LIGHT:
-            m_themeManager->setTheme(ThemeManager::Theme::PURPLE);
-            break;
-        case ThemeManager::Theme::PURPLE:
-            m_themeManager->setTheme(ThemeManager::Theme::DARK);
-            break;
+    case ThemeManager::Theme::DARK:
+        m_themeManager->setTheme(ThemeManager::Theme::LIGHT);
+        break;
+    case ThemeManager::Theme::LIGHT:
+        m_themeManager->setTheme(ThemeManager::Theme::PURPLE);
+        break;
+    case ThemeManager::Theme::PURPLE:
+        m_themeManager->setTheme(ThemeManager::Theme::DARK);
+        break;
     }
 
     this->setStyleSheet(m_themeManager->styleSheet());
@@ -145,10 +145,14 @@ void MainWindow::initMenuToolBar() {
     m_menuToolBar->setMovable(false);
     addToolBar(Qt::TopToolBarArea, m_menuToolBar);
 
-    connect(m_menuToolBar->openGraphAction(), &QAction::triggered, this, &MainWindow::onOpenGraphTriggered);
-    connect(m_menuToolBar->createGraphAction(), &QAction::triggered, this, &MainWindow::onCreateGraphTriggered);
-    connect(m_menuToolBar->saveGraphAction(), &QAction::triggered, this, &MainWindow::onSaveGraphTriggered);
-    connect(m_menuToolBar->saveImageAction(), &QAction::triggered, this, &MainWindow::onSaveImageTriggered);
-    connect(m_menuToolBar->changeThemeAction(), &QAction::triggered, this, &MainWindow::onChangeThemeTriggered);
+    connect(m_menuToolBar->openGraphAction(), &QAction::triggered, this,
+            &MainWindow::onOpenGraphTriggered);
+    connect(m_menuToolBar->createGraphAction(), &QAction::triggered, this,
+            &MainWindow::onCreateGraphTriggered);
+    connect(m_menuToolBar->saveGraphAction(), &QAction::triggered, this,
+            &MainWindow::onSaveGraphTriggered);
+    connect(m_menuToolBar->saveImageAction(), &QAction::triggered, this,
+            &MainWindow::onSaveImageTriggered);
+    connect(m_menuToolBar->changeThemeAction(), &QAction::triggered, this,
+            &MainWindow::onChangeThemeTriggered);
 }
-

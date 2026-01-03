@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 
-#include "MenuToolBar.h"
 #include "AppConstants.h"
+#include "MenuToolBar.h"
 #include "ThemeManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -29,8 +29,8 @@ private slots:
 
 private:
     Ui::MainWindow* m_ui;
-    MenuToolBar* m_menuToolBar = nullptr;
-    ThemeManager* m_themeManager;
+    MenuToolBar*    m_menuToolBar = nullptr;
+    ThemeManager*   m_themeManager;
 
     void initMenuToolBar();
 };

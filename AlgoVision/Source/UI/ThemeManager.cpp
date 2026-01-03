@@ -11,15 +11,15 @@ ThemeManager::Theme ThemeManager::currentTheme() const {
 QString ThemeManager::styleSheet() const {
     QString path;
     switch(m_currentTheme) {
-        case Theme::DARK:
-            path = ":themes/dark.qss";
-            break;
-        case Theme::LIGHT:
-            path = ":themes/light.qss";
-            break;
-        case Theme::PURPLE:
-            path = ":themes/purple.qss";
-            break;
+    case Theme::DARK:
+        path = ":themes/dark.qss";
+        break;
+    case Theme::LIGHT:
+        path = ":themes/light.qss";
+        break;
+    case Theme::PURPLE:
+        path = ":themes/purple.qss";
+        break;
     }
 
     QFile file(path);
@@ -52,15 +52,15 @@ void ThemeManager::loadTheme() {
 void ThemeManager::saveTheme() {
     QString t;
     switch(m_currentTheme) {
-        case Theme::DARK:
-            t = "dark";
-            break;
-        case Theme::LIGHT:
-            t = "light";
-            break;
-        case Theme::PURPLE:
-            t = "purple";
-            break;
+    case Theme::DARK:
+        t = "dark";
+        break;
+    case Theme::LIGHT:
+        t = "light";
+        break;
+    case Theme::PURPLE:
+        t = "purple";
+        break;
     }
 
     m_settings.setValue("theme", t);

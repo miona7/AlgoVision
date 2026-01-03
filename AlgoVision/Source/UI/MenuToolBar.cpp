@@ -70,5 +70,3 @@ void MenuToolBar::setOptionShortcuts() {
     m_changeThemeAction->setShortcut(Qt::CTRL | Qt::Key_T);
     m_changeThemeAction->setToolTip("change theme (Ctrl + T)");
 }
-
-
