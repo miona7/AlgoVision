@@ -2,14 +2,16 @@
 #define GRAPH_H
 
 #include <QVector>
+#include <QVariant>
 
 #include <map>
 #include <vector>
 
 #include "Edge.h"
 #include "Node.h"
+#include "Serialization/Serializable.h"
 
-class Graph {
+class Graph : public Serializable{
 public:
     Graph()          = default;
     virtual ~Graph() = default;
@@ -27,7 +29,13 @@ public:
     std::map<unsigned, Node>                         getNodes() const;
     std::map<unsigned, Edge>                         getEdges() const;
 
+    QVariant toVariant() const override;
+    void fromVariant(const QVariant& variant) override;
+
 protected:
+    void clear();
+    void addEdgeSerialized(unsigned edgeId, unsigned from, unsigned to, int w);
+
     unsigned                                         m_numOfNodes = 0;
     unsigned                                         m_numOfEdges = 0;
     std::map<unsigned, std::map<unsigned, unsigned>> m_adjacencyList;
