@@ -14,13 +14,14 @@ public:
 
     virtual void execute(unsigned = 0, unsigned = 0) = 0;
 
-    const std::vector<AlgorithmStep> getSteps() const;
+    const std::vector<AlgorithmStep>& getSteps() const;
 
 protected:
     std::shared_ptr<Graph> m_graph;
     std::vector<AlgorithmStep> m_steps;
 
     void addStep(const AlgorithmStep&);
+    void clearSteps();
 };
 
-#endif
+#endif // ALGORITHM_H

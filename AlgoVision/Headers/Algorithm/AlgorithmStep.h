@@ -32,10 +32,12 @@ enum class StepType {
 };
 
 struct AlgorithmStep {
-    StepType m_type;
+    StepType m_type{StepType::Start};
 
     std::optional<unsigned> m_node;
-    std::optional<unsigned> m_edge;
+    std::optional<unsigned> m_from;
+    std::optional<unsigned> m_to;
+
 
     // numericke vrednosti
     std::optional<int> m_value;
