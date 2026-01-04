@@ -1,30 +1,35 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
 
-#include "FloydWarshall.h"
 #include "AlgorithmStep.h"
+#include "FloydWarshall.h"
 #include "WeightedDirectedGraph.h"
 
 #include <iostream>
 
-static const char* stepTypeToString(StepType t)
-{
-    switch (t) {
-    case StepType::Start: return "Start";
-    case StepType::Finish: return "Finish";
-    case StepType::ProcessNode: return "ProcessNode";
-    case StepType::ExamineEdge: return "ExamineEdge";
-    case StepType::UpdateDistance: return "UpdateDistance";
-    default: return "Other";
+static const char* stepTypeToString(StepType t) {
+    switch(t) {
+    case StepType::Start:
+        return "Start";
+    case StepType::Finish:
+        return "Finish";
+    case StepType::ProcessNode:
+        return "ProcessNode";
+    case StepType::ExamineEdge:
+        return "ExamineEdge";
+    case StepType::UpdateDistance:
+        return "UpdateDistance";
+    default:
+        return "Other";
     }
 }
 
-TEST_CASE("Floyd-Warshall produces and logs AlgorithmSteps (manual verification)", "[FW][Steps][Debug]")
-{
+TEST_CASE("Floyd-Warshall produces and logs AlgorithmSteps (manual verification)",
+          "[FW][Steps][Debug]") {
     std::cout << "\n================ FLOYD-WARSHALL STEPS TEST ================\n";
 
     auto graph = std::make_shared<WeightedDirectedGraph>();
-    for (unsigned i = 1; i <= 4; ++i) {
+    for(unsigned i = 1; i <= 4; ++i) {
         graph->addNode(i);
     }
 
@@ -42,41 +47,44 @@ TEST_CASE("Floyd-Warshall produces and logs AlgorithmSteps (manual verification)
 
     std::cout << "Total steps produced: " << steps.size() << "\n\n";
 
-    for (std::size_t i = 0; i < steps.size(); ++i) {
+    for(std::size_t i = 0; i < steps.size(); ++i) {
         const auto& s = steps[i];
 
         std::cout << "[" << i << "] " << stepTypeToString(s.m_type);
 
-        if (s.m_node) {
+        if(s.m_node) {
             std::cout << " | node=" << *s.m_node;
         }
-        if (s.m_from && s.m_to) {
+        if(s.m_from && s.m_to) {
             std::cout << " | edge=" << *s.m_from << "->" << *s.m_to;
         }
-        if (s.m_value) {
+        if(s.m_value) {
             std::cout << " | value=" << *s.m_value;
         }
-        if (s.m_message) {
+        if(s.m_message) {
             std::cout << " | msg=\"" << *s.m_message << "\"";
         }
         std::cout << "\n";
     }
 
-    bool hasStart = false;
-    bool hasFinish = false;
-    int  processKCount = 0;
-    int  updateCount = 0;
+    bool hasStart              = false;
+    bool hasFinish             = false;
+    int  processKCount         = 0;
+    int  updateCount           = 0;
     bool hasImprovement_1_to_4 = false;
 
-    for (const auto& s : steps) {
-        if (s.m_type == StepType::Start) hasStart = true;
-        if (s.m_type == StepType::Finish) hasFinish = true;
-        if (s.m_type == StepType::ProcessNode) ++processKCount;
-        if (s.m_type == StepType::UpdateDistance) {
+    for(const auto& s: steps) {
+        if(s.m_type == StepType::Start)
+            hasStart = true;
+        if(s.m_type == StepType::Finish)
+            hasFinish = true;
+        if(s.m_type == StepType::ProcessNode)
+            ++processKCount;
+        if(s.m_type == StepType::UpdateDistance) {
             ++updateCount;
 
-            if (s.m_from && s.m_to && s.m_value) {
-                if (*s.m_from == 1 && *s.m_to == 4 && *s.m_value == 9) {
+            if(s.m_from && s.m_to && s.m_value) {
+                if(*s.m_from == 1 && *s.m_to == 4 && *s.m_value == 9) {
                     hasImprovement_1_to_4 = true;
                 }
             }
@@ -90,7 +98,7 @@ TEST_CASE("Floyd-Warshall produces and logs AlgorithmSteps (manual verification)
     std::cout << "UpdateDistance steps:       " << updateCount << "\n";
     std::cout << "Improvement 1->4 to 9 seen: " << (hasImprovement_1_to_4 ? "YES" : "NO") << "\n";
 
-    if (hasStart && hasFinish && processKCount >= (int)graph->getNodes().size() && updateCount > 0) {
+    if(hasStart && hasFinish && processKCount >= (int)graph->getNodes().size() && updateCount > 0) {
         std::cout << "Floyd-Warshall AlgorithmSteps are working correctly.\n";
     } else {
         std::cout << "Floyd-Warshall AlgorithmSteps are incomplete or invalid.\n";
@@ -105,10 +113,9 @@ TEST_CASE("Floyd-Warshall produces and logs AlgorithmSteps (manual verification)
     std::cout << "================================================================\n\n";
 }
 
-TEST_CASE("Floyd-Warshall: graph with negative cycle throws", "[FW]")
-{
+TEST_CASE("Floyd-Warshall: graph with negative cycle throws", "[FW]") {
     auto graph = std::make_shared<WeightedDirectedGraph>();
-    for (unsigned i = 1; i <= 3; ++i) {
+    for(unsigned i = 1; i <= 3; ++i) {
         graph->addNode(i);
     }
 

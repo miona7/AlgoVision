@@ -25,7 +25,7 @@ void Prim::execute(unsigned, unsigned) {
     clearSteps();
     {
         AlgorithmStep s;
-        s.m_type = StepType::Start;
+        s.m_type    = StepType::Start;
         s.m_message = std::string("Prim start");
         addStep(s);
     }
@@ -36,7 +36,7 @@ void Prim::execute(unsigned, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Finish;
+        s.m_type    = StepType::Finish;
         s.m_message = std::string("Prim finish");
         addStep(s);
     }
@@ -69,8 +69,8 @@ void Prim::prim() {
     }
     {
         AlgorithmStep s;
-        s.m_type = StepType::UpdateDistance;
-        s.m_node = start;
+        s.m_type  = StepType::UpdateDistance;
+        s.m_node  = start;
         s.m_value = 0;
         addStep(s);
     }
@@ -93,17 +93,17 @@ void Prim::prim() {
             }
             {
                 AlgorithmStep s;
-                s.m_type = StepType::MarkNode;
-                s.m_node = currentNode;
+                s.m_type  = StepType::MarkNode;
+                s.m_node  = currentNode;
                 s.m_value = 1; // inTree = true
                 addStep(s);
             }
 
-            if (parent[currentNode] != -1) {
+            if(parent[currentNode] != -1) {
                 AlgorithmStep s;
-                s.m_type = StepType::SelectEdge;
-                s.m_from = static_cast<unsigned>(parent[currentNode]);
-                s.m_to   = currentNode;
+                s.m_type  = StepType::SelectEdge;
+                s.m_from  = static_cast<unsigned>(parent[currentNode]);
+                s.m_to    = currentNode;
                 s.m_value = minDistance[currentNode]; // težina ivice
                 addStep(s);
             }
@@ -126,8 +126,8 @@ void Prim::prim() {
                             pq.emplace(minDistance[neighbourId], neighbourId);
                             {
                                 AlgorithmStep s;
-                                s.m_type = StepType::UpdateDistance;
-                                s.m_node = neighbourId;
+                                s.m_type  = StepType::UpdateDistance;
+                                s.m_node  = neighbourId;
                                 s.m_value = weight;
                                 addStep(s);
                             }

@@ -1,33 +1,41 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
 
-#include "BellmanFord.h"
 #include "AlgorithmStep.h"
+#include "BellmanFord.h"
 #include "WeightedDirectedGraph.h"
 
 #include <iostream>
 
-static const char* stepTypeToString(StepType t)
-{
-    switch (t) {
-    case StepType::Start: return "Start";
-    case StepType::Finish: return "Finish";
-    case StepType::VisitNode: return "VisitNode";
-    case StepType::ProcessNode: return "ProcessNode";
-    case StepType::ExamineEdge: return "ExamineEdge";
-    case StepType::RelaxEdge: return "RelaxEdge";
-    case StepType::UpdateDistance: return "UpdateDistance";
-    case StepType::MarkNode: return "MarkNode";
-    default: return "Other";
+static const char* stepTypeToString(StepType t) {
+    switch(t) {
+    case StepType::Start:
+        return "Start";
+    case StepType::Finish:
+        return "Finish";
+    case StepType::VisitNode:
+        return "VisitNode";
+    case StepType::ProcessNode:
+        return "ProcessNode";
+    case StepType::ExamineEdge:
+        return "ExamineEdge";
+    case StepType::RelaxEdge:
+        return "RelaxEdge";
+    case StepType::UpdateDistance:
+        return "UpdateDistance";
+    case StepType::MarkNode:
+        return "MarkNode";
+    default:
+        return "Other";
     }
 }
 
-TEST_CASE("Bellman-Ford produces and logs AlgorithmSteps (manual verification)", "[BF][Steps][Debug]")
-{
+TEST_CASE("Bellman-Ford produces and logs AlgorithmSteps (manual verification)",
+          "[BF][Steps][Debug]") {
     std::cout << "\n================ BELLMAN-FORD STEPS TEST ================\n";
 
     auto graph = std::make_shared<WeightedDirectedGraph>();
-    for (unsigned i = 1; i <= 5; ++i) {
+    for(unsigned i = 1; i <= 5; ++i) {
         graph->addNode(i);
     }
 
@@ -45,39 +53,43 @@ TEST_CASE("Bellman-Ford produces and logs AlgorithmSteps (manual verification)",
 
     std::cout << "Total steps produced: " << steps.size() << "\n\n";
 
-    for (std::size_t i = 0; i < steps.size(); ++i) {
+    for(std::size_t i = 0; i < steps.size(); ++i) {
         const auto& s = steps[i];
 
         std::cout << "[" << i << "] " << stepTypeToString(s.m_type);
 
-        if (s.m_node) {
+        if(s.m_node) {
             std::cout << " | node=" << *s.m_node;
         }
-        if (s.m_from && s.m_to) {
+        if(s.m_from && s.m_to) {
             std::cout << " | edge=" << *s.m_from << "->" << *s.m_to;
         }
-        if (s.m_value) {
+        if(s.m_value) {
             std::cout << " | value=" << *s.m_value;
         }
-        if (s.m_message) {
+        if(s.m_message) {
             std::cout << " | msg=\"" << *s.m_message << "\"";
         }
 
         std::cout << "\n";
     }
 
-    bool hasStart = false;
-    bool hasFinish = false;
-    int examineCount = 0;
-    int relaxCount = 0;
-    bool negCycleMsg = false;
+    bool hasStart     = false;
+    bool hasFinish    = false;
+    int  examineCount = 0;
+    int  relaxCount   = 0;
+    bool negCycleMsg  = false;
 
-    for (const auto& s : steps) {
-        if (s.m_type == StepType::Start) hasStart = true;
-        if (s.m_type == StepType::Finish) hasFinish = true;
-        if (s.m_type == StepType::ExamineEdge) ++examineCount;
-        if (s.m_type == StepType::RelaxEdge) ++relaxCount;
-        if (s.m_type == StepType::MarkNode && s.m_message &&
+    for(const auto& s: steps) {
+        if(s.m_type == StepType::Start)
+            hasStart = true;
+        if(s.m_type == StepType::Finish)
+            hasFinish = true;
+        if(s.m_type == StepType::ExamineEdge)
+            ++examineCount;
+        if(s.m_type == StepType::RelaxEdge)
+            ++relaxCount;
+        if(s.m_type == StepType::MarkNode && s.m_message &&
            s.m_message->find("negative cycle") != std::string::npos) {
             negCycleMsg = true;
         }
@@ -88,9 +100,10 @@ TEST_CASE("Bellman-Ford produces and logs AlgorithmSteps (manual verification)",
     std::cout << "ExamineEdge steps:           " << examineCount << "\n";
     std::cout << "RelaxEdge steps:             " << relaxCount << "\n";
     std::cout << "Negative-cycle message step: " << (negCycleMsg ? "YES" : "NO") << "\n";
-    std::cout << "hasNegativeCycle() flag:     " << (bf.hasNegativeCycle() ? "TRUE" : "FALSE") << "\n";
+    std::cout << "hasNegativeCycle() flag:     " << (bf.hasNegativeCycle() ? "TRUE" : "FALSE")
+              << "\n";
 
-    if (hasStart && hasFinish && examineCount > 0 && relaxCount > 0 && !bf.hasNegativeCycle()) {
+    if(hasStart && hasFinish && examineCount > 0 && relaxCount > 0 && !bf.hasNegativeCycle()) {
         std::cout << "Bellman-Ford AlgorithmSteps are working correctly.\n";
     } else {
         std::cout << "Bellman-Ford AlgorithmSteps are incomplete or invalid.\n";
@@ -106,12 +119,11 @@ TEST_CASE("Bellman-Ford produces and logs AlgorithmSteps (manual verification)",
     std::cout << "=============================================================\n\n";
 }
 
-TEST_CASE("Bellman-Ford detects negative cycle (flag + optional step)", "[BF][NegCycle]")
-{
+TEST_CASE("Bellman-Ford detects negative cycle (flag + optional step)", "[BF][NegCycle]") {
     std::cout << "\n================ BELLMAN-FORD NEGATIVE CYCLE TEST ================\n";
 
     auto graph = std::make_shared<WeightedDirectedGraph>();
-    for (unsigned i = 1; i <= 3; ++i) {
+    for(unsigned i = 1; i <= 3; ++i) {
         graph->addNode(i);
     }
 
@@ -125,14 +137,16 @@ TEST_CASE("Bellman-Ford detects negative cycle (flag + optional step)", "[BF][Ne
     const auto& steps = bf.getSteps();
     REQUIRE_FALSE(steps.empty());
 
-    bool hasStart = false;
-    bool hasFinish = false;
+    bool hasStart    = false;
+    bool hasFinish   = false;
     bool negCycleMsg = false;
 
-    for (const auto& s : steps) {
-        if (s.m_type == StepType::Start) hasStart = true;
-        if (s.m_type == StepType::Finish) hasFinish = true;
-        if (s.m_type == StepType::MarkNode && s.m_message &&
+    for(const auto& s: steps) {
+        if(s.m_type == StepType::Start)
+            hasStart = true;
+        if(s.m_type == StepType::Finish)
+            hasFinish = true;
+        if(s.m_type == StepType::MarkNode && s.m_message &&
            s.m_message->find("negative cycle") != std::string::npos) {
             negCycleMsg = true;
         }
@@ -143,7 +157,7 @@ TEST_CASE("Bellman-Ford detects negative cycle (flag + optional step)", "[BF][Ne
     std::cout << "Negative-cycle message step: " << (negCycleMsg ? "YES" : "NO") << "\n";
     std::cout << "hasNegativeCycle() flag: " << (bf.hasNegativeCycle() ? "TRUE" : "FALSE") << "\n";
 
-    if (hasStart && hasFinish && bf.hasNegativeCycle()) {
+    if(hasStart && hasFinish && bf.hasNegativeCycle()) {
         std::cout << "Negative cycle detection is working.\n";
     } else {
         std::cout << "Negative cycle detection is not working.\n";

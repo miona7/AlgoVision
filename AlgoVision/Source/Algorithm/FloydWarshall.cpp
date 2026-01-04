@@ -15,7 +15,7 @@ void FloydWarshall::execute(unsigned, unsigned) {
     clearSteps();
     {
         AlgorithmStep s;
-        s.m_type = StepType::Start;
+        s.m_type    = StepType::Start;
         s.m_message = std::string("Floyd-Warshall start");
         addStep(s);
     }
@@ -38,12 +38,11 @@ void FloydWarshall::execute(unsigned, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Finish;
+        s.m_type    = StepType::Finish;
         s.m_message = std::string("Floyd-Warshall finish");
         addStep(s);
     }
 }
-
 
 // Belezi promene samo kada dodje do smanjenja distanci jer je O(n^3)
 void FloydWarshall::floydWarshall() {
@@ -66,7 +65,7 @@ void FloydWarshall::floydWarshall() {
         m_distances[edge.startNode()][edge.endNode()] = edge.getWeight();
     }
 
-    for (const auto& [_, edge] : edges) {
+    for(const auto& [_, edge]: edges) {
         {
             AlgorithmStep s;
             s.m_type = StepType::ExamineEdge;
@@ -76,10 +75,10 @@ void FloydWarshall::floydWarshall() {
         }
         {
             AlgorithmStep s;
-            s.m_type = StepType::UpdateDistance;
-            s.m_from = edge.startNode();
-            s.m_to   = edge.endNode();
-            s.m_value = edge.getWeight();
+            s.m_type    = StepType::UpdateDistance;
+            s.m_from    = edge.startNode();
+            s.m_to      = edge.endNode();
+            s.m_value   = edge.getWeight();
             s.m_message = std::string("init edge weight");
             addStep(s);
         }
@@ -88,8 +87,8 @@ void FloydWarshall::floydWarshall() {
     for(const auto& [k, _]: nodes) {
         {
             AlgorithmStep s;
-            s.m_type = StepType::ProcessNode;
-            s.m_node = k; // trenutno posrednik
+            s.m_type    = StepType::ProcessNode;
+            s.m_node    = k; // trenutno posrednik
             s.m_message = std::string("using intermediate k");
             addStep(s);
         }
@@ -99,14 +98,14 @@ void FloydWarshall::floydWarshall() {
                     if(m_distances[k][j] != std::numeric_limits<int>::max()) {
 
                         int throughK = m_distances[i][k] + m_distances[k][j];
-                        if (throughK < m_distances[i][j]) {
+                        if(throughK < m_distances[i][j]) {
                             m_distances[i][j] = throughK;
 
                             AlgorithmStep s;
-                            s.m_type = StepType::UpdateDistance;
-                            s.m_node = k;     // cvor koji je omogućio poboljšanje
-                            s.m_from = i;     // od i
-                            s.m_to   = j;     // do j
+                            s.m_type  = StepType::UpdateDistance;
+                            s.m_node  = k; // cvor koji je omogućio poboljšanje
+                            s.m_from  = i; // od i
+                            s.m_to    = j; // do j
                             s.m_value = throughK;
                             addStep(s);
                         }
@@ -120,7 +119,7 @@ void FloydWarshall::floydWarshall() {
         if(m_distances[i][i] < 0) {
             {
                 AlgorithmStep s;
-                s.m_type = StepType::Finish;
+                s.m_type    = StepType::Finish;
                 s.m_message = std::string("negative cycle detected");
                 addStep(s);
             }
