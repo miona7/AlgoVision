@@ -82,9 +82,9 @@ TEST_CASE("Prim produces and logs AlgorithmSteps (manual verification)", "[PRIM]
     std::cout << "MST edges selected:  " << mstEdges << "\n";
 
     if (hasStart && hasFinish && mstEdges == static_cast<int>(g->getNodes().size()) - 1) {
-        std::cout << "Prim AlgorithmSteps are WORKING correctly.\n";
+        std::cout << "Prim AlgorithmSteps are working correctly.\n";
     } else {
-        std::cout << " Prim AlgorithmSteps are INCOMPLETE or INVALID.\n";
+        std::cout << " Prim AlgorithmSteps are incomplete or invalid.\n";
     }
 
     REQUIRE(hasStart);

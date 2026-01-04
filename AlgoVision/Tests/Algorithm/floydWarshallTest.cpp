@@ -91,9 +91,9 @@ TEST_CASE("Floyd-Warshall produces and logs AlgorithmSteps (manual verification)
     std::cout << "Improvement 1->4 to 9 seen: " << (hasImprovement_1_to_4 ? "YES" : "NO") << "\n";
 
     if (hasStart && hasFinish && processKCount >= (int)graph->getNodes().size() && updateCount > 0) {
-        std::cout << "Floyd-Warshall AlgorithmSteps are WORKING correctly.\n";
+        std::cout << "Floyd-Warshall AlgorithmSteps are working correctly.\n";
     } else {
-        std::cout << "Floyd-Warshall AlgorithmSteps are INCOMPLETE or INVALID.\n";
+        std::cout << "Floyd-Warshall AlgorithmSteps are incomplete or invalid.\n";
     }
 
     REQUIRE(hasStart);
