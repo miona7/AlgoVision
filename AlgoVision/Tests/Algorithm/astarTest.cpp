@@ -62,3 +62,115 @@ TEST_CASE("AStar: negative edge weight", "[AStar]") {
     AStar astar(g);
     REQUIRE_THROWS_WITH(astar.execute(1, 2), "Graph contains negative edge weights!");
 }
+
+static const char* stepTypeToString(StepType t) {
+    switch(t) {
+    case StepType::Start:
+        return "Start";
+    case StepType::Finish:
+        return "Finish";
+    case StepType::VisitNode:
+        return "VisitNode";
+    case StepType::ProcessNode:
+        return "ProcessNode";
+    case StepType::MarkNode:
+        return "MarkNode";
+    case StepType::ExamineEdge:
+        return "ExamineEdge";
+    case StepType::PushToStack:
+        return "PushToStack";
+    case StepType::PopFromStack:
+        return "PopFromStack";
+    case StepType::UpdateDistance:
+        return "UpdateDistance";
+    case StepType::AddToPath:
+        return "AddToPath";
+    }
+}
+
+void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsigned startNode, unsigned goalNode) {
+    AStar astar(g);
+    REQUIRE_NOTHROW(astar.execute(startNode, goalNode));
+
+    const auto& steps = astar.getSteps();
+
+    std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
+
+    REQUIRE_FALSE(steps.empty());
+
+    for(size_t i = 0; i < steps.size(); ++i) {
+        const auto& s = steps[i];
+        std::cout << "[" << i << "] " << stepTypeToString(s.m_type);
+
+        if(s.m_node) {
+            std::cout << " | node = " << *s.m_node;
+        }
+        if(s.m_from && s.m_to) {
+            std::cout << " | edge = " << *s.m_from << " -> " << *s.m_to;
+        }
+        if(s.m_value) {
+            std::cout << " | value = " << *s.m_value;
+        }
+        if(s.m_message) {
+            std::cout << " | msg = \"" << *s.m_message << "\"";
+        }
+        std::cout << std::endl;
+    }
+
+    bool hasStart     = false;
+    bool hasFinish    = false;
+    bool hasVisit     = false;
+    bool hasEdge      = false;
+    bool hasUpdate    = false;
+    bool hasAddToPath = false;
+
+    for(const auto& s : steps) {
+        if(s.m_type == StepType::Start) {
+            hasStart = true;
+        }
+
+        if(s.m_type == StepType::Finish) {
+            hasFinish = true;
+        }
+
+        if(s.m_type == StepType::VisitNode) {
+            hasVisit = true;
+        }
+
+        if(s.m_type == StepType::ExamineEdge) {
+            hasEdge = true;
+        }
+
+        if(s.m_type == StepType::UpdateDistance) {
+            hasUpdate = true;
+        }
+
+        if(s.m_type == StepType::AddToPath) {
+            hasAddToPath = true;
+        }
+    }
+
+    REQUIRE(hasStart);
+    REQUIRE(hasFinish);
+    REQUIRE(hasVisit);
+    REQUIRE(hasEdge);
+    // REQUIRE(hasUpdate);
+    // REQUIRE(hasAddToPath);
+}
+
+TEST_CASE("AStar steps test", "[AStar]") {
+    auto g = std::make_shared<WeightedDirectedGraph>();
+
+    g->addNode(1, 0, 0);
+    g->addNode(2, 1, 0);
+    g->addNode(3, 1, 1);
+    g->addNode(4, 2, 1);
+
+    g->addEdge(1, 2, 1);
+    g->addEdge(2, 4, 2);
+    g->addEdge(1, 3, 2);
+    g->addEdge(3, 4, 1);
+
+    runAStarLoggingTest(g, 1, 4);
+}
+
