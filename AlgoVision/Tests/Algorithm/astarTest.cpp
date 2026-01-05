@@ -77,15 +77,16 @@ static const char* stepTypeToString(StepType t) {
         return "MarkNode";
     case StepType::ExamineEdge:
         return "ExamineEdge";
-    case StepType::PushToStack:
-        return "PushToStack";
-    case StepType::PopFromStack:
-        return "PopFromStack";
+    case StepType::PushToQueue:
+        return "PushToQueue";
+    case StepType::PopFromQueue:
+        return "PopFromQueue";
     case StepType::UpdateDistance:
         return "UpdateDistance";
     case StepType::AddToPath:
         return "AddToPath";
     }
+    return nullptr;
 }
 
 void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsigned startNode, unsigned goalNode) {
@@ -123,6 +124,8 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsign
     bool hasEdge      = false;
     bool hasUpdate    = false;
     bool hasAddToPath = false;
+    bool pushToQueue  = false;
+    bool popFromQueue = false;
 
     for(const auto& s : steps) {
         if(s.m_type == StepType::Start) {
@@ -143,6 +146,12 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsign
         if(s.m_type == StepType::AddToPath) {
             hasAddToPath = true;
         }
+        if(s.m_type == StepType::PushToQueue) {
+            pushToQueue = true;
+        }
+        if(s.m_type == StepType::PopFromQueue) {
+            popFromQueue = true;
+        }
     }
 
     REQUIRE(hasStart);
@@ -151,6 +160,8 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsign
     REQUIRE(hasEdge);
     REQUIRE(hasUpdate);
     REQUIRE(hasAddToPath);
+    REQUIRE(pushToQueue);
+    REQUIRE(popFromQueue);
 }
 
 TEST_CASE("AStar steps test", "[AStar]") {

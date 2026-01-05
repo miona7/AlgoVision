@@ -80,12 +80,26 @@ void AStar::aStar(unsigned start, unsigned goal) {
         pq;
     pq.emplace(fScore[start], start);
 
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::PushToQueue;
+        s.m_node = start;
+        addStep(s);
+    }
+
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
 
     while(!pq.empty()) {
         auto [_, current] = pq.top();
         pq.pop();
+
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::PopFromQueue;
+            s.m_node = current;
+            addStep(s);
+        }
 
         if(visited[current]) {
             continue;
@@ -96,6 +110,12 @@ void AStar::aStar(unsigned start, unsigned goal) {
         {
             AlgorithmStep s;
             s.m_type = StepType::VisitNode;
+            s.m_node = current;
+            addStep(s);
+        }
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::ProcessNode;
             s.m_node = current;
             addStep(s);
         }
@@ -118,13 +138,6 @@ void AStar::aStar(unsigned start, unsigned goal) {
             m_path.push_back(start);
             std::reverse(m_path.begin(), m_path.end());
             return;
-        }
-
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::ProcessNode;
-            s.m_node = current;
-            addStep(s);
         }
 
         if(adjList.find(current) != adjList.end()) {
@@ -155,6 +168,13 @@ void AStar::aStar(unsigned start, unsigned goal) {
                         }
 
                         pq.emplace(fScore[neighbour], neighbour);
+
+                        {
+                            AlgorithmStep s;
+                            s.m_type = StepType::PushToQueue;
+                            s.m_node = neighbour;
+                            addStep(s);
+                        }
                     }
                 }
             }
