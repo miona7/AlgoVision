@@ -38,7 +38,6 @@ struct AlgorithmStep {
     std::optional<unsigned> m_from;
     std::optional<unsigned> m_to;
 
-
     // numericke vrednosti
     std::optional<int> m_value;
 
