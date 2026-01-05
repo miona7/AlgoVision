@@ -54,6 +54,8 @@ set(PROJECT_SOURCES
         Headers/UI/MenuToolBar.h Source/UI/MenuToolBar.cpp
         Headers/UI/ThemeManager.h Source/UI/ThemeManager.cpp
         Headers/UI/GraphEditor.h Source/UI/GraphEditor.cpp
+        Headers/UI/GraphEditTab.h Source/UI/GraphEditTab.cpp
+        Headers/UI/AlgorithmTab.h Source/UI/AlgorithmTab.cpp
 )
 
 qt_add_resources(RESOURCES

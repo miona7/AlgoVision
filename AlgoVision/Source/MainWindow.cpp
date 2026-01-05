@@ -8,6 +8,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <QVBoxLayout>
+#include "GraphEditor.h"
+
+
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()) {
     m_ui->setupUi(this);
@@ -39,6 +43,19 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(btnOpenGraph, &QPushButton::clicked, this, &MainWindow::onOpenGraphTriggered);
     connect(btnCreateGraph, &QPushButton::clicked, this, &MainWindow::onCreateGraphTriggered);
+
+    // ===== GRAPH PAGE CONTENT =====
+    QWidget* graphPage = m_ui->graphPage;
+
+    // layout
+    if (graphPage->layout() == nullptr) {
+        auto* graphLayout = new QVBoxLayout(graphPage);
+        graphLayout->setContentsMargins(0, 0, 0, 0);
+
+        auto* graphEditor = new GraphEditor(graphPage);
+        graphLayout->addWidget(graphEditor);
+    }
+
 }
 
 MainWindow::~MainWindow() {
