@@ -128,23 +128,18 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsign
         if(s.m_type == StepType::Start) {
             hasStart = true;
         }
-
         if(s.m_type == StepType::Finish) {
             hasFinish = true;
         }
-
         if(s.m_type == StepType::VisitNode) {
             hasVisit = true;
         }
-
         if(s.m_type == StepType::ExamineEdge) {
             hasEdge = true;
         }
-
         if(s.m_type == StepType::UpdateDistance) {
             hasUpdate = true;
         }
-
         if(s.m_type == StepType::AddToPath) {
             hasAddToPath = true;
         }
@@ -154,8 +149,8 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsign
     REQUIRE(hasFinish);
     REQUIRE(hasVisit);
     REQUIRE(hasEdge);
-    // REQUIRE(hasUpdate);
-    // REQUIRE(hasAddToPath);
+    REQUIRE(hasUpdate);
+    REQUIRE(hasAddToPath);
 }
 
 TEST_CASE("AStar steps test", "[AStar]") {

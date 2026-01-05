@@ -119,15 +119,12 @@ void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
         if(s.m_node) {
             std::cout << " | node = " << *s.m_node;
         }
-
         if(s.m_from && s.m_to) {
             std::cout << " | edge = " << *s.m_from << " -> " << *s.m_to;
         }
-
         if(s.m_value) {
             std::cout << " | value = " << *s.m_value;
         }
-
         if(s.m_message) {
             std::cout << " | msg = \"" << *s.m_message << "\"";
         }
@@ -146,23 +143,18 @@ void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
         if(s.m_type == StepType::Start) {
             hasStart = true;
         }
-
         if(s.m_type == StepType::Finish) {
             hasFinish = true;
         }
-
         if(s.m_type == StepType::VisitNode) {
             hasVisit = true;
         }
-
         if(s.m_type == StepType::ExamineEdge) {
             hasEdge = true;
         }
-
         if(s.m_type == StepType::PushToStack) {
             hasPush = true;
         }
-
         if(s.m_type == StepType::PopFromStack) {
             hasPop = true;
         }
