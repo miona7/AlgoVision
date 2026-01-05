@@ -18,11 +18,17 @@ protected:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
     Node* m_modelNode;
     qreal m_radius{AppConstants::defaultRadius};
     qreal m_borderWidth{AppConstants::defaultBorderWidth};
+    bool m_hasChangePosition{false};
+    bool m_nodeSelected{false};
+
+    const QColor calculateColor() const;
 };
 
 #endif // NODEITEM_H

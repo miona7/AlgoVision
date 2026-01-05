@@ -4,7 +4,8 @@
 
 NodeItem::NodeItem(Node* modelNode)
     : m_modelNode(modelNode) {
-    setFlags(ItemIsMovable | ItemIsSelectable);
+    setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
+    setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
     setPos(modelNode->getPosition().first, modelNode->getPosition().second);
 }
@@ -32,9 +33,36 @@ QPainterPath NodeItem::shape() const {
 
 void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
     QPen pen(Qt::black, m_borderWidth);
-    QBrush brush(Qt::green);
+    QBrush brush(calculateColor());
 
     painter->setPen(pen);
     painter->setBrush(brush);
     painter->drawEllipse(QRectF(-m_radius, -m_radius, 2 * m_radius, 2 * m_radius));
+}
+
+QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value) {
+    switch (change) {
+    case QGraphicsItem::ItemPositionHasChanged:
+        m_hasChangePosition = true;
+        break;
+    default:
+        break;
+    }
+
+    return QGraphicsItem::itemChange(change, value);
+}
+
+void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if (!m_hasChangePosition) {
+        m_nodeSelected = !m_nodeSelected;
+        update();
+        std::cout << "cvor je kliknut" << std::endl;
+    }
+
+    m_hasChangePosition = false;
+    QGraphicsItem::mouseReleaseEvent(event);
+}
+
+const QColor NodeItem::calculateColor() const {
+    return (!m_nodeSelected)? Qt::green : Qt::red;
 }
