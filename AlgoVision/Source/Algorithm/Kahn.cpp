@@ -16,7 +16,7 @@ void Kahn::execute(unsigned, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Start;
+        s.m_type    = StepType::Start;
         s.m_message = std::string("Kahn start");
         addStep(s);
     }
@@ -27,7 +27,7 @@ void Kahn::execute(unsigned, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Finish;
+        s.m_type    = StepType::Finish;
         s.m_message = std::string("Kahn finish");
         addStep(s);
     }

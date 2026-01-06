@@ -28,8 +28,8 @@ void Dijkstra::execute(unsigned idStartNode, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Start;
-        s.m_node = idStartNode;
+        s.m_type    = StepType::Start;
+        s.m_node    = idStartNode;
         s.m_message = std::string("Dijkstra start");
         addStep(s);
     }
@@ -40,7 +40,7 @@ void Dijkstra::execute(unsigned idStartNode, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Finish;
+        s.m_type    = StepType::Finish;
         s.m_message = std::string("Dijkstra finish");
         addStep(s);
     }
@@ -107,9 +107,9 @@ void Dijkstra::dijkstra(unsigned start) {
 
                     {
                         AlgorithmStep s;
-                        s.m_type = StepType::ExamineEdge;
-                        s.m_from = currentNode;
-                        s.m_to = neighbourId;
+                        s.m_type  = StepType::ExamineEdge;
+                        s.m_from  = currentNode;
+                        s.m_to    = neighbourId;
                         s.m_value = weight;
                         addStep(s);
                     }
@@ -119,8 +119,8 @@ void Dijkstra::dijkstra(unsigned start) {
 
                         {
                             AlgorithmStep s;
-                            s.m_type = StepType::UpdateDistance;
-                            s.m_node = neighbourId;
+                            s.m_type  = StepType::UpdateDistance;
+                            s.m_node  = neighbourId;
                             s.m_value = minDistance[neighbourId];
                             addStep(s);
                         }

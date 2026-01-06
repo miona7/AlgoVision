@@ -1,8 +1,8 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <QVector>
 #include <QVariant>
+#include <QVector>
 
 #include <map>
 #include <vector>
@@ -30,7 +30,7 @@ public:
     std::map<unsigned, Edge>                         getEdges() const;
 
     QVariant toVariant() const override;
-    void fromVariant(const QVariant&) override;
+    void     fromVariant(const QVariant&) override;
 
 protected:
     unsigned                                         m_numOfNodes = 0;

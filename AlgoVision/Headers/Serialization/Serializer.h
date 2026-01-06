@@ -1,9 +1,9 @@
 #ifndef SERIALIZER_H
 #define SERIALIZER_H
 
-#include <QString>
 #include <QFile>
 #include <QJsonDocument>
+#include <QString>
 #include <QVariantMap>
 
 #include "Serializable.h"

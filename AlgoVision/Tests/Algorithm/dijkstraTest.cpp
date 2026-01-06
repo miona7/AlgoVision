@@ -118,7 +118,6 @@ static const char* stepTypeToString(StepType t) {
     return nullptr;
 }
 
-
 void runDijkstraLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     Dijkstra dijkstra(g);
     REQUIRE_NOTHROW(dijkstra.execute(startNode));
@@ -156,7 +155,7 @@ void runDijkstraLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode)
     bool hasPushToQueue  = false;
     bool hasPopFromQueue = false;
 
-    for(const auto& s : steps) {
+    for(const auto& s: steps) {
         if(s.m_type == StepType::Start) {
             hasStart = true;
         }

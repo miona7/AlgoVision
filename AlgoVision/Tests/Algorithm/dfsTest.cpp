@@ -82,22 +82,22 @@ TEST_CASE("DFS throws for invalid start node", "[DFS]") {
 
 static const char* stepTypeToString(StepType t) {
     switch(t) {
-        case StepType::Start:
-            return "Start";
-        case StepType::Finish:
-            return "Finish";
-        case StepType::VisitNode:
-            return "VisitNode";
-        case StepType::ProcessNode:
-            return "ProcessNode";
-        case StepType::MarkNode:
-            return "MarkNode";
-        case StepType::ExamineEdge:
-            return "ExamineEdge";
-        case StepType::PushToStack:
-            return "PushToStack";
-        case StepType::PopFromStack:
-            return "PopFromStack";
+    case StepType::Start:
+        return "Start";
+    case StepType::Finish:
+        return "Finish";
+    case StepType::VisitNode:
+        return "VisitNode";
+    case StepType::ProcessNode:
+        return "ProcessNode";
+    case StepType::MarkNode:
+        return "MarkNode";
+    case StepType::ExamineEdge:
+        return "ExamineEdge";
+    case StepType::PushToStack:
+        return "PushToStack";
+    case StepType::PopFromStack:
+        return "PopFromStack";
     }
 }
 
@@ -105,7 +105,7 @@ void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     DFS dfs(g);
     dfs.execute(startNode);
 
-    const auto& steps = dfs.getSteps();
+    const auto& steps   = dfs.getSteps();
     const auto& visited = dfs.getVisited();
 
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
@@ -139,7 +139,7 @@ void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     bool hasPush   = false;
     bool hasPop    = false;
 
-    for(const auto& s : steps) {
+    for(const auto& s: steps) {
         if(s.m_type == StepType::Start) {
             hasStart = true;
         }
@@ -167,7 +167,7 @@ void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     REQUIRE(hasPush);
     REQUIRE(hasPop);
 
-    for(const auto& [node, v] : visited) {
+    for(const auto& [node, v]: visited) {
         REQUIRE(v == true);
     }
 }

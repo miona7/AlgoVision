@@ -31,8 +31,8 @@ void AStar::execute(unsigned start, unsigned goal) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Start;
-        s.m_node = start;
+        s.m_type    = StepType::Start;
+        s.m_node    = start;
         s.m_message = std::string("A* start");
         addStep(s);
     }
@@ -43,7 +43,7 @@ void AStar::execute(unsigned start, unsigned goal) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Finish;
+        s.m_type    = StepType::Finish;
         s.m_message = std::string("A* finish");
         addStep(s);
     }
@@ -63,12 +63,12 @@ void AStar::aStar(unsigned start, unsigned goal) {
     std::map<unsigned, int> gScore; // stvarni trosak puta od startnog do trenutnog cvora
     std::map<unsigned, int> fScore; // procena ukupnog troska od startnog do ciljnog preko trenutnog
     std::map<unsigned, unsigned> parent;
-    std::map<unsigned, bool> visited;
+    std::map<unsigned, bool>     visited;
 
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
-        gScore[id] = std::numeric_limits<int>::max();
-        fScore[id] = std::numeric_limits<int>::max();
+        gScore[id]  = std::numeric_limits<int>::max();
+        fScore[id]  = std::numeric_limits<int>::max();
         visited[id] = false;
     }
 
@@ -150,7 +150,7 @@ void AStar::aStar(unsigned start, unsigned goal) {
                         AlgorithmStep s;
                         s.m_type = StepType::ExamineEdge;
                         s.m_from = current;
-                        s.m_to = neighbour;
+                        s.m_to   = neighbour;
                         addStep(s);
                     }
 
@@ -161,8 +161,8 @@ void AStar::aStar(unsigned start, unsigned goal) {
 
                         {
                             AlgorithmStep s;
-                            s.m_type = StepType::UpdateDistance;
-                            s.m_node = neighbour;
+                            s.m_type  = StepType::UpdateDistance;
+                            s.m_node  = neighbour;
                             s.m_value = fScore[neighbour];
                             addStep(s);
                         }

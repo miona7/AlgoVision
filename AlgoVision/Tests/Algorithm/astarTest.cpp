@@ -89,7 +89,8 @@ static const char* stepTypeToString(StepType t) {
     return nullptr;
 }
 
-void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsigned startNode, unsigned goalNode) {
+void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsigned startNode,
+                         unsigned goalNode) {
     AStar astar(g);
     REQUIRE_NOTHROW(astar.execute(startNode, goalNode));
 
@@ -127,7 +128,7 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsign
     bool pushToQueue  = false;
     bool popFromQueue = false;
 
-    for(const auto& s : steps) {
+    for(const auto& s: steps) {
         if(s.m_type == StepType::Start) {
             hasStart = true;
         }
@@ -179,4 +180,3 @@ TEST_CASE("AStar steps test", "[AStar]") {
 
     runAStarLoggingTest(g, 1, 4);
 }
-

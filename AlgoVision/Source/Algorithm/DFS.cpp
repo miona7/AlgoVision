@@ -23,14 +23,14 @@ void DFS::execute(unsigned idStartNode, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Start;
-        s.m_node = idStartNode;
+        s.m_type    = StepType::Start;
+        s.m_node    = idStartNode;
         s.m_message = std::string("DFS Start");
         addStep(s);
     }
 
     m_visited.clear();
-    auto                     nodes = m_graph->getNodes();
+    auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
         m_visited[id] = false;
     }
@@ -41,7 +41,7 @@ void DFS::execute(unsigned idStartNode, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::Finish;
+        s.m_type    = StepType::Finish;
         s.m_message = std::string("DFS Finish");
         addStep(s);
     }
@@ -63,8 +63,8 @@ void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::MarkNode;
-        s.m_node = nodeId;
+        s.m_type  = StepType::MarkNode;
+        s.m_node  = nodeId;
         s.m_value = 1; // visited = true
         addStep(s);
     }
@@ -84,7 +84,7 @@ void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
                 AlgorithmStep s;
                 s.m_type = StepType::ExamineEdge;
                 s.m_from = nodeId;
-                s.m_to = neighbourId;
+                s.m_to   = neighbourId;
                 addStep(s);
             }
 

@@ -1,9 +1,9 @@
 #ifndef ALGORITHMSTEP_H
 #define ALGORITHMSTEP_H
 
+#include <optional>
 #include <string>
 #include <vector>
-#include <optional>
 
 enum class StepType {
     // opsti koraci
@@ -11,28 +11,28 @@ enum class StepType {
     Finish,
 
     // cvorovi
-    VisitNode,    // DFS, BFS, Dijkstra, A*
+    VisitNode, // DFS, BFS, Dijkstra, A*
     ProcessNode,
-    MarkNode,     // Tarjan, Prim
+    MarkNode, // Tarjan, Prim
 
     // grane
     ExamineEdge,
-    RelaxEdge,    // BellmanFord
-    SelectEdge,   // Prim
+    RelaxEdge,  // BellmanFord
+    SelectEdge, // Prim
 
-    PushToQueue,  // BFS, Kahn
+    PushToQueue, // BFS, Kahn
     PopFromQueue,
-    PushToStack,  // DFS, Tarjan
+    PushToStack, // DFS, Tarjan
     PopFromStack,
 
-    UpdateDistance,  // Dijkstra, Bellman-Ford, Floyd-Warshall
-    AddToPath,       // A*
+    UpdateDistance, // Dijkstra, Bellman-Ford, Floyd-Warshall
+    AddToPath,      // A*
     AddToTopologicalOrder,
-    AssignComponent  // Tarjan
+    AssignComponent // Tarjan
 };
 
 struct AlgorithmStep {
-    StepType m_type{StepType::Start};
+    StepType m_type {StepType::Start};
 
     std::optional<unsigned> m_node;
     std::optional<unsigned> m_from;

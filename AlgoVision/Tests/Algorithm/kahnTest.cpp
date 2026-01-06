@@ -109,7 +109,7 @@ void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph>& g) {
     bool hasPopFromQueue = false;
     bool hasAddTopOrder  = false;
 
-    for(const auto& s : steps) {
+    for(const auto& s: steps) {
         if(s.m_type == StepType::Start) {
             hasStart = true;
         }
@@ -153,4 +153,3 @@ TEST_CASE("Kahn steps test", "[KAHN]") {
 
     runKahnLoggingTest(graph);
 }
-

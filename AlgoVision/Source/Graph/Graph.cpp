@@ -64,7 +64,7 @@ QVariant Graph::toVariant() const {
     QVariantList nodes;
     nodes.reserve(static_cast<int>(m_nodes.size()));
 
-    for(const auto& [id, node] : m_nodes) {
+    for(const auto& [id, node]: m_nodes) {
         const auto& pos = node.getPosition();
 
         QVariantMap n;
@@ -78,7 +78,7 @@ QVariant Graph::toVariant() const {
     QVariantList edges;
     edges.reserve(static_cast<int>(m_edges.size()));
 
-    for(const auto& [id, edge] : m_edges) {
+    for(const auto& [id, edge]: m_edges) {
         QVariantMap e;
         e["id"]     = edge.getId();
         e["from"]   = edge.startNode();
@@ -103,22 +103,22 @@ void Graph::fromVariant(const QVariant& variant) {
     clear();
 
     const QVariantList nodes = graph.value("nodes").toList();
-    for(const QVariant& v : nodes) {
-        const QVariantMap n = v.toMap();
-        const unsigned id = n.value("id").toUInt();
-        const double x = n.value("x").toDouble();
-        const double y = n.value("y").toDouble();
+    for(const QVariant& v: nodes) {
+        const QVariantMap n  = v.toMap();
+        const unsigned    id = n.value("id").toUInt();
+        const double      x  = n.value("x").toDouble();
+        const double      y  = n.value("y").toDouble();
         addNode(id, x, y);
     }
 
     const QVariantList edges = graph.value("edges").toList();
-    for(const QVariant& v : edges) {
+    for(const QVariant& v: edges) {
         const QVariantMap e = v.toMap();
 
         const unsigned edgeId = e.value("id").toUInt();
         const unsigned from   = e.value("from").toUInt();
         const unsigned to     = e.value("to").toUInt();
-        const int w           = e.value("weight", 1).toInt();
+        const int      w      = e.value("weight", 1).toInt();
 
         addEdgeSerialized(edgeId, from, to, w);
     }
