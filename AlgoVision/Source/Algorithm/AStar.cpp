@@ -33,18 +33,16 @@ void AStar::execute(unsigned start, unsigned goal) {
         AlgorithmStep s;
         s.m_type    = StepType::Start;
         s.m_node    = start;
-        s.m_message = std::string("A* start");
+        s.m_message = std::string("Starting A*.");
         addStep(s);
     }
 
-    // std::cout << "Starting A*." << std::endl;
     aStar(start, goal);
-    // std::cout << "A* finished." << std::endl;
 
     {
         AlgorithmStep s;
         s.m_type    = StepType::Finish;
-        s.m_message = std::string("A* finish");
+        s.m_message = std::string("A* finished.");
         addStep(s);
     }
 
@@ -75,6 +73,14 @@ void AStar::aStar(unsigned start, unsigned goal) {
     gScore[start] = 0;
     fScore[start] = heuristic(start, goal);
 
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::UpdateDistance;
+        s.m_node = start;
+        s.m_value = fScore[start];
+        addStep(s);
+    }
+
     std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
                         std::greater<>>
         pq;
@@ -84,6 +90,7 @@ void AStar::aStar(unsigned start, unsigned goal) {
         AlgorithmStep s;
         s.m_type = StepType::PushToQueue;
         s.m_node = start;
+        s.m_value = fScore[start];
         addStep(s);
     }
 
@@ -144,7 +151,6 @@ void AStar::aStar(unsigned start, unsigned goal) {
             for(const auto& [edgeId, neighbour]: adjList[current]) {
                 auto it = edges.find(edgeId);
                 if(it != edges.end()) {
-                    int tentativeG = gScore[current] + it->second.getWeight();
 
                     {
                         AlgorithmStep s;
@@ -153,6 +159,8 @@ void AStar::aStar(unsigned start, unsigned goal) {
                         s.m_to   = neighbour;
                         addStep(s);
                     }
+
+                    int tentativeG = gScore[current] + it->second.getWeight();
 
                     if(tentativeG < gScore[neighbour]) {
                         parent[neighbour] = current;

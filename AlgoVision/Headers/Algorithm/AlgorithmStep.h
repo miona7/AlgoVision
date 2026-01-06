@@ -11,23 +11,23 @@ enum class StepType {
     Finish,
 
     // cvorovi
-    VisitNode, // DFS, BFS, Dijkstra, A*
+    VisitNode,
     ProcessNode,
     MarkNode, // Tarjan, Prim
 
     // grane
     ExamineEdge,
-    RelaxEdge,  // BellmanFord
+    RelaxEdge,  // Bellman-Ford
     SelectEdge, // Prim
 
-    PushToQueue, // BFS, Kahn
+    PushToQueue, // BFS, Kahn, A*
     PopFromQueue,
     PushToStack, // DFS, Tarjan
     PopFromStack,
 
-    UpdateDistance, // Dijkstra, Bellman-Ford, Floyd-Warshall
+    UpdateDistance, // Dijkstra, Bellman-Ford, Floyd-Warshall, A*
     AddToPath,      // A*
-    AddToTopologicalOrder,
+    AddToTopologicalOrder, // Kahn
     AssignComponent // Tarjan
 };
 

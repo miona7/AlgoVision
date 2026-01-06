@@ -99,6 +99,7 @@ static const char* stepTypeToString(StepType t) {
     case StepType::PopFromStack:
         return "PopFromStack";
     }
+    return nullptr;
 }
 
 void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {

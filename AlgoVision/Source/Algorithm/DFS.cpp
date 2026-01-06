@@ -21,57 +21,53 @@ void DFS::execute(unsigned idStartNode, unsigned) {
 
     clearSteps();
 
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Start;
-        s.m_node    = idStartNode;
-        s.m_message = std::string("DFS Start");
-        addStep(s);
-    }
-
     m_visited.clear();
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
         m_visited[id] = false;
     }
 
-    // std::cout << "DFS traversal starting from node " << idStartNode << ":" << std::endl;
+    {
+        AlgorithmStep s;
+        s.m_type    = StepType::Start;
+        s.m_node    = idStartNode;
+        s.m_message = std::string("DFS traversal starting from node " + std::to_string(idStartNode));
+        addStep(s);
+    }
+
     dfs(idStartNode, std::nullopt);
-    // std::cout << "DFS finished." << std::endl;
 
     {
         AlgorithmStep s;
         s.m_type    = StepType::Finish;
-        s.m_message = std::string("DFS Finish");
+        s.m_message = std::string("DFS finished.");
         addStep(s);
     }
 }
 
 void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::PushToStack;
+        s.m_node = nodeId;
+        addStep(s);
+    }
+
     m_visited[nodeId] = true;
-    // std::cout << "visiting node with id " << nodeId << std::endl;
 
     {
         AlgorithmStep s;
         s.m_type = StepType::VisitNode;
         s.m_node = nodeId;
         if(parent.has_value()) {
-            s.m_from = parent.value();
+            s.m_from = parent;
         }
+        s.m_to = nodeId;
         addStep(s);
     }
-
     {
         AlgorithmStep s;
-        s.m_type  = StepType::MarkNode;
-        s.m_node  = nodeId;
-        s.m_value = 1; // visited = true
-        addStep(s);
-    }
-
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::PushToStack;
+        s.m_type = StepType::ProcessNode;
         s.m_node = nodeId;
         addStep(s);
     }
@@ -92,13 +88,6 @@ void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
                 dfs(neighbourId, nodeId);
             }
         }
-    }
-
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::ProcessNode;
-        s.m_node = nodeId;
-        addStep(s);
     }
 
     {

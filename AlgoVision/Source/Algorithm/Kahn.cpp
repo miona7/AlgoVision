@@ -17,18 +17,16 @@ void Kahn::execute(unsigned, unsigned) {
     {
         AlgorithmStep s;
         s.m_type    = StepType::Start;
-        s.m_message = std::string("Kahn start");
+        s.m_message = std::string("Starting Kahn's topological sort.");
         addStep(s);
     }
 
-    // std::cout << "Starting Kahn's topological sort." << std::endl;
     kahn();
-    // std::cout << "Kahn finished." << std::endl;
 
     {
         AlgorithmStep s;
         s.m_type    = StepType::Finish;
-        s.m_message = std::string("Kahn finish");
+        s.m_message = std::string("Kahn finished.");
         addStep(s);
     }
 
