@@ -5,6 +5,7 @@
 #include <limits>
 #include <map>
 #include <queue>
+#include <optional>
 
 #include "Algorithm.h"
 #include "BFS.h"
