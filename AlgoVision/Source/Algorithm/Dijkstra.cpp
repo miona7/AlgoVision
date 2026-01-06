@@ -63,8 +63,8 @@ void Dijkstra::dijkstra(unsigned start) {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::UpdateDistance;
-        s.m_node = start;
+        s.m_type  = StepType::UpdateDistance;
+        s.m_node  = start;
         s.m_value = 0;
         addStep(s);
     }

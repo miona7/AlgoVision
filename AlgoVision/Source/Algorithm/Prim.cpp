@@ -45,7 +45,8 @@ void Prim::execute(unsigned, unsigned) {
 void Prim::prim() {
     std::map<unsigned, bool> inTree;      // da li je cvor vec u drvetu
     std::map<unsigned, int>  minDistance; // minimalno rastojanje cvora do drveta
-    std::map<unsigned, std::optional<unsigned>>  parent; // za svaki cvor pamtimo iz kog cvora smo dosli do njeg
+    std::map<unsigned, std::optional<unsigned>>
+        parent; // za svaki cvor pamtimo iz kog cvora smo dosli do njeg
 
     auto nodes = m_graph->getNodes();
     for(const auto& [nodeId, _]: nodes) {

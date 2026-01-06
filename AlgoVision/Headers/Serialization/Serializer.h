@@ -12,7 +12,7 @@ class Serializer {
 public:
     virtual ~Serializer() = default;
 
-    virtual void save(const Serializable&, const QString&, const bool, const bool);
+    virtual void save(const Serializable&, const QString&, bool, bool);
 
     virtual void load(Serializable&, const QString&, bool&, bool&);
 };

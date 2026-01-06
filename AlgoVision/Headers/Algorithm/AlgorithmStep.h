@@ -25,10 +25,10 @@ enum class StepType {
     PushToStack, // DFS, Tarjan
     PopFromStack,
 
-    UpdateDistance, // Dijkstra, Bellman-Ford, Floyd-Warshall, A*
-    AddToPath,      // A*
+    UpdateDistance,        // Dijkstra, Bellman-Ford, Floyd-Warshall, A*
+    AddToPath,             // A*
     AddToTopologicalOrder, // Kahn
-    AssignComponent // Tarjan
+    AssignComponent        // Tarjan
 };
 
 struct AlgorithmStep {

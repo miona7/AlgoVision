@@ -7,7 +7,7 @@ SaveFile::SaveFile(Serializer* serializer, Serializable* serializable, const QSt
 }
 
 void SaveFile::run() {
-    if(!m_serializer || !m_serializable) {
+    if(m_serializer == nullptr || m_serializable == nullptr) {
         return;
     }
 

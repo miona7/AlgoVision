@@ -4,8 +4,8 @@
 #include <iostream>
 #include <limits>
 #include <map>
-#include <queue>
 #include <optional>
+#include <queue>
 
 #include "Algorithm.h"
 #include "BFS.h"

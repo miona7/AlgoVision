@@ -13,8 +13,8 @@
 
 class Graph : public Serializable {
 public:
-    Graph()          = default;
-    virtual ~Graph() = default;
+    Graph()           = default;
+    ~Graph() override = default;
 
     void addNode(unsigned, double = 0.0, double = 0.0);
     void removeNode(unsigned);

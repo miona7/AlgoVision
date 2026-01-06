@@ -29,9 +29,10 @@ void DFS::execute(unsigned idStartNode, unsigned) {
 
     {
         AlgorithmStep s;
-        s.m_type    = StepType::Start;
-        s.m_node    = idStartNode;
-        s.m_message = std::string("DFS traversal starting from node " + std::to_string(idStartNode));
+        s.m_type = StepType::Start;
+        s.m_node = idStartNode;
+        s.m_message =
+            std::string("DFS traversal starting from node " + std::to_string(idStartNode));
         addStep(s);
     }
 
