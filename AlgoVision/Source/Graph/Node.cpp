@@ -19,7 +19,7 @@ void Node::setPosition(double x, double y) {
     m_position = {x, y};
 }
 
-void Node::setstate(NodeState state) {
+void Node::setState(NodeState state) {
     m_state = state;
 }
 

@@ -28,7 +28,7 @@ void Edge::setWeight(int w) {
     m_weight = w;
 }
 
-void Edge::setstate(EdgeState state) {
+void Edge::setState(EdgeState state) {
     m_state = state;
 }
 

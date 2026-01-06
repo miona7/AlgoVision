@@ -23,7 +23,7 @@ public:
     unsigned endNode() const;
 
     void setWeight(int);
-    void setstate(EdgeState);
+    void setState(EdgeState);
 
     friend std::ostream& operator<<(std::ostream&, const Edge&);
 

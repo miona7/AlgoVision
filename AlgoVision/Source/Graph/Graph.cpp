@@ -1,8 +1,5 @@
 #include "Graph.h"
 
-#include <QVariantList>
-#include <QVariantMap>
-
 void Graph::addNode(unsigned id, double x, double y) {
     if(m_nodes.find(id) != m_nodes.end()) {
         return; // cvor vec postoji
@@ -134,4 +131,38 @@ std::map<unsigned, Node> Graph::getNodes() const {
 
 std::map<unsigned, Edge> Graph::getEdges() const {
     return m_edges;
+}
+
+Node* Graph::getNode(unsigned id) {
+    auto it = m_nodes.find(id);
+    return (it != m_nodes.end()) ? &it->second : nullptr;
+}
+
+const Node* Graph::getNode(unsigned id) const {
+    auto it = m_nodes.find(id);
+    return (it != m_nodes.end()) ? &it->second : nullptr;
+}
+
+Edge* Graph::getEdge(unsigned from, unsigned to) {
+    for (auto& [_, edge] : m_edges) {
+        if(edge.startNode() == from && edge.endNode() == to) {
+            return &edge;
+        }
+        if(!isDirected() && edge.startNode() == to && edge.endNode() == from) {
+            return &edge;
+        }
+    }
+    return nullptr;
+}
+
+const Edge* Graph::getEdge(unsigned from, unsigned to) const {
+    for (auto& [_, edge] : m_edges) {
+        if(edge.startNode() == from && edge.endNode() == to) {
+            return &edge;
+        }
+        if(!isDirected() && edge.startNode() == to && edge.endNode() == from) {
+            return &edge;
+        }
+    }
+    return nullptr;
 }

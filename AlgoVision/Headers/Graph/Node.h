@@ -1,16 +1,17 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <QObject>
+
 #include <iostream>
 #include <string>
 
 enum class NodeState {
     Default,
-    Active, // InProcess
-    Visited, // Processed
-    InQueue,
-    InStack,
+    Active, // InProcess -> trenutno se obradjuje
+    Visited, // posecen -> obradjen
     InPath,
+    TopologicalOrder,
     AssignedComponent
 };
 
@@ -24,7 +25,7 @@ public:
     NodeState getState() const;
 
     void setPosition(double, double);
-    void setstate(NodeState);
+    void setState(NodeState);
 
     friend std::ostream& operator<<(std::ostream&, const Node&);
 

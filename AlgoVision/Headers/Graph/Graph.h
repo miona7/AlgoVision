@@ -3,6 +3,8 @@
 
 #include <QVariant>
 #include <QVector>
+#include <QVariantList>
+#include <QVariantMap>
 
 #include <map>
 #include <vector>
@@ -28,6 +30,12 @@ public:
     std::map<unsigned, std::map<unsigned, unsigned>> getAdjacencyList() const;
     std::map<unsigned, Node>                         getNodes() const;
     std::map<unsigned, Edge>                         getEdges() const;
+
+    Node* getNode(unsigned);
+    const Node* getNode(unsigned) const;
+
+    Edge* getEdge(unsigned, unsigned);
+    const Edge* getEdge(unsigned, unsigned) const;
 
     QVariant toVariant() const override;
     void     fromVariant(const QVariant&) override;

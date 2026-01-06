@@ -13,19 +13,20 @@ enum class StepType {
     // cvorovi
     VisitNode,
     ProcessNode,
-    MarkNode, // Tarjan, Prim
+    MarkNode, // Tarjan, Prim (izbaciti?)
 
     // grane
     ExamineEdge,
     RelaxEdge,  // Bellman-Ford
     SelectEdge, // Prim
 
+    // (izbaciti sva 4?)
     PushToQueue, // BFS, Kahn, A*
     PopFromQueue,
     PushToStack, // DFS, Tarjan
     PopFromStack,
 
-    UpdateDistance,        // Dijkstra, Bellman-Ford, Floyd-Warshall, A*
+    UpdateDistance,        // Dijkstra, Bellman-Ford, Floyd-Warshall, A*, (izbaciti?)
     AddToPath,             // A*
     AddToTopologicalOrder, // Kahn
     AssignComponent        // Tarjan
