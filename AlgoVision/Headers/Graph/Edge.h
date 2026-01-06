@@ -3,6 +3,14 @@
 
 #include <iostream>
 
+enum class EdgeState {
+    Default,
+    Examined,
+    Relaxed,
+    Selected,
+    InPath
+};
+
 class Edge {
 public:
     Edge(unsigned, unsigned, unsigned, int = 1);
@@ -10,10 +18,12 @@ public:
 
     unsigned getId() const;
     int      getWeight() const;
+    EdgeState getState() const;
     unsigned startNode() const;
     unsigned endNode() const;
 
     void setWeight(int);
+    void setstate(EdgeState);
 
     friend std::ostream& operator<<(std::ostream&, const Edge&);
 
@@ -22,6 +32,7 @@ private:
     unsigned m_id;
     unsigned m_idStartNode;
     unsigned m_idEndNode;
+    EdgeState m_state = EdgeState::Default;
 };
 
 std::ostream& operator<<(std::ostream&, const Edge&);
