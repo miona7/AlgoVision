@@ -12,9 +12,25 @@ void Kahn::checkConditions() const {
 void Kahn::execute(unsigned, unsigned) {
     checkConditions();
 
-    std::cout << "Starting Kahn's topological sort." << std::endl;
+    clearSteps();
+
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::Start;
+        s.m_message = std::string("Kahn start");
+        addStep(s);
+    }
+
+    // std::cout << "Starting Kahn's topological sort." << std::endl;
     kahn();
-    std::cout << "Kahn finished." << std::endl;
+    // std::cout << "Kahn finished." << std::endl;
+
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::Finish;
+        s.m_message = std::string("Kahn finish");
+        addStep(s);
+    }
 
     std::cout << "Topological order:" << std::endl;
     for(unsigned node: m_sorted) {
@@ -43,19 +59,53 @@ void Kahn::kahn() {
     for(const auto& [u, deg]: inDegree) {
         if(deg == 0) {
             q.push(u);
+
+            {
+                AlgorithmStep s;
+                s.m_type = StepType::PushToQueue;
+                s.m_node = u;
+                addStep(s);
+            }
         }
     }
 
     while(!q.empty()) {
         unsigned node = q.front();
         q.pop();
+
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::PopFromQueue;
+            s.m_node = node;
+            addStep(s);
+        }
+
         m_sorted.push_back(node);
+
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::AddToTopologicalOrder;
+            s.m_node = node;
+            addStep(s);
+        }
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::ProcessNode;
+            s.m_node = node;
+            addStep(s);
+        }
 
         if(adjList.find(node) != adjList.end()) {
             for(const auto& [edge, neighbour]: adjList[node]) {
                 inDegree[neighbour]--;
                 if(inDegree[neighbour] == 0) {
                     q.push(neighbour);
+                    {
+                        AlgorithmStep s;
+                        s.m_type = StepType::PushToQueue;
+                        s.m_node = neighbour;
+                        addStep(s);
+                    }
                 }
             }
         }
