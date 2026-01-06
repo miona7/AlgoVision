@@ -43,7 +43,7 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value) {
     switch (change) {
     case QGraphicsItem::ItemPositionHasChanged:
-        m_hasChangePosition = true;
+        //m_hasChangePosition = true;
         break;
     default:
         break;
@@ -52,14 +52,22 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value) 
     return QGraphicsItem::itemChange(change, value);
 }
 
+void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    m_hasChangePosition = false;
+    QGraphicsItem::mousePressEvent(event);
+}
+
+void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    m_hasChangePosition = true;
+    QGraphicsItem::mouseMoveEvent(event);
+}
+
 void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_hasChangePosition) {
         m_nodeSelected = !m_nodeSelected;
         update();
-        std::cout << "cvor je kliknut" << std::endl;
     }
 
-    m_hasChangePosition = false;
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
