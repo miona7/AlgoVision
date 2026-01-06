@@ -1,14 +1,12 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <QObject>
-
 #include <iostream>
 #include <string>
 
 enum class NodeState {
     Default,
-    Active, // InProcess -> trenutno se obradjuje
+    Active,  // InProcess -> trenutno se obradjuje
     Visited, // posecen -> obradjen
     InPath,
     TopologicalOrder,
@@ -22,7 +20,7 @@ public:
 
     unsigned                         getId() const;
     const std::pair<double, double>& getPosition() const;
-    NodeState getState() const;
+    NodeState                        getState() const;
 
     void setPosition(double, double);
     void setState(NodeState);
@@ -32,7 +30,7 @@ public:
 private:
     unsigned                  m_id;
     std::pair<double, double> m_position; // x, y koordinata cvora
-    NodeState m_state = NodeState::Default;
+    NodeState                 m_state = NodeState::Default;
 };
 
 std::ostream& operator<<(std::ostream&, const Node&);

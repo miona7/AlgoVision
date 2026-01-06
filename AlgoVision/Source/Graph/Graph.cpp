@@ -144,7 +144,7 @@ const Node* Graph::getNode(unsigned id) const {
 }
 
 Edge* Graph::getEdge(unsigned from, unsigned to) {
-    for (auto& [_, edge] : m_edges) {
+    for(auto& [_, edge]: m_edges) {
         if(edge.startNode() == from && edge.endNode() == to) {
             return &edge;
         }
@@ -156,7 +156,7 @@ Edge* Graph::getEdge(unsigned from, unsigned to) {
 }
 
 const Edge* Graph::getEdge(unsigned from, unsigned to) const {
-    for (auto& [_, edge] : m_edges) {
+    for(auto& [_, edge]: m_edges) {
         if(edge.startNode() == from && edge.endNode() == to) {
             return &edge;
         }

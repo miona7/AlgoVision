@@ -2,9 +2,9 @@
 #define GRAPH_H
 
 #include <QVariant>
-#include <QVector>
 #include <QVariantList>
 #include <QVariantMap>
+#include <QVector>
 
 #include <map>
 #include <vector>
@@ -31,10 +31,10 @@ public:
     std::map<unsigned, Node>                         getNodes() const;
     std::map<unsigned, Edge>                         getEdges() const;
 
-    Node* getNode(unsigned);
+    Node*       getNode(unsigned);
     const Node* getNode(unsigned) const;
 
-    Edge* getEdge(unsigned, unsigned);
+    Edge*       getEdge(unsigned, unsigned);
     const Edge* getEdge(unsigned, unsigned) const;
 
     QVariant toVariant() const override;
