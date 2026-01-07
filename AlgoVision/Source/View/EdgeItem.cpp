@@ -1,5 +1,4 @@
 #include "EdgeItem.h"
-#include "Utility.h"
 
 EdgeItem::EdgeItem(Edge *modelEdge, NodeItem *sourceNode, NodeItem *destNode)
     : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode) {
@@ -13,14 +12,12 @@ void EdgeItem::adjust() {
     qreal length = line.length();
     qreal nodeRadius = m_sourceNode->radius();
 
-    m_orientation = Utility::lineOrientation(line.p1(), line.p2());
-
     prepareGeometryChange();
 
     if (length > 2.0 * nodeRadius) {
         QPointF edgeOffset((line.dx() * nodeRadius) / length, (line.dy() * nodeRadius) / length);
-        m_sourcePoint = line.p1() + m_orientation * edgeOffset;
-        m_destPoint = line.p2() - m_orientation * edgeOffset;
+        m_sourcePoint = line.p1() + edgeOffset;
+        m_destPoint = line.p2() - edgeOffset;
     } else {
         m_sourcePoint = m_destPoint = line.p1();
     }

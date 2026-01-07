@@ -27,7 +27,6 @@ protected:
     QPointF m_sourcePoint;
     QPointF m_destPoint;
 
-    int m_orientation;
     qreal m_penWidth{2};
 };
 
