@@ -15,13 +15,11 @@ public:
 
     void adjust();
     virtual QPainterPath edgePath() const = 0;
-
-protected:
     QRectF boundingRect() const override = 0;
     QPainterPath shape() const override = 0;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override = 0;
 
-private:
+protected:
     Edge* m_modelEdge;
 
     NodeItem* m_sourceNode;
