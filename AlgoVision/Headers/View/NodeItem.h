@@ -14,6 +14,9 @@ public:
     Node* modelNode() const;
     void setModelNode(Node *newModel);
 
+    qreal radius() const;
+    void setRadius(qreal newRadius);
+
 protected:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
