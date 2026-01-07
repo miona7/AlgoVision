@@ -17,6 +17,13 @@ public:
     qreal radius() const;
     void setRadius(qreal newRadius);
 
+
+
+    void setNodeSelected(bool newNodeSelected);
+
+signals:
+    void nodeSelected(NodeItem* self);
+
 protected:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;

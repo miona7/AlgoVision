@@ -66,9 +66,15 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (!m_hasChangePosition) {
         m_nodeSelected = !m_nodeSelected;
         update();
+        emit nodeSelected(this);
     }
 
     QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void NodeItem::setNodeSelected(bool newNodeSelected) {
+    m_nodeSelected = newNodeSelected;
+    update();
 }
 
 qreal NodeItem::radius() const {
