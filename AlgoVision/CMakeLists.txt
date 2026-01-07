@@ -59,6 +59,7 @@ set(PROJECT_SOURCES
         Headers/View/NodeItem.h Source/View/NodeItem.cpp
         Headers/View/EdgeItem.h Source/View/EdgeItem.cpp
         Headers/View/UndirectedEdgeItem.h Source/View/UndirectedEdgeItem.cpp
+        Headers/View/DirectedEdgeItem.h Source/View/DirectedEdgeItem.cpp
         Headers/View/GraphScene.h Source/View/GraphScene.cpp
 )
 
