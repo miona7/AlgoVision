@@ -2,9 +2,9 @@
 #define EDGEITEM_H
 
 #include <Edge.h>
-#include <NodeItem.h>
 #include <QGraphicsObject>
 
+class NodeItem;
 
 class EdgeItem : public QGraphicsObject {
     Q_OBJECT

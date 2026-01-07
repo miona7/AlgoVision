@@ -1,9 +1,13 @@
 #include "EdgeItem.h"
+#include "NodeItem.h"
 
 EdgeItem::EdgeItem(Edge *modelEdge, NodeItem *sourceNode, NodeItem *destNode)
     : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode) {
     setFlag(ItemIsSelectable);
     setAcceptedMouseButtons(Qt::LeftButton);
+
+    m_sourceNode->addEdge(this);
+    m_destNode->addEdge(this);
     adjust();
 }
 

@@ -1,4 +1,5 @@
 #include "NodeItem.h"
+#include "EdgeItem.h"
 #include <QPen>
 #include <QPainter>
 
@@ -8,6 +9,10 @@ NodeItem::NodeItem(Node* modelNode)
     setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
     setPos(modelNode->getPosition().first, modelNode->getPosition().second);
+}
+
+NodeItem::~NodeItem() {
+    m_edges.clear();
 }
 
 Node *NodeItem::modelNode() const {
@@ -43,7 +48,10 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value) {
     switch (change) {
     case QGraphicsItem::ItemPositionHasChanged:
-        //m_hasChangePosition = true;
+        for (auto edge : m_edges) {
+            edge->adjust();
+        }
+
         break;
     default:
         break;
@@ -75,6 +83,14 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 void NodeItem::setNodeSelected(bool newNodeSelected) {
     m_nodeSelected = newNodeSelected;
     update();
+}
+
+void NodeItem::addEdge(EdgeItem *edgeItem) {
+    m_edges.insert(edgeItem);
+}
+
+void NodeItem::removeEdge(EdgeItem *edgeItem) {
+    m_edges.remove(edgeItem);
 }
 
 qreal NodeItem::radius() const {
