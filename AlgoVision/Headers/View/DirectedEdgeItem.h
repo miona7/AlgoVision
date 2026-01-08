@@ -15,7 +15,7 @@ public:
     QPainterPath edgePath() const override;
 
 private:
-    qreal m_skewness{50.0};
+    qreal m_skewness{70.0};
     qreal m_arrowSize{10.0};
 
     QPainterPath arrowPath() const;

@@ -26,10 +26,14 @@ void DirectedEdgeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
 QPainterPath DirectedEdgeItem::edgePath() const {
     QPainterPath path;
-    path.moveTo(m_sourcePoint);
     QPointF normal = calculateNormal();
-    QPointF middle = (m_sourcePoint + m_destPoint) / 2.0 - normal * m_skewness;
-    path.quadTo(middle, m_destPoint);
+
+    if (!(qFuzzyCompare(normal.x(), 0.0) && qFuzzyCompare(normal.y(), 0.0))) {
+        path.moveTo(m_sourcePoint);
+        QPointF middle = (m_sourcePoint + m_destPoint) / 2.0 - normal * m_skewness;
+        path.quadTo(middle, m_destPoint);
+    }
+
     return path;
 }
 
@@ -39,8 +43,15 @@ QPainterPath DirectedEdgeItem::arrowPath() const {
 }
 
 QPointF DirectedEdgeItem::calculateNormal() const {
-    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.x());
+    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
     QPointF normal(-line.y(), line.x());
-    normal /= std::hypot(normal.x(), normal.y());
+    qreal length = std::hypot(normal.x(), normal.y());
+
+    if (qFuzzyCompare(length, 0.0)) {
+        normal *= 0.0;
+    } else {
+        normal /= length;
+    }
+
     return normal;
 }
