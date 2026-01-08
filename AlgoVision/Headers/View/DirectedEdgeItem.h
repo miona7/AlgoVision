@@ -16,9 +16,10 @@ public:
 
 private:
     qreal m_skewness{70.0};
-    qreal m_arrowSize{10.0};
+    qreal m_arrowSize{20.0};
+    qreal m_arrowAngle{M_PI / 6.0};
 
-    QPainterPath arrowPath() const;
+    QPainterPath arrowPath(const QPainterPath& edgePath) const;
     QPointF calculateNormal() const;
 };
 
