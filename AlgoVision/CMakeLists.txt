@@ -29,6 +29,7 @@ set(PROJECT_SOURCES
         Headers/Graph/Graph.h Source/Graph/Graph.cpp
         Headers/Graph/Node.h Source/Graph/Node.cpp
         Headers/Graph/Edge.h Source/Graph/Edge.cpp
+        Headers/Graph/Observable.h
         Headers/Graph/UnweightedUndirectedGraph.h Source/Graph/UnweightedUndirectedGraph.cpp
         Headers/Graph/UnweightedDirectedGraph.h Source/Graph/UnweightedDirectedGraph.cpp
         Headers/Graph/WeightedUndirectedGraph.h Source/Graph/WeightedUndirectedGraph.cpp
@@ -152,6 +153,10 @@ add_executable(AlgoVisionTests
     Source/Serialization/SaveFile.cpp
     Source/Serialization/LoadFile.cpp
 
+
+    Tests/Graph/nodeTest.cpp
+    Tests/Graph/edgeTest.cpp
+
     Tests/Algorithm/astarTest.cpp
     Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp
@@ -165,7 +170,7 @@ add_executable(AlgoVisionTests
     Tests/Algorithm/oldBellmanFordTest.cpp
     Tests/Algorithm/oldFloydWarshallTest.cpp
     Tests/Algorithm/oldPrimTest.cpp
-    Tests/Algorithm/oldTarjanTest.cpp
+
     Tests/Serialization/SerializationTest.cpp
 )
 

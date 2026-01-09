@@ -2,7 +2,10 @@
 #define NODE_H
 
 #include <iostream>
+#include <vector>
 #include <string>
+
+#include "Observable.h"
 
 enum class NodeState {
     Default,
@@ -13,7 +16,7 @@ enum class NodeState {
     AssignedComponent
 };
 
-class Node {
+class Node : public Observable<Node> {
 public:
     explicit Node(unsigned, double = 0.0, double = 0.0);
     ~Node() = default;

@@ -3,9 +3,11 @@
 
 #include <iostream>
 
+#include "Observable.h"
+
 enum class EdgeState { Default, Examined, Relaxed, Selected, InPath };
 
-class Edge {
+class Edge : public Observable<Edge> {
 public:
     Edge(unsigned, unsigned, unsigned, int = 1);
     ~Edge() = default;

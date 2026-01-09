@@ -29,7 +29,11 @@ void Edge::setWeight(int w) {
 }
 
 void Edge::setState(EdgeState state) {
+    if(m_state == state) {
+        return;
+    }
     m_state = state;
+    notifyObservers(*this);
 }
 
 std::ostream& operator<<(std::ostream& s, const Edge& e) {

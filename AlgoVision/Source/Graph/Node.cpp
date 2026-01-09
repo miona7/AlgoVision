@@ -20,7 +20,11 @@ void Node::setPosition(double x, double y) {
 }
 
 void Node::setState(NodeState state) {
+    if(m_state == state) {
+        return;
+    }
     m_state = state;
+    notifyObservers(*this); // obavestavamo sve posmatrace da se stanje promenilo
 }
 
 std::ostream& operator<<(std::ostream& s, const Node& n) {
