@@ -37,7 +37,7 @@ protected:
 
 private:
     Node* m_modelNode;
-    QSet<EdgeItem*> m_edges{};
+    QSet<EdgeItem*> m_edges;
 
     qreal m_radius{AppConstants::defaultRadius};
     qreal m_borderWidth{AppConstants::defaultBorderWidth};
