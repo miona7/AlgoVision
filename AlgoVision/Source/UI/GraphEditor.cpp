@@ -34,5 +34,4 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent){
     // layout for the whole GraphEditor
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(splitter);
-    setLayout(layout);
 }
