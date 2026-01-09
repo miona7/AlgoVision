@@ -19,7 +19,7 @@ QRectF UndirectedEdgeItem::boundingRect() const {
 
 QPainterPath UndirectedEdgeItem::shape() const {
     QPainterPathStroker stroker;
-    qreal offset = m_penWidth + 3.0; // bigger offset, so the click would be easier, more UX friendly
+    qreal offset = m_penWidth + m_shapeStroke; // bigger offset, so the click would be easier, more UX friendly
     stroker.setWidth(offset);
     return stroker.createStroke(edgePath());
 }

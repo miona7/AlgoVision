@@ -31,3 +31,8 @@ void EdgeItem::adjust() {
         m_sourcePoint = m_destPoint = line.p1();
     }
 }
+
+// remove edge by clicking on it
+void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    delete this;
+}
