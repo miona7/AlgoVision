@@ -11,7 +11,7 @@ class EdgeItem : public QGraphicsObject {
 
 public:
     EdgeItem(Edge *modelEdge, NodeItem *sourceNode, NodeItem *destNode);
-    virtual ~EdgeItem() = default;
+    virtual ~EdgeItem();
 
     void adjust();
     virtual QPainterPath edgePath() const = 0;

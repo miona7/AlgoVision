@@ -11,6 +11,11 @@ EdgeItem::EdgeItem(Edge *modelEdge, NodeItem *sourceNode, NodeItem *destNode)
     adjust();
 }
 
+EdgeItem::~EdgeItem() {
+    m_sourceNode->removeEdge(this);
+    m_destNode->removeEdge(this);
+}
+
 void EdgeItem::adjust() {
     QLineF line(mapFromItem(m_sourceNode, 0, 0), mapFromItem(m_destNode, 0, 0));
     qreal length = line.length();
