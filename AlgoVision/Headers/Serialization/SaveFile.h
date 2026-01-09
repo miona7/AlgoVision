@@ -7,9 +7,6 @@
 #include "Serializable.h"
 #include "Serializer.h"
 
-class Serializer;
-class Serializable;
-
 class SaveFile : public QThread {
 public:
     SaveFile(Serializer*, Serializable*, const QString&, bool, bool, QObject* = nullptr);

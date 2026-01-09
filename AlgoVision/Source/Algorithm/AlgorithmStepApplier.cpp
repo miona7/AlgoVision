@@ -49,7 +49,7 @@ void AlgorithmStepApplier::check(const AlgorithmStep& step) const {
     case StepType::ExamineEdge:
     case StepType::RelaxEdge:
     case StepType::SelectEdge:
-        if (!step.m_from.has_value() || !step.m_to.has_value()) {
+        if(!step.m_from.has_value() || !step.m_to.has_value()) {
             throw std::logic_error("Missing Edge state!");
         }
         break;
