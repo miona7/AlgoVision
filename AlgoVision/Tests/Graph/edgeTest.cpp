@@ -6,10 +6,10 @@
 TEST_CASE("Observer is called on edge state change", "[Edge]") {
     Edge e(1, 0, 1, 5);
 
-    int callCount = 0;
+    int       callCount = 0;
     EdgeState lastState = EdgeState::Default;
 
-    e.addObserver([&](Edge& edge){
+    e.addObserver([&](Edge& edge) {
         callCount++;
         lastState = edge.getState();
     });
@@ -27,9 +27,7 @@ TEST_CASE("Observer is not called if edge state does not change", "[Edge]") {
     Edge e(1, 0, 1, 5);
 
     int callCount = 0;
-    e.addObserver([&](Edge& edge){
-        callCount++;
-    });
+    e.addObserver([&](Edge& edge) { callCount++; });
 
     e.setState(EdgeState::Default); // isto kao inicijalno
     REQUIRE(callCount == 0);        // ne bi trebao da se pozove
@@ -38,10 +36,8 @@ TEST_CASE("Observer is not called if edge state does not change", "[Edge]") {
 TEST_CASE("Observer is not called after removal", "[Edge]") {
     Edge e(1, 0, 1, 5);
 
-    int callCount = 0;
-    unsigned obsId = e.addObserver([&](Edge& edge){
-        callCount++;
-    });
+    int      callCount = 0;
+    unsigned obsId     = e.addObserver([&](Edge& edge) { callCount++; });
 
     e.removeObserver(obsId);
     e.setState(EdgeState::Selected);

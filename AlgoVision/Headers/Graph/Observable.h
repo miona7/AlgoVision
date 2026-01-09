@@ -1,16 +1,15 @@
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
-#include <map>
 #include <functional>
+#include <map>
 
-template<typename T>
-class Observable {
+template <typename T> class Observable {
 public:
     using Observer = std::function<void(T&)>;
 
     unsigned addObserver(Observer observer) {
-        unsigned id = ++m_id;
+        unsigned id     = ++m_id;
         m_observers[id] = std::move(observer);
         return id;
     }
@@ -21,13 +20,13 @@ public:
 
 protected:
     void notifyObservers(T& subject) {
-        for(auto& [_, observer] : m_observers) {
+        for(auto& [_, observer]: m_observers) {
             observer(subject);
         }
     }
 
 private:
-    unsigned m_id = 0;
+    unsigned                     m_id = 0;
     std::map<unsigned, Observer> m_observers;
 };
 

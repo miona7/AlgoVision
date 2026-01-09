@@ -2,7 +2,6 @@
 #define NODE_H
 
 #include <iostream>
-#include <vector>
 #include <string>
 
 #include "Observable.h"
