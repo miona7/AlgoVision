@@ -1,7 +1,7 @@
 #include "Serializer.h"
 
-void Serializer::save(const Serializable& s, const QString& filePath, const bool isWeighted,
-                      const bool isDirected) {
+void Serializer::save(const Serializable& s, const QString& filePath, bool isWeighted,
+                      bool isDirected) {
 
     if(filePath.isEmpty()) {
         return;

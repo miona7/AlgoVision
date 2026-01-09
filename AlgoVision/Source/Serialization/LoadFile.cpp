@@ -15,7 +15,7 @@ bool LoadFile::isDirected() const {
 }
 
 void LoadFile::run() {
-    if(!m_serializer || !m_serializable) {
+    if(m_serializer == nullptr || m_serializable == nullptr) {
         return;
     }
 

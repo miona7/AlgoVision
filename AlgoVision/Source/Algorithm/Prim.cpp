@@ -45,13 +45,14 @@ void Prim::execute(unsigned, unsigned) {
 void Prim::prim() {
     std::map<unsigned, bool> inTree;      // da li je cvor vec u drvetu
     std::map<unsigned, int>  minDistance; // minimalno rastojanje cvora do drveta
-    std::map<unsigned, int>  parent;      // za svaki cvor pamtimo iz kog cvora smo dosli do njeg
+    std::map<unsigned, std::optional<unsigned>>
+        parent; // za svaki cvor pamtimo iz kog cvora smo dosli do njeg
 
     auto nodes = m_graph->getNodes();
     for(const auto& [nodeId, _]: nodes) {
         inTree[nodeId]      = false;
         minDistance[nodeId] = std::numeric_limits<int>::max();
-        parent[nodeId]      = -1;
+        parent[nodeId]      = std::nullopt;
     }
 
     std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
@@ -99,10 +100,10 @@ void Prim::prim() {
                 addStep(s);
             }
 
-            if(parent[currentNode] != -1) {
+            if(parent[currentNode]) {
                 AlgorithmStep s;
                 s.m_type  = StepType::SelectEdge;
-                s.m_from  = static_cast<unsigned>(parent[currentNode]);
+                s.m_from  = parent[currentNode];
                 s.m_to    = currentNode;
                 s.m_value = minDistance[currentNode]; // težina ivice
                 addStep(s);
@@ -142,8 +143,8 @@ void Prim::prim() {
 
     std::cout << "Minimum Spanning Tree:" << std::endl;
     for(const auto& [u, v]: parent) {
-        if(v != -1) {
-            std::cout << v << " -> " << u << " edge = " << minDistance[u] << std::endl;
+        if(v) {
+            std::cout << *v << " -> " << u << " edge = " << minDistance[u] << std::endl;
             totalWeight += minDistance[u];
         }
     }

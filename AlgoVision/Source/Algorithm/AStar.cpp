@@ -27,9 +27,24 @@ void AStar::checkConditions(unsigned start, unsigned goal) const {
 void AStar::execute(unsigned start, unsigned goal) {
     checkConditions(start, goal);
 
-    std::cout << "Starting A*." << std::endl;
+    clearSteps();
+
+    {
+        AlgorithmStep s;
+        s.m_type    = StepType::Start;
+        s.m_node    = start;
+        s.m_message = std::string("Starting A*.");
+        addStep(s);
+    }
+
     aStar(start, goal);
-    std::cout << "A* finished." << std::endl;
+
+    {
+        AlgorithmStep s;
+        s.m_type    = StepType::Finish;
+        s.m_message = std::string("A* finished.");
+        addStep(s);
+    }
 
     std::cout << "Path: ";
     for(int i = 0; i < m_path.size(); i++) {
@@ -46,20 +61,38 @@ void AStar::aStar(unsigned start, unsigned goal) {
     std::map<unsigned, int> gScore; // stvarni trosak puta od startnog do trenutnog cvora
     std::map<unsigned, int> fScore; // procena ukupnog troska od startnog do ciljnog preko trenutnog
     std::map<unsigned, unsigned> parent;
+    std::map<unsigned, bool>     visited;
 
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
-        gScore[id] = std::numeric_limits<int>::max();
-        fScore[id] = std::numeric_limits<int>::max();
+        gScore[id]  = std::numeric_limits<int>::max();
+        fScore[id]  = std::numeric_limits<int>::max();
+        visited[id] = false;
     }
 
     gScore[start] = 0;
     fScore[start] = heuristic(start, goal);
 
+    {
+        AlgorithmStep s;
+        s.m_type  = StepType::UpdateDistance;
+        s.m_node  = start;
+        s.m_value = fScore[start];
+        addStep(s);
+    }
+
     std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
                         std::greater<>>
         pq;
     pq.emplace(fScore[start], start);
+
+    {
+        AlgorithmStep s;
+        s.m_type  = StepType::PushToQueue;
+        s.m_node  = start;
+        s.m_value = fScore[start];
+        addStep(s);
+    }
 
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
@@ -68,11 +101,45 @@ void AStar::aStar(unsigned start, unsigned goal) {
         auto [_, current] = pq.top();
         pq.pop();
 
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::PopFromQueue;
+            s.m_node = current;
+            addStep(s);
+        }
+
+        if(visited[current]) {
+            continue;
+        }
+
+        visited[current] = true;
+
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::VisitNode;
+            s.m_node = current;
+            addStep(s);
+        }
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::ProcessNode;
+            s.m_node = current;
+            addStep(s);
+        }
+
         if(current == goal) {
             // rekonstruisemo put
             m_totalCost = gScore[current];
             while(current != start) {
                 m_path.push_back(current);
+
+                {
+                    AlgorithmStep s;
+                    s.m_type = StepType::AddToPath;
+                    s.m_node = current;
+                    addStep(s);
+                }
+
                 current = parent[current];
             }
             m_path.push_back(start);
@@ -84,12 +151,38 @@ void AStar::aStar(unsigned start, unsigned goal) {
             for(const auto& [edgeId, neighbour]: adjList[current]) {
                 auto it = edges.find(edgeId);
                 if(it != edges.end()) {
+
+                    {
+                        AlgorithmStep s;
+                        s.m_type = StepType::ExamineEdge;
+                        s.m_from = current;
+                        s.m_to   = neighbour;
+                        addStep(s);
+                    }
+
                     int tentativeG = gScore[current] + it->second.getWeight();
+
                     if(tentativeG < gScore[neighbour]) {
                         parent[neighbour] = current;
                         gScore[neighbour] = tentativeG;
                         fScore[neighbour] = tentativeG + heuristic(neighbour, goal);
+
+                        {
+                            AlgorithmStep s;
+                            s.m_type  = StepType::UpdateDistance;
+                            s.m_node  = neighbour;
+                            s.m_value = fScore[neighbour];
+                            addStep(s);
+                        }
+
                         pq.emplace(fScore[neighbour], neighbour);
+
+                        {
+                            AlgorithmStep s;
+                            s.m_type = StepType::PushToQueue;
+                            s.m_node = neighbour;
+                            addStep(s);
+                        }
                     }
                 }
             }

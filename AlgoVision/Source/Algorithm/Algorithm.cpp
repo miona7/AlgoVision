@@ -11,7 +11,6 @@ void Algorithm::addStep(const AlgorithmStep& step) {
     m_steps.push_back(step);
 }
 
-void Algorithm::clearSteps()
-{
+void Algorithm::clearSteps() {
     m_steps.clear();
 }

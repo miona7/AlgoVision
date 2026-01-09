@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include "Graph.h"
 #include "AlgorithmStep.h"
+#include "Graph.h"
 
 class Algorithm {
 public:
@@ -17,7 +17,7 @@ public:
     const std::vector<AlgorithmStep>& getSteps() const;
 
 protected:
-    std::shared_ptr<Graph> m_graph;
+    std::shared_ptr<Graph>     m_graph;
     std::vector<AlgorithmStep> m_steps;
 
     void addStep(const AlgorithmStep&);
