@@ -15,7 +15,7 @@ GraphEditTab::GraphEditTab(QWidget* parent)
       m_nodeSizeSlider(new QSlider(Qt::Horizontal, this)) {
     initLayout();
 
-    // emitujemo signale (GraphEditor će odlučiti šta to radi)
+    // emitujemo signale (GraphEditor se onda pita)
     connect(m_undoBtn, &QPushButton::clicked, this, &GraphEditTab::undoRequested);
     connect(m_redoBtn, &QPushButton::clicked, this, &GraphEditTab::redoRequested);
     connect(m_addBtn, &QPushButton::clicked, this, &GraphEditTab::addRequested);
