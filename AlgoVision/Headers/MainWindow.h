@@ -2,10 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <memory>
 
 #include "AppConstants.h"
 #include "MenuToolBar.h"
 #include "ThemeManager.h"
+
+class Graph;
+class Serializer;
+class GraphEditor;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,7 +30,12 @@ private:
     MenuToolBar*    m_menuToolBar = nullptr;
     ThemeManager*   m_themeManager;
 
+    std::unique_ptr<Serializer> m_serializer;
+    std::shared_ptr<Graph>      m_graph;
+    GraphEditor* m_graphEditor = nullptr;
+
     void initMenuToolBar();
+    std::shared_ptr<Graph> createGraph(bool, bool);
 
     // slotovi
     void onOpenGraphTriggered();
