@@ -9,23 +9,34 @@ class QSlider;
 class GraphEditTab : public QWidget {
     Q_OBJECT
 
-    public:
-        explicit GraphEditTab(QWidget* parent = nullptr);
-        ~GraphEditTab() override = default;
+public:
+    explicit GraphEditTab(QWidget* parent = nullptr);
+    ~GraphEditTab() override = default;
 
-    private:
-        void initLayout();
+signals:
+    void undoRequested();
+    void redoRequested();
+    void addRequested();
+    void removeRequested();
+    void clearRequested();
 
-        QPushButton* m_addBtn;
-        QPushButton* m_removeBtn;
-        QPushButton* m_undoBtn;
-        QPushButton* m_redoBtn;
-        QPushButton* m_zoomInBtn;
-        QPushButton* m_zoomOutBtn;
-        QPushButton* m_panBtn;
-        QPushButton* m_clearBtn;
+public slots:
+    void setUndoEnabled(bool);
+    void setRedoEnabled(bool);
 
-        QSlider* m_nodeSizeSlider;
+private:
+    void initLayout();
+
+    QPushButton* m_addBtn;
+    QPushButton* m_removeBtn;
+    QPushButton* m_undoBtn;
+    QPushButton* m_redoBtn;
+    QPushButton* m_zoomInBtn;
+    QPushButton* m_zoomOutBtn;
+    QPushButton* m_panBtn;
+    QPushButton* m_clearBtn;
+
+    QSlider* m_nodeSizeSlider;
 };
 
 #endif // GRAPHEDITTAB_H

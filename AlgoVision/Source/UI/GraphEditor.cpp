@@ -1,28 +1,66 @@
 #include "GraphEditor.h"
 
 #include <QHBoxLayout>
-#include <QTabWidget>
-#include <QSplitter>
 #include <QLabel>
+#include <QSplitter>
+#include <QTabWidget>
+#include <QUndoCommand>
+#include <QUndoStack>
+#include <functional>
 
-#include "GraphEditTab.h"
 #include "AlgorithmTab.h"
+#include "GraphEditTab.h"
 
-GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent){
+namespace {
+    class LambdaCommand : public QUndoCommand {
+    public:
+        LambdaCommand(std::function<void()> redoFn, std::function<void()> undoFn,
+                      const QString& text = "")
+            : m_redo(std::move(redoFn)), m_undo(std::move(undoFn)) {
+            setText(text);
+        }
+
+        void redo() override {
+            if(m_redo)
+                m_redo();
+        }
+        void undo() override {
+            if(m_undo)
+                m_undo();
+        }
+
+    private:
+        std::function<void()> m_redo;
+        std::function<void()> m_undo;
+    };
+} // namespace
+
+GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
+
+    m_undoStack = new QUndoStack(this);
 
     // main splitter for the left and right page sides
     QSplitter* splitter = new QSplitter(Qt::Horizontal, this);
 
     // left side (placeholder)
-    QLabel* leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
-    leftPlaceholder->setAlignment(Qt::AlignCenter);
-    leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
+    // QLabel* leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
+    // leftPlaceholder->setAlignment(Qt::AlignCenter);
+    // leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
 
-    splitter->addWidget(leftPlaceholder);
+    m_leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
+    m_leftPlaceholder->setAlignment(Qt::AlignCenter);
+    m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
+
+    // splitter->addWidget(leftPlaceholder);
+    splitter->addWidget(m_leftPlaceholder);
 
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
-    rightTabs->addTab(new GraphEditTab(rightTabs), "graph edit");
+
+    // rightTabs->addTab(new GraphEditTab(rightTabs), "graph edit");
+    m_editTab = new GraphEditTab(rightTabs);
+
+    rightTabs->addTab(m_editTab, "graph edit");
     rightTabs->addTab(new AlgorithmTab(rightTabs), "algorithm");
 
     splitter->addWidget(rightTabs);
@@ -34,4 +72,29 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent){
     // layout for the whole GraphEditor
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(splitter);
+
+    connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
+
+    connect(m_editTab, &GraphEditTab::redoRequested, m_undoStack, &QUndoStack::redo);
+
+    connect(m_undoStack, &QUndoStack::canUndoChanged, m_editTab, &GraphEditTab::setUndoEnabled);
+
+    connect(m_undoStack, &QUndoStack::canRedoChanged, m_editTab, &GraphEditTab::setRedoEnabled);
+
+    // Dummy test
+    connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
+        const int before = m_dummyState;
+        const int after  = before + 1;
+
+        m_undoStack->push(new LambdaCommand(
+            [this, after]() {
+                m_dummyState = after;
+                m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
+            },
+            [this, before]() {
+                m_dummyState = before;
+                m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
+            },
+            "Add dummy"));
+    });
 }
