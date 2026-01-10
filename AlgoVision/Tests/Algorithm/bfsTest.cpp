@@ -4,10 +4,14 @@
 #include "AlgorithmStep.h"
 #include "BFS.h"
 #include "UnweightedDirectedGraph.h"
+#include "UnweightedUndirectedGraph.h"
+#include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
 
 #include <iostream>
 #include <sstream>
 
+// -------------------- helpers --------------------
 static const char* stepTypeToString(StepType t) {
     switch(t) {
     case StepType::Start:
@@ -31,6 +35,67 @@ static const char* stepTypeToString(StepType t) {
     }
 }
 
+TEST_CASE("BFS on Unweighted Directed Graph", "[BFS]") {
+    auto g = std::make_shared<UnweightedDirectedGraph>();
+    g->addNode(0);
+    g->addNode(1);
+    g->addNode(2);
+
+    g->addEdge(0, 1);
+    g->addEdge(1, 2);
+
+    BFS bfs(g);
+    REQUIRE_NOTHROW(bfs.execute(0));
+}
+
+TEST_CASE("BFS on Unweighted Undirected Graph", "[BFS]") {
+    auto g = std::make_shared<UnweightedUndirectedGraph>();
+    g->addNode(0);
+    g->addNode(1);
+    g->addNode(2);
+
+    g->addEdge(0, 1);
+    g->addEdge(1, 2);
+
+    BFS bfs(g);
+    REQUIRE_NOTHROW(bfs.execute(0));
+}
+
+TEST_CASE("BFS on Weighted Directed Graph", "[BFS]") {
+    auto g = std::make_shared<WeightedDirectedGraph>();
+    g->addNode(0);
+    g->addNode(1);
+    g->addNode(2);
+
+    g->addEdge(0, 1, 5);
+    g->addEdge(1, 2, 3);
+
+    BFS bfs(g);
+    REQUIRE_NOTHROW(bfs.execute(0));
+}
+
+TEST_CASE("BFS on Weighted Undirected Graph", "[BFS]") {
+    auto g = std::make_shared<WeightedUndirectedGraph>();
+    g->addNode(0);
+    g->addNode(1);
+    g->addNode(2);
+
+    g->addEdge(0, 1, 2);
+    g->addEdge(1, 2, 4);
+
+    BFS bfs(g);
+    REQUIRE_NOTHROW(bfs.execute(0));
+}
+
+TEST_CASE("BFS with invalid start node", "[BFS]") {
+    auto g = std::make_shared<UnweightedDirectedGraph>();
+    g->addNode(1);
+    g->addNode(2);
+
+    BFS bfs(g);
+    REQUIRE_THROWS_AS(bfs.execute(0), std::runtime_error);
+}
+
 TEST_CASE("BFS produces and logs AlgorithmSteps (manual verification)", "[BFS][Steps][Debug]") {
     std::cout << "\n================ BFS STEPS TEST ================\n";
 
@@ -46,10 +111,9 @@ TEST_CASE("BFS produces and logs AlgorithmSteps (manual verification)", "[BFS][S
     bfs.execute(0);
 
     const auto& steps = bfs.getSteps();
+    REQUIRE_FALSE(steps.empty());
 
     std::cout << "Total steps produced: " << steps.size() << "\n\n";
-
-    REQUIRE_FALSE(steps.empty());
 
     for(std::size_t i = 0; i < steps.size(); ++i) {
         const auto& s = steps[i];

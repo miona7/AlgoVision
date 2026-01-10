@@ -166,10 +166,6 @@ add_executable(AlgoVisionTests
     Tests/Algorithm/primTest.cpp
     Tests/Algorithm/bellmanFordTest.cpp
     Tests/Algorithm/floydWarshallTest.cpp
-    Tests/Algorithm/oldBfsTest.cpp
-    Tests/Algorithm/oldBellmanFordTest.cpp
-    Tests/Algorithm/oldFloydWarshallTest.cpp
-    Tests/Algorithm/oldPrimTest.cpp
 
     Tests/Serialization/SerializationTest.cpp
 )
