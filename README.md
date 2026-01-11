@@ -11,13 +11,13 @@ kontrolu toka izvršavanja i prilagodljiv korisnički interfejs.
 
 AlgoVision trenutno podržava sledeće grafovske algoritme:
 
-- 🔍 DFS (Depth-First Search)
-- 🌊 BFS (Breadth-First Search)
-- ⭐ A* (A-star)
+- 🔍 DFS 
+- 🌊 BFS 
+- ⭐ A* 
 - 📏 Dijkstra
 - 🔁 Bellman–Ford
 - 🔄 Floyd–Warshall
-- 🌲 Prim (Minimalno razapinjuće stablo)
+- 🌲 Prim 
 - 🧩 Kahn (Topološko sortiranje)
 - 🔗 Tarjan za jake komponente povezanosti
 
@@ -67,9 +67,9 @@ Ove funkcionalnosti omogućavaju lako deljenje grafova, ponovno korišćenje tes
 Za izgradnju i pokretanje projekta potrebno je:
 
 - 🧩 C++17 ili noviji
-- 🪟 Qt 6 (moduli: QtCore, QtWidgets, QtGui)
+- 🏗️ Qt 6
 - 🛠️ CMake (verzija 3.16 ili novija)
-- 🐧 Linux ili 🪟 Windows
+- 🐧 Linux ili 🖥️ Windows
 - 💡 Opcionalno: clang-format i clang-tidy za proveru stila i automatsko formatiranje koda
 
 ---
@@ -77,8 +77,8 @@ Za izgradnju i pokretanje projekta potrebno je:
 #### 🐧 Linux
 
 ```bash
-# 1️⃣ Kloniranje repozitorijuma
-git clone <repo-url>
+# 1️⃣ Kloniranje repozitorijuma (SSH)
+git clone git@gitlab.com:matf-bg-ac-rs/course-rs/projects-2025-2026/AlgoVision.git
 cd /putanja/do/projekta
 
 # 2️⃣ Kreiranje build direktorijuma
@@ -100,11 +100,11 @@ clang-tidy Source/**/*.cpp Tests/**/*.cpp -p build --fix
 
 ---
 
-#### 🪟 Windows (PowerShell)
+#### 🖥️ Windows (PowerShell)
 
 ```powershell
-# 1️⃣ Kloniranje repozitorijuma
-git clone <repo-url>
+# 1️⃣ Kloniranje repozitorijuma (SSH)
+git clone git@gitlab.com:matf-bg-ac-rs/course-rs/projects-2025-2026/AlgoVision.git
 cd C:\putanja\do\projekta
 
 # 2️⃣ Kreiranje build direktorijuma
