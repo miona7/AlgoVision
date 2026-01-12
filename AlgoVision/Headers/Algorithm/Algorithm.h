@@ -2,10 +2,10 @@
 #define ALGORITHM_H
 
 #include <memory>
+#include <vector>
 
-#include "Edge.h"
+#include "AlgorithmStep.h"
 #include "Graph.h"
-#include "Node.h"
 
 class Algorithm {
 public:
@@ -14,11 +14,14 @@ public:
 
     virtual void execute(unsigned = 0, unsigned = 0) = 0;
 
-    // getStates
+    const std::vector<AlgorithmStep>& getSteps() const;
 
 protected:
-    std::shared_ptr<Graph> m_graph;
-    // states
+    std::shared_ptr<Graph>     m_graph;
+    std::vector<AlgorithmStep> m_steps;
+
+    void addStep(const AlgorithmStep&);
+    void clearSteps();
 };
 
-#endif
+#endif // ALGORITHM_H

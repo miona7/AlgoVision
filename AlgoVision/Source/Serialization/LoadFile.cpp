@@ -1,6 +1,4 @@
 #include "LoadFile.h"
-#include "Serializable.h"
-#include "Serializer.h"
 
 LoadFile::LoadFile(Serializer* serializer, Serializable* serializable, const QString& filePath,
                    QObject* parent)
@@ -17,7 +15,7 @@ bool LoadFile::isDirected() const {
 }
 
 void LoadFile::run() {
-    if(!m_serializer || !m_serializable) {
+    if(m_serializer == nullptr || m_serializable == nullptr) {
         return;
     }
 

@@ -29,11 +29,14 @@ set(PROJECT_SOURCES
         Headers/Graph/Graph.h Source/Graph/Graph.cpp
         Headers/Graph/Node.h Source/Graph/Node.cpp
         Headers/Graph/Edge.h Source/Graph/Edge.cpp
+        Headers/Graph/Observable.h
         Headers/Graph/UnweightedUndirectedGraph.h Source/Graph/UnweightedUndirectedGraph.cpp
         Headers/Graph/UnweightedDirectedGraph.h Source/Graph/UnweightedDirectedGraph.cpp
         Headers/Graph/WeightedUndirectedGraph.h Source/Graph/WeightedUndirectedGraph.cpp
         Headers/Graph/WeightedDirectedGraph.h Source/Graph/WeightedDirectedGraph.cpp
 
+        Headers/Algorithm/AlgorithmStep.h
+        Headers/Algorithm/AlgorithmStepApplier.h Source/Algorithm/AlgorithmStepApplier.cpp
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
@@ -153,6 +156,10 @@ add_executable(AlgoVisionTests
     Source/Serialization/SaveFile.cpp
     Source/Serialization/LoadFile.cpp
 
+
+    Tests/Graph/nodeTest.cpp
+    Tests/Graph/edgeTest.cpp
+
     Tests/Algorithm/astarTest.cpp
     Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp
@@ -162,6 +169,7 @@ add_executable(AlgoVisionTests
     Tests/Algorithm/primTest.cpp
     Tests/Algorithm/bellmanFordTest.cpp
     Tests/Algorithm/floydWarshallTest.cpp
+
     Tests/Serialization/SerializationTest.cpp
 )
 

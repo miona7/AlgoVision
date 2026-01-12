@@ -19,28 +19,86 @@ void DFS::checkConditions(unsigned start) const {
 void DFS::execute(unsigned idStartNode, unsigned) {
     checkConditions(idStartNode);
 
-    auto                     nodes = m_graph->getNodes();
-    std::map<unsigned, bool> visited;
+    clearSteps();
+
+    m_visited.clear();
+    auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
-        visited[id] = false;
+        m_visited[id] = false;
     }
 
-    std::cout << "DFS traversal starting from node " << idStartNode << ":" << std::endl;
-    dfs(idStartNode, visited);
-    std::cout << "DFS finished." << std::endl;
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::Start;
+        s.m_node = idStartNode;
+        s.m_message =
+            std::string("DFS traversal starting from node " + std::to_string(idStartNode));
+        addStep(s);
+    }
+
+    dfs(idStartNode, std::nullopt);
+
+    {
+        AlgorithmStep s;
+        s.m_type    = StepType::Finish;
+        s.m_message = std::string("DFS finished.");
+        addStep(s);
+    }
 }
 
-void DFS::dfs(unsigned nodeId, std::map<unsigned, bool>& visited) {
-    visited[nodeId] = true;
-    std::cout << "visiting node with id " << nodeId << std::endl;
+void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::PushToStack;
+        s.m_node = nodeId;
+        addStep(s);
+    }
+
+    m_visited[nodeId] = true;
+
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::VisitNode;
+        s.m_node = nodeId;
+        if(parent.has_value()) {
+            s.m_from = parent;
+        }
+        s.m_to = nodeId;
+        addStep(s);
+    }
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::ProcessNode;
+        s.m_node = nodeId;
+        addStep(s);
+    }
 
     auto adjList = m_graph->getAdjacencyList();
     if(adjList.find(nodeId) != adjList.end()) {
         for(const auto& [_, neighbourId]: adjList[nodeId]) {
-            if(!visited[neighbourId]) {
-                dfs(neighbourId, visited);
+
+            {
+                AlgorithmStep s;
+                s.m_type = StepType::ExamineEdge;
+                s.m_from = nodeId;
+                s.m_to   = neighbourId;
+                addStep(s);
+            }
+
+            if(!m_visited[neighbourId]) {
+                dfs(neighbourId, nodeId);
             }
         }
     }
-    // TODO: ispis kroz spdlog
+
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::PopFromStack;
+        s.m_node = nodeId;
+        addStep(s);
+    }
+}
+
+const std::map<unsigned, bool>& DFS::getVisited() const {
+    return m_visited;
 }
