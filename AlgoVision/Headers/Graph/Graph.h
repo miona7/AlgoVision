@@ -18,8 +18,9 @@ public:
     Graph()           = default;
     ~Graph() override = default;
 
-    void addNode(unsigned, double = 0.0, double = 0.0);
-    void removeNode(unsigned);
+    Node* addNode(double = 0.0, double = 0.0);
+    void  addNode(unsigned, double = 0.0, double = 0.0);
+    void  removeNode(unsigned);
 
     virtual void addEdge(unsigned, unsigned, int = 1) = 0;
     virtual void removeEdge(unsigned)                 = 0;
