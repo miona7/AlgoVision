@@ -1,11 +1,10 @@
-#include "NodeItem.h"
-#include "EdgeItem.h"
-#include <QPen>
-#include <QPainter>
+#include <EdgeItem.h>
+#include <NodeItem.h>
 #include <QGraphicsSceneEvent>
+#include <QPainter>
+#include <QPen>
 
-NodeItem::NodeItem(Node* modelNode)
-    : m_modelNode(modelNode) {
+NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton);
     setZValue(-1);
@@ -14,29 +13,27 @@ NodeItem::NodeItem(Node* modelNode)
 
 // FIX: move removeedge and removenode from destructors to method inside
 //       GraphScene class, which has "controller" role
-//       don't call delete edge inside destructor which again works with the semi-destroyed object a.k.a
-//       object that is in procces of destroying
+//       don't call delete edge inside destructor which again works with the semi-destroyed object
+//       a.k.a object that is in procces of destroying
 NodeItem::~NodeItem() {
-    for (auto edge : m_edges) {
+    for(auto edge: m_edges) {
         delete edge;
     }
 
     m_edges.clear();
 }
 
-Node *NodeItem::modelNode() const {
+Node* NodeItem::modelNode() const {
     return m_modelNode;
 }
 
-void NodeItem::setModelNode(Node *newModelNode) {
+void NodeItem::setModelNode(Node* newModelNode) {
     m_modelNode = newModelNode;
 }
 
 QRectF NodeItem::boundingRect() const {
-    return QRectF(-m_radius - m_borderWidth,
-                  -m_radius - m_borderWidth,
-                  2 * (m_radius + m_borderWidth),
-                  2 * (m_radius + m_borderWidth));
+    return QRectF(-m_radius - m_borderWidth, -m_radius - m_borderWidth,
+                  2 * (m_radius + m_borderWidth), 2 * (m_radius + m_borderWidth));
 }
 
 QPainterPath NodeItem::shape() const {
@@ -45,8 +42,8 @@ QPainterPath NodeItem::shape() const {
     return path;
 }
 
-void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    QPen pen(Qt::black, m_borderWidth);
+void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
+    QPen   pen(Qt::black, m_borderWidth);
     QBrush brush(calculateColor());
 
     painter->setPen(pen);
@@ -54,10 +51,10 @@ void NodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->drawEllipse(QRectF(-m_radius, -m_radius, 2 * m_radius, 2 * m_radius));
 }
 
-QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value) {
-    switch (change) {
+QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) {
+    switch(change) {
     case QGraphicsItem::ItemPositionHasChanged:
-        for (auto edge : m_edges) {
+        for(auto edge: m_edges) {
             edge->adjust();
         }
 
@@ -70,8 +67,8 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant &value) 
 }
 
 // test: right click on node delete itself
-void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    if (event->button() == Qt::RightButton) {
+void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    if(event->button() == Qt::RightButton) {
         delete this;
         return;
     }
@@ -80,13 +77,13 @@ void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mousePressEvent(event);
 }
 
-void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
     m_hasChangePosition = true;
     QGraphicsItem::mouseMoveEvent(event);
 }
 
-void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    if (!m_hasChangePosition) {
+void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+    if(!m_hasChangePosition) {
         m_nodeSelected = !m_nodeSelected;
         update();
         emit nodeSelected(this);
@@ -100,11 +97,11 @@ void NodeItem::setNodeSelected(bool newNodeSelected) {
     update();
 }
 
-void NodeItem::addEdge(EdgeItem *edgeItem) {
+void NodeItem::addEdge(EdgeItem* edgeItem) {
     m_edges.insert(edgeItem);
 }
 
-void NodeItem::removeEdge(EdgeItem *edgeItem) {
+void NodeItem::removeEdge(EdgeItem* edgeItem) {
     m_edges.remove(edgeItem);
 }
 
@@ -117,5 +114,5 @@ void NodeItem::setRadius(qreal newRadius) {
 }
 
 const QColor NodeItem::calculateColor() const {
-    return (!m_nodeSelected)? Qt::green : Qt::red;
+    return (!m_nodeSelected) ? Qt::green : Qt::red;
 }

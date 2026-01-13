@@ -1,9 +1,9 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
+#include <AppConstants.h>
+#include <Node.h>
 #include <QGraphicsObject>
-#include "Node.h"
-#include "AppConstants.h"
 
 class EdgeItem;
 
@@ -15,10 +15,10 @@ public:
     ~NodeItem();
 
     Node* modelNode() const;
-    void setModelNode(Node *newModel);
+    void  setModelNode(Node* newModel);
     qreal radius() const;
-    void setRadius(qreal newRadius);
-    void setNodeSelected(bool newNodeSelected);
+    void  setRadius(qreal newRadius);
+    void  setNodeSelected(bool newNodeSelected);
 
     void addEdge(EdgeItem* edgeItem);
     void removeEdge(EdgeItem* edgeItem);
@@ -27,22 +27,22 @@ signals:
     void nodeSelected(NodeItem* self);
 
 protected:
-    QRectF boundingRect() const override;
+    QRectF       boundingRect() const override;
     QPainterPath shape() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+    QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
+    void     mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    void     mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+    void     mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
 private:
-    Node* m_modelNode;
+    Node*           m_modelNode;
     QSet<EdgeItem*> m_edges;
 
-    qreal m_radius{AppConstants::defaultRadius};
-    qreal m_borderWidth{AppConstants::defaultBorderWidth};
-    bool m_hasChangePosition{false};
-    bool m_nodeSelected{false};
+    qreal m_radius {AppConstants::defaultRadius};
+    qreal m_borderWidth {AppConstants::defaultBorderWidth};
+    bool  m_hasChangePosition {false};
+    bool  m_nodeSelected {false};
 
     const QColor calculateColor() const;
 };
