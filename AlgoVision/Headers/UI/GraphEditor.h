@@ -1,6 +1,8 @@
 #ifndef GRAPHEDITOR_H
 #define GRAPHEDITOR_H
 
+#include <GraphScene.h>
+#include <QGraphicsView>
 #include <QWidget>
 
 class QUndoStack;
@@ -15,9 +17,11 @@ public:
     ~GraphEditor() override = default;
 
 private:
-    QUndoStack*   m_undoStack       = nullptr;
-    GraphEditTab* m_editTab         = nullptr;
-    QLabel*       m_leftPlaceholder = nullptr;
+    QUndoStack*    m_undoStack       = nullptr;
+    GraphEditTab*  m_editTab         = nullptr;
+    QLabel*        m_leftPlaceholder = nullptr;
+    QGraphicsView* m_view            = nullptr;
+    GraphScene*    m_scene           = nullptr;
 
     int m_dummyState = 0; // samo za test
 };

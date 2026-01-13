@@ -47,12 +47,15 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     // leftPlaceholder->setAlignment(Qt::AlignCenter);
     // leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
 
-    m_leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
-    m_leftPlaceholder->setAlignment(Qt::AlignCenter);
-    m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
+    // m_leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
+    // m_leftPlaceholder->setAlignment(Qt::AlignCenter);
+    // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
+    // splitter->addWidget(m_leftPlaceholder);
 
-    // splitter->addWidget(leftPlaceholder);
-    splitter->addWidget(m_leftPlaceholder);
+    m_scene = new GraphScene(splitter);
+    m_view  = new QGraphicsView(splitter);
+    m_view->setScene(m_scene);
+    splitter->addWidget(m_view);
 
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
