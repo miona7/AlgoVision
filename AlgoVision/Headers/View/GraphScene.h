@@ -17,12 +17,14 @@ protected:
 
 private slots:
     void onNodeSelectTrigger(NodeItem* node);
+    void onEdgeSelectTrigger(EdgeItem* edge);
 
 private:
     void addNode(QPointF position);
-    void addEdge(NodeItem* source, NodeItem* dest);
     void removeNode(NodeItem* node);
     void selectNode(NodeItem* node);
+    void addEdge(NodeItem* source, NodeItem* dest);
+    void removeEdge(EdgeItem* edge);
 
     NodeItem* m_firstNodeSelect {nullptr};
     State     m_state {State::ADD};

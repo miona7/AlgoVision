@@ -34,5 +34,5 @@ void EdgeItem::adjust() {
 
 // remove edge by clicking on it
 void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    delete this;
+    emit edgeSelected(this);
 }

@@ -31,8 +31,16 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 void GraphScene::onNodeSelectTrigger(NodeItem* node) {
     if(m_state == State::ADD) {
         selectNode(node);
-    } else {
+    }
+
+    if(m_state == State::REMOVE) {
         removeNode(node);
+    }
+}
+
+void GraphScene::onEdgeSelectTrigger(EdgeItem* edge) {
+    if(m_state == State::REMOVE) {
+        removeEdge(edge);
     }
 }
 
@@ -51,6 +59,7 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     Edge*     edgePlaceHolder = nullptr; // only for testing
     EdgeItem* edgeItem        = new DirectedEdgeItem(edgePlaceHolder, source, dest);
     addItem(edgeItem);
+    connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
 
     source->setNodeSelected(false);
     dest->setNodeSelected(false);
@@ -58,8 +67,13 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     m_firstNodeSelect = nullptr;
 }
 
+void GraphScene::removeEdge(EdgeItem* edge) {
+    /* TODO: remove in model  */
+    delete edge;
+}
+
 void GraphScene::removeNode(NodeItem* node) {
-    /* TODO: uradi brisanje u modelu */
+    /* TODO: remove in model */
     delete node;
 }
 
