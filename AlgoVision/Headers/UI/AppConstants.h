@@ -19,6 +19,12 @@ namespace AppConstants {
 
     // graph page element's attributes
     constexpr auto graphPageDefaultTitle = "Untilted";
+
+
+    // node view
+    constexpr double defaultRadius = 30;
+    constexpr double defaultBorderWidth = 3;
+
 } // namespace AppConstants
 
 #endif // APPCONSTANT
