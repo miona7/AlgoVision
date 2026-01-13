@@ -14,8 +14,12 @@ public:
     void checkConditions(unsigned) const;
     void execute(unsigned, unsigned = 0) override;
 
+    const std::map<unsigned, bool>& getVisited() const;
+
 private:
-    void dfs(unsigned, std::map<unsigned, bool>&);
+    std::map<unsigned, bool> m_visited;
+
+    void dfs(unsigned, std::optional<unsigned>);
 };
 
 #endif // DFS_H

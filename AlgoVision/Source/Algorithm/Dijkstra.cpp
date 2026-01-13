@@ -24,9 +24,24 @@ void Dijkstra::checkConditions(unsigned start) const {
 void Dijkstra::execute(unsigned idStartNode, unsigned) {
     checkConditions(idStartNode);
 
-    std::cout << "Starting Dijkstra." << std::endl;
+    clearSteps();
+
+    {
+        AlgorithmStep s;
+        s.m_type    = StepType::Start;
+        s.m_node    = idStartNode;
+        s.m_message = std::string("Starting Dijkstra.");
+        addStep(s);
+    }
+
     dijkstra(idStartNode);
-    std::cout << "Dijkstra finished." << std::endl;
+
+    {
+        AlgorithmStep s;
+        s.m_type    = StepType::Finish;
+        s.m_message = std::string("Dijkstra finished.");
+        addStep(s);
+    }
 }
 
 void Dijkstra::dijkstra(unsigned start) {
@@ -46,6 +61,21 @@ void Dijkstra::dijkstra(unsigned start) {
     pq.emplace(0, start);
     minDistance[start] = 0;
 
+    {
+        AlgorithmStep s;
+        s.m_type  = StepType::UpdateDistance;
+        s.m_node  = start;
+        s.m_value = 0;
+        addStep(s);
+    }
+
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::PushToQueue;
+        s.m_node = start;
+        addStep(s);
+    }
+
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
 
@@ -53,16 +83,62 @@ void Dijkstra::dijkstra(unsigned start) {
         auto [currentDistance, currentNode] = pq.top();
         pq.pop();
 
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::PopFromQueue;
+            s.m_node = currentNode;
+            addStep(s);
+        }
+
         if(!finished[currentNode]) {
             finished[currentNode] = true;
+
+            {
+                AlgorithmStep s;
+                s.m_type = StepType::VisitNode;
+                s.m_node = currentNode;
+                addStep(s);
+            }
+            {
+                AlgorithmStep s;
+                s.m_type = StepType::ProcessNode;
+                s.m_node = currentNode;
+                addStep(s);
+            }
 
             for(const auto& [edgeId, neighbourId]: adjList[currentNode]) {
                 auto it = edges.find(edgeId);
                 if(it != edges.end()) {
                     int weight = it->second.getWeight();
+
+                    {
+                        AlgorithmStep s;
+                        s.m_type  = StepType::ExamineEdge;
+                        s.m_from  = currentNode;
+                        s.m_to    = neighbourId;
+                        s.m_value = weight;
+                        addStep(s);
+                    }
+
                     if(currentDistance + weight < minDistance[neighbourId]) {
                         minDistance[neighbourId] = currentDistance + weight;
+
+                        {
+                            AlgorithmStep s;
+                            s.m_type  = StepType::UpdateDistance;
+                            s.m_node  = neighbourId;
+                            s.m_value = minDistance[neighbourId];
+                            addStep(s);
+                        }
+
                         pq.emplace(minDistance[neighbourId], neighbourId);
+
+                        {
+                            AlgorithmStep s;
+                            s.m_type = StepType::PushToQueue;
+                            s.m_node = neighbourId;
+                            addStep(s);
+                        }
                     }
                 }
             }

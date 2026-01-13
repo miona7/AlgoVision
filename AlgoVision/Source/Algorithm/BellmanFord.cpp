@@ -18,6 +18,15 @@ void BellmanFord::checkConditions(unsigned start) const {
 void BellmanFord::execute(unsigned idStartNode, unsigned) {
     checkConditions(idStartNode);
 
+    clearSteps();
+    {
+        AlgorithmStep s;
+        s.m_type    = StepType::Start;
+        s.m_node    = idStartNode;
+        s.m_message = std::string("Bellman-Ford start");
+        addStep(s);
+    }
+
     std::cout << "Starting Bellman Ford." << std::endl;
     bellmanFord(idStartNode);
     std::cout << "Bellman Ford finished." << std::endl;
@@ -35,6 +44,13 @@ void BellmanFord::execute(unsigned idStartNode, unsigned) {
     if(m_hasNegativeCycle) {
         std::cout << "Graph contains a negative cycle!" << std::endl;
     }
+
+    {
+        AlgorithmStep s;
+        s.m_type    = StepType::Finish;
+        s.m_message = std::string("Bellman-Ford finish");
+        addStep(s);
+    }
 }
 
 void BellmanFord::bellmanFord(unsigned start) {
@@ -49,19 +65,65 @@ void BellmanFord::bellmanFord(unsigned start) {
 
     m_minDistance[start] = 0;
 
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::VisitNode;
+        s.m_node = start;
+        addStep(s);
+    }
+    {
+        AlgorithmStep s;
+        s.m_type  = StepType::UpdateDistance;
+        s.m_node  = start;
+        s.m_value = 0;
+        addStep(s);
+    }
+
     unsigned v = nodes.size();
 
     // relaksiraj grane v-1 put
     for(int k = 0; k < v - 1; ++k) {
+
+        {
+            AlgorithmStep s;
+            s.m_type    = StepType::ProcessNode; // koristimo kao "pass k"
+            s.m_value   = k;
+            s.m_message = std::string("relaxation pass");
+            addStep(s);
+        }
+
         bool wasRelaxed = false;
         for(const auto& [_, edge]: edges) {
             unsigned u = edge.startNode();
             unsigned v = edge.endNode();
             int      w = edge.getWeight();
+            {
+                AlgorithmStep s;
+                s.m_type  = StepType::ExamineEdge;
+                s.m_from  = u;
+                s.m_to    = v;
+                s.m_value = w; // opcionalno: težina ivice
+                addStep(s);
+            }
             if(m_minDistance[u] != std::numeric_limits<int>::max() &&
                m_minDistance[u] + w < m_minDistance[v]) {
                 m_minDistance[v] = m_minDistance[u] + w;
                 wasRelaxed       = true;
+                {
+                    AlgorithmStep s;
+                    s.m_type  = StepType::RelaxEdge;
+                    s.m_from  = u;
+                    s.m_to    = v;
+                    s.m_value = w;
+                    addStep(s);
+                }
+                {
+                    AlgorithmStep s;
+                    s.m_type  = StepType::UpdateDistance;
+                    s.m_node  = v;
+                    s.m_value = m_minDistance[v]; // nova distanca
+                    addStep(s);
+                }
             }
         }
         if(!wasRelaxed) {
@@ -78,6 +140,12 @@ void BellmanFord::bellmanFord(unsigned start) {
            m_minDistance[u] != std::numeric_limits<int>::max() &&
            m_minDistance[u] + w < m_minDistance[v]) {
             m_hasNegativeCycle = true;
+            {
+                AlgorithmStep s;
+                s.m_type    = StepType::MarkNode; // koristimo kao "flag"
+                s.m_message = std::string("negative cycle detected");
+                addStep(s);
+            }
             break;
         }
     }

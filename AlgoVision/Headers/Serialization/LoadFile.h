@@ -4,12 +4,12 @@
 #include <QString>
 #include <QThread>
 
-class Serializer;
-class Serializable;
+#include "Serializable.h"
+#include "Serializer.h"
 
 class LoadFile : public QThread {
 public:
-    LoadFile(Serializer*, Serializable*, const QString&, QObject* parent = nullptr);
+    LoadFile(Serializer*, Serializable*, const QString&, QObject* = nullptr);
 
     void run() override;
 

@@ -93,3 +93,145 @@ TEST_CASE("Dijkstra on graph with negative edges", "[DIJKSTRA]") {
     Dijkstra dijkstra(wdg);
     REQUIRE_THROWS_AS(dijkstra.execute(1), std::runtime_error);
 }
+
+static const char* stepTypeToString(StepType t) {
+    switch(t) {
+    case StepType::Start:
+        return "Start";
+    case StepType::Finish:
+        return "Finish";
+    case StepType::VisitNode:
+        return "VisitNode";
+    case StepType::ProcessNode:
+        return "ProcessNode";
+    case StepType::MarkNode:
+        return "MarkNode";
+    case StepType::ExamineEdge:
+        return "ExamineEdge";
+    case StepType::PushToQueue:
+        return "PushToQueue";
+    case StepType::PopFromQueue:
+        return "PopFromQueue";
+    case StepType::UpdateDistance:
+        return "UpdateDistance";
+    }
+    return nullptr;
+}
+
+void runDijkstraLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
+    Dijkstra dijkstra(g);
+    REQUIRE_NOTHROW(dijkstra.execute(startNode));
+
+    const auto& steps = dijkstra.getSteps();
+
+    std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
+
+    REQUIRE_FALSE(steps.empty());
+
+    for(size_t i = 0; i < steps.size(); ++i) {
+        const auto& s = steps[i];
+        std::cout << "[" << i << "] " << stepTypeToString(s.m_type);
+
+        if(s.m_node) {
+            std::cout << " | node = " << *s.m_node;
+        }
+        if(s.m_from && s.m_to) {
+            std::cout << " | edge = " << *s.m_from << " -> " << *s.m_to;
+        }
+        if(s.m_value) {
+            std::cout << " | value = " << *s.m_value;
+        }
+        if(s.m_message) {
+            std::cout << " | msg = \"" << *s.m_message << "\"";
+        }
+        std::cout << std::endl;
+    }
+
+    bool hasStart        = false;
+    bool hasFinish       = false;
+    bool hasVisit        = false;
+    bool hasEdge         = false;
+    bool hasUpdate       = false;
+    bool hasPushToQueue  = false;
+    bool hasPopFromQueue = false;
+
+    for(const auto& s: steps) {
+        if(s.m_type == StepType::Start) {
+            hasStart = true;
+        }
+        if(s.m_type == StepType::Finish) {
+            hasFinish = true;
+        }
+        if(s.m_type == StepType::VisitNode) {
+            hasVisit = true;
+        }
+        if(s.m_type == StepType::ExamineEdge) {
+            hasEdge = true;
+        }
+        if(s.m_type == StepType::UpdateDistance) {
+            hasUpdate = true;
+        }
+        if(s.m_type == StepType::PushToQueue) {
+            hasPushToQueue = true;
+        }
+        if(s.m_type == StepType::PopFromQueue) {
+            hasPopFromQueue = true;
+        }
+    }
+
+    REQUIRE(hasStart);
+    REQUIRE(hasFinish);
+    REQUIRE(hasVisit);
+    REQUIRE(hasEdge);
+    REQUIRE(hasUpdate);
+    REQUIRE(hasPushToQueue);
+    REQUIRE(hasPopFromQueue);
+}
+
+TEST_CASE("Dijkstra steps test on all graph types", "[DIJKSTRA]") {
+
+    auto udg = std::make_shared<UnweightedDirectedGraph>();
+    for(unsigned i = 1; i <= 5; ++i) {
+        udg->addNode(i);
+    }
+    udg->addEdge(1, 2);
+    udg->addEdge(1, 3);
+    udg->addEdge(2, 4);
+    udg->addEdge(3, 4);
+    udg->addEdge(4, 5);
+    runDijkstraLoggingTest(udg, 1);
+
+    auto uug = std::make_shared<UnweightedUndirectedGraph>();
+    for(unsigned i = 1; i <= 5; ++i) {
+        uug->addNode(i);
+    }
+    uug->addEdge(1, 2);
+    uug->addEdge(1, 3);
+    uug->addEdge(2, 4);
+    uug->addEdge(3, 4);
+    uug->addEdge(4, 5);
+    runDijkstraLoggingTest(uug, 1);
+
+    auto wdg = std::make_shared<WeightedDirectedGraph>();
+    for(unsigned i = 1; i <= 6; ++i) {
+        wdg->addNode(i);
+    }
+    wdg->addEdge(1, 2, 2);
+    wdg->addEdge(1, 3, 5);
+    wdg->addEdge(2, 4, 1);
+    wdg->addEdge(3, 4, 2);
+    wdg->addEdge(4, 5, 1);
+    wdg->addEdge(5, 6, 3);
+    runDijkstraLoggingTest(wdg, 1);
+
+    auto wug = std::make_shared<WeightedUndirectedGraph>();
+    for(unsigned i = 1; i <= 5; ++i) {
+        wug->addNode(i);
+    }
+    wug->addEdge(1, 2, 2);
+    wug->addEdge(1, 3, 4);
+    wug->addEdge(2, 4, 1);
+    wug->addEdge(3, 4, 3);
+    wug->addEdge(4, 5, 5);
+    runDijkstraLoggingTest(wug, 1);
+}
