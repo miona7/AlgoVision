@@ -31,8 +31,6 @@ protected:
     qreal m_penWidth {2};
     qreal m_shapeStroke {20.0};
 
-    // QGraphicsItem interface
-protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 };
 
