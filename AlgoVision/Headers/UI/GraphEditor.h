@@ -16,6 +16,10 @@ public:
     explicit GraphEditor(QWidget* parent = nullptr);
     ~GraphEditor() override = default;
 
+private slots:
+    void onAddRequestTrigger();
+    void onRemoveRequestTrigger();
+
 private:
     QUndoStack*    m_undoStack       = nullptr;
     GraphEditTab*  m_editTab         = nullptr;

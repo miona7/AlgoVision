@@ -8,6 +8,13 @@ class GraphScene : public QGraphicsScene {
 public:
     explicit GraphScene(QObject* parent = nullptr);
 
+    enum class State {
+        ADD,
+        REMOVE
+    };
+
+    void setState(GraphScene::State state);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
 
@@ -18,6 +25,7 @@ private:
     void      addNode(QPointF position);
     void      addEdge(NodeItem* source, NodeItem* dest);
     NodeItem* m_firstNodeSelect {nullptr};
+    State m_state{State::ADD};
 };
 
 #endif // GRAPHSCENE_H

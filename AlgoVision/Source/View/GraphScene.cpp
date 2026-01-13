@@ -11,6 +11,10 @@ GraphScene::GraphScene(QObject* parent) : QGraphicsScene(parent) {
     setSceneRect(0, 0, 3000, 3000);
 }
 
+void GraphScene::setState(GraphScene::State state) {
+    m_state = state;
+}
+
 void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     const auto     clickPos = event->scenePos();
     QGraphicsItem* item     = itemAt(clickPos, QTransform());

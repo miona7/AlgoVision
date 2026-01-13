@@ -84,20 +84,32 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 
     connect(m_undoStack, &QUndoStack::canRedoChanged, m_editTab, &GraphEditTab::setRedoEnabled);
 
-    // Dummy test
-    connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
-        const int before = m_dummyState;
-        const int after  = before + 1;
+    connect(m_editTab, &GraphEditTab::addRequested, this, &GraphEditor::onAddRequestTrigger);
 
-        m_undoStack->push(new LambdaCommand(
-            [this, after]() {
-                m_dummyState = after;
-                m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
-            },
-            [this, before]() {
-                m_dummyState = before;
-                m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
-            },
-            "Add dummy"));
-    });
+    connect(m_editTab, &GraphEditTab::removeRequested, this, &GraphEditor::onRemoveRequestTrigger);
+
+    // Dummy test
+    // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
+    //     const int before = m_dummyState;
+    //     const int after  = before + 1;
+
+    //     m_undoStack->push(new LambdaCommand(
+    //         [this, after]() {
+    //             m_dummyState = after;
+    //             m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
+    //         },
+    //         [this, before]() {
+    //             m_dummyState = before;
+    //             m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
+    //         },
+    //         "Add dummy"));
+    // });
+}
+
+void GraphEditor::onAddRequestTrigger() {
+    m_scene->setState(GraphScene::State::ADD);
+}
+
+void GraphEditor::onRemoveRequestTrigger() {
+    m_scene->setState(GraphScene::State::REMOVE);
 }
