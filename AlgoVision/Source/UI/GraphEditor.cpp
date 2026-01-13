@@ -6,6 +6,7 @@
 #include <QTabWidget>
 #include <QUndoCommand>
 #include <QUndoStack>
+#include <UnweightedDirectedGraph.h>
 #include <functional>
 
 #include "AlgorithmTab.h"
@@ -37,6 +38,8 @@ namespace {
 
 GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 
+    m_graph = new UnweightedDirectedGraph();
+
     m_undoStack = new QUndoStack(this);
 
     // main splitter for the left and right page sides
@@ -52,7 +55,7 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
     // splitter->addWidget(m_leftPlaceholder);
 
-    m_scene = new GraphScene(splitter);
+    m_scene = new GraphScene(m_graph, splitter);
     m_view  = new QGraphicsView(splitter);
     m_view->setScene(m_scene);
     splitter->addWidget(m_view);
@@ -104,6 +107,10 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     //         },
     //         "Add dummy"));
     // });
+}
+
+GraphEditor::~GraphEditor() {
+    delete m_graph;
 }
 
 void GraphEditor::onAddRequestTrigger() {

@@ -1,6 +1,7 @@
 #ifndef GRAPHEDITOR_H
 #define GRAPHEDITOR_H
 
+#include <Graph.h>
 #include <GraphScene.h>
 #include <QGraphicsView>
 #include <QWidget>
@@ -14,7 +15,7 @@ class GraphEditor : public QWidget {
 
 public:
     explicit GraphEditor(QWidget* parent = nullptr);
-    ~GraphEditor() override = default;
+    ~GraphEditor();
 
 private slots:
     void onAddRequestTrigger();
@@ -26,6 +27,7 @@ private:
     QLabel*        m_leftPlaceholder = nullptr;
     QGraphicsView* m_view            = nullptr;
     GraphScene*    m_scene           = nullptr;
+    Graph*         m_graph           = nullptr;
 
     int m_dummyState = 0; // samo za test
 };

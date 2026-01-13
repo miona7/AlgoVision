@@ -18,7 +18,7 @@ public:
     Graph()           = default;
     ~Graph() override = default;
 
-    Node* addNode(double = 0.0, double = 0.0);
+    Node* addNode(double, double);
     void  addNode(unsigned, double = 0.0, double = 0.0);
     void  removeNode(unsigned);
 

@@ -7,7 +7,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <UndirectedEdgeItem.h>
 
-GraphScene::GraphScene(QObject* parent) : QGraphicsScene(parent) {
+GraphScene::GraphScene(Graph* graph, QObject* parent) : m_graph(graph), QGraphicsScene(parent) {
     setSceneRect(0, 0, 3000, 3000);
 }
 
@@ -45,7 +45,7 @@ void GraphScene::onEdgeSelectTrigger(EdgeItem* edge) {
 }
 
 void GraphScene::addNode(QPointF position) {
-    Node*     nodeModel = new Node(1, position.x(), position.y());
+    Node*     nodeModel = m_graph->addNode(position.x(), position.y());
     NodeItem* nodeItem  = new NodeItem(nodeModel);
     addItem(nodeItem);
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
@@ -56,24 +56,27 @@ void GraphScene::addNode(QPointF position) {
 }
 
 void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
-    Edge*     edgePlaceHolder = nullptr; // only for testing
-    EdgeItem* edgeItem        = new DirectedEdgeItem(edgePlaceHolder, source, dest);
+    unsigned sourceId = source->modelNode()->getId();
+    unsigned destId   = dest->modelNode()->getId();
+    m_graph->addEdge(sourceId, destId);
+
+    Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
+    EdgeItem* edgeItem  = new DirectedEdgeItem(edgeModel, source, dest);
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
 
     source->setNodeSelected(false);
     dest->setNodeSelected(false);
-
     m_firstNodeSelect = nullptr;
 }
 
 void GraphScene::removeEdge(EdgeItem* edge) {
-    /* TODO: remove in model  */
+    // m_graph->removeEdge(edge->modelEdge()->getId());
     delete edge;
 }
 
 void GraphScene::removeNode(NodeItem* node) {
-    /* TODO: remove in model */
+    // m_graph->removeNode(node->modelNode()->getId());
     delete node;
 }
 

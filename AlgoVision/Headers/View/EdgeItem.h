@@ -20,6 +20,9 @@ public:
     void                 paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                                QWidget* widget) override = 0;
 
+    Edge* modelEdge() const;
+    void  setModelEdge(Edge* newModelEdge);
+
 signals:
     void edgeSelected(EdgeItem* self);
 

@@ -1,12 +1,13 @@
 #ifndef GRAPHSCENE_H
 #define GRAPHSCENE_H
 
+#include <Graph.h>
 #include <NodeItem.h>
 #include <QGraphicsScene>
 
 class GraphScene : public QGraphicsScene {
 public:
-    explicit GraphScene(QObject* parent = nullptr);
+    explicit GraphScene(Graph* graph, QObject* parent = nullptr);
 
     enum class State { ADD, REMOVE };
 
@@ -28,6 +29,7 @@ private:
 
     NodeItem* m_firstNodeSelect {nullptr};
     State     m_state {State::ADD};
+    Graph*    m_graph {nullptr};
 };
 
 #endif // GRAPHSCENE_H
