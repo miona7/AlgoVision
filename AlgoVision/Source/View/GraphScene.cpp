@@ -19,7 +19,7 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     const auto     clickPos = event->scenePos();
     QGraphicsItem* item     = itemAt(clickPos, QTransform());
 
-    if(!item) {
+    if(!item && m_state == State::ADD) {
         addNode(clickPos);
         event->accept();
         return;
@@ -29,20 +29,11 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void GraphScene::onNodeSelectTrigger(NodeItem* node) {
-    // node is selected
-    if(m_firstNodeSelect == nullptr) {
-        m_firstNodeSelect = node;
-        return;
+    if(m_state == State::ADD) {
+        selectNode(node);
+    } else {
+        removeNode(node);
     }
-
-    // same node is unselected
-    if(m_firstNodeSelect == node) {
-        m_firstNodeSelect = nullptr;
-        return;
-    }
-
-    // other node is selected
-    addEdge(m_firstNodeSelect, node);
 }
 
 void GraphScene::addNode(QPointF position) {
@@ -65,4 +56,26 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     dest->setNodeSelected(false);
 
     m_firstNodeSelect = nullptr;
+}
+
+void GraphScene::removeNode(NodeItem* node) {
+    /* TODO: uradi brisanje u modelu */
+    delete node;
+}
+
+void GraphScene::selectNode(NodeItem* node) {
+    // node is selected
+    if(m_firstNodeSelect == nullptr) {
+        m_firstNodeSelect = node;
+        return;
+    }
+
+    // same node is unselected
+    if(m_firstNodeSelect == node) {
+        m_firstNodeSelect = nullptr;
+        return;
+    }
+
+    // other node is selected
+    addEdge(m_firstNodeSelect, node);
 }
