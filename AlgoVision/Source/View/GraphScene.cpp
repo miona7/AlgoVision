@@ -61,7 +61,14 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     m_graph->addEdge(sourceId, destId);
 
     Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
-    EdgeItem* edgeItem  = new DirectedEdgeItem(edgeModel, source, dest);
+    EdgeItem* edgeItem  = nullptr;
+
+    if(m_graph->isDirected()) {
+        edgeItem = new DirectedEdgeItem(edgeModel, source, dest);
+    } else {
+        edgeItem = new UndirectedEdgeItem(edgeModel, source, dest);
+    }
+
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
 
