@@ -55,7 +55,6 @@ set(PROJECT_SOURCES
         Headers/UI/ThemeManager.h Source/UI/ThemeManager.cpp
         Headers/UI/GraphEditor.h Source/UI/GraphEditor.cpp
 
-        Headers/View/Utility.h
         Headers/View/NodeItem.h Source/View/NodeItem.cpp
         Headers/View/EdgeItem.h Source/View/EdgeItem.cpp
         Headers/View/UndirectedEdgeItem.h Source/View/UndirectedEdgeItem.cpp
