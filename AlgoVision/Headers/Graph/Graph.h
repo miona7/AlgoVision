@@ -6,6 +6,7 @@
 #include <QVariantMap>
 #include <QVector>
 
+#include <set>
 #include <map>
 #include <vector>
 
