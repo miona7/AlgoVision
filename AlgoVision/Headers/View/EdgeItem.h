@@ -10,21 +10,20 @@ class EdgeItem : public QGraphicsObject {
     Q_OBJECT
 
 public:
-    EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode);
+    EdgeItem(Edge*, NodeItem*, NodeItem*);
     virtual ~EdgeItem();
 
     void                 adjust();
-    virtual QPainterPath edgePath() const                = 0;
-    QRectF               boundingRect() const override   = 0;
-    QPainterPath         shape() const override          = 0;
-    void                 paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
-                               QWidget* widget) override = 0;
+    virtual QPainterPath edgePath() const                                                     = 0;
+    QRectF               boundingRect() const override                                        = 0;
+    QPainterPath         shape() const override                                               = 0;
+    void                 paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override = 0;
 
     Edge* modelEdge() const;
-    void  setModelEdge(Edge* newModelEdge);
+    void  setModelEdge(Edge*);
 
 signals:
-    void edgeSelected(EdgeItem* self);
+    void edgeSelected(EdgeItem*);
 
 protected:
     Edge* m_modelEdge;
@@ -37,7 +36,7 @@ protected:
     qreal m_penWidth {2};
     qreal m_shapeStroke {20.0};
 
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 };
 
 #endif // EDGEITEM_H

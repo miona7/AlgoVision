@@ -83,7 +83,7 @@ void GraphScene::removeEdge(EdgeItem* edge) {
 }
 
 void GraphScene::removeNode(NodeItem* node) {
-    //m_graph->removeNode(node->modelNode()->getId());
+    // m_graph->removeNode(node->modelNode()->getId());
     delete node;
 }
 

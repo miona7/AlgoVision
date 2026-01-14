@@ -20,20 +20,33 @@ void Graph::removeNode(unsigned id) {
         return; // cvor ne postoji
     }
 
-    // ukloni sve grane koje izlaze iz cvora
-    for(const auto& [edgeId, _]: m_adjacencyList[id]) {
-        removeEdge(edgeId);
+    // sve grane povezane sa cvorom
+    std::set<unsigned> edgesToRemove;
+
+    // izlazne grane
+    if(m_adjacencyList.find(id) != m_adjacencyList.end()) {
+        for(const auto& [edgeId, _]: m_adjacencyList[id]) {
+            edgesToRemove.insert(edgeId);
+        }
     }
 
-    // ukloni sve grane koje ulaze u cvor
-    for(auto& [nodeId, neighbors]: m_adjacencyList) {
-        neighbors.erase(id);
+    // ulazne grane
+    for(const auto& [_, neighbors]: m_adjacencyList) {
+        for(const auto& [edgeId, to]: neighbors) {
+            if(to == id) {
+                edgesToRemove.insert(edgeId);
+            }
+        }
+    }
+
+    // obrisi sve grane
+    for(unsigned edgeId: edgesToRemove) {
+        removeEdge(edgeId);
     }
 
     // obrisi cvor
     m_adjacencyList.erase(id);
     m_nodes.erase(id);
-
     --m_numOfNodes;
 }
 

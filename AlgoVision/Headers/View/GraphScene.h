@@ -7,29 +7,29 @@
 
 class GraphScene : public QGraphicsScene {
 public:
-    explicit GraphScene(Graph* graph, QObject* parent = nullptr);
+    explicit GraphScene(Graph*, QObject* = nullptr);
 
     enum class State { ADD, REMOVE };
 
-    void setState(GraphScene::State state);
+    void setState(GraphScene::State);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 
 private slots:
-    void onNodeSelectTrigger(NodeItem* node);
-    void onEdgeSelectTrigger(EdgeItem* edge);
+    void onNodeSelectTrigger(NodeItem*);
+    void onEdgeSelectTrigger(EdgeItem*);
 
 private:
-    void addNode(QPointF position);
-    void removeNode(NodeItem* node);
-    void selectNode(NodeItem* node);
-    void addEdge(NodeItem* source, NodeItem* dest);
-    void removeEdge(EdgeItem* edge);
-
     NodeItem* m_firstNodeSelect {nullptr};
     State     m_state {State::ADD};
     Graph*    m_graph {nullptr};
+
+    void addNode(QPointF);
+    void removeNode(NodeItem*);
+    void selectNode(NodeItem*);
+    void addEdge(NodeItem*, NodeItem*);
+    void removeEdge(EdgeItem*);
 };
 
 #endif // GRAPHSCENE_H

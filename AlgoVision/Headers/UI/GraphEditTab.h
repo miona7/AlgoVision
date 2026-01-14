@@ -10,7 +10,7 @@ class GraphEditTab : public QWidget {
     Q_OBJECT
 
 public:
-    explicit GraphEditTab(QWidget* parent = nullptr);
+    explicit GraphEditTab(QWidget* = nullptr);
     ~GraphEditTab() override = default;
 
 signals:
@@ -25,8 +25,6 @@ public slots:
     void setRedoEnabled(bool);
 
 private:
-    void initLayout();
-
     QPushButton* m_addBtn;
     QPushButton* m_removeBtn;
     QPushButton* m_undoBtn;
@@ -37,6 +35,8 @@ private:
     QPushButton* m_clearBtn;
 
     QSlider* m_nodeSizeSlider;
+
+    void initLayout();
 };
 
 #endif // GRAPHEDITTAB_H

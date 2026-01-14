@@ -1,32 +1,31 @@
 #include <iostream>
 
+#include <QFile>
 #include <QFileDialog>
+#include <QJsonDocument>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QString>
-#include <QFile>
-#include <QJsonDocument>
 #include <QVariantMap>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include <QVBoxLayout>
+#include "Graph.h"
 #include "GraphEditor.h"
 #include "Serializer.h"
-#include "Graph.h"
-#include "WeightedDirectedGraph.h"
-#include "WeightedUndirectedGraph.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
-
+#include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
+#include <QVBoxLayout>
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()) {
     m_ui->setupUi(this);
 
     m_serializer = std::make_unique<Serializer>();
-    m_graph = createGraph(false, false); // default unweighted, undirected
+    m_graph      = createGraph(false, false); // default unweighted, undirected
 
     this->setStyleSheet(m_themeManager->styleSheet());
 
@@ -60,15 +59,15 @@ MainWindow::MainWindow(QWidget* parent)
     QWidget* graphPage = m_ui->graphPage;
 
     // layout
-    if (graphPage->layout() == nullptr) {
+    if(graphPage->layout() == nullptr) {
         auto* graphLayout = new QVBoxLayout(graphPage);
         graphLayout->setContentsMargins(0, 0, 0, 0);
 
         auto* graphEditor = new GraphEditor(graphPage);
-        m_graphEditor = graphEditor; // mora zato sto je graphEditor lokalna promenljiva, necemo imati pristup kasnije (cim konstruktor zavrsi, brise se)
+        m_graphEditor     = graphEditor; // mora zato sto je graphEditor lokalna promenljiva, necemo
+                                         // imati pristup kasnije (cim konstruktor zavrsi, brise se)
         graphLayout->addWidget(graphEditor);
     }
-
 }
 
 MainWindow::~MainWindow() {
@@ -76,9 +75,12 @@ MainWindow::~MainWindow() {
 }
 
 std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected) {
-    if(isWeighted && isDirected)  return std::make_shared<WeightedDirectedGraph>();
-    if(isWeighted && !isDirected) return std::make_shared<WeightedUndirectedGraph>();
-    if(!isWeighted && isDirected) return std::make_shared<UnweightedDirectedGraph>();
+    if(isWeighted && isDirected)
+        return std::make_shared<WeightedDirectedGraph>();
+    if(isWeighted && !isDirected)
+        return std::make_shared<WeightedUndirectedGraph>();
+    if(!isWeighted && isDirected)
+        return std::make_shared<UnweightedDirectedGraph>();
     return std::make_shared<UnweightedUndirectedGraph>();
 }
 
@@ -104,9 +106,9 @@ void MainWindow::onOpenGraphTriggered() {
     }
     const auto jsonDoc = QJsonDocument::fromJson(file.readAll());
     file.close();
-    const QVariantMap root = jsonDoc.toVariant().toMap();
-    const bool isWeighted = root.value("isWeighted").toBool();
-    const bool isDirected = root.value("isDirected").toBool();
+    const QVariantMap root       = jsonDoc.toVariant().toMap();
+    const bool        isWeighted = root.value("isWeighted").toBool();
+    const bool        isDirected = root.value("isDirected").toBool();
 
     m_graph = createGraph(isWeighted, isDirected);
 
@@ -114,14 +116,16 @@ void MainWindow::onOpenGraphTriggered() {
     bool loadedDirected = false;
     m_serializer->load(*m_graph, filePath, loadedWeighted, loadedDirected);
 
-
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     std::cout << "btnOpenGraph clicked: "
               << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
 
     initMenuToolBar();
 
-    QMessageBox::information(this, "graph opened", "loaded file: " + filePath + "\nweighted: " + QString(loadedWeighted ? "true" : "false") + "\ndirected: " + QString(loadedDirected ? "true" : "false"));
+    QMessageBox::information(this, "graph opened",
+                             "loaded file: " + filePath +
+                                 "\nweighted: " + QString(loadedWeighted ? "true" : "false") +
+                                 "\ndirected: " + QString(loadedDirected ? "true" : "false"));
 
     // TODO: kada napravimo GraphEditor API:
     // if(m_graphEditor) m_graphEditor->setGraph(m_graph);

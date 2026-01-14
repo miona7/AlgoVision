@@ -14,8 +14,8 @@ class GraphEditor : public QWidget {
     Q_OBJECT
 
 public:
-    explicit GraphEditor(QWidget* parent = nullptr);
-    ~GraphEditor();
+    explicit GraphEditor(QWidget* = nullptr);
+    ~GraphEditor() override;
 
 private slots:
     void onAddRequestTrigger();

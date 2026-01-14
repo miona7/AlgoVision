@@ -22,8 +22,15 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
+    explicit MainWindow(QWidget* = nullptr);
     ~MainWindow() override;
+
+private slots:
+    void onOpenGraphTriggered();
+    void onCreateGraphTriggered();
+    void onSaveGraphTriggered();
+    void onSaveImageTriggered();
+    void onChangeThemeTriggered();
 
 private:
     Ui::MainWindow* m_ui;
@@ -32,16 +39,9 @@ private:
 
     std::unique_ptr<Serializer> m_serializer;
     std::shared_ptr<Graph>      m_graph;
-    GraphEditor* m_graphEditor = nullptr;
+    GraphEditor*                m_graphEditor = nullptr;
 
-    void initMenuToolBar();
+    void                   initMenuToolBar();
     std::shared_ptr<Graph> createGraph(bool, bool);
-
-    // slotovi
-    void onOpenGraphTriggered();
-    void onCreateGraphTriggered();
-    void onSaveGraphTriggered();
-    void onSaveImageTriggered();
-    void onChangeThemeTriggered();
 };
 #endif // MAINWINDOW_H

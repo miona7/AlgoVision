@@ -12,18 +12,14 @@ class AlgorithmTab : public QWidget {
     Q_OBJECT
 
 public:
-    explicit AlgorithmTab(QWidget* parent = nullptr);
+    explicit AlgorithmTab(QWidget* = nullptr);
     ~AlgorithmTab() override = default;
 
 private:
-    void initLayout();
-    void initIcons();
-    void updateUiForAlgorithm(const QString& algorithmName);
+    QComboBox* m_algorithmCombo;
 
-    QComboBox*   m_algorithmCombo;
-
-    QLineEdit*   m_startNodeEdit;
-    QLineEdit*   m_endNodeEdit;
+    QLineEdit* m_startNodeEdit;
+    QLineEdit* m_endNodeEdit;
 
     QPushButton* m_helpBtn;
 
@@ -32,6 +28,10 @@ private:
     QToolButton* m_pauseBtn;
     QToolButton* m_nextBtn;
     QToolButton* m_restartBtn;
+
+    void initLayout();
+    void initIcons();
+    void updateUiForAlgorithm(const QString&);
 };
 
 #endif // ALGORITHMTAB_H

@@ -164,6 +164,7 @@ add_executable(AlgoVisionTests
     Source/Serialization/LoadFile.cpp
 
 
+    Tests/Graph/graphTest.cpp
     Tests/Graph/nodeTest.cpp
     Tests/Graph/edgeTest.cpp
 
