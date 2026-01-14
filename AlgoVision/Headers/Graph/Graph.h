@@ -18,8 +18,9 @@ public:
     Graph()           = default;
     ~Graph() override = default;
 
-    void addNode(unsigned, double = 0.0, double = 0.0);
-    void removeNode(unsigned);
+    Node* addNode(double, double);
+    void  addNode(unsigned, double = 0.0, double = 0.0);
+    void  removeNode(unsigned);
 
     virtual void addEdge(unsigned, unsigned, int = 1) = 0;
     virtual void removeEdge(unsigned)                 = 0;
@@ -41,6 +42,8 @@ public:
     void     fromVariant(const QVariant&) override;
 
 protected:
+    unsigned m_nodeId = 0;
+    unsigned m_edgeId = 0;
     unsigned                                         m_numOfNodes = 0;
     unsigned                                         m_numOfEdges = 0;
     std::map<unsigned, std::map<unsigned, unsigned>> m_adjacencyList;

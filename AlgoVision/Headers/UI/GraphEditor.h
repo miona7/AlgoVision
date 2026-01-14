@@ -1,6 +1,9 @@
 #ifndef GRAPHEDITOR_H
 #define GRAPHEDITOR_H
 
+#include <Graph.h>
+#include <GraphScene.h>
+#include <QGraphicsView>
 #include <QWidget>
 
 class QUndoStack;
@@ -12,12 +15,19 @@ class GraphEditor : public QWidget {
 
 public:
     explicit GraphEditor(QWidget* parent = nullptr);
-    ~GraphEditor() override = default;
+    ~GraphEditor();
+
+private slots:
+    void onAddRequestTrigger();
+    void onRemoveRequestTrigger();
 
 private:
-    QUndoStack*   m_undoStack       = nullptr;
-    GraphEditTab* m_editTab         = nullptr;
-    QLabel*       m_leftPlaceholder = nullptr;
+    QUndoStack*    m_undoStack       = nullptr;
+    GraphEditTab*  m_editTab         = nullptr;
+    QLabel*        m_leftPlaceholder = nullptr;
+    QGraphicsView* m_view            = nullptr;
+    GraphScene*    m_scene           = nullptr;
+    Graph*         m_graph           = nullptr;
 
     int m_dummyState = 0; // samo za test
 };

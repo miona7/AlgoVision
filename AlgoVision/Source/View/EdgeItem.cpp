@@ -32,7 +32,15 @@ void EdgeItem::adjust() {
     }
 }
 
+Edge* EdgeItem::modelEdge() const {
+    return m_modelEdge;
+}
+
+void EdgeItem::setModelEdge(Edge* newModelEdge) {
+    m_modelEdge = newModelEdge;
+}
+
 // remove edge by clicking on it
 void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    delete this;
+    emit edgeSelected(this);
 }

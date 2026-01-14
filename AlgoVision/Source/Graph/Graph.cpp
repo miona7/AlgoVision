@@ -1,5 +1,11 @@
 #include "Graph.h"
 
+Node* Graph::addNode(double x, double y) {
+    unsigned id = m_nodeId++;
+    addNode(id, x, y);
+    return getNode(id);
+}
+
 void Graph::addNode(unsigned id, double x, double y) {
     if(m_nodes.find(id) != m_nodes.end()) {
         return; // cvor vec postoji

@@ -6,6 +6,8 @@
 #include <QTabWidget>
 #include <QUndoCommand>
 #include <QUndoStack>
+#include <UnweightedDirectedGraph.h>
+#include <UnweightedUndirectedGraph.h>
 #include <functional>
 
 #include "AlgorithmTab.h"
@@ -37,6 +39,8 @@ namespace {
 
 GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 
+    m_graph = new UnweightedDirectedGraph();
+
     m_undoStack = new QUndoStack(this);
 
     // main splitter for the left and right page sides
@@ -47,12 +51,15 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     // leftPlaceholder->setAlignment(Qt::AlignCenter);
     // leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
 
-    m_leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
-    m_leftPlaceholder->setAlignment(Qt::AlignCenter);
-    m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
+    // m_leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
+    // m_leftPlaceholder->setAlignment(Qt::AlignCenter);
+    // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
+    // splitter->addWidget(m_leftPlaceholder);
 
-    // splitter->addWidget(leftPlaceholder);
-    splitter->addWidget(m_leftPlaceholder);
+    m_scene = new GraphScene(m_graph, splitter);
+    m_view  = new QGraphicsView(splitter);
+    m_view->setScene(m_scene);
+    splitter->addWidget(m_view);
 
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
@@ -81,20 +88,36 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 
     connect(m_undoStack, &QUndoStack::canRedoChanged, m_editTab, &GraphEditTab::setRedoEnabled);
 
-    // Dummy test
-    connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
-        const int before = m_dummyState;
-        const int after  = before + 1;
+    connect(m_editTab, &GraphEditTab::addRequested, this, &GraphEditor::onAddRequestTrigger);
 
-        m_undoStack->push(new LambdaCommand(
-            [this, after]() {
-                m_dummyState = after;
-                m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
-            },
-            [this, before]() {
-                m_dummyState = before;
-                m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
-            },
-            "Add dummy"));
-    });
+    connect(m_editTab, &GraphEditTab::removeRequested, this, &GraphEditor::onRemoveRequestTrigger);
+
+    // Dummy test
+    // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
+    //     const int before = m_dummyState;
+    //     const int after  = before + 1;
+
+    //     m_undoStack->push(new LambdaCommand(
+    //         [this, after]() {
+    //             m_dummyState = after;
+    //             m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
+    //         },
+    //         [this, before]() {
+    //             m_dummyState = before;
+    //             m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
+    //         },
+    //         "Add dummy"));
+    // });
+}
+
+GraphEditor::~GraphEditor() {
+    delete m_graph;
+}
+
+void GraphEditor::onAddRequestTrigger() {
+    m_scene->setState(GraphScene::State::ADD);
+}
+
+void GraphEditor::onRemoveRequestTrigger() {
+    m_scene->setState(GraphScene::State::REMOVE);
 }

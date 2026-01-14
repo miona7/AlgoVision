@@ -6,15 +6,11 @@
 
 NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
-    setAcceptedMouseButtons(Qt::LeftButton | Qt::RightButton);
+    setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
     setPos(modelNode->getPosition().first, modelNode->getPosition().second);
 }
 
-// FIX: move removeedge and removenode from destructors to method inside
-//       GraphScene class, which has "controller" role
-//       don't call delete edge inside destructor which again works with the semi-destroyed object
-//       a.k.a object that is in procces of destroying
 NodeItem::~NodeItem() {
     for(auto edge: m_edges) {
         delete edge;
@@ -68,11 +64,6 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) 
 
 // test: right click on node delete itself
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    if(event->button() == Qt::RightButton) {
-        delete this;
-        return;
-    }
-
     m_hasChangePosition = false;
     QGraphicsItem::mousePressEvent(event);
 }
