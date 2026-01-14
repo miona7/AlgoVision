@@ -6,11 +6,11 @@
 class DirectedEdgeItem : public EdgeItem {
 
 public:
-    DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode);
+    DirectedEdgeItem(Edge*, NodeItem*, NodeItem*);
 
     QRectF       boundingRect() const override;
     QPainterPath shape() const override;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+    void         paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 
     QPainterPath edgePath() const override;
 
@@ -19,7 +19,7 @@ private:
     qreal m_arrowSize {20.0};
     qreal m_arrowAngle {M_PI / 6.0};
 
-    QPainterPath arrowPath(const QPainterPath& edgePath) const;
+    QPainterPath arrowPath(const QPainterPath&) const;
     QPointF      calculateNormal() const;
 };
 

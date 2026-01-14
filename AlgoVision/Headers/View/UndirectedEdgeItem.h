@@ -5,11 +5,11 @@
 
 class UndirectedEdgeItem : public EdgeItem {
 public:
-    UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode);
+    UndirectedEdgeItem(Edge*, NodeItem*, NodeItem*);
 
     QRectF       boundingRect() const override;
     QPainterPath shape() const override;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
+    void         paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
     QPainterPath edgePath() const override;
 };
 

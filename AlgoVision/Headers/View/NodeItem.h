@@ -11,29 +11,29 @@ class NodeItem : public QGraphicsObject {
     Q_OBJECT
 
 public:
-    explicit NodeItem(Node* model);
+    explicit NodeItem(Node*);
     ~NodeItem();
 
     Node* modelNode() const;
-    void  setModelNode(Node* newModel);
+    void  setModelNode(Node*);
     qreal radius() const;
-    void  setRadius(qreal newRadius);
-    void  setNodeSelected(bool newNodeSelected);
+    void  setRadius(qreal);
+    void  setNodeSelected(bool);
 
-    void addEdge(EdgeItem* edgeItem);
-    void removeEdge(EdgeItem* edgeItem);
+    void addEdge(EdgeItem*);
+    void removeEdge(EdgeItem*);
 
 signals:
-    void nodeSelected(NodeItem* self);
+    void nodeSelected(NodeItem*);
 
 protected:
     QRectF       boundingRect() const override;
     QPainterPath shape() const override;
-    void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-    QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
-    void     mousePressEvent(QGraphicsSceneMouseEvent* event) override;
-    void     mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
-    void     mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
+    void         paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
+    QVariant     itemChange(GraphicsItemChange, const QVariant&) override;
+    void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    void         mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+    void         mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 
 private:
     Node*           m_modelNode;
