@@ -20,10 +20,10 @@ private:
     void initIcons();
     void updateUiForAlgorithm(const QString& algorithmName);
 
-    QComboBox*   m_algorithmCombo;
+    QComboBox* m_algorithmCombo;
 
-    QLineEdit*   m_startNodeEdit;
-    QLineEdit*   m_endNodeEdit;
+    QLineEdit* m_startNodeEdit;
+    QLineEdit* m_endNodeEdit;
 
     QPushButton* m_helpBtn;
 

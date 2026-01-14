@@ -32,9 +32,9 @@ private:
 
     std::unique_ptr<Serializer> m_serializer;
     std::shared_ptr<Graph>      m_graph;
-    GraphEditor* m_graphEditor = nullptr;
+    GraphEditor*                m_graphEditor = nullptr;
 
-    void initMenuToolBar();
+    void                   initMenuToolBar();
     std::shared_ptr<Graph> createGraph(bool, bool);
 
     // slotovi

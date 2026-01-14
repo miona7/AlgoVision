@@ -6,8 +6,8 @@
 #include <QVariantMap>
 #include <QVector>
 
-#include <set>
 #include <map>
+#include <set>
 #include <vector>
 
 #include "Edge.h"
@@ -43,8 +43,8 @@ public:
     void     fromVariant(const QVariant&) override;
 
 protected:
-    unsigned m_nodeId = 0;
-    unsigned m_edgeId = 0;
+    unsigned                                         m_nodeId     = 0;
+    unsigned                                         m_edgeId     = 0;
     unsigned                                         m_numOfNodes = 0;
     unsigned                                         m_numOfEdges = 0;
     std::map<unsigned, std::map<unsigned, unsigned>> m_adjacencyList;

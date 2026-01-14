@@ -25,14 +25,14 @@ void Graph::removeNode(unsigned id) {
 
     // izlazne grane
     if(m_adjacencyList.find(id) != m_adjacencyList.end()) {
-        for(const auto& [edgeId, _] : m_adjacencyList[id]) {
+        for(const auto& [edgeId, _]: m_adjacencyList[id]) {
             edgesToRemove.insert(edgeId);
         }
     }
 
     // ulazne grane
-    for(const auto& [_, neighbors] : m_adjacencyList) {
-        for(const auto& [edgeId, to] : neighbors) {
+    for(const auto& [_, neighbors]: m_adjacencyList) {
+        for(const auto& [edgeId, to]: neighbors) {
             if(to == id) {
                 edgesToRemove.insert(edgeId);
             }
@@ -40,7 +40,7 @@ void Graph::removeNode(unsigned id) {
     }
 
     // obrisi sve grane
-    for(unsigned edgeId : edgesToRemove) {
+    for(unsigned edgeId: edgesToRemove) {
         removeEdge(edgeId);
     }
 

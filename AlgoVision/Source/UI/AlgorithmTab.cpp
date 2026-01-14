@@ -8,37 +8,30 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QStyle>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QStyle>
 
 AlgorithmTab::AlgorithmTab(QWidget* parent)
-    : QWidget(parent),
-      m_algorithmCombo(new QComboBox(this)),
-      m_startNodeEdit(new QLineEdit(this)),
-      m_endNodeEdit(new QLineEdit(this)),
-      m_helpBtn(new QPushButton("help", this)),
-      m_prevBtn(new QToolButton(this)),
-      m_playBtn(new QToolButton(this)),
-      m_pauseBtn(new QToolButton(this)),
-      m_nextBtn(new QToolButton(this)),
-      m_restartBtn(new QToolButton(this))
-{
+    : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startNodeEdit(new QLineEdit(this)),
+      m_endNodeEdit(new QLineEdit(this)), m_helpBtn(new QPushButton("help", this)),
+      m_prevBtn(new QToolButton(this)), m_playBtn(new QToolButton(this)),
+      m_pauseBtn(new QToolButton(this)), m_nextBtn(new QToolButton(this)),
+      m_restartBtn(new QToolButton(this)) {
     initLayout();
     initIcons();
 
     updateUiForAlgorithm(m_algorithmCombo->currentText());
 
-    connect(m_algorithmCombo, &QComboBox::currentTextChanged,
-            this, &AlgorithmTab::updateUiForAlgorithm);
+    connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
+            &AlgorithmTab::updateUiForAlgorithm);
 }
 
-void AlgorithmTab::initLayout()
-{
+void AlgorithmTab::initLayout() {
     auto* mainLayout = new QVBoxLayout(this);
 
     // algorithm choice
-    auto* chooseAlgoBox = new QGroupBox("choose algorithm", this);
+    auto* chooseAlgoBox    = new QGroupBox("choose algorithm", this);
     auto* chooseAlgoLayout = new QVBoxLayout(chooseAlgoBox);
 
     m_algorithmCombo->addItem("A*");
@@ -56,7 +49,7 @@ void AlgorithmTab::initLayout()
 
     // algorithm attributes
     auto* attributesBox = new QGroupBox("algorithm attributes", this);
-    auto* formLayout = new QFormLayout(attributesBox);
+    auto* formLayout    = new QFormLayout(attributesBox);
 
     m_startNodeEdit->setPlaceholderText("e.g. 0");
     m_endNodeEdit->setPlaceholderText("e.g. 5");
@@ -105,8 +98,7 @@ void AlgorithmTab::initLayout()
     mainLayout->addStretch();
 }
 
-void AlgorithmTab::initIcons()
-{
+void AlgorithmTab::initIcons() {
     m_prevBtn->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
     m_playBtn->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     m_pauseBtn->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
@@ -114,18 +106,12 @@ void AlgorithmTab::initIcons()
     m_restartBtn->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
 }
 
-void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName)
-{
-    const bool needsStart =
-        algorithmName == "BFS" ||
-        algorithmName == "DFS" ||
-        algorithmName == "Dijkstra" ||
-        algorithmName == "Bellman-Ford" ||
-        algorithmName == "Prim" ||
-        algorithmName == "A*";
+void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
+    const bool needsStart = algorithmName == "BFS" || algorithmName == "DFS" ||
+                            algorithmName == "Dijkstra" || algorithmName == "Bellman-Ford" ||
+                            algorithmName == "Prim" || algorithmName == "A*";
 
-    const bool needsEnd =
-        algorithmName == "A*";
+    const bool needsEnd = algorithmName == "A*";
 
     m_startNodeEdit->setEnabled(needsStart);
     m_endNodeEdit->setEnabled(needsEnd);
