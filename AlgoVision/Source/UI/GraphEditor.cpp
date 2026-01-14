@@ -7,6 +7,7 @@
 #include <QUndoCommand>
 #include <QUndoStack>
 #include <UnweightedDirectedGraph.h>
+#include <UnweightedUndirectedGraph.h>
 #include <functional>
 
 #include "AlgorithmTab.h"

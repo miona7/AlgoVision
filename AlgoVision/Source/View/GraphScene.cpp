@@ -78,12 +78,12 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
 }
 
 void GraphScene::removeEdge(EdgeItem* edge) {
-    // m_graph->removeEdge(edge->modelEdge()->getId());
+    m_graph->removeEdge(edge->modelEdge()->getId());
     delete edge;
 }
 
 void GraphScene::removeNode(NodeItem* node) {
-    // m_graph->removeNode(node->modelNode()->getId());
+    //m_graph->removeNode(node->modelNode()->getId());
     delete node;
 }
 

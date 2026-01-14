@@ -1,7 +1,7 @@
 #include "Graph.h"
 
 Node* Graph::addNode(double x, double y) {
-    unsigned id = m_numOfNodes;
+    unsigned id = m_nodeId++;
     addNode(id, x, y);
     return getNode(id);
 }
