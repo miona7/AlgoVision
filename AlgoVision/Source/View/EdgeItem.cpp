@@ -1,5 +1,5 @@
-#include <EdgeItem.h>
-#include <NodeItem.h>
+#include "EdgeItem.h"
+#include "NodeItem.h"
 
 EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
     : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode) {
@@ -11,18 +11,14 @@ EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
     adjust();
 
     if(m_modelEdge != nullptr) {
-        m_observerId = m_modelEdge->addObserver(
-            [this](Edge&) {
-                this->onEdgeUpdated();
-            }
-        );
+        m_observerId = m_modelEdge->addObserver([this](Edge&) { this->onEdgeUpdated(); });
     }
 }
 
 EdgeItem::~EdgeItem() {
-    if(m_modelEdge != nullptr) {
-        m_modelEdge->removeObserver(m_observerId);
-    }
+    // if(m_modelEdge != nullptr) {
+    //     m_modelEdge->removeObserver(m_observerId);
+    // }
 
     m_sourceNode->removeEdge(this);
     m_destNode->removeEdge(this);

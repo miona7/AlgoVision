@@ -1,8 +1,9 @@
 #ifndef EDGEITEM_H
 #define EDGEITEM_H
 
-#include <Edge.h>
 #include <QGraphicsObject>
+
+#include "Edge.h"
 
 class NodeItem;
 
@@ -27,6 +28,7 @@ signals:
 
 protected:
     Edge* m_modelEdge;
+    // std::shared_ptr<Edge> m_modelEdge;
 
     NodeItem* m_sourceNode;
     NodeItem* m_destNode;
@@ -38,9 +40,9 @@ protected:
 
     unsigned m_observerId = 0;
 
-    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
     const QColor calculateColor() const;
-    void onEdgeUpdated();
+    void         onEdgeUpdated();
 };
 
 #endif // EDGEITEM_H

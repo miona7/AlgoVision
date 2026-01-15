@@ -1,8 +1,9 @@
-#include <EdgeItem.h>
-#include <NodeItem.h>
 #include <QGraphicsSceneEvent>
 #include <QPainter>
 #include <QPen>
+
+#include "EdgeItem.h"
+#include "NodeItem.h"
 
 NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
@@ -12,11 +13,7 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
 
     // observer
     if(m_modelNode != nullptr) {
-        m_observerId = m_modelNode->addObserver(
-            [this](Node&) {
-                this->onNodeUpdated();
-            }
-        );
+        m_observerId = m_modelNode->addObserver([this](Node&) { this->onNodeUpdated(); });
     }
 }
 
@@ -25,7 +22,7 @@ NodeItem::~NodeItem() {
         m_modelNode->removeObserver(m_observerId);
     }
 
-    for(auto edge: m_edges) {
+    for(auto* edge: m_edges) {
         delete edge;
     }
 
@@ -71,7 +68,7 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) {
     switch(change) {
     case QGraphicsItem::ItemPositionHasChanged:
-        for(auto edge: m_edges) {
+        for(auto* edge: m_edges) {
             edge->adjust();
         }
 

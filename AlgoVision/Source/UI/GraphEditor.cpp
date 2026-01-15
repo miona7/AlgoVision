@@ -1,17 +1,17 @@
-#include "GraphEditor.h"
-
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QSplitter>
 #include <QTabWidget>
 #include <QUndoCommand>
 #include <QUndoStack>
-#include <UnweightedDirectedGraph.h>
-#include <UnweightedUndirectedGraph.h>
+
 #include <functional>
 
 #include "AlgorithmTab.h"
 #include "GraphEditTab.h"
+#include "GraphEditor.h"
+#include "UnweightedDirectedGraph.h"
+#include "UnweightedUndirectedGraph.h"
 
 namespace {
     class LambdaCommand : public QUndoCommand {
@@ -23,12 +23,14 @@ namespace {
         }
 
         void redo() override {
-            if(m_redo)
+            if(m_redo) {
                 m_redo();
+            }
         }
         void undo() override {
-            if(m_undo)
+            if(m_undo) {
                 m_undo();
+            }
         }
 
     private:

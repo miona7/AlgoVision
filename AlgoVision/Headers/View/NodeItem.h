@@ -1,9 +1,10 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
-#include <AppConstants.h>
-#include <Node.h>
 #include <QGraphicsObject>
+
+#include "AppConstants.h"
+#include "Node.h"
 
 class EdgeItem;
 
@@ -47,7 +48,7 @@ private:
     unsigned m_observerId = 0;
 
     const QColor calculateColor() const;
-    void onNodeUpdated();
+    void         onNodeUpdated();
 };
 
 #endif // NODEITEM_H

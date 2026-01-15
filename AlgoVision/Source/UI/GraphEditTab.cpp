@@ -1,10 +1,10 @@
-#include "GraphEditTab.h"
-
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>
 #include <QSlider>
 #include <QVBoxLayout>
+
+#include "GraphEditTab.h"
 
 GraphEditTab::GraphEditTab(QWidget* parent)
     : QWidget(parent), m_addBtn(new QPushButton("add", this)),

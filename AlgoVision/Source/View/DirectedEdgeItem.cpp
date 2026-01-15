@@ -1,6 +1,7 @@
-#include <DirectedEdgeItem.h>
 #include <QPainter>
 #include <QPen>
+
+#include "DirectedEdgeItem.h"
 
 DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
     : EdgeItem(modelEdge, sourceNode, destNode) {

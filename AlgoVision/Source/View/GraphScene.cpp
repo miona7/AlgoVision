@@ -1,11 +1,12 @@
-#include <DirectedEdgeItem.h>
-#include <Edge.h>
-#include <EdgeItem.h>
-#include <GraphScene.h>
-#include <Node.h>
-#include <NodeItem.h>
 #include <QGraphicsSceneMouseEvent>
-#include <UndirectedEdgeItem.h>
+
+#include "DirectedEdgeItem.h"
+#include "Edge.h"
+#include "EdgeItem.h"
+#include "GraphScene.h"
+#include "Node.h"
+#include "NodeItem.h"
+#include "UndirectedEdgeItem.h"
 
 GraphScene::GraphScene(Graph* graph, QObject* parent) : m_graph(graph), QGraphicsScene(parent) {
     setSceneRect(0, 0, 3000, 3000);
