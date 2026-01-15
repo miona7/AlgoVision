@@ -9,9 +9,20 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
     setPos(modelNode->getPosition().first, modelNode->getPosition().second);
+
+    // observer
+    m_observerId = m_modelNode->addObserver(
+        [this](Node& node) {
+            onNodeUpdated(node);
+        }
+    );
 }
 
 NodeItem::~NodeItem() {
+    if(m_modelNode != nullptr) {
+        m_modelNode->removeObserver(m_observerId);
+    }
+
     for(auto edge: m_edges) {
         delete edge;
     }
@@ -39,7 +50,15 @@ QPainterPath NodeItem::shape() const {
 }
 
 void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-    QPen   pen(Qt::black, m_borderWidth);
+    QPen pen(Qt::black, m_borderWidth);
+
+    /*
+    if(m_nodeSelected) {
+        pen.setColor(Qt::red);
+        pen.setWidth(m_borderWidth + 2);
+    }
+    */
+
     QBrush brush(calculateColor());
 
     painter->setPen(pen);
@@ -105,5 +124,26 @@ void NodeItem::setRadius(qreal newRadius) {
 }
 
 const QColor NodeItem::calculateColor() const {
-    return (!m_nodeSelected) ? Qt::green : Qt::red;
+    // return (!m_nodeSelected) ? Qt::green : Qt::red;
+
+    if(m_nodeSelected) {
+        return Qt::red;
+    }
+
+    switch(m_modelNode->getState()) {
+    case NodeState::Visited:
+        return Qt::blue;
+    case NodeState::Active:
+        return Qt::yellow;
+    case NodeState::InPath:
+        return Qt::green;
+    case NodeState::AssignedComponent:
+        return Qt::cyan;
+    default:
+        return Qt::lightGray;
+    }
+}
+
+void NodeItem::onNodeUpdated(Node& node) {
+    update();
 }
