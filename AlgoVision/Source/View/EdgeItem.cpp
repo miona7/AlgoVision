@@ -16,9 +16,11 @@ EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
 }
 
 EdgeItem::~EdgeItem() {
-    // if(m_modelEdge != nullptr) {
-    //     m_modelEdge->removeObserver(m_observerId);
-    // }
+    if(m_modelEdge != nullptr && m_observerId != 0) {
+        m_modelEdge->removeObserver(m_observerId);
+        m_observerId = 0;
+        m_modelEdge = nullptr; // sprecavamo ponovno pozivanje
+    }
 
     m_sourceNode->removeEdge(this);
     m_destNode->removeEdge(this);
@@ -73,5 +75,8 @@ const QColor EdgeItem::calculateColor() const {
 }
 
 void EdgeItem::onEdgeUpdated() {
+    if(scene() == nullptr) {
+        return;
+    }
     update();
 }

@@ -20,8 +20,11 @@ public:
 
 protected:
     void notifyObservers(T& subject) {
-        for(auto& [_, observer]: m_observers) {
-            observer(subject);
+        auto observersCopy = m_observers;
+        for(auto& [_, observer]: observersCopy) {
+            if(observer) {
+                observer(subject);
+            }
         }
     }
 

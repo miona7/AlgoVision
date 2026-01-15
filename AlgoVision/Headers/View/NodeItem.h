@@ -45,7 +45,7 @@ private:
     bool  m_hasChangePosition {false};
     bool  m_nodeSelected {false};
 
-    unsigned m_observerId = 0;
+    unsigned m_observerId {0};
 
     const QColor calculateColor() const;
     void         onNodeUpdated();
