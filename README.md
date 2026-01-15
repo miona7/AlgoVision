@@ -41,6 +41,7 @@ Ovakav način rada omogućava detaljno razumevanje svakog algoritma i lak povrat
 
 Korisnik može da prilagodi izgled i ponašanje aplikacije:
 
+- ✏️ Interaktivno dodavanje i brisanje čvorova i grana
 - 🔘 Podešavanje veličine čvorova
 - 🎨 Vizuelno razlikovanje stanja čvorova i grana (posećen, aktivan, deo puta, relaksiran, itd.)
 - 🌗 Promena izgleda i teme aplikacije
