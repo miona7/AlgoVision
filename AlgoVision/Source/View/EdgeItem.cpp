@@ -9,9 +9,21 @@ EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
     m_sourceNode->addEdge(this);
     m_destNode->addEdge(this);
     adjust();
+
+    if(m_modelEdge != nullptr) {
+        m_observerId = m_modelEdge->addObserver(
+            [this](Edge&) {
+                this->onEdgeUpdated();
+            }
+        );
+    }
 }
 
 EdgeItem::~EdgeItem() {
+    if(m_modelEdge != nullptr) {
+        m_modelEdge->removeObserver(m_observerId);
+    }
+
     m_sourceNode->removeEdge(this);
     m_destNode->removeEdge(this);
 }
@@ -43,4 +55,25 @@ void EdgeItem::setModelEdge(Edge* newModelEdge) {
 // remove edge by clicking on it
 void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     emit edgeSelected(this);
+}
+
+const QColor EdgeItem::calculateColor() const {
+    if(m_modelEdge == nullptr) {
+        return Qt::black; // fallback ako grana ne postoji
+    }
+
+    switch(m_modelEdge->getState()) {
+    case EdgeState::Examined:
+        return Qt::blue;
+    case EdgeState::Relaxed:
+        return Qt::green;
+    case EdgeState::Selected:
+        return Qt::red;
+    default:
+        return Qt::black;
+    }
+}
+
+void EdgeItem::onEdgeUpdated() {
+    update();
 }

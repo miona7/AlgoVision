@@ -23,4 +23,4 @@ private:
     QPointF      calculateNormal() const;
 };
 
-#endif // DIRECTED_EDGEITEM
+#endif // DIRECTED_EDGEITEM_H

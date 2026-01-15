@@ -28,7 +28,9 @@ QPainterPath UndirectedEdgeItem::shape() const {
 
 void UndirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                                QWidget* widget) {
-    QPen pen(Qt::black, m_penWidth);
+    // QPen pen(Qt::black, m_penWidth);
+    auto color = calculateColor();
+    QPen pen(color, m_penWidth);
     painter->setPen(pen);
     painter->drawPath(edgePath());
 }

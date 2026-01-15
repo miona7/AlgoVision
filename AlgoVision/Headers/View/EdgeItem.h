@@ -11,7 +11,7 @@ class EdgeItem : public QGraphicsObject {
 
 public:
     EdgeItem(Edge*, NodeItem*, NodeItem*);
-    virtual ~EdgeItem();
+    virtual ~EdgeItem() override;
 
     void                 adjust();
     virtual QPainterPath edgePath() const                                                     = 0;
@@ -36,7 +36,11 @@ protected:
     qreal m_penWidth {2};
     qreal m_shapeStroke {20.0};
 
+    unsigned m_observerId = 0;
+
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    const QColor calculateColor() const;
+    void onEdgeUpdated();
 };
 
 #endif // EDGEITEM_H

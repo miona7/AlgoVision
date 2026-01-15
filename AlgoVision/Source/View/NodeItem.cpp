@@ -14,7 +14,7 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     if(m_modelNode != nullptr) {
         m_observerId = m_modelNode->addObserver(
             [this](Node&) {
-                onNodeUpdated();
+                this->onNodeUpdated();
             }
         );
     }
