@@ -11,11 +11,13 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setPos(modelNode->getPosition().first, modelNode->getPosition().second);
 
     // observer
-    m_observerId = m_modelNode->addObserver(
-        [this](Node& node) {
-            onNodeUpdated(node);
-        }
-    );
+    if(m_modelNode != nullptr) {
+        m_observerId = m_modelNode->addObserver(
+            [this](Node&) {
+                onNodeUpdated();
+            }
+        );
+    }
 }
 
 NodeItem::~NodeItem() {
@@ -144,6 +146,6 @@ const QColor NodeItem::calculateColor() const {
     }
 }
 
-void NodeItem::onNodeUpdated(Node& node) {
+void NodeItem::onNodeUpdated() {
     update();
 }
