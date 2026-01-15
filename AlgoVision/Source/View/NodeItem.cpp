@@ -133,12 +133,14 @@ const QColor NodeItem::calculateColor() const {
     }
 
     switch(m_modelNode->getState()) {
-    case NodeState::Visited:
-        return Qt::blue;
     case NodeState::Active:
         return Qt::yellow;
+    case NodeState::Visited:
+        return Qt::blue;
     case NodeState::InPath:
         return Qt::green;
+    case NodeState::TopologicalOrder:
+        return Qt::darkYellow;
     case NodeState::AssignedComponent:
         return Qt::cyan;
     default:
