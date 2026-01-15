@@ -175,7 +175,7 @@ Edge* Graph::getEdge(unsigned from, unsigned to) {
 }
 
 const Edge* Graph::getEdge(unsigned from, unsigned to) const {
-    for(auto& [_, edge]: m_edges) {
+    for(const auto& [_, edge]: m_edges) {
         if(edge.startNode() == from && edge.endNode() == to) {
             return &edge;
         }
