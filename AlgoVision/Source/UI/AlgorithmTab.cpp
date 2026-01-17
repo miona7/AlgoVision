@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QStyle>
 #include <QToolButton>
@@ -27,6 +28,30 @@ AlgorithmTab::AlgorithmTab(QWidget* parent)
 
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
             &AlgorithmTab::updateUiForAlgorithm);
+
+    connect(m_helpBtn, &QPushButton::clicked, this, [this]() {
+        const QString helpText =
+            "Algorithm Tab — Help\n\n"
+            "Use this tab to select an algorithm and control its execution on the graph displayed "
+            "in the main area.\n\n"
+            "1. Choose algorithm\n"
+            "Select an algorithm from the drop-down list.\n\n"
+            "2. Algorithm attributes\n"
+            "If the selected algorithm requires extra input, enter the requested values (e.g., "
+            "start node / end node).\n"
+            "If no parameters are needed, you will see: \"No additional input needed.\".\n\n"
+            "3. Help\n"
+            "Press Help at any time to review these instructions.\n\n"
+            "4. Run algorithm\n"
+            "Use the control buttons to navigate through the algorithm:\n"
+            "- Previous step: go one step back\n"
+            "- Play: run continuously\n"
+            "- Pause: pause execution\n"
+            "- Next step: advance one step\n"
+            "- Restart: reset execution to the beginning\n\n";
+
+        QMessageBox::information(this, "Algorithm Tab Help", helpText);
+    });
 }
 
 void AlgorithmTab::initLayout() {
