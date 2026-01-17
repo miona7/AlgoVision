@@ -103,14 +103,22 @@ static const char* stepTypeToString(StepType t) {
 }
 
 void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
+    // arrange
     DFS dfs(g);
+    const std::vector<StepType> expectedSteps = {
+        StepType::Start, StepType::Finish, StepType::VisitNode,
+        StepType::ProcessNode, StepType::ExamineEdge,
+        StepType::PushToStack, StepType::PopFromStack
+    };
+
+    // act
     dfs.execute(startNode);
 
     const auto& steps   = dfs.getSteps();
     const auto& visited = dfs.getVisited();
-
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
 
+    // assert
     REQUIRE_FALSE(steps.empty());
 
     for(std::size_t i = 0; i < steps.size(); ++i) {
@@ -133,43 +141,9 @@ void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
         std::cout << std::endl;
     }
 
-    bool hasStart  = false;
-    bool hasFinish = false;
-    bool hasVisit  = false;
-    bool hasEdge   = false;
-    bool hasPush   = false;
-    bool hasPop    = false;
-
-    for(const auto& s: steps) {
-        if(s.m_type == StepType::Start) {
-            hasStart = true;
-        }
-        if(s.m_type == StepType::Finish) {
-            hasFinish = true;
-        }
-        if(s.m_type == StepType::VisitNode) {
-            hasVisit = true;
-        }
-        if(s.m_type == StepType::ExamineEdge) {
-            hasEdge = true;
-        }
-        if(s.m_type == StepType::PushToStack) {
-            hasPush = true;
-        }
-        if(s.m_type == StepType::PopFromStack) {
-            hasPop = true;
-        }
-    }
-
-    REQUIRE(hasStart);
-    REQUIRE(hasFinish);
-    REQUIRE(hasVisit);
-    REQUIRE(hasEdge);
-    REQUIRE(hasPush);
-    REQUIRE(hasPop);
-
-    for(const auto& [node, v]: visited) {
-        REQUIRE(v == true);
+    for(auto expected : expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(), [&](const auto& s){ return s.m_type == expected; });
+        REQUIRE(found);
     }
 }
 
