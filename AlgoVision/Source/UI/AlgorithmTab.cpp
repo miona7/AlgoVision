@@ -100,15 +100,11 @@ void AlgorithmTab::initLayout() {
 
     mainLayout->addWidget(attributesBox);
 
-    // help
-    m_helpBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    mainLayout->addWidget(m_helpBtn);
-
-    // separator
-    auto* separator = new QFrame(this);
-    separator->setFrameShape(QFrame::HLine);
-    separator->setFrameShadow(QFrame::Sunken);
-    mainLayout->addWidget(separator);
+    // separator 1
+    auto* separator1 = new QFrame(this);
+    separator1->setFrameShape(QFrame::HLine);
+    separator1->setFrameShadow(QFrame::Sunken);
+    mainLayout->addWidget(separator1);
 
     // run algorithm
     auto* runLabel = new QLabel("run algorithm", this);
@@ -136,6 +132,17 @@ void AlgorithmTab::initLayout() {
     runLayout->addWidget(m_restartBtn);
 
     mainLayout->addLayout(runLayout);
+
+    // separator 2
+    auto* separator2 = new QFrame(this);
+    separator2->setFrameShape(QFrame::HLine);
+    separator2->setFrameShadow(QFrame::Sunken);
+    mainLayout->addWidget(separator2);
+
+    // help
+    m_helpBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    mainLayout->addWidget(m_helpBtn);
+
     mainLayout->addStretch();
 }
 
