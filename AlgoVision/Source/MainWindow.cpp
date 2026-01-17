@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <QFile>
 #include <QFileDialog>
 #include <QJsonDocument>
@@ -7,6 +5,9 @@
 #include <QPushButton>
 #include <QString>
 #include <QVariantMap>
+#include <QVBoxLayout>
+
+#include <iostream>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -18,7 +19,7 @@
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
-#include <QVBoxLayout>
+
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()) {
@@ -74,16 +75,6 @@ MainWindow::~MainWindow() {
     delete m_ui;
 }
 
-std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected) {
-    if(isWeighted && isDirected)
-        return std::make_shared<WeightedDirectedGraph>();
-    if(isWeighted && !isDirected)
-        return std::make_shared<WeightedUndirectedGraph>();
-    if(!isWeighted && isDirected)
-        return std::make_shared<UnweightedDirectedGraph>();
-    return std::make_shared<UnweightedUndirectedGraph>();
-}
-
 void MainWindow::onOpenGraphTriggered() {
     QString filePath = QFileDialog::getOpenFileName(this, "open graph", "", "graph files (*.json)");
 
@@ -92,8 +83,7 @@ void MainWindow::onOpenGraphTriggered() {
         return;
     }
 
-    QMessageBox::information(this, "graph opened", "selected file: " + filePath);
-    if(!m_serializer) {
+    if(m_serializer == nullptr) {
         QMessageBox::warning(this, "error", "serializer is not initialized");
         return;
     }
@@ -151,23 +141,20 @@ void MainWindow::onSaveGraphTriggered() {
         filePath += ".json";
     }
 
-    // kreiranje fajla
-    QFile file(filePath);
-    if(file.open(QIODevice::WriteOnly)) {
-        QTextStream out(&file);
-        out << "{}";
-        file.close();
-        QMessageBox::information(this, "saved", "graph saved to: " + filePath);
-    } else {
-        QMessageBox::warning(this, "error", "could not save file: " + filePath);
-    }
-    if(!m_graph || !m_serializer) {
+    if(m_graph == nullptr || m_serializer == nullptr) {
         QMessageBox::warning(this, "error", "graph/serializer is not initialized");
         return;
     }
 
-    m_serializer->save(*m_graph, filePath, m_graph->isWeighted(), m_graph->isDirected());
-    QMessageBox::information(this, "saved", "graph saved to: " + filePath);
+    // kreiranje fajla
+    QFile file(filePath);
+    if(file.open(QIODevice::WriteOnly)) {
+        file.close();
+        m_serializer->save(*m_graph, filePath, m_graph->isWeighted(), m_graph->isDirected());
+        QMessageBox::information(this, "saved", "graph saved to: " + filePath);
+    } else {
+        QMessageBox::warning(this, "error", "could not save file: " + filePath);
+    }
 }
 
 void MainWindow::onSaveImageTriggered() {
@@ -231,4 +218,17 @@ void MainWindow::initMenuToolBar() {
             &MainWindow::onSaveImageTriggered);
     connect(m_menuToolBar->changeThemeAction(), &QAction::triggered, this,
             &MainWindow::onChangeThemeTriggered);
+}
+
+std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected) {
+    if(isWeighted && isDirected) {
+        return std::make_shared<WeightedDirectedGraph>();
+    }
+    if(isWeighted && !isDirected) {
+        return std::make_shared<WeightedUndirectedGraph>();
+    }
+    if(!isWeighted && isDirected) {
+        return std::make_shared<UnweightedDirectedGraph>();
+    }
+    return std::make_shared<UnweightedUndirectedGraph>();
 }
