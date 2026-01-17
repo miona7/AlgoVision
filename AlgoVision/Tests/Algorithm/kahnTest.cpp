@@ -5,6 +5,7 @@
 #include "UnweightedDirectedGraph.h"
 
 TEST_CASE("Kahn topological sort on acyclic graph", "[KAHN]") {
+    // arrange
     auto graph = std::make_shared<UnweightedDirectedGraph>();
 
     for(unsigned i = 1; i <= 5; ++i) {
@@ -18,10 +19,15 @@ TEST_CASE("Kahn topological sort on acyclic graph", "[KAHN]") {
     graph->addEdge(4, 5);
 
     Kahn kahn(graph);
+    int expectedSize = 5;
+
+    // act
     REQUIRE_NOTHROW(kahn.execute());
 
     auto sorted = kahn.getSorted();
-    REQUIRE(sorted.size() == 5);
+
+    // assert
+    REQUIRE(sorted.size() == expectedSize);
 
     auto pos = std::map<unsigned, unsigned>();
     for(unsigned i = 0; i < sorted.size(); ++i)
@@ -35,6 +41,7 @@ TEST_CASE("Kahn topological sort on acyclic graph", "[KAHN]") {
 }
 
 TEST_CASE("Kahn throws on cyclic graph", "[KAHN]") {
+    // arrange
     auto graph = std::make_shared<UnweightedDirectedGraph>();
 
     graph->addNode(1);
@@ -46,6 +53,8 @@ TEST_CASE("Kahn throws on cyclic graph", "[KAHN]") {
     graph->addEdge(3, 1);
 
     Kahn kahn(graph);
+
+    // act + assert
     REQUIRE_THROWS_WITH(kahn.execute(), "Graph contains a cycle, topological sort not possible!");
 }
 
@@ -74,13 +83,21 @@ static const char* stepTypeToString(StepType t) {
 }
 
 void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph>& g) {
+    // arrange
     Kahn kahn(g);
+    const std::vector<StepType> expectedSteps = {
+        StepType::Start, StepType::Finish,
+        StepType::ProcessNode, StepType::AddToTopologicalOrder,
+        StepType::PushToQueue, StepType::PopFromQueue
+    };
+
+    // act
     REQUIRE_NOTHROW(kahn.execute());
 
     const auto& steps = kahn.getSteps();
-
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
 
+    // assert
     REQUIRE_FALSE(steps.empty());
 
     for(size_t i = 0; i < steps.size(); ++i) {
@@ -102,43 +119,14 @@ void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph>& g) {
         std::cout << std::endl;
     }
 
-    bool hasStart        = false;
-    bool hasFinish       = false;
-    bool hasProcess      = false;
-    bool hasPushToQueue  = false;
-    bool hasPopFromQueue = false;
-    bool hasAddTopOrder  = false;
-
-    for(const auto& s: steps) {
-        if(s.m_type == StepType::Start) {
-            hasStart = true;
-        }
-        if(s.m_type == StepType::Finish) {
-            hasFinish = true;
-        }
-        if(s.m_type == StepType::ProcessNode) {
-            hasProcess = true;
-        }
-        if(s.m_type == StepType::PushToQueue) {
-            hasPushToQueue = true;
-        }
-        if(s.m_type == StepType::PopFromQueue) {
-            hasPopFromQueue = true;
-        }
-        if(s.m_type == StepType::AddToTopologicalOrder) {
-            hasAddTopOrder = true;
-        }
+    for(auto expected : expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(), [&](const auto& s){ return s.m_type == expected; });
+        REQUIRE(found);
     }
-
-    REQUIRE(hasStart);
-    REQUIRE(hasFinish);
-    REQUIRE(hasProcess);
-    REQUIRE(hasPushToQueue);
-    REQUIRE(hasPopFromQueue);
-    REQUIRE(hasAddTopOrder);
 }
 
 TEST_CASE("Kahn steps test", "[KAHN]") {
+    // arrange
     auto graph = std::make_shared<UnweightedDirectedGraph>();
 
     for(unsigned i = 1; i <= 5; ++i) {
@@ -151,5 +139,6 @@ TEST_CASE("Kahn steps test", "[KAHN]") {
     graph->addEdge(2, 4);
     graph->addEdge(4, 5);
 
+    // act + assert
     runKahnLoggingTest(graph);
 }
