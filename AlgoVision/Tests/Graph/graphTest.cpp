@@ -5,6 +5,8 @@
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
+#include "Node.h"
+#include "Edge.h"
 
 TEST_CASE("UnweightedDirectedGraph - add/remove edge", "[Graph]") {
     // arrange
@@ -13,10 +15,12 @@ TEST_CASE("UnweightedDirectedGraph - add/remove edge", "[Graph]") {
     // act
     g.addNode(1);
     g.addNode(2);
+    g.addNode(1);
 
     // assert
     REQUIRE(g.isDirected());
     REQUIRE_FALSE(g.isWeighted());
+    REQUIRE(g.getNodes().size() == 2);
 
     // act
     g.addEdge(1, 2);
@@ -47,10 +51,12 @@ TEST_CASE("UnweightedUndirectedGraph - add/remove edge", "[Graph]") {
     // act
     g.addNode(1);
     g.addNode(2);
+    g.addNode(1);
 
     // assert
     REQUIRE_FALSE(g.isDirected());
     REQUIRE_FALSE(g.isWeighted());
+    REQUIRE(g.getNodes().size() == 2);
 
     // act
     g.addEdge(1, 2);
@@ -82,10 +88,12 @@ TEST_CASE("WeightedDirectedGraph - add/remove edge", "[Graph]") {
     // act
     g.addNode(1);
     g.addNode(2);
+    g.addNode(1);
 
     // assert
     REQUIRE(g.isDirected());
     REQUIRE(g.isWeighted());
+    REQUIRE(g.getNodes().size() == 2);
 
     // act
     g.addEdge(1, 2, 7);
@@ -116,10 +124,12 @@ TEST_CASE("WeightedUndirectedGraph - add/remove edge", "[Graph]") {
     // act
     g.addNode(1);
     g.addNode(2);
+    g.addNode(1);
 
     // assert
     REQUIRE_FALSE(g.isDirected());
     REQUIRE(g.isWeighted());
+    REQUIRE(g.getNodes().size() == 2);
 
     // act
     g.addEdge(1, 2, 10);
@@ -304,3 +314,259 @@ TEST_CASE("removeNode on non-existing node does nothing", "[Graph]") {
     REQUIRE(g.getNodes().size() == 2);
     REQUIRE(g.getEdges().empty());
 }
+
+TEST_CASE("Testing getNode and getEdge", "[Graph]") {
+
+    SECTION("Unweighted Directed Graph") {
+        // arrange
+        UnweightedDirectedGraph g;
+
+        g.addNode(1);
+        g.addNode(2);
+
+        // act
+        auto* node1 = g.getNode(1);
+        auto* node2 = g.getNode(999);
+
+        auto* edge1 = g.getEdge(1, 2);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE(node2 == nullptr);
+        REQUIRE(edge1 == nullptr);
+
+        // act
+        g.addEdge(1, 2);
+        edge1 = g.getEdge(1, 2);
+        auto* edge2 = g.getEdge(2, 1);
+
+        // assert
+        REQUIRE_FALSE(edge1 == nullptr);
+        REQUIRE(edge2 == nullptr);
+    }
+
+    SECTION("Unweighted Undirected Graph") {
+        // arrange
+        UnweightedUndirectedGraph g;
+        g.addNode(1);
+        g.addNode(2);
+
+        // act
+        auto* node1 = g.getNode(1);
+        auto* node2 = g.getNode(999);
+        auto* edge1 = g.getEdge(1, 2);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE(node2 == nullptr);
+        REQUIRE(edge1 == nullptr);
+
+        // act
+        g.addEdge(1, 2);
+        edge1 = g.getEdge(1, 2);
+        auto* edge2 = g.getEdge(2, 1);
+
+        // assert
+        REQUIRE_FALSE(edge1 == nullptr);
+        REQUIRE_FALSE(edge2 == nullptr);
+    }
+
+    SECTION("Weighted Directed Graph") {
+        // arrange
+        WeightedDirectedGraph g;
+        g.addNode(1);
+        g.addNode(2);
+
+        // act
+        auto* node1 = g.getNode(1);
+        auto* node2 = g.getNode(999);
+        auto* edge1 = g.getEdge(1, 2);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE(node2 == nullptr);
+        REQUIRE(edge1 == nullptr);
+
+        // act
+        g.addEdge(1, 2, 5);
+        edge1 = g.getEdge(1, 2);
+        auto* edge2 = g.getEdge(2, 1);
+
+        // assert
+        REQUIRE_FALSE(edge1 == nullptr);
+        REQUIRE(edge1->getWeight() == 5);
+        REQUIRE(edge2 == nullptr);
+    }
+
+    SECTION("Weighted Undirected Graph") {
+        // arrange
+        WeightedUndirectedGraph g;
+        g.addNode(1);
+        g.addNode(2);
+
+        // act
+        auto* node1 = g.getNode(1);
+        auto* node2 = g.getNode(999);
+        auto* edge1 = g.getEdge(1, 2);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE(node2 == nullptr);
+        REQUIRE(edge1 == nullptr);
+
+        // act
+        g.addEdge(1, 2, 10);
+        edge1 = g.getEdge(1, 2);
+        auto* edge2 = g.getEdge(2, 1);
+
+        // assert
+        REQUIRE_FALSE(edge1 == nullptr);
+        REQUIRE(edge1->getWeight() == 10);
+        REQUIRE_FALSE(edge2 == nullptr);
+    }
+}
+
+TEST_CASE("Testing const getNode and getEdge coverage", "[Graph]") {
+
+    SECTION("Unweighted Directed Graph") {
+        // arrange
+        UnweightedDirectedGraph g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addEdge(1, 2);
+        const auto& cg = g;
+
+        // act
+        const Node* node1 = cg.getNode(1);
+        const Node* node2 = cg.getNode(999);
+        const Edge* edge1 = cg.getEdge(1, 2);
+        const Edge* edge2 = cg.getEdge(2, 1);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE(node2 == nullptr);
+        REQUIRE_FALSE(edge1 == nullptr);
+        REQUIRE(edge2 == nullptr); // directed
+    }
+
+    SECTION("Unweighted Undirected Graph") {
+        // arrange
+        UnweightedUndirectedGraph g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addEdge(1, 2);
+        const auto& cg = g;
+
+        // act
+        const Node* node1 = cg.getNode(1);
+        const Node* node2 = cg.getNode(999);
+        const Edge* edge1 = cg.getEdge(1, 2);
+        const Edge* edge2 = cg.getEdge(2, 1);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE(node2 == nullptr);
+        REQUIRE_FALSE(edge1 == nullptr);
+        REQUIRE_FALSE(edge2 == nullptr);
+    }
+
+    SECTION("Weighted Directed Graph") {
+        // arrange
+        WeightedDirectedGraph g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addEdge(1, 2, 5);
+        const auto& cg = g;
+
+        // act
+        const Node* node1 = cg.getNode(1);
+        const Node* node2 = cg.getNode(999);
+        const Edge* edge1 = cg.getEdge(1, 2);
+        const Edge* edge2 = cg.getEdge(2, 1);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE(node2 == nullptr);
+        REQUIRE_FALSE(edge1 == nullptr);
+        REQUIRE(edge1->getWeight() == 5);
+        REQUIRE(edge2 == nullptr);
+    }
+
+    SECTION("Weighted Undirected Graph") {
+        // arrange
+        WeightedUndirectedGraph g;
+        g.addNode(1);
+        g.addNode(2);
+        g.addEdge(1, 2, 10);
+        const auto& cg = g;
+
+        // act
+        const Node* node1 = cg.getNode(1);
+        const Node* node2 = cg.getNode(999);
+        const Edge* edge1 = cg.getEdge(1, 2);
+        const Edge* edge2 = cg.getEdge(2, 1);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE(node2 == nullptr);
+        REQUIRE_FALSE(edge1 == nullptr);
+        REQUIRE(edge1->getWeight() == 10);
+        REQUIRE_FALSE(edge2 == nullptr);
+    }
+}
+
+TEST_CASE("Testing addNode(position)", "[Graph]") {
+
+    SECTION("Unweighted Directed Graph") {
+        // arrange
+        UnweightedDirectedGraph g;
+
+        // act
+        Node* node1 = g.addNode(1.5, 2.5);
+        Node* node2 = g.addNode(3.0, 4.0);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE_FALSE(node2 == nullptr);
+    }
+
+    SECTION("Unweighted Undirected Graph") {
+        // arrange
+        UnweightedUndirectedGraph g;
+
+        // act
+        Node* node1 = g.addNode(1.5, 2.5);
+        Node* node2 = g.addNode(3.0, 4.0);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE_FALSE(node2 == nullptr);
+    }
+
+    SECTION("Weighted Directed Graph") {
+        // arrange
+        WeightedDirectedGraph g;
+
+        // act
+        Node* node1 = g.addNode(1.5, 2.5);
+        Node* node2 = g.addNode(3.0, 4.0);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE_FALSE(node2 == nullptr);
+    }
+
+    SECTION("Weighted Undirected Graph") {
+        // arrange
+        WeightedUndirectedGraph g;
+
+        // act
+        Node* node1 = g.addNode(1.5, 2.5);
+        Node* node2 = g.addNode(3.0, 4.0);
+
+        // assert
+        REQUIRE_FALSE(node1 == nullptr);
+        REQUIRE_FALSE(node2 == nullptr);
+    }
+}
+
