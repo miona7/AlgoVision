@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class QComboBox;
+class QLabel;
 class QLineEdit;
 class QPushButton;
 class QToolButton;
@@ -18,8 +19,15 @@ public:
 private:
     QComboBox* m_algorithmCombo;
 
+    QWidget*  m_startRow;
+    QLabel*   m_startLabel;
     QLineEdit* m_startNodeEdit;
+
+    QWidget*  m_endRow;
+    QLabel*   m_endLabel;
     QLineEdit* m_endNodeEdit;
+
+    QLabel* m_noInputLabel;
 
     QPushButton* m_helpBtn;
 
