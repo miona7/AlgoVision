@@ -1,7 +1,6 @@
 #include "AlgorithmTab.h"
 
 #include <QComboBox>
-#include <QFormLayout>
 #include <QFrame>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -13,8 +12,11 @@
 #include <QVBoxLayout>
 
 AlgorithmTab::AlgorithmTab(QWidget* parent)
-    : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startNodeEdit(new QLineEdit(this)),
-      m_endNodeEdit(new QLineEdit(this)), m_helpBtn(new QPushButton("help", this)),
+    : QWidget(parent), m_algorithmCombo(new QComboBox(this)),
+      m_startRow(new QWidget(this)), m_startLabel(new QLabel("start node:", this)),
+      m_startNodeEdit(new QLineEdit(this)), m_endRow(new QWidget(this)),
+      m_endLabel(new QLabel("end node:", this)), m_endNodeEdit(new QLineEdit(this)),
+      m_noInputLabel(new QLabel(this)), m_helpBtn(new QPushButton("help", this)),
       m_prevBtn(new QToolButton(this)), m_playBtn(new QToolButton(this)),
       m_pauseBtn(new QToolButton(this)), m_nextBtn(new QToolButton(this)),
       m_restartBtn(new QToolButton(this)) {
@@ -48,14 +50,28 @@ void AlgorithmTab::initLayout() {
     mainLayout->addWidget(chooseAlgoBox);
 
     // algorithm attributes
-    auto* attributesBox = new QGroupBox("algorithm attributes", this);
-    auto* formLayout    = new QFormLayout(attributesBox);
+    auto* attributesBox    = new QGroupBox("algorithm attributes", this);
+    auto* attributesLayout = new QVBoxLayout(attributesBox);
 
+    // start row (label + edit) as one widget
+    auto* startRowLayout = new QHBoxLayout(m_startRow);
+    startRowLayout->addWidget(m_startLabel);
+    startRowLayout->addWidget(m_startNodeEdit);
     m_startNodeEdit->setPlaceholderText("e.g. 0");
-    m_endNodeEdit->setPlaceholderText("e.g. 5");
+    attributesLayout->addWidget(m_startRow);
 
-    formLayout->addRow("start node:", m_startNodeEdit);
-    formLayout->addRow("end node:", m_endNodeEdit);
+    // end row (label + edit) as one widget
+    auto* endRowLayout = new QHBoxLayout(m_endRow);
+    endRowLayout->addWidget(m_endLabel);
+    endRowLayout->addWidget(m_endNodeEdit);
+    m_endNodeEdit->setPlaceholderText("e.g. 5");
+    attributesLayout->addWidget(m_endRow);
+
+    // message when no input needed
+    m_noInputLabel->setText("No additional input needed.");
+    m_noInputLabel->setWordWrap(true);
+    m_noInputLabel->hide();
+    attributesLayout->addWidget(m_noInputLabel);
 
     mainLayout->addWidget(attributesBox);
 
@@ -113,20 +129,32 @@ void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
 
     const bool needsEnd = algorithmName == "A*";
 
-    m_startNodeEdit->setEnabled(needsStart);
-    m_endNodeEdit->setEnabled(needsEnd);
-
-    if(!needsStart) {
+    // show/hide whole rows
+    if(!needsStart && !needsEnd) {
         m_startNodeEdit->clear();
-        m_startNodeEdit->setPlaceholderText("no parameters required");
-    } else {
-        m_startNodeEdit->setPlaceholderText("e.g. 0");
+        m_endNodeEdit->clear();
+
+        m_startRow->hide();
+        m_endRow->hide();
+        m_noInputLabel->show();
+        return;
     }
 
-    if(!needsEnd) {
-        m_endNodeEdit->clear();
-        m_endNodeEdit->setPlaceholderText(needsStart ? "not required" : "no parameters required");
+    m_noInputLabel->hide();
+
+    if(needsStart) {
+        m_startRow->show();
+        m_startNodeEdit->setPlaceholderText("e.g. 0");
     } else {
+        m_startNodeEdit->clear();
+        m_startRow->hide();
+    }
+
+    if(needsEnd) {
+        m_endRow->show();
         m_endNodeEdit->setPlaceholderText("e.g. 5");
+    } else {
+        m_endNodeEdit->clear();
+        m_endRow->hide();
     }
 }
