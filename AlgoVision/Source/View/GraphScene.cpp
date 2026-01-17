@@ -83,7 +83,7 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     // delete edge;
 
     const unsigned edgeId = edge->modelEdge()->getId();
-    delete edge;                 // prvo uklanja observer
+    delete edge; // prvo uklanja observer
     m_graph->removeEdge(edgeId);
 }
 

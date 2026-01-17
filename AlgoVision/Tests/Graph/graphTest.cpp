@@ -1,12 +1,12 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch_all.hpp>
 
+#include "Edge.h"
+#include "Node.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
-#include "Node.h"
-#include "Edge.h"
 
 TEST_CASE("UnweightedDirectedGraph - add/remove edge", "[Graph]") {
     // arrange
@@ -60,8 +60,8 @@ TEST_CASE("UnweightedUndirectedGraph - add/remove edge", "[Graph]") {
 
     // act
     g.addEdge(1, 2);
-    auto edges = g.getEdges();    
-    auto adj = g.getAdjacencyList();
+    auto edges = g.getEdges();
+    auto adj   = g.getAdjacencyList();
 
     // assert
     REQUIRE(edges.size() == 1);
@@ -97,9 +97,9 @@ TEST_CASE("WeightedDirectedGraph - add/remove edge", "[Graph]") {
 
     // act
     g.addEdge(1, 2, 7);
-    auto edges = g.getEdges();
-    const auto& e = edges.begin()->second;
-    auto adj = g.getAdjacencyList();
+    auto        edges = g.getEdges();
+    const auto& e     = edges.begin()->second;
+    auto        adj   = g.getAdjacencyList();
 
     // assert
     REQUIRE(edges.size() == 1);
@@ -133,10 +133,10 @@ TEST_CASE("WeightedUndirectedGraph - add/remove edge", "[Graph]") {
 
     // act
     g.addEdge(1, 2, 10);
-    auto edges = g.getEdges();
-    const auto& e = edges.begin()->second;
-    auto adj = g.getAdjacencyList();
-    unsigned edgeId = edges.begin()->first;
+    auto        edges  = g.getEdges();
+    const auto& e      = edges.begin()->second;
+    auto        adj    = g.getAdjacencyList();
+    unsigned    edgeId = edges.begin()->first;
 
     // assert
     REQUIRE(edges.size() == 1);
@@ -337,7 +337,7 @@ TEST_CASE("Testing getNode and getEdge", "[Graph]") {
 
         // act
         g.addEdge(1, 2);
-        edge1 = g.getEdge(1, 2);
+        edge1       = g.getEdge(1, 2);
         auto* edge2 = g.getEdge(2, 1);
 
         // assert
@@ -363,7 +363,7 @@ TEST_CASE("Testing getNode and getEdge", "[Graph]") {
 
         // act
         g.addEdge(1, 2);
-        edge1 = g.getEdge(1, 2);
+        edge1       = g.getEdge(1, 2);
         auto* edge2 = g.getEdge(2, 1);
 
         // assert
@@ -389,7 +389,7 @@ TEST_CASE("Testing getNode and getEdge", "[Graph]") {
 
         // act
         g.addEdge(1, 2, 5);
-        edge1 = g.getEdge(1, 2);
+        edge1       = g.getEdge(1, 2);
         auto* edge2 = g.getEdge(2, 1);
 
         // assert
@@ -416,7 +416,7 @@ TEST_CASE("Testing getNode and getEdge", "[Graph]") {
 
         // act
         g.addEdge(1, 2, 10);
-        edge1 = g.getEdge(1, 2);
+        edge1       = g.getEdge(1, 2);
         auto* edge2 = g.getEdge(2, 1);
 
         // assert
@@ -569,4 +569,3 @@ TEST_CASE("Testing addNode(position)", "[Graph]") {
         REQUIRE_FALSE(node2 == nullptr);
     }
 }
-

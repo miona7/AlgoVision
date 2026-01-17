@@ -21,7 +21,7 @@ NodeItem::~NodeItem() {
     if(m_modelNode != nullptr && m_observerId != 0) {
         m_modelNode->removeObserver(m_observerId);
         m_observerId = 0;
-        m_modelNode = nullptr;
+        m_modelNode  = nullptr;
     }
 
     for(auto* edge: m_edges) {

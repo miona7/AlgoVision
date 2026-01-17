@@ -19,7 +19,7 @@ EdgeItem::~EdgeItem() {
     if(m_modelEdge != nullptr && m_observerId != 0) {
         m_modelEdge->removeObserver(m_observerId);
         m_observerId = 0;
-        m_modelEdge = nullptr; // sprecavamo ponovno pozivanje
+        m_modelEdge  = nullptr; // sprecavamo ponovno pozivanje
     }
 
     m_sourceNode->removeEdge(this);

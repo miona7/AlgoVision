@@ -4,8 +4,8 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QString>
-#include <QVariantMap>
 #include <QVBoxLayout>
+#include <QVariantMap>
 
 #include <iostream>
 
@@ -19,7 +19,6 @@
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
-
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()) {

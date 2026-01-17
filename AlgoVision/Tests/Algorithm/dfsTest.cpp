@@ -104,12 +104,10 @@ static const char* stepTypeToString(StepType t) {
 
 void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     // arrange
-    DFS dfs(g);
+    DFS                         dfs(g);
     const std::vector<StepType> expectedSteps = {
-        StepType::Start, StepType::Finish, StepType::VisitNode,
-        StepType::ProcessNode, StepType::ExamineEdge,
-        StepType::PushToStack, StepType::PopFromStack
-    };
+        StepType::Start,       StepType::Finish,      StepType::VisitNode,   StepType::ProcessNode,
+        StepType::ExamineEdge, StepType::PushToStack, StepType::PopFromStack};
 
     // act
     dfs.execute(startNode);
@@ -141,8 +139,9 @@ void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
         std::cout << std::endl;
     }
 
-    for(auto expected : expectedSteps) {
-        bool found = std::any_of(steps.begin(), steps.end(), [&](const auto& s){ return s.m_type == expected; });
+    for(auto expected: expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 }
