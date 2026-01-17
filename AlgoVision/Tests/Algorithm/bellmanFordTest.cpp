@@ -32,6 +32,7 @@ static const char* stepTypeToString(StepType t) {
 }
 
 TEST_CASE("Bellman-Ford without negative cycle", "[BF]") {
+    // arrange
     auto graph = std::make_shared<WeightedDirectedGraph>();
 
     for(unsigned i = 1; i <= 5; ++i) {
@@ -45,11 +46,18 @@ TEST_CASE("Bellman-Ford without negative cycle", "[BF]") {
     graph->addEdge(4, 5, 2);
 
     BellmanFord bf(graph);
+
+    // act
     REQUIRE_NOTHROW(bf.execute(1));
-    REQUIRE_FALSE(bf.hasNegativeCycle());
+
+    bool negativeCycle = bf.hasNegativeCycle();
+
+    // assert
+    REQUIRE_FALSE(negativeCycle);
 }
 
 TEST_CASE("Bellman-Ford with negative cycle", "[BF]") {
+    // arrange
     auto graph = std::make_shared<WeightedDirectedGraph>();
 
     for(unsigned i = 1; i <= 3; ++i) {
@@ -61,39 +69,58 @@ TEST_CASE("Bellman-Ford with negative cycle", "[BF]") {
     graph->addEdge(3, 1, -2);
 
     BellmanFord bf(graph);
+
+    // act
     REQUIRE_NOTHROW(bf.execute(1));
-    REQUIRE(bf.hasNegativeCycle());
+
+    bool negativeCycle = bf.hasNegativeCycle();
+
+    // assert
+    REQUIRE(negativeCycle);
 }
 
 TEST_CASE("Bellman-Ford on invalid graph", "[BF]") {
+    // arrange
     auto wud = std::make_shared<WeightedUndirectedGraph>();
+
     wud->addNode(1);
     wud->addNode(2);
     wud->addEdge(1, 2, 6);
 
     BellmanFord bf(wud);
 
+    // act + assert
     REQUIRE_THROWS_AS(bf.execute(1), std::runtime_error);
 }
 
 TEST_CASE("Bellman-Ford: start node does not exist", "[BF]") {
+    // arrange
     auto graph = std::make_shared<WeightedDirectedGraph>();
+
     for(unsigned i = 1; i <= 2; ++i) {
         graph->addNode(i);
     }
 
     BellmanFord bf(graph);
+
+    // act + assert
     REQUIRE_THROWS_AS(bf.execute(0), std::runtime_error);
 }
 
 TEST_CASE("Bellman-Ford: empty graph", "[BF]") {
+    // arrange
     auto        graph = std::make_shared<WeightedDirectedGraph>();
+
     BellmanFord bf(graph);
+
+    // act + assert
     REQUIRE_THROWS_AS(bf.execute(0), std::runtime_error);
 }
 
 TEST_CASE("Bellman-Ford: graph with disconnected nodes", "[BF]") {
+    // arrange
     auto graph = std::make_shared<WeightedDirectedGraph>();
+
     for(unsigned i = 1; i <= 4; ++i) {
         graph->addNode(i);
     }
@@ -102,6 +129,8 @@ TEST_CASE("Bellman-Ford: graph with disconnected nodes", "[BF]") {
     graph->addEdge(2, 3, 2);
 
     BellmanFord bf(graph);
+
+    // act + assert
     REQUIRE_NOTHROW(bf.execute(1));
 }
 

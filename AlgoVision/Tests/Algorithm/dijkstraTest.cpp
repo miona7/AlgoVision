@@ -119,13 +119,21 @@ static const char* stepTypeToString(StepType t) {
 }
 
 void runDijkstraLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
+    // arrange
     Dijkstra dijkstra(g);
+    const std::vector<StepType> expectedSteps = {
+        StepType::Start, StepType::Finish, StepType::VisitNode,
+        StepType::ProcessNode, StepType::ExamineEdge, StepType::UpdateDistance,
+        StepType::PushToQueue, StepType::PopFromQueue
+    };
+
+    // act
     REQUIRE_NOTHROW(dijkstra.execute(startNode));
 
     const auto& steps = dijkstra.getSteps();
-
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
 
+    // assert
     REQUIRE_FALSE(steps.empty());
 
     for(size_t i = 0; i < steps.size(); ++i) {
@@ -147,91 +155,76 @@ void runDijkstraLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode)
         std::cout << std::endl;
     }
 
-    bool hasStart        = false;
-    bool hasFinish       = false;
-    bool hasVisit        = false;
-    bool hasEdge         = false;
-    bool hasUpdate       = false;
-    bool hasPushToQueue  = false;
-    bool hasPopFromQueue = false;
-
-    for(const auto& s: steps) {
-        if(s.m_type == StepType::Start) {
-            hasStart = true;
-        }
-        if(s.m_type == StepType::Finish) {
-            hasFinish = true;
-        }
-        if(s.m_type == StepType::VisitNode) {
-            hasVisit = true;
-        }
-        if(s.m_type == StepType::ExamineEdge) {
-            hasEdge = true;
-        }
-        if(s.m_type == StepType::UpdateDistance) {
-            hasUpdate = true;
-        }
-        if(s.m_type == StepType::PushToQueue) {
-            hasPushToQueue = true;
-        }
-        if(s.m_type == StepType::PopFromQueue) {
-            hasPopFromQueue = true;
-        }
+    for(auto expected : expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(), [&](const auto& s){ return s.m_type == expected; });
+        REQUIRE(found);
     }
-
-    REQUIRE(hasStart);
-    REQUIRE(hasFinish);
-    REQUIRE(hasVisit);
-    REQUIRE(hasEdge);
-    REQUIRE(hasUpdate);
-    REQUIRE(hasPushToQueue);
-    REQUIRE(hasPopFromQueue);
 }
 
 TEST_CASE("Dijkstra steps test on all graph types", "[DIJKSTRA]") {
 
-    auto udg = std::make_shared<UnweightedDirectedGraph>();
-    for(unsigned i = 1; i <= 5; ++i) {
-        udg->addNode(i);
-    }
-    udg->addEdge(1, 2);
-    udg->addEdge(1, 3);
-    udg->addEdge(2, 4);
-    udg->addEdge(3, 4);
-    udg->addEdge(4, 5);
-    runDijkstraLoggingTest(udg, 1);
+    SECTION("Unweighted Directed Graph") {
+        auto udg = std::make_shared<UnweightedDirectedGraph>();
 
-    auto uug = std::make_shared<UnweightedUndirectedGraph>();
-    for(unsigned i = 1; i <= 5; ++i) {
-        uug->addNode(i);
-    }
-    uug->addEdge(1, 2);
-    uug->addEdge(1, 3);
-    uug->addEdge(2, 4);
-    uug->addEdge(3, 4);
-    uug->addEdge(4, 5);
-    runDijkstraLoggingTest(uug, 1);
+        for(unsigned i = 1; i <= 5; ++i) {
+            udg->addNode(i);
+        }
 
-    auto wdg = std::make_shared<WeightedDirectedGraph>();
-    for(unsigned i = 1; i <= 6; ++i) {
-        wdg->addNode(i);
-    }
-    wdg->addEdge(1, 2, 2);
-    wdg->addEdge(1, 3, 5);
-    wdg->addEdge(2, 4, 1);
-    wdg->addEdge(3, 4, 2);
-    wdg->addEdge(4, 5, 1);
-    wdg->addEdge(5, 6, 3);
-    runDijkstraLoggingTest(wdg, 1);
+        udg->addEdge(1, 2);
+        udg->addEdge(1, 3);
+        udg->addEdge(2, 4);
+        udg->addEdge(3, 4);
+        udg->addEdge(4, 5);
 
-    auto wug = std::make_shared<WeightedUndirectedGraph>();
-    for(unsigned i = 1; i <= 5; ++i) {
-        wug->addNode(i);
+        runDijkstraLoggingTest(udg, 1);
     }
-    wug->addEdge(1, 2, 2);
-    wug->addEdge(1, 3, 4);
-    wug->addEdge(2, 4, 1);
-    wug->addEdge(3, 4, 3);
-    wug->addEdge(4, 5, 5);
-    runDijkstraLoggingTest(wug, 1);
+
+    SECTION("Unweighted Unirected Graph") {
+        auto uug = std::make_shared<UnweightedUndirectedGraph>();
+
+        for(unsigned i = 1; i <= 5; ++i) {
+            uug->addNode(i);
+        }
+
+        uug->addEdge(1, 2);
+        uug->addEdge(1, 3);
+        uug->addEdge(2, 4);
+        uug->addEdge(3, 4);
+        uug->addEdge(4, 5);
+
+        runDijkstraLoggingTest(uug, 1);
+    }
+
+    SECTION("Weighted Directed Graph") {
+        auto wdg = std::make_shared<WeightedDirectedGraph>();
+
+        for(unsigned i = 1; i <= 6; ++i) {
+            wdg->addNode(i);
+        }
+
+        wdg->addEdge(1, 2, 2);
+        wdg->addEdge(1, 3, 5);
+        wdg->addEdge(2, 4, 1);
+        wdg->addEdge(3, 4, 2);
+        wdg->addEdge(4, 5, 1);
+        wdg->addEdge(5, 6, 3);
+
+        runDijkstraLoggingTest(wdg, 1);
+    }
+
+    SECTION("Weighted Undirected Graph") {
+        auto wug = std::make_shared<WeightedUndirectedGraph>();
+
+        for(unsigned i = 1; i <= 5; ++i) {
+            wug->addNode(i);
+        }
+
+        wug->addEdge(1, 2, 2);
+        wug->addEdge(1, 3, 4);
+        wug->addEdge(2, 4, 1);
+        wug->addEdge(3, 4, 3);
+        wug->addEdge(4, 5, 5);
+
+        runDijkstraLoggingTest(wug, 1);
+    }
 }
