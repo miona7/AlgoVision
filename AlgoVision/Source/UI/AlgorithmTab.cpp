@@ -107,10 +107,8 @@ void AlgorithmTab::initLayout() {
     mainLayout->addWidget(separator1);
 
     // run algorithm
-    auto* runLabel = new QLabel("run algorithm", this);
-    mainLayout->addWidget(runLabel);
-
-    auto* runLayout = new QHBoxLayout();
+    auto* runBox    = new QGroupBox("run algorithm", this);
+    auto* runLayout = new QHBoxLayout(runBox);
     runLayout->setSpacing(6);
 
     m_prevBtn->setToolTip("previous step");
@@ -131,7 +129,7 @@ void AlgorithmTab::initLayout() {
     runLayout->addWidget(m_nextBtn);
     runLayout->addWidget(m_restartBtn);
 
-    mainLayout->addLayout(runLayout);
+    mainLayout->addWidget(runBox);
 
     // separator 2
     auto* separator2 = new QFrame(this);
