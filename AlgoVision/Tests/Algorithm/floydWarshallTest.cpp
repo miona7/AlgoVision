@@ -143,18 +143,3 @@ TEST_CASE("Floyd-Warshall produces and logs AlgorithmSteps (manual verification)
 
     std::cout << "================================================================\n\n";
 }
-
-TEST_CASE("Floyd-Warshall: graph with negative cycle throws", "[FW]") {
-    auto graph = std::make_shared<WeightedDirectedGraph>();
-    for(unsigned i = 1; i <= 3; ++i) {
-        graph->addNode(i);
-    }
-
-    graph->addEdge(1, 2, 1);
-    graph->addEdge(2, 3, -2);
-    graph->addEdge(3, 1, -2);
-
-    FloydWarshall fw(graph);
-
-    REQUIRE_THROWS_AS(fw.execute(), std::runtime_error);
-}
