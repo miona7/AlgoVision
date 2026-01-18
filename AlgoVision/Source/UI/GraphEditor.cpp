@@ -94,6 +94,7 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 
     connect(m_editTab, &GraphEditTab::removeRequested, this, &GraphEditor::onRemoveRequestTrigger);
 
+    connect(m_editTab, &GraphEditTab::clearRequested, this, &GraphEditor::onClearRequestTrigger);
     // Dummy test
     // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
     //     const int before = m_dummyState;
@@ -124,4 +125,9 @@ void GraphEditor::onAddRequestTrigger() {
 void GraphEditor::onRemoveRequestTrigger() {
     m_scene->resetScene();
     m_scene->setState(GraphScene::State::REMOVE);
+}
+
+void GraphEditor::onClearRequestTrigger() {
+    m_scene->resetScene();
+    m_scene->clearScene();
 }

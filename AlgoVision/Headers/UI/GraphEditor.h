@@ -21,6 +21,7 @@ public:
 private slots:
     void onAddRequestTrigger();
     void onRemoveRequestTrigger();
+    void onClearRequestTrigger();
 
 private:
     QUndoStack*    m_undoStack       = nullptr;
