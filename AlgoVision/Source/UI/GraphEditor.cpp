@@ -128,6 +128,10 @@ void GraphEditor::onRemoveRequestTrigger() {
 }
 
 void GraphEditor::onClearRequestTrigger() {
+    clear();
+}
+
+void GraphEditor::clear() const {
     m_scene->resetScene();
     m_scene->clearScene();
 }

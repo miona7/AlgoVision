@@ -31,6 +31,8 @@ private:
     GraphScene*    m_scene           = nullptr;
     Graph*         m_graph           = nullptr;
 
+    void clear() const;
+
     int m_dummyState = 0; // samo za test
 };
 
