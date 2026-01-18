@@ -1,19 +1,19 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
+#include <AppConstants.h>
+#include <Node.h>
 #include <QGraphicsObject>
 
-#include "AppConstants.h"
-#include "Node.h"
-
 class EdgeItem;
+class EditableTextItem;
 
 class NodeItem : public QGraphicsObject {
     Q_OBJECT
 
 public:
     explicit NodeItem(Node*);
-    ~NodeItem() override;
+    ~NodeItem();
 
     Node* modelNode() const;
     void  setModelNode(Node*);
@@ -23,6 +23,9 @@ public:
 
     void addEdge(EdgeItem*);
     void removeEdge(EdgeItem*);
+
+    EditableTextItem* label() const;
+    void              setLabel(EditableTextItem* newLabel);
 
 signals:
     void nodeSelected(NodeItem*);
@@ -35,15 +38,21 @@ protected:
     void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void         mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
     void         mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+    void         mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+
+private slots:
+    void onNameChanged(const QString& name) const;
 
 private:
-    Node*           m_modelNode;
-    QSet<EdgeItem*> m_edges;
+    Node*             m_modelNode;
+    EditableTextItem* m_label;
+    QSet<EdgeItem*>   m_edges;
 
     qreal m_radius {AppConstants::defaultRadius};
     qreal m_borderWidth {AppConstants::defaultBorderWidth};
     bool  m_hasChangePosition {false};
     bool  m_nodeSelected {false};
+    bool  m_ignoreNextMouseRealese {false};
 
     unsigned m_observerId {0};
 

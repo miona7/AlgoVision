@@ -1,3 +1,4 @@
+#include <EditableTextItem.h>
 #include <QGraphicsSceneEvent>
 #include <QPainter>
 #include <QPen>
@@ -10,6 +11,14 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
     setPos(modelNode->getPosition().first, modelNode->getPosition().second);
+
+    // node name
+    m_label = new EditableTextItem(this);
+    m_label->setPlainText(m_modelNode->getName());
+    m_label->setTextWidth(2 * m_radius);
+    m_label->setDefaultTextColor(Qt::black);
+    m_label->centerText();
+    connect(m_label, &EditableTextItem::textCommited, this, &NodeItem::onNameChanged);
 
     // observer
     if(m_modelNode != nullptr) {
@@ -94,13 +103,59 @@ void NodeItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-    if(!m_hasChangePosition) {
+    if(!m_hasChangePosition && !m_ignoreNextMouseRealese) {
         m_nodeSelected = !m_nodeSelected;
         update();
         emit nodeSelected(this);
     }
 
+    if(m_ignoreNextMouseRealese) {
+        m_ignoreNextMouseRealese = false;
+    }
+
     QGraphicsItem::mouseReleaseEvent(event);
+}
+
+/*
+    mouseDoubleClickEvent se sastoji iz naredna 4 dogadjaja ovim redom:
+        1. mousePressEvent
+        2. mouseRealeseEvent
+        3. mouseDoubleClickEvent
+        4. mouseReleaseEvent
+
+ Problem je sto mouseReleaseEvent ima select logiku koja se koristi i pri dodavanju grana,
+ a to ne zelimo da se desava kada hocemo da izvrsimo rename logiku sa duplim klikom.
+
+ Ne postoji nacin kako da se prvi mouseRealeseEvent spreci jer se ne zna da li ce se izvrsiti
+ mouseDoubleClickEvent ili ne, pa ga izvrsavamo, ali ako se desi mouseDoubleClickEvent ponavo
+ izvrsavamo logiku mouseReleaseEvent-a, jer sva logika i u nodeItem i u GrahiScene u okviru
+selectNode() metode je takva da se sa ponovnim izvrsavanjem sa istim argumentima ponistava.
+
+ ignoreNextMouseRelease flag omogucuje da se ignorise drugi mouseReleaseEvent koji se desava
+nakon mouseDoubleClickEvent-a
+*/
+void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
+    event->accept();
+    m_label->startEditing();
+    m_ignoreNextMouseRealese = true;
+
+    m_nodeSelected = !m_nodeSelected;
+    update();
+    emit nodeSelected(this);
+}
+
+void NodeItem::onNameChanged(const QString& name) const {
+    m_modelNode->setName(name);
+    QRectF r = m_label->boundingRect();
+    m_label->setPos(-r.width() / 2, -r.height() / 2);
+}
+
+EditableTextItem* NodeItem::label() const {
+    return m_label;
+}
+
+void NodeItem::setLabel(EditableTextItem* newLabel) {
+    m_label = newLabel;
 }
 
 void NodeItem::setNodeSelected(bool newNodeSelected) {
@@ -143,7 +198,7 @@ const QColor NodeItem::calculateColor() const {
     case NodeState::AssignedComponent:
         return Qt::cyan;
     default:
-        return Qt::lightGray;
+        return Qt::green;
     }
 }
 
