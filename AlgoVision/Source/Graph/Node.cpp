@@ -1,6 +1,6 @@
 #include "Node.h"
 
-Node::Node(unsigned id, double x, double y) : m_id(id), m_position {x, y} {
+Node::Node(unsigned id, double x, double y) : m_id(id), m_name(QString("node %1").arg(id)), m_position {x, y} {
 }
 
 unsigned Node::getId() const {
@@ -25,6 +25,14 @@ void Node::setState(NodeState state) {
     }
     m_state = state;
     notifyObservers(*this); // obavestavamo sve posmatrace da se stanje promenilo
+}
+
+QString Node::getName() const {
+    return m_name;
+}
+
+void Node::setName(const QString &newName) {
+    m_name = newName;
 }
 
 std::ostream& operator<<(std::ostream& s, const Node& n) {

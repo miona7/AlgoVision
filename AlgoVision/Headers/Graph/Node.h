@@ -2,7 +2,7 @@
 #define NODE_H
 
 #include <iostream>
-#include <string>
+#include <QString>
 
 #include "Observable.h"
 
@@ -29,8 +29,12 @@ public:
 
     friend std::ostream& operator<<(std::ostream&, const Node&);
 
+    QString getName() const;
+    void setName(const QString &newName);
+
 private:
     unsigned                  m_id;
+    QString m_name;
     std::pair<double, double> m_position; // x, y koordinata cvora
     NodeState                 m_state = NodeState::Default;
 };
