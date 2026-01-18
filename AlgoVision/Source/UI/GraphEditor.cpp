@@ -114,6 +114,7 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 }
 
 GraphEditor::~GraphEditor() {
+    clear();
     delete m_graph;
 }
 
