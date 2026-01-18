@@ -27,6 +27,14 @@ void Node::setState(NodeState state) {
     notifyObservers(*this); // obavestavamo sve posmatrace da se stanje promenilo
 }
 
+QString Node::getName() const {
+    return m_name;
+}
+
+void Node::setName(const QString &newName) {
+    m_name = newName;
+}
+
 std::ostream& operator<<(std::ostream& s, const Node& n) {
     return s << "Node {id = " << n.m_id << "}" << std::endl;
 }
