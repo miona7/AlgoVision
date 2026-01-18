@@ -42,6 +42,8 @@ public:
     QVariant toVariant() const override;
     void     fromVariant(const QVariant&) override;
 
+    void clear();
+
 protected:
     unsigned                                         m_nodeId     = 0;
     unsigned                                         m_edgeId     = 0;
@@ -52,7 +54,6 @@ protected:
     std::map<unsigned, Node> m_nodes;
     std::map<unsigned, Edge> m_edges;
 
-    void clear();
     void addEdgeSerialized(unsigned, unsigned, unsigned, int);
 };
 

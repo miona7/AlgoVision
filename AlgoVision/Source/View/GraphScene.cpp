@@ -59,6 +59,11 @@ void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsScene::mouseDoubleClickEvent(event);
 }
 
+void GraphScene::clearScene() {
+    clear(); // prvo brisemo sve UI iteme + observere
+    m_graph->clear(); // onda brisemo model
+}
+
 void GraphScene::onNodeSelectTrigger(NodeItem* node) {
     if(m_state == State::ADD || m_state == State::EDIT) {
         selectNode(node);

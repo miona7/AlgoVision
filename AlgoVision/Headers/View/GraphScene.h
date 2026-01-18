@@ -18,6 +18,9 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
 
+public slots:
+    void clearScene();
+
 private slots:
     void onNodeSelectTrigger(NodeItem*);
     void onEdgeSelectTrigger(EdgeItem*);
