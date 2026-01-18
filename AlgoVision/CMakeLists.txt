@@ -65,6 +65,7 @@ set(PROJECT_SOURCES
         Headers/View/UndirectedEdgeItem.h Source/View/UndirectedEdgeItem.cpp
         Headers/View/DirectedEdgeItem.h Source/View/DirectedEdgeItem.cpp
         Headers/View/GraphScene.h Source/View/GraphScene.cpp
+        Headers/View/EditableTextItem.h Source/View/EditableTextItem.cpp
 )
 
 qt_add_resources(RESOURCES
