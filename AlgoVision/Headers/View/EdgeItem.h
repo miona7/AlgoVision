@@ -1,8 +1,9 @@
 #ifndef EDGEITEM_H
 #define EDGEITEM_H
 
-#include <Edge.h>
 #include <QGraphicsObject>
+
+#include "Edge.h"
 
 class NodeItem;
 
@@ -11,7 +12,7 @@ class EdgeItem : public QGraphicsObject {
 
 public:
     EdgeItem(Edge*, NodeItem*, NodeItem*);
-    virtual ~EdgeItem();
+    ~EdgeItem() override;
 
     void                 adjust();
     virtual QPainterPath edgePath() const                                                     = 0;
@@ -36,7 +37,11 @@ protected:
     qreal m_penWidth {2};
     qreal m_shapeStroke {20.0};
 
-    void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    unsigned m_observerId {0};
+
+    void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    const QColor calculateColor() const;
+    void         onEdgeUpdated();
 };
 
 #endif // EDGEITEM_H

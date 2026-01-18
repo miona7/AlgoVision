@@ -109,7 +109,7 @@ TEST_CASE("Bellman-Ford: start node does not exist", "[BF]") {
 
 TEST_CASE("Bellman-Ford: empty graph", "[BF]") {
     // arrange
-    auto        graph = std::make_shared<WeightedDirectedGraph>();
+    auto graph = std::make_shared<WeightedDirectedGraph>();
 
     BellmanFord bf(graph);
 

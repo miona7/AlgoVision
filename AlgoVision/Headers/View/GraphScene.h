@@ -1,9 +1,10 @@
 #ifndef GRAPHSCENE_H
 #define GRAPHSCENE_H
 
-#include <Graph.h>
-#include <NodeItem.h>
 #include <QGraphicsScene>
+
+#include "Graph.h"
+#include "NodeItem.h"
 
 class GraphScene : public QGraphicsScene {
 public:

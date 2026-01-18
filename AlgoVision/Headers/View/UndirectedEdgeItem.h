@@ -1,7 +1,7 @@
 #ifndef UNDIRECTED_EDGEITEM_H
 #define UNDIRECTED_EDGEITEM_H
 
-#include <EdgeItem.h>
+#include "EdgeItem.h"
 
 class UndirectedEdgeItem : public EdgeItem {
 public:

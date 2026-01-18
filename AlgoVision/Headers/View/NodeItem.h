@@ -1,9 +1,10 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
-#include <AppConstants.h>
-#include <Node.h>
 #include <QGraphicsObject>
+
+#include "AppConstants.h"
+#include "Node.h"
 
 class EdgeItem;
 
@@ -12,7 +13,7 @@ class NodeItem : public QGraphicsObject {
 
 public:
     explicit NodeItem(Node*);
-    ~NodeItem();
+    ~NodeItem() override;
 
     Node* modelNode() const;
     void  setModelNode(Node*);
@@ -44,7 +45,10 @@ private:
     bool  m_hasChangePosition {false};
     bool  m_nodeSelected {false};
 
+    unsigned m_observerId {0};
+
     const QColor calculateColor() const;
+    void         onNodeUpdated();
 };
 
 #endif // NODEITEM_H

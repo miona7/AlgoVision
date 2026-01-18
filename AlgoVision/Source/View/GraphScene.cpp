@@ -1,11 +1,12 @@
-#include <DirectedEdgeItem.h>
-#include <Edge.h>
-#include <EdgeItem.h>
-#include <GraphScene.h>
-#include <Node.h>
-#include <NodeItem.h>
 #include <QGraphicsSceneMouseEvent>
-#include <UndirectedEdgeItem.h>
+
+#include "DirectedEdgeItem.h"
+#include "Edge.h"
+#include "EdgeItem.h"
+#include "GraphScene.h"
+#include "Node.h"
+#include "NodeItem.h"
+#include "UndirectedEdgeItem.h"
 
 GraphScene::GraphScene(Graph* graph, QObject* parent) : m_graph(graph), QGraphicsScene(parent) {
     setSceneRect(0, 0, 3000, 3000);
@@ -78,13 +79,22 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
 }
 
 void GraphScene::removeEdge(EdgeItem* edge) {
-    m_graph->removeEdge(edge->modelEdge()->getId());
-    delete edge;
+    // m_graph->removeEdge(edge->modelEdge()->getId());
+    // delete edge;
+
+    const unsigned edgeId = edge->modelEdge()->getId();
+    delete edge; // prvo uklanja observer
+    m_graph->removeEdge(edgeId);
 }
 
 void GraphScene::removeNode(NodeItem* node) {
     // m_graph->removeNode(node->modelNode()->getId());
-    delete node;
+    // delete node;
+
+    const unsigned nodeId = node->modelNode()->getId();
+
+    delete node;                 // prvo UI + observer
+    m_graph->removeNode(nodeId); // onda model
 }
 
 void GraphScene::selectNode(NodeItem* node) {

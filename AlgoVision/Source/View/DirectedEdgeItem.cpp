@@ -1,6 +1,7 @@
-#include <DirectedEdgeItem.h>
 #include <QPainter>
 #include <QPen>
+
+#include "DirectedEdgeItem.h"
 
 DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
     : EdgeItem(modelEdge, sourceNode, destNode) {
@@ -35,11 +36,13 @@ void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     }
 
     QPainterPath edge = edgePath();
-    QPen         pen(Qt::black, m_penWidth);
+    // QPen         pen(Qt::black, m_penWidth);
+    auto color = calculateColor();
+    QPen pen(color, m_penWidth);
     painter->setPen(pen);
     painter->drawPath(edge);
 
-    QBrush brush(Qt::black);
+    QBrush brush(color);
     painter->setBrush(brush);
     painter->drawPath(arrowPath(edge));
 }

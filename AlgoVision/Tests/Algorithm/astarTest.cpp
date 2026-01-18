@@ -17,16 +17,16 @@ TEST_CASE("A*: simple path exists", "[AStar]") {
     g->addEdge(3, 4, 3);
     g->addEdge(1, 4, 10);
 
-    AStar astar(g);
+    AStar                 astar(g);
     std::vector<unsigned> expectedPath = {1, 2, 3, 4};
-    int expectedCost = 6;
+    int                   expectedCost = 6;
 
     // act
     REQUIRE_NOTHROW(astar.execute(1, 4));
 
     // assert
     std::vector<unsigned> path = astar.getPath();
-    int cost = astar.getTotalCost();
+    int                   cost = astar.getTotalCost();
 
     REQUIRE(path == expectedPath);
     REQUIRE(cost == expectedCost);
@@ -46,18 +46,18 @@ TEST_CASE("A*: finds shortest path in simple graph", "[AStar]") {
     graph->addEdge(1, 3, 2);
     graph->addEdge(3, 4, 1);
 
-    AStar astar(graph);
+    AStar                 astar(graph);
     std::vector<unsigned> expectedPath1 = {1, 2, 4};
     std::vector<unsigned> expectedPath2 = {1, 3, 4};
-    int expectedCost = 3;
+    int                   expectedCost  = 3;
 
     // act
     REQUIRE_NOTHROW(astar.execute(1, 4));
 
     // assert
-    std::vector<unsigned> path = astar.getPath();
-    int cost = astar.getTotalCost();
-    bool validPath = path == expectedPath1 || path == expectedPath2;
+    std::vector<unsigned> path      = astar.getPath();
+    int                   cost      = astar.getTotalCost();
+    bool                  validPath = path == expectedPath1 || path == expectedPath2;
 
     REQUIRE(validPath);
     REQUIRE(cost == expectedCost);
@@ -119,13 +119,11 @@ static const char* stepTypeToString(StepType t) {
 void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsigned startNode,
                          unsigned goalNode) {
     // arrange
-    AStar astar(g);
+    AStar                       astar(g);
     const std::vector<StepType> expectedSteps = {
-        StepType::Start, StepType::Finish, StepType::VisitNode,
-        StepType::ProcessNode, StepType::AddToPath,
-        StepType::ExamineEdge, StepType::UpdateDistance,
-        StepType::PushToQueue, StepType::PopFromQueue
-    };
+        StepType::Start,          StepType::Finish,      StepType::VisitNode,
+        StepType::ProcessNode,    StepType::AddToPath,   StepType::ExamineEdge,
+        StepType::UpdateDistance, StepType::PushToQueue, StepType::PopFromQueue};
 
     // act
     REQUIRE_NOTHROW(astar.execute(startNode, goalNode));
@@ -155,8 +153,9 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsign
         std::cout << std::endl;
     }
 
-    for(auto expected : expectedSteps) {
-        bool found = std::any_of(steps.begin(), steps.end(), [&](const auto& s){ return s.m_type == expected; });
+    for(auto expected: expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 }

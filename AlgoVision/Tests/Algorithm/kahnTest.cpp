@@ -19,7 +19,7 @@ TEST_CASE("Kahn topological sort on acyclic graph", "[KAHN]") {
     graph->addEdge(4, 5);
 
     Kahn kahn(graph);
-    int expectedSize = 5;
+    int  expectedSize = 5;
 
     // act
     REQUIRE_NOTHROW(kahn.execute());
@@ -84,12 +84,11 @@ static const char* stepTypeToString(StepType t) {
 
 void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph>& g) {
     // arrange
-    Kahn kahn(g);
+    Kahn                        kahn(g);
     const std::vector<StepType> expectedSteps = {
-        StepType::Start, StepType::Finish,
+        StepType::Start,       StepType::Finish,
         StepType::ProcessNode, StepType::AddToTopologicalOrder,
-        StepType::PushToQueue, StepType::PopFromQueue
-    };
+        StepType::PushToQueue, StepType::PopFromQueue};
 
     // act
     REQUIRE_NOTHROW(kahn.execute());
@@ -119,8 +118,9 @@ void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph>& g) {
         std::cout << std::endl;
     }
 
-    for(auto expected : expectedSteps) {
-        bool found = std::any_of(steps.begin(), steps.end(), [&](const auto& s){ return s.m_type == expected; });
+    for(auto expected: expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 }

@@ -1,18 +1,30 @@
-#include <EdgeItem.h>
-#include <NodeItem.h>
 #include <QGraphicsSceneEvent>
 #include <QPainter>
 #include <QPen>
+
+#include "EdgeItem.h"
+#include "NodeItem.h"
 
 NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
     setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
     setPos(modelNode->getPosition().first, modelNode->getPosition().second);
+
+    // observer
+    if(m_modelNode != nullptr) {
+        m_observerId = m_modelNode->addObserver([this](Node&) { this->onNodeUpdated(); });
+    }
 }
 
 NodeItem::~NodeItem() {
-    for(auto edge: m_edges) {
+    if(m_modelNode != nullptr && m_observerId != 0) {
+        m_modelNode->removeObserver(m_observerId);
+        m_observerId = 0;
+        m_modelNode  = nullptr;
+    }
+
+    for(auto* edge: m_edges) {
         delete edge;
     }
 
@@ -39,7 +51,15 @@ QPainterPath NodeItem::shape() const {
 }
 
 void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-    QPen   pen(Qt::black, m_borderWidth);
+    QPen pen(Qt::black, m_borderWidth);
+
+    /*
+    if(m_nodeSelected) {
+        pen.setColor(Qt::red);
+        pen.setWidth(m_borderWidth + 2);
+    }
+    */
+
     QBrush brush(calculateColor());
 
     painter->setPen(pen);
@@ -50,7 +70,7 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) {
     switch(change) {
     case QGraphicsItem::ItemPositionHasChanged:
-        for(auto edge: m_edges) {
+        for(auto* edge: m_edges) {
             edge->adjust();
         }
 
@@ -105,5 +125,31 @@ void NodeItem::setRadius(qreal newRadius) {
 }
 
 const QColor NodeItem::calculateColor() const {
-    return (!m_nodeSelected) ? Qt::green : Qt::red;
+    // return (!m_nodeSelected) ? Qt::green : Qt::red;
+
+    if(m_nodeSelected) {
+        return Qt::red;
+    }
+
+    switch(m_modelNode->getState()) {
+    case NodeState::Active:
+        return Qt::yellow;
+    case NodeState::Visited:
+        return Qt::blue;
+    case NodeState::InPath:
+        return Qt::green;
+    case NodeState::TopologicalOrder:
+        return Qt::darkYellow;
+    case NodeState::AssignedComponent:
+        return Qt::cyan;
+    default:
+        return Qt::lightGray;
+    }
+}
+
+void NodeItem::onNodeUpdated() {
+    if(scene() == nullptr) {
+        return;
+    }
+    update();
 }

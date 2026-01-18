@@ -120,12 +120,11 @@ static const char* stepTypeToString(StepType t) {
 
 void runDijkstraLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     // arrange
-    Dijkstra dijkstra(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::Start, StepType::Finish, StepType::VisitNode,
-        StepType::ProcessNode, StepType::ExamineEdge, StepType::UpdateDistance,
-        StepType::PushToQueue, StepType::PopFromQueue
-    };
+    Dijkstra                    dijkstra(g);
+    const std::vector<StepType> expectedSteps = {StepType::Start,       StepType::Finish,
+                                                 StepType::VisitNode,   StepType::ProcessNode,
+                                                 StepType::ExamineEdge, StepType::UpdateDistance,
+                                                 StepType::PushToQueue, StepType::PopFromQueue};
 
     // act
     REQUIRE_NOTHROW(dijkstra.execute(startNode));
@@ -155,8 +154,9 @@ void runDijkstraLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode)
         std::cout << std::endl;
     }
 
-    for(auto expected : expectedSteps) {
-        bool found = std::any_of(steps.begin(), steps.end(), [&](const auto& s){ return s.m_type == expected; });
+    for(auto expected: expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 }

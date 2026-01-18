@@ -1,10 +1,11 @@
 #ifndef GRAPHEDITOR_H
 #define GRAPHEDITOR_H
 
-#include <Graph.h>
-#include <GraphScene.h>
 #include <QGraphicsView>
 #include <QWidget>
+
+#include "Graph.h"
+#include "GraphScene.h"
 
 class QUndoStack;
 class GraphEditTab;

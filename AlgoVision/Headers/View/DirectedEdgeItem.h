@@ -1,7 +1,7 @@
 #ifndef DIRECTED_EDGEITEM_H
 #define DIRECTED_EDGEITEM_H
 
-#include <EdgeItem.h>
+#include "EdgeItem.h"
 
 class DirectedEdgeItem : public EdgeItem {
 
@@ -23,4 +23,4 @@ private:
     QPointF      calculateNormal() const;
 };
 
-#endif // DIRECTED_EDGEITEM
+#endif // DIRECTED_EDGEITEM_H
