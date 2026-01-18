@@ -4,6 +4,7 @@
 #include "Edge.h"
 #include "EdgeItem.h"
 #include "GraphScene.h"
+#include "EditableTextItem.h"
 #include "Node.h"
 #include "NodeItem.h"
 #include "UndirectedEdgeItem.h"
@@ -16,7 +17,27 @@ void GraphScene::setState(GraphScene::State state) {
     m_state = state;
 }
 
+void GraphScene::resetScene() {
+    if(m_firstNodeSelect) {
+        m_firstNodeSelect->setNodeSelected(false);
+        m_firstNodeSelect = nullptr;
+    }
+
+    if(m_editLabel) {
+        m_editLabel->finishEditing(false);
+        m_editLabel = nullptr;
+    }
+
+    m_state = State::ADD;
+}
+
 void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    if(m_state == State::EDIT) {
+        m_editLabel->finishEditing(true);
+        event->accept();
+        return;
+    }
+
     const auto     clickPos = event->scenePos();
     QGraphicsItem* item     = itemAt(clickPos, QTransform());
 
@@ -29,8 +50,17 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsScene::mousePressEvent(event);
 }
 
+void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
+    if(m_state == State::REMOVE || m_state == State::EDIT) {
+        event->accept();
+        return;
+    }
+
+    QGraphicsScene::mouseDoubleClickEvent(event);
+}
+
 void GraphScene::onNodeSelectTrigger(NodeItem* node) {
-    if(m_state == State::ADD) {
+    if(m_state == State::ADD || m_state == State::EDIT) {
         selectNode(node);
     }
 
@@ -45,11 +75,23 @@ void GraphScene::onEdgeSelectTrigger(EdgeItem* edge) {
     }
 }
 
+void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
+    if(edit) {
+        m_state     = State::EDIT;
+        m_editLabel = label;
+    } else {
+        m_state     = State::ADD;
+        m_editLabel = nullptr;
+    }
+}
+
 void GraphScene::addNode(QPointF position) {
     Node*     nodeModel = m_graph->addNode(position.x(), position.y());
     NodeItem* nodeItem  = new NodeItem(nodeModel);
     addItem(nodeItem);
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
+    connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
+            &GraphScene::setEditGraphSceneTrigger);
 
     if(m_firstNodeSelect) {
         addEdge(m_firstNodeSelect, nodeItem);
