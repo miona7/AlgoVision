@@ -31,6 +31,7 @@ private slots:
     void onSaveGraphTriggered();
     void onSaveImageTriggered();
     void onChangeThemeTriggered();
+    void onHelpTriggered(); // <- slot za Help dugme
 
 private:
     Ui::MainWindow* m_ui;
@@ -44,4 +45,6 @@ private:
     void                   initMenuToolBar();
     std::shared_ptr<Graph> createGraph(bool, bool);
 };
+
 #endif // MAINWINDOW_H
+

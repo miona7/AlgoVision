@@ -55,17 +55,16 @@ MainWindow::MainWindow(QWidget* parent)
     connect(btnOpenGraph, &QPushButton::clicked, this, &MainWindow::onOpenGraphTriggered);
     connect(btnCreateGraph, &QPushButton::clicked, this, &MainWindow::onCreateGraphTriggered);
 
-    // ===== GRAPH PAGE CONTENT =====
+           // ===== GRAPH PAGE CONTENT =====
     QWidget* graphPage = m_ui->graphPage;
 
-    // layout
+           // layout
     if(graphPage->layout() == nullptr) {
         auto* graphLayout = new QVBoxLayout(graphPage);
         graphLayout->setContentsMargins(0, 0, 0, 0);
 
         auto* graphEditor = new GraphEditor(graphPage);
-        m_graphEditor     = graphEditor; // mora zato sto je graphEditor lokalna promenljiva, necemo
-                                         // imati pristup kasnije (cim konstruktor zavrsi, brise se)
+        m_graphEditor     = graphEditor;
         graphLayout->addWidget(graphEditor);
     }
 }
@@ -77,7 +76,6 @@ MainWindow::~MainWindow() {
 void MainWindow::onOpenGraphTriggered() {
     QString filePath = QFileDialog::getOpenFileName(this, "open graph", "", "graph files (*.json)");
 
-    // cancel -> vracamo se
     if(filePath.isEmpty()) {
         return;
     }
@@ -87,7 +85,6 @@ void MainWindow::onOpenGraphTriggered() {
         return;
     }
 
-    // pre-read isWeighted/isDirected iz json root-a
     QFile file(filePath);
     if(!file.open(QFile::ReadOnly)) {
         QMessageBox::warning(this, "error", "could not open file: " + filePath);
@@ -115,9 +112,6 @@ void MainWindow::onOpenGraphTriggered() {
                              "loaded file: " + filePath +
                                  "\nweighted: " + QString(loadedWeighted ? "true" : "false") +
                                  "\ndirected: " + QString(loadedDirected ? "true" : "false"));
-
-    // TODO: kada napravimo GraphEditor API:
-    // if(m_graphEditor) m_graphEditor->setGraph(m_graph);
 }
 
 void MainWindow::onCreateGraphTriggered() {
@@ -145,7 +139,6 @@ void MainWindow::onSaveGraphTriggered() {
         return;
     }
 
-    // kreiranje fajla
     QFile file(filePath);
     if(file.open(QIODevice::WriteOnly)) {
         file.close();
@@ -167,11 +160,8 @@ void MainWindow::onSaveImageTriggered() {
         filePath += ".png";
     }
 
-    // TODO: cuvati samo scenu grafa, ne ceo widget
-
     QPixmap pixmap = m_ui->graphPage->grab();
 
-    // cuvamo pix mapu u fajl
     if(pixmap.save(filePath, "PNG")) {
         QMessageBox::information(this, "saved", "image saved to: " + filePath);
     } else {
@@ -180,7 +170,6 @@ void MainWindow::onSaveImageTriggered() {
 }
 
 void MainWindow::onChangeThemeTriggered() {
-    // rotira teme: DARK -> LIGHT -> PURPLE -> DARK
     switch(m_themeManager->currentTheme()) {
     case ThemeManager::Theme::DARK:
         m_themeManager->setTheme(ThemeManager::Theme::LIGHT);
@@ -197,8 +186,6 @@ void MainWindow::onChangeThemeTriggered() {
 }
 
 void MainWindow::initMenuToolBar() {
-    // dodajemo menu tool bar samo 1, akcije povezujemo samo 1
-
     if(m_menuToolBar != nullptr) {
         return;
     }
@@ -217,6 +204,8 @@ void MainWindow::initMenuToolBar() {
             &MainWindow::onSaveImageTriggered);
     connect(m_menuToolBar->changeThemeAction(), &QAction::triggered, this,
             &MainWindow::onChangeThemeTriggered);
+
+    connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
 }
 
 std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected) {
@@ -231,3 +220,17 @@ std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected)
     }
     return std::make_shared<UnweightedUndirectedGraph>();
 }
+
+// NOVO: Help dialog
+void MainWindow::onHelpTriggered() {
+    QString helpText =
+        "Graph Editor Help:\n\n"
+        "- Use the right toolbar to add new elements.\n"
+        "- Double-click on a node to create a new node.\n"
+        "- To create a new edge, click on the two nodes you want to connect.\n"
+        "- You can save the graph or export it as an image using the top toolbar.\n"
+        "- For any visual styling, switch themes using the theme button.";
+
+    QMessageBox::information(this, "Help", helpText);
+}
+
