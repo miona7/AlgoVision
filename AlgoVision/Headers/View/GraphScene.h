@@ -13,6 +13,7 @@ public:
 
     void setState(GraphScene::State);
     void resetScene();
+    void clearScene();
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;

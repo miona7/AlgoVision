@@ -59,6 +59,11 @@ void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsScene::mouseDoubleClickEvent(event);
 }
 
+void GraphScene::clearScene() {
+    clear(); // prvo brisemo sve UI iteme + observere
+    m_graph->clear(); // onda brisemo model
+}
+
 void GraphScene::onNodeSelectTrigger(NodeItem* node) {
     if(m_state == State::ADD || m_state == State::EDIT) {
         selectNode(node);
@@ -125,8 +130,10 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     // delete edge;
 
     const unsigned edgeId = edge->modelEdge()->getId();
-    delete edge; // prvo uklanja observer
-    m_graph->removeEdge(edgeId);
+
+    removeItem(edge); // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
+    delete edge; // onda ukloni UI item + observer
+    m_graph->removeEdge(edgeId); // onda ukloni model
 }
 
 void GraphScene::removeNode(NodeItem* node) {
@@ -135,7 +142,8 @@ void GraphScene::removeNode(NodeItem* node) {
 
     const unsigned nodeId = node->modelNode()->getId();
 
-    delete node;                 // prvo UI + observer
+    removeItem(node); // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
+    delete node;                 // onda UI + observer
     m_graph->removeNode(nodeId); // onda model
 }
 

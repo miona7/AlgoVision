@@ -21,6 +21,7 @@ public:
 private slots:
     void onAddRequestTrigger();
     void onRemoveRequestTrigger();
+    void onClearRequestTrigger();
 
 private:
     QUndoStack*    m_undoStack       = nullptr;
@@ -29,6 +30,8 @@ private:
     QGraphicsView* m_view            = nullptr;
     GraphScene*    m_scene           = nullptr;
     Graph*         m_graph           = nullptr;
+
+    void clear() const;
 
     int m_dummyState = 0; // samo za test
 };
