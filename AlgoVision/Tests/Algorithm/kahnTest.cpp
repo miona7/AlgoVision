@@ -82,7 +82,7 @@ static const char* stepTypeToString(StepType t) {
     return nullptr;
 }
 
-void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph>& g) {
+void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph> g) {
     // arrange
     Kahn                        kahn(g);
     const std::vector<StepType> expectedSteps = {

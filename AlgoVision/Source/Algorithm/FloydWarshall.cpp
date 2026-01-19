@@ -1,6 +1,6 @@
 #include "FloydWarshall.h"
 
-FloydWarshall::FloydWarshall(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+FloydWarshall::FloydWarshall(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void FloydWarshall::checkConditions() const {

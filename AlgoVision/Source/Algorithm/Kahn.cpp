@@ -1,6 +1,6 @@
 #include "Kahn.h"
 
-Kahn::Kahn(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+Kahn::Kahn(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void Kahn::checkConditions() const {

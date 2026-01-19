@@ -12,7 +12,7 @@
 
 class FloydWarshall : public Algorithm {
 public:
-    explicit FloydWarshall(const std::shared_ptr<Graph>&);
+    explicit FloydWarshall(const std::shared_ptr<Graph>);
 
     void checkConditions() const;
     void execute(unsigned = 0, unsigned = 0) override;

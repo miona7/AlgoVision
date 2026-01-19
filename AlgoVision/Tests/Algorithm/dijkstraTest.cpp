@@ -118,7 +118,7 @@ static const char* stepTypeToString(StepType t) {
     return nullptr;
 }
 
-void runDijkstraLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
+void runDijkstraLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) {
     // arrange
     Dijkstra                    dijkstra(g);
     const std::vector<StepType> expectedSteps = {StepType::Start,       StepType::Finish,

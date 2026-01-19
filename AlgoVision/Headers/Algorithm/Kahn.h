@@ -11,7 +11,7 @@
 
 class Kahn : public Algorithm {
 public:
-    explicit Kahn(const std::shared_ptr<Graph>&);
+    explicit Kahn(const std::shared_ptr<Graph>);
 
     void checkConditions() const;
     void execute(unsigned = 0, unsigned = 0) override;

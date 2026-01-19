@@ -12,7 +12,7 @@
 
 class Prim : public Algorithm {
 public:
-    explicit Prim(const std::shared_ptr<Graph>&);
+    explicit Prim(const std::shared_ptr<Graph>);
 
     void checkConditions() const;
     void execute(unsigned = 0, unsigned = 0) override;

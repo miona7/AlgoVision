@@ -1,6 +1,6 @@
 #include "Dijkstra.h"
 
-Dijkstra::Dijkstra(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+Dijkstra::Dijkstra(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void Dijkstra::checkConditions(unsigned start) const {

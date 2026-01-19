@@ -13,7 +13,7 @@
 
 class AStar : public Algorithm {
 public:
-    explicit AStar(const std::shared_ptr<Graph>&);
+    explicit AStar(const std::shared_ptr<Graph>);
 
     void checkConditions(unsigned, unsigned) const;
     void execute(unsigned, unsigned) override;

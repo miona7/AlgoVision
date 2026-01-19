@@ -1,6 +1,6 @@
 #include "Tarjan.h"
 
-Tarjan::Tarjan(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+Tarjan::Tarjan(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void Tarjan::checkConditions() const {

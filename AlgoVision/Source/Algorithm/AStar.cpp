@@ -1,6 +1,6 @@
 #include "AStar.h"
 
-AStar::AStar(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+AStar::AStar(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void AStar::checkConditions(unsigned start, unsigned goal) const {

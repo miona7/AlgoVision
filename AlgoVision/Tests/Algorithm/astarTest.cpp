@@ -116,7 +116,7 @@ static const char* stepTypeToString(StepType t) {
     return nullptr;
 }
 
-void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsigned startNode,
+void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigned startNode,
                          unsigned goalNode) {
     // arrange
     AStar                       astar(g);

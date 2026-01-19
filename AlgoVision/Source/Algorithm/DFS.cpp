@@ -1,6 +1,6 @@
 #include "DFS.h"
 
-DFS::DFS(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+DFS::DFS(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void DFS::checkConditions(unsigned start) const {

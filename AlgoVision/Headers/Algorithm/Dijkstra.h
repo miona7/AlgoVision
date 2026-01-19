@@ -10,7 +10,7 @@
 
 class Dijkstra : public Algorithm {
 public:
-    explicit Dijkstra(const std::shared_ptr<Graph>&);
+    explicit Dijkstra(const std::shared_ptr<Graph>);
 
     void checkConditions(unsigned) const;
     void execute(unsigned, unsigned = 0) override;

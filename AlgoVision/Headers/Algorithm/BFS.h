@@ -10,7 +10,7 @@
 
 class BFS : public Algorithm {
 public:
-    explicit BFS(const std::shared_ptr<Graph>&);
+    explicit BFS(const std::shared_ptr<Graph>);
 
     void checkConditions(unsigned) const;
     void execute(unsigned, unsigned = 0) override;
