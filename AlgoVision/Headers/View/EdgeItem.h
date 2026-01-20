@@ -50,6 +50,7 @@ protected:
     void         onEdgeUpdated();
 
     QPointF getEdgeCenter() const;
+    QPointF calculateNormal() const;
 };
 
 #endif // EDGEITEM_H

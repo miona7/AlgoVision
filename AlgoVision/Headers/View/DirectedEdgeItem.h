@@ -20,7 +20,6 @@ private:
     qreal m_arrowAngle {M_PI / 6.0};
 
     QPainterPath arrowPath(const QPainterPath&) const;
-    QPointF      calculateNormal() const;
 };
 
 #endif // DIRECTED_EDGEITEM_H

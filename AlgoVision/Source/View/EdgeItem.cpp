@@ -69,6 +69,20 @@ QPointF EdgeItem::getEdgeCenter() const {
     return edgePath().pointAtPercent(0.5);
 }
 
+QPointF EdgeItem::calculateNormal() const {
+    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
+    QPointF normal(-line.y(), line.x());
+    qreal   length = std::hypot(normal.x(), normal.y());
+
+    if(qFuzzyCompare(length, 0.0)) {
+        normal *= 0.0;
+    } else {
+        normal /= length;
+    }
+
+    return normal;
+}
+
 // remove edge by clicking on it
 void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     emit edgeSelected(this);

@@ -77,17 +77,3 @@ QPainterPath DirectedEdgeItem::arrowPath(const QPainterPath& edgePath) const {
     arrowPath.closeSubpath();
     return arrowPath;
 }
-
-QPointF DirectedEdgeItem::calculateNormal() const {
-    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
-    QPointF normal(-line.y(), line.x());
-    qreal   length = std::hypot(normal.x(), normal.y());
-
-    if(qFuzzyCompare(length, 0.0)) {
-        normal *= 0.0;
-    } else {
-        normal /= length;
-    }
-
-    return normal;
-}
