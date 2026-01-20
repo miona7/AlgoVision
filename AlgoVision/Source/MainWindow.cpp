@@ -12,6 +12,11 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QDialog>
+#include <QDialogButtonBox>
+
 #include "Graph.h"
 #include "GraphEditor.h"
 #include "Serializer.h"
@@ -115,13 +120,57 @@ void MainWindow::onOpenGraphTriggered() {
 }
 
 void MainWindow::onCreateGraphTriggered() {
+
+    QDialog dialog(this);
+    dialog.setWindowTitle("Create Graph Options");
+    dialog.setModal(true);
+    dialog.setFixedSize(300, 200);
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(&dialog);
+
+    QGroupBox* typeGroup = new QGroupBox("Graph Type", &dialog);
+    QVBoxLayout* typeLayout = new QVBoxLayout(typeGroup);
+    QRadioButton* directedBtn = new QRadioButton("Directed", typeGroup);
+    QRadioButton* undirectedBtn = new QRadioButton("Undirected", typeGroup);
+    undirectedBtn->setChecked(true);
+    typeLayout->addWidget(directedBtn);
+    typeLayout->addWidget(undirectedBtn);
+    mainLayout->addWidget(typeGroup);
+
+    QGroupBox* weightGroup = new QGroupBox("Weight", &dialog);
+    QVBoxLayout* weightLayout = new QVBoxLayout(weightGroup);
+    QRadioButton* weightedBtn = new QRadioButton("Weighted", weightGroup);
+    QRadioButton* unweightedBtn = new QRadioButton("Unweighted", weightGroup);
+    unweightedBtn->setChecked(true);
+    weightLayout->addWidget(weightedBtn);
+    weightLayout->addWidget(unweightedBtn);
+    mainLayout->addWidget(weightGroup);
+
+    QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+                                                     Qt::Horizontal, &dialog);
+    mainLayout->addWidget(buttons);
+    QObject::connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+
+    if(dialog.exec() == QDialog::Accepted) {
+        bool directed = directedBtn->isChecked();
+        bool weighted = weightedBtn->isChecked();
+
+        std::cout << "Graph created with options: "
+                  << (directed ? "Directed" : "Undirected") << ", "
+                  << (weighted ? "Weighted" : "Unweighted") << std::endl;
+
+    } else {
+
+        return;
+    }
+
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     this->setWindowTitle(QString::fromLatin1(AppConstants::graphPageDefaultTitle));
-    std::cout << "btnCreateGraph clicked: "
-              << m_ui->stackedWidget->currentWidget()->objectName().toStdString() << std::endl;
-
     initMenuToolBar();
 }
+
 
 void MainWindow::onSaveGraphTriggered() {
     QString filePath = QFileDialog::getSaveFileName(this, "save graph", "", "graph files (*.json)");
