@@ -40,7 +40,6 @@ void EdgeItem::initEdgeWeight() {
 void EdgeItem::adjust() {
     prepareGeometryChange();
     adjustPointsGeometry();
-    adjustWeightGeometry();
 }
 
 void EdgeItem::adjustPointsGeometry() {
@@ -52,15 +51,46 @@ void EdgeItem::adjustPointsGeometry() {
         QPointF edgeOffset((line.dx() * nodeRadius) / length, (line.dy() * nodeRadius) / length);
         m_sourcePoint = line.p1() + edgeOffset;
         m_destPoint   = line.p2() - edgeOffset;
+
+        if(m_hasWeight) {
+            m_weight->setVisible(true);
+        }
+
+        adjustWeightGeometry();
     } else {
         m_sourcePoint = m_destPoint = line.p1();
+
+        if(m_hasWeight) {
+            m_weight->setVisible(false);
+        }
     }
 }
 
-void EdgeItem::adjustWeightGeometry() {
-    if(m_hasWeight) {
-        m_weight->setCenter(getWeightPosition());
+void EdgeItem::adjustWeightGeometry() const {
+    if(!m_hasWeight) {
+        return;
+    }
+
+    constexpr qreal factor = 1.5;
+
+    QPainterPathStroker stroker;
+    stroker.setWidth(m_penWidth + 2.0);
+    QPainterPath edge = stroker.createStroke(edgePath());
+
+    auto pos = getWeightPosition();
+    auto normal = calculateNormal();
+
+    for (;;) {
+        m_weight->setCenter(pos);
         m_weight->centerText();
+
+        auto rect = m_weight->mapRectToParent(m_weight->boundingRect());
+
+        if (!edge.intersects(rect)) {
+            break;
+        }
+
+        pos -= factor * normal;
     }
 }
 
@@ -75,6 +105,7 @@ void EdgeItem::onEdgeWeightChanged(const QString& name) const {
     int number = name.toInt(&isNumber);
     if(isNumber) {
         m_modelEdge->setWeight(number);
+        adjustWeightGeometry();
     } else {
         m_weight->setPlainText(m_weight->oldText());
     }

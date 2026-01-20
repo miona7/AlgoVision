@@ -61,7 +61,7 @@ protected:
     QPointF getWeightPosition() const;
 
     void adjustPointsGeometry();
-    void adjustWeightGeometry();
+    void adjustWeightGeometry() const;
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 };
