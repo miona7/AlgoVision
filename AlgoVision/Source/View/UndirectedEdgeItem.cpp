@@ -3,8 +3,8 @@
 
 #include "UndirectedEdgeItem.h"
 
-UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
-    : EdgeItem(modelEdge, sourceNode, destNode) {
+UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bool hasWeight)
+    : EdgeItem(modelEdge, sourceNode, destNode, hasWeight) {
 }
 
 QPainterPath UndirectedEdgeItem::edgePath() const {

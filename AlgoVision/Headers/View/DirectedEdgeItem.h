@@ -6,7 +6,7 @@
 class DirectedEdgeItem : public EdgeItem {
 
 public:
-    DirectedEdgeItem(Edge*, NodeItem*, NodeItem*);
+    DirectedEdgeItem(Edge*, NodeItem*, NodeItem*, bool = false);
 
     QRectF       boundingRect() const override;
     QPainterPath shape() const override;

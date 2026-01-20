@@ -3,8 +3,8 @@
 
 #include "DirectedEdgeItem.h"
 
-DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
-    : EdgeItem(modelEdge, sourceNode, destNode) {
+DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bool hasWeight)
+    : EdgeItem(modelEdge, sourceNode, destNode, hasWeight) {
 }
 
 QRectF DirectedEdgeItem::boundingRect() const {
