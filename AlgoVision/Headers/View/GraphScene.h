@@ -23,7 +23,7 @@ private slots:
     void onNodeSelectTrigger(NodeItem*);
     void onEdgeSelectTrigger(EdgeItem*);
 
-           // reacts to editabletextitem scene change
+    // reacts to editabletextitem scene change
     void setEditGraphSceneTrigger(bool edit, EditableTextItem* label = nullptr);
 
 private:
@@ -32,11 +32,12 @@ private:
     State             m_state {State::ADD};
     Graph*            m_graph {nullptr};
 
-    void addNode(QPointF);
-    void removeNode(NodeItem*);
-    void selectNode(NodeItem*);
-    void addEdge(NodeItem*, NodeItem*);
-    void removeEdge(EdgeItem*);
+    void      addNode(QPointF);
+    void      removeNode(NodeItem*);
+    void      selectNode(NodeItem*);
+    void      addEdge(NodeItem*, NodeItem*);
+    void      removeEdge(EdgeItem*);
+    EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*) const;
 };
 
 #endif // GRAPHSCENE_H

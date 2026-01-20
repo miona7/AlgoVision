@@ -43,6 +43,19 @@ void EditableTextItem::keyPressEvent(QKeyEvent* event) {
     QGraphicsTextItem::keyPressEvent(event);
 }
 
+QPointF EditableTextItem::center() const {
+    return m_center;
+}
+
+void EditableTextItem::setCenter(const QPointF& newCenter) {
+    m_center = newCenter;
+}
+
+void EditableTextItem::setCenter(qreal x, qreal y) {
+    m_center.setX(x);
+    m_center.setY(y);
+}
+
 void EditableTextItem::finishEditing(bool commit) {
     QTextCursor c = textCursor();
     c.clearSelection();
@@ -63,5 +76,5 @@ void EditableTextItem::finishEditing(bool commit) {
 
 void EditableTextItem::centerText() {
     QRectF r = boundingRect();
-    setPos(-r.width() / 2, -r.height() / 2);
+    setPos(m_center.x() - (r.width() / 2), m_center.y() - (r.height() / 2));
 }
