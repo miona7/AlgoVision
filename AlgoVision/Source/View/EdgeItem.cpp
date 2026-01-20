@@ -1,14 +1,21 @@
 #include "EdgeItem.h"
+#include "EditableTextItem.h"
 #include "NodeItem.h"
 
-EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode)
-    : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode) {
+EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bool hasWeight)
+    : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode), m_hasWeight(hasWeight) {
     setFlag(ItemIsSelectable);
     setAcceptedMouseButtons(Qt::LeftButton);
 
     m_sourceNode->addEdge(this);
     m_destNode->addEdge(this);
     adjust();
+
+    // initialize weigth label (without proper positioning, not responsive to edge movement)
+    m_weight = new EditableTextItem(this);
+    m_weight->setPlainText(QString::number(modelEdge->getWeight()));
+    m_weight->setDefaultTextColor(Qt::black);
+    m_weight->setVisible(false);
 
     if(m_modelEdge != nullptr) {
         m_observerId = m_modelEdge->addObserver([this](Edge&) { this->onEdgeUpdated(); });
@@ -48,6 +55,14 @@ Edge* EdgeItem::modelEdge() const {
 
 void EdgeItem::setModelEdge(Edge* newModelEdge) {
     m_modelEdge = newModelEdge;
+}
+
+bool EdgeItem::hasWeight() const {
+    return m_hasWeight;
+}
+
+void EdgeItem::setHasWeight(bool newHasWeight) {
+    m_hasWeight = newHasWeight;
 }
 
 // remove edge by clicking on it

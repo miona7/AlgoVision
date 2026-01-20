@@ -17,8 +17,8 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     m_label->setPlainText(m_modelNode->getName());
     m_label->setTextWidth(2 * m_radius);
     m_label->setDefaultTextColor(Qt::black);
-    m_label->centerText();
     m_label->setCenter(0.0, 0.0);
+    m_label->centerText();
     connect(m_label, &EditableTextItem::textCommited, this, &NodeItem::onNameChanged);
 
     // observer

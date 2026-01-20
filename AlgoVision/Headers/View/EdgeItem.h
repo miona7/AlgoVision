@@ -6,12 +6,13 @@
 #include "Edge.h"
 
 class NodeItem;
+class EditableTextItem;
 
 class EdgeItem : public QGraphicsObject {
     Q_OBJECT
 
 public:
-    EdgeItem(Edge*, NodeItem*, NodeItem*);
+    EdgeItem(Edge*, NodeItem*, NodeItem*, bool = false);
     ~EdgeItem() override;
 
     void                 adjust();
@@ -23,11 +24,16 @@ public:
     Edge* modelEdge() const;
     void  setModelEdge(Edge*);
 
+    bool hasWeight() const;
+    void setHasWeight(bool newHasWeight);
+
 signals:
     void edgeSelected(EdgeItem*);
 
 protected:
     Edge* m_modelEdge;
+    EditableTextItem* m_weight {nullptr};
+    bool m_hasWeight;
 
     NodeItem* m_sourceNode;
     NodeItem* m_destNode;
