@@ -55,9 +55,8 @@ void EdgeItem::adjustPointsGeometry() {
 
         if(m_hasWeight) {
             m_weight->setVisible(true);
+            adjustWeightGeometry();
         }
-
-        adjustWeightGeometry();
     } else {
         m_sourcePoint = m_destPoint = line.p1();
 
@@ -97,7 +96,10 @@ void EdgeItem::adjustWeightGeometry() const {
 
 void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     event->accept();
-    m_weight->startEditing();
+
+    if(m_hasWeight) {
+        m_weight->startEditing();
+    }
 }
 
 // if user didn't change weight to number, reset back to old edge weight
