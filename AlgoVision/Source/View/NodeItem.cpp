@@ -18,6 +18,7 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     m_label->setTextWidth(2 * m_radius);
     m_label->setDefaultTextColor(Qt::black);
     m_label->centerText();
+    m_label->setCenter(0.0, 0.0);
     connect(m_label, &EditableTextItem::textCommited, this, &NodeItem::onNameChanged);
 
     // observer
@@ -146,8 +147,6 @@ void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
 
 void NodeItem::onNameChanged(const QString& name) const {
     m_modelNode->setName(name);
-    QRectF r = m_label->boundingRect();
-    m_label->setPos(-r.width() / 2, -r.height() / 2);
 }
 
 EditableTextItem* NodeItem::label() const {

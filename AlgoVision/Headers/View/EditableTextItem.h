@@ -16,6 +16,10 @@ public:
     void finishEditing(bool commit);
     void centerText();
 
+    QPointF center() const;
+    void setCenter(QPointF newCenter);
+    void setCenter(qreal x, qreal y);
+
 protected:
     void keyPressEvent(QKeyEvent* event) override;
 
@@ -27,6 +31,7 @@ signals:
 
 private:
     QString m_oldText;
+    QPointF m_center;
 };
 
 #endif
