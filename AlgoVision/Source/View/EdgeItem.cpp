@@ -83,6 +83,14 @@ QPointF EdgeItem::calculateNormal() const {
     return normal;
 }
 
+QPointF EdgeItem::getWeightPosition() const {
+    auto normal = calculateNormal();
+    auto center = getEdgeCenter();
+    qreal offset = 10;
+    return QPointF(center.x() + offset * normal.x(),
+                   center.y() + offset * normal.y());
+}
+
 // remove edge by clicking on it
 void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     emit edgeSelected(this);
