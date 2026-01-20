@@ -48,6 +48,8 @@ protected:
     void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
     const QColor calculateColor() const;
     void         onEdgeUpdated();
+
+    QPointF getEdgeCenter() const;
 };
 
 #endif // EDGEITEM_H

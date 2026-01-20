@@ -65,6 +65,10 @@ void EdgeItem::setHasWeight(bool newHasWeight) {
     m_hasWeight = newHasWeight;
 }
 
+QPointF EdgeItem::getEdgeCenter() const {
+    return edgePath().pointAtPercent(0.5);
+}
+
 // remove edge by clicking on it
 void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     emit edgeSelected(this);
