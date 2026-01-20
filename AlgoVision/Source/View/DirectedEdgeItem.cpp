@@ -3,7 +3,8 @@
 
 #include "DirectedEdgeItem.h"
 
-DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bool hasWeight)
+DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
+                                   bool hasWeight)
     : EdgeItem(modelEdge, sourceNode, destNode, hasWeight) {
 }
 

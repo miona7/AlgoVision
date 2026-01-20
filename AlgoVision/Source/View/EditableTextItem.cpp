@@ -76,6 +76,5 @@ void EditableTextItem::finishEditing(bool commit) {
 
 void EditableTextItem::centerText() {
     QRectF r = boundingRect();
-    setPos(m_center.x() - (r.width() / 2),
-           m_center.y() - (r.height() / 2));
+    setPos(m_center.x() - (r.width() / 2), m_center.y() - (r.height() / 2));
 }

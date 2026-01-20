@@ -15,7 +15,7 @@ public:
     EdgeItem(Edge*, NodeItem*, NodeItem*, bool = false);
     ~EdgeItem() override;
 
-    void initEdgeWeight();
+    void                 initEdgeWeight();
     void                 adjust();
     virtual QPainterPath edgePath() const                                                     = 0;
     QRectF               boundingRect() const override                                        = 0;
@@ -29,7 +29,7 @@ public:
     void setHasWeight(bool newHasWeight);
 
     EditableTextItem* weight() const;
-    void setWeight(EditableTextItem* newWeight);
+    void              setWeight(EditableTextItem* newWeight);
 
 signals:
     void edgeSelected(EdgeItem*);
@@ -38,9 +38,9 @@ private slots:
     void onEdgeWeightChanged(const QString& name) const;
 
 protected:
-    Edge* m_modelEdge;
+    Edge*             m_modelEdge;
     EditableTextItem* m_weight {nullptr};
-    bool m_hasWeight;
+    bool              m_hasWeight;
 
     NodeItem* m_sourceNode;
     NodeItem* m_destNode;
@@ -63,7 +63,7 @@ protected:
     void adjustPointsGeometry();
     void adjustWeightGeometry() const;
 
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
 };
 
 #endif // EDGEITEM_H

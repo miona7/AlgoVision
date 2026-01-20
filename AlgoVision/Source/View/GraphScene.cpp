@@ -3,8 +3,8 @@
 #include "DirectedEdgeItem.h"
 #include "Edge.h"
 #include "EdgeItem.h"
-#include "GraphScene.h"
 #include "EditableTextItem.h"
+#include "GraphScene.h"
 #include "Node.h"
 #include "NodeItem.h"
 #include "UndirectedEdgeItem.h"
@@ -60,7 +60,7 @@ void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void GraphScene::clearScene() {
-    clear(); // prvo brisemo sve UI iteme + observere
+    clear();          // prvo brisemo sve UI iteme + observere
     m_graph->clear(); // onda brisemo model
 }
 
@@ -110,8 +110,8 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
 
     Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
     EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
-    connect(edgeItem->weight(), &EditableTextItem::setEditGraphSceneState,
-            this, &GraphScene::setEditGraphSceneTrigger);
+    connect(edgeItem->weight(), &EditableTextItem::setEditGraphSceneState, this,
+            &GraphScene::setEditGraphSceneTrigger);
 
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
@@ -127,22 +127,22 @@ void GraphScene::removeEdge(EdgeItem* edge) {
 
     const unsigned edgeId = edge->modelEdge()->getId();
 
-    removeItem(edge); // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
-    delete edge; // onda ukloni UI item + observer
+    removeItem(edge);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
+    delete edge;                 // onda ukloni UI item + observer
     m_graph->removeEdge(edgeId); // onda ukloni model
 }
 
 EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest) const {
-    EdgeItem* edgeItem = nullptr;
-    bool isWeighted = m_graph->isWeighted();
+    EdgeItem* edgeItem   = nullptr;
+    bool      isWeighted = m_graph->isWeighted();
 
-    if (m_graph->isDirected()) {
+    if(m_graph->isDirected()) {
         edgeItem = new DirectedEdgeItem(modelEdge, src, dest, isWeighted);
     } else {
         edgeItem = new UndirectedEdgeItem(modelEdge, src, dest, isWeighted);
     }
 
-    if (isWeighted) {
+    if(isWeighted) {
         edgeItem->initEdgeWeight();
     }
 
@@ -157,7 +157,7 @@ void GraphScene::removeNode(NodeItem* node) {
 
     const unsigned nodeId = node->modelNode()->getId();
 
-    removeItem(node); // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
+    removeItem(node);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
     delete node;                 // onda UI + observer
     m_graph->removeNode(nodeId); // onda model
 }

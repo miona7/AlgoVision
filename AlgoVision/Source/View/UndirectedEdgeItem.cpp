@@ -3,7 +3,8 @@
 
 #include "UndirectedEdgeItem.h"
 
-UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bool hasWeight)
+UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
+                                       bool hasWeight)
     : EdgeItem(modelEdge, sourceNode, destNode, hasWeight) {
 }
 

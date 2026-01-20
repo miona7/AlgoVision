@@ -17,8 +17,8 @@ public:
     void centerText();
 
     QPointF center() const;
-    void setCenter(const QPointF& newCenter);
-    void setCenter(qreal x, qreal y);
+    void    setCenter(const QPointF& newCenter);
+    void    setCenter(qreal x, qreal y);
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;

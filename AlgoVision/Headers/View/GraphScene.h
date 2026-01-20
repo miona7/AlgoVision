@@ -32,11 +32,11 @@ private:
     State             m_state {State::ADD};
     Graph*            m_graph {nullptr};
 
-    void addNode(QPointF);
-    void removeNode(NodeItem*);
-    void selectNode(NodeItem*);
-    void addEdge(NodeItem*, NodeItem*);
-    void removeEdge(EdgeItem*);
+    void      addNode(QPointF);
+    void      removeNode(NodeItem*);
+    void      selectNode(NodeItem*);
+    void      addEdge(NodeItem*, NodeItem*);
+    void      removeEdge(EdgeItem*);
     EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*) const;
 };
 

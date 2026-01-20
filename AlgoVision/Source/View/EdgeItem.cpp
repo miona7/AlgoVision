@@ -5,7 +5,8 @@
 #include "NodeItem.h"
 
 EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bool hasWeight)
-    : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode), m_hasWeight(hasWeight) {
+    : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode),
+      m_hasWeight(hasWeight) {
     setFlag(ItemIsSelectable);
     setAcceptedMouseButtons(Qt::LeftButton);
 
@@ -29,7 +30,7 @@ EdgeItem::~EdgeItem() {
 }
 
 void EdgeItem::initEdgeWeight() {
-    if (m_hasWeight) {
+    if(m_hasWeight) {
         m_weight = new EditableTextItem(this);
         m_weight->setPlainText(QString::number(m_modelEdge->getWeight()));
         m_weight->setDefaultTextColor(Qt::black);
@@ -77,16 +78,16 @@ void EdgeItem::adjustWeightGeometry() const {
     stroker.setWidth(m_penWidth + 2.0);
     QPainterPath edge = stroker.createStroke(edgePath());
 
-    auto pos = getWeightPosition();
+    auto pos    = getWeightPosition();
     auto normal = calculateNormal();
 
-    for (;;) {
+    for(;;) {
         m_weight->setCenter(pos);
         m_weight->centerText();
 
         auto rect = m_weight->mapRectToParent(m_weight->boundingRect());
 
-        if (!edge.intersects(rect)) {
+        if(!edge.intersects(rect)) {
             break;
         }
 
@@ -94,7 +95,7 @@ void EdgeItem::adjustWeightGeometry() const {
     }
 }
 
-void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     event->accept();
     m_weight->startEditing();
 }
@@ -102,7 +103,7 @@ void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 // if user didn't change weight to number, reset back to old edge weight
 void EdgeItem::onEdgeWeightChanged(const QString& name) const {
     bool isNumber;
-    int number = name.toInt(&isNumber);
+    int  number = name.toInt(&isNumber);
     if(isNumber) {
         m_modelEdge->setWeight(number);
         adjustWeightGeometry();
@@ -115,7 +116,7 @@ EditableTextItem* EdgeItem::weight() const {
     return m_weight;
 }
 
-void EdgeItem::setWeight(EditableTextItem *newWeight) {
+void EdgeItem::setWeight(EditableTextItem* newWeight) {
     m_weight = newWeight;
 }
 
@@ -154,11 +155,10 @@ QPointF EdgeItem::calculateNormal() const {
 }
 
 QPointF EdgeItem::getWeightPosition() const {
-    auto normal = calculateNormal();
-    auto center = getEdgeCenter();
+    auto  normal = calculateNormal();
+    auto  center = getEdgeCenter();
     qreal offset = 10;
-    return QPointF(center.x() - offset * normal.x(),
-                   center.y() - offset * normal.y());
+    return QPointF(center.x() - offset * normal.x(), center.y() - offset * normal.y());
 }
 
 // remove edge by clicking on it
