@@ -23,7 +23,7 @@ private slots:
     void onNodeSelectTrigger(NodeItem*);
     void onEdgeSelectTrigger(EdgeItem*);
 
-           // reacts to editabletextitem scene change
+    // reacts to editabletextitem scene change
     void setEditGraphSceneTrigger(bool edit, EditableTextItem* label = nullptr);
 
 private:
@@ -37,6 +37,7 @@ private:
     void selectNode(NodeItem*);
     void addEdge(NodeItem*, NodeItem*);
     void removeEdge(EdgeItem*);
+    EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*) const;
 };
 
 #endif // GRAPHSCENE_H

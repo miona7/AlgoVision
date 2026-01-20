@@ -109,13 +109,7 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     m_graph->addEdge(sourceId, destId);
 
     Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
-    EdgeItem* edgeItem  = nullptr;
-
-    if(m_graph->isDirected()) {
-        edgeItem = new DirectedEdgeItem(edgeModel, source, dest);
-    } else {
-        edgeItem = new UndirectedEdgeItem(edgeModel, source, dest);
-    }
+    EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
 
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
@@ -134,6 +128,23 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     removeItem(edge); // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
     delete edge; // onda ukloni UI item + observer
     m_graph->removeEdge(edgeId); // onda ukloni model
+}
+
+EdgeItem *GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest) const {
+    EdgeItem* edgeItem = nullptr;
+    bool isWeighted = m_graph->isWeighted();
+
+    if (m_graph->isDirected()) {
+        edgeItem = new DirectedEdgeItem(modelEdge, src, dest, isWeighted);
+    } else {
+        edgeItem = new UndirectedEdgeItem(modelEdge, src, dest, isWeighted);
+    }
+
+    if (isWeighted) {
+        edgeItem->initEdgeWeight();
+    }
+
+    return edgeItem;
 }
 
 void GraphScene::removeNode(NodeItem* node) {
