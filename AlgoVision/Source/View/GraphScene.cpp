@@ -130,7 +130,7 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     m_graph->removeEdge(edgeId); // onda ukloni model
 }
 
-EdgeItem *GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest) const {
+EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest) const {
     EdgeItem* edgeItem = nullptr;
     bool isWeighted = m_graph->isWeighted();
 
@@ -143,6 +143,8 @@ EdgeItem *GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* des
     if (isWeighted) {
         edgeItem->initEdgeWeight();
     }
+
+    edgeItem->adjust();
 
     return edgeItem;
 }

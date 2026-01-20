@@ -53,6 +53,9 @@ protected:
     QPointF getEdgeCenter() const;
     QPointF calculateNormal() const;
     QPointF getWeightPosition() const;
+
+    void adjustPointsGeometry();
+    void adjustWeightGeometry();
 };
 
 #endif // EDGEITEM_H

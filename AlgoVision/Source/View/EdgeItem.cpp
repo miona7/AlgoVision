@@ -9,7 +9,6 @@ EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bo
 
     m_sourceNode->addEdge(this);
     m_destNode->addEdge(this);
-    adjust();
 
     if(m_modelEdge != nullptr) {
         m_observerId = m_modelEdge->addObserver([this](Edge&) { this->onEdgeUpdated(); });
@@ -32,17 +31,19 @@ void EdgeItem::initEdgeWeight() {
         m_weight = new EditableTextItem(this);
         m_weight->setPlainText(QString::number(m_modelEdge->getWeight()));
         m_weight->setDefaultTextColor(Qt::black);
-        m_weight->setCenter(getWeightPosition());
-        m_weight->centerText();
     }
 }
 
 void EdgeItem::adjust() {
+    prepareGeometryChange();
+    adjustPointsGeometry();
+    adjustWeightGeometry();
+}
+
+void EdgeItem::adjustPointsGeometry() {
     QLineF line(mapFromItem(m_sourceNode, 0, 0), mapFromItem(m_destNode, 0, 0));
     qreal  length     = line.length();
     qreal  nodeRadius = m_sourceNode->radius();
-
-    prepareGeometryChange();
 
     if(length > 2.0 * nodeRadius) {
         QPointF edgeOffset((line.dx() * nodeRadius) / length, (line.dy() * nodeRadius) / length);
@@ -50,6 +51,13 @@ void EdgeItem::adjust() {
         m_destPoint   = line.p2() - edgeOffset;
     } else {
         m_sourcePoint = m_destPoint = line.p1();
+    }
+}
+
+void EdgeItem::adjustWeightGeometry() {
+    if(m_hasWeight) {
+        m_weight->setCenter(getWeightPosition());
+        m_weight->centerText();
     }
 }
 
