@@ -47,7 +47,7 @@ QPointF EditableTextItem::center() const {
     return m_center;
 }
 
-void EditableTextItem::setCenter(QPointF newCenter) {
+void EditableTextItem::setCenter(const QPointF& newCenter) {
     m_center = newCenter;
 }
 

@@ -17,7 +17,7 @@ public:
     void centerText();
 
     QPointF center() const;
-    void setCenter(QPointF newCenter);
+    void setCenter(const QPointF& newCenter);
     void setCenter(qreal x, qreal y);
 
 protected:
