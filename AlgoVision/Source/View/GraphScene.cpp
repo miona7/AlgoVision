@@ -110,6 +110,8 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
 
     Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
     EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
+    connect(edgeItem->weight(), &EditableTextItem::setEditGraphSceneState,
+            this, &GraphScene::setEditGraphSceneTrigger);
 
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);

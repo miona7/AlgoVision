@@ -1,3 +1,5 @@
+#include <QGraphicsSceneEvent>
+
 #include "EdgeItem.h"
 #include "EditableTextItem.h"
 #include "NodeItem.h"
@@ -31,6 +33,7 @@ void EdgeItem::initEdgeWeight() {
         m_weight = new EditableTextItem(this);
         m_weight->setPlainText(QString::number(m_modelEdge->getWeight()));
         m_weight->setDefaultTextColor(Qt::black);
+        connect(m_weight, &EditableTextItem::textCommited, this, &EdgeItem::onEdgeWeightChanged);
     }
 }
 
@@ -59,6 +62,30 @@ void EdgeItem::adjustWeightGeometry() {
         m_weight->setCenter(getWeightPosition());
         m_weight->centerText();
     }
+}
+
+void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    event->accept();
+    m_weight->startEditing();
+}
+
+// if user didn't change weight to number, reset back to old edge weight
+void EdgeItem::onEdgeWeightChanged(const QString& name) const {
+    bool isNumber;
+    int number = name.toInt(&isNumber);
+    if(isNumber) {
+        m_modelEdge->setWeight(number);
+    } else {
+        m_weight->setPlainText(m_weight->oldText());
+    }
+}
+
+EditableTextItem* EdgeItem::weight() const {
+    return m_weight;
+}
+
+void EdgeItem::setWeight(EditableTextItem *newWeight) {
+    m_weight = newWeight;
 }
 
 Edge* EdgeItem::modelEdge() const {

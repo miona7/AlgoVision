@@ -28,8 +28,14 @@ public:
     bool hasWeight() const;
     void setHasWeight(bool newHasWeight);
 
+    EditableTextItem* weight() const;
+    void setWeight(EditableTextItem* newWeight);
+
 signals:
     void edgeSelected(EdgeItem*);
+
+private slots:
+    void onEdgeWeightChanged(const QString& name) const;
 
 protected:
     Edge* m_modelEdge;
@@ -56,6 +62,8 @@ protected:
 
     void adjustPointsGeometry();
     void adjustWeightGeometry();
+
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
 #endif // EDGEITEM_H
