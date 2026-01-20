@@ -15,6 +15,7 @@ public:
     EdgeItem(Edge*, NodeItem*, NodeItem*, bool = false);
     ~EdgeItem() override;
 
+    void initEdgeWeight();
     void                 adjust();
     virtual QPainterPath edgePath() const                                                     = 0;
     QRectF               boundingRect() const override                                        = 0;

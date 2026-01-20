@@ -11,12 +11,6 @@ EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bo
     m_destNode->addEdge(this);
     adjust();
 
-    // initialize weigth label (without proper positioning, not responsive to edge movement)
-    m_weight = new EditableTextItem(this);
-    m_weight->setPlainText(QString::number(modelEdge->getWeight()));
-    m_weight->setDefaultTextColor(Qt::black);
-    m_weight->setVisible(false);
-
     if(m_modelEdge != nullptr) {
         m_observerId = m_modelEdge->addObserver([this](Edge&) { this->onEdgeUpdated(); });
     }
@@ -31,6 +25,16 @@ EdgeItem::~EdgeItem() {
 
     m_sourceNode->removeEdge(this);
     m_destNode->removeEdge(this);
+}
+
+void EdgeItem::initEdgeWeight() {
+    if (m_hasWeight) {
+        m_weight = new EditableTextItem(this);
+        m_weight->setPlainText(QString::number(m_modelEdge->getWeight()));
+        m_weight->setDefaultTextColor(Qt::black);
+        m_weight->setCenter(getWeightPosition());
+        m_weight->centerText();
+    }
 }
 
 void EdgeItem::adjust() {
@@ -87,8 +91,8 @@ QPointF EdgeItem::getWeightPosition() const {
     auto normal = calculateNormal();
     auto center = getEdgeCenter();
     qreal offset = 10;
-    return QPointF(center.x() + offset * normal.x(),
-                   center.y() + offset * normal.y());
+    return QPointF(center.x() - offset * normal.x(),
+                   center.y() - offset * normal.y());
 }
 
 // remove edge by clicking on it
