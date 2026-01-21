@@ -98,6 +98,8 @@ static const char* stepTypeToString(StepType t) {
         return "ProcessNode";
     case StepType::ExamineEdge:
         return "ExamineEdge";
+    case StepType::SelectEdge:
+        return "SelectEdge";
     case StepType::UpdateDistance:
         return "UpdateDistance";
     case StepType::AddToPath:
@@ -110,7 +112,7 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigne
                          unsigned goalNode) {
     // arrange
     AStar                       astar(g);
-    const std::vector<StepType> expectedSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::AddToPath, StepType::ExamineEdge, StepType::UpdateDistance };
+    const std::vector<StepType> expectedSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::AddToPath, StepType::ExamineEdge, StepType::SelectEdge, StepType::UpdateDistance };
 
     // act
     REQUIRE_NOTHROW(astar.execute(startNode, goalNode));

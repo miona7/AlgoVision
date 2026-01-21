@@ -109,6 +109,14 @@ void AStar::aStar(unsigned start, unsigned goal) {
                     addStep(s);
                 }
 
+                {
+                    AlgorithmStep s;
+                    s.m_type = StepType::SelectEdge;
+                    s.m_from = parent[current];
+                    s.m_to = current;
+                    addStep(s);
+                }
+
                 current = parent[current];
             }
 
