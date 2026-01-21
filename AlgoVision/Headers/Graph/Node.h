@@ -10,6 +10,7 @@ enum class NodeState {
     Default,
     Active,  // InProcess -> trenutno se obradjuje
     Visited, // posecen -> obradjen
+    UpdatedDistance,
     InPath,
     TopologicalOrder,
     AssignedComponent
