@@ -19,8 +19,6 @@ public slots:
 
     void nextStep();
     void prevStep();
-    void undo();
-    void redo();
     void reset();
     bool isFinished() const;
 
@@ -33,6 +31,9 @@ private:
 
     std::vector<AlgorithmStep> m_undoStack;
     std::vector<AlgorithmStep> m_redoStack;
+
+    void undo();
+    void redo();
 };
 
 #endif // EXECUTION_H
