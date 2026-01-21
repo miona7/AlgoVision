@@ -12,7 +12,7 @@
 
 class Tarjan : public Algorithm {
 public:
-    explicit Tarjan(const std::shared_ptr<Graph>&);
+    explicit Tarjan(const std::shared_ptr<Graph>);
 
     void checkConditions() const;
     void execute(unsigned = 0, unsigned = 0) override;

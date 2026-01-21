@@ -1,6 +1,6 @@
 #include "AStar.h"
 
-AStar::AStar(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+AStar::AStar(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void AStar::checkConditions(unsigned start, unsigned goal) const {
@@ -29,22 +29,7 @@ void AStar::execute(unsigned start, unsigned goal) {
 
     clearSteps();
 
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Start;
-        s.m_node    = start;
-        s.m_message = std::string("Starting A*.");
-        addStep(s);
-    }
-
     aStar(start, goal);
-
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Finish;
-        s.m_message = std::string("A* finished.");
-        addStep(s);
-    }
 
     std::cout << "Path: ";
     for(int i = 0; i < m_path.size(); i++) {
@@ -85,28 +70,12 @@ void AStar::aStar(unsigned start, unsigned goal) {
                         std::greater<>>
         pq;
     pq.emplace(fScore[start], start);
-
-    {
-        AlgorithmStep s;
-        s.m_type  = StepType::PushToQueue;
-        s.m_node  = start;
-        s.m_value = fScore[start];
-        addStep(s);
-    }
-
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
 
     while(!pq.empty()) {
         auto [_, current] = pq.top();
         pq.pop();
-
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::PopFromQueue;
-            s.m_node = current;
-            addStep(s);
-        }
 
         if(visited[current]) {
             continue;
@@ -140,9 +109,26 @@ void AStar::aStar(unsigned start, unsigned goal) {
                     addStep(s);
                 }
 
+                {
+                    AlgorithmStep s;
+                    s.m_type = StepType::SelectEdge;
+                    s.m_from = parent[current];
+                    s.m_to = current;
+                    addStep(s);
+                }
+
                 current = parent[current];
             }
+
             m_path.push_back(start);
+
+            {
+                AlgorithmStep s;
+                s.m_type = StepType::AddToPath;
+                s.m_node = start;
+                addStep(s);
+            }
+
             std::reverse(m_path.begin(), m_path.end());
             return;
         }
@@ -176,13 +162,6 @@ void AStar::aStar(unsigned start, unsigned goal) {
                         }
 
                         pq.emplace(fScore[neighbour], neighbour);
-
-                        {
-                            AlgorithmStep s;
-                            s.m_type = StepType::PushToQueue;
-                            s.m_node = neighbour;
-                            addStep(s);
-                        }
                     }
                 }
             }

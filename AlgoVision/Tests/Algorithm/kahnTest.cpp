@@ -60,35 +60,18 @@ TEST_CASE("Kahn throws on cyclic graph", "[KAHN]") {
 
 static const char* stepTypeToString(StepType t) {
     switch(t) {
-    case StepType::Start:
-        return "Start";
-    case StepType::Finish:
-        return "Finish";
-    case StepType::VisitNode:
-        return "VisitNode";
     case StepType::ProcessNode:
         return "ProcessNode";
-    case StepType::MarkNode:
-        return "MarkNode";
-    case StepType::ExamineEdge:
-        return "ExamineEdge";
-    case StepType::PushToQueue:
-        return "PushToQueue";
-    case StepType::PopFromQueue:
-        return "PopFromQueue";
     case StepType::AddToTopologicalOrder:
         return "AddToTopologicalOrder";
     }
     return nullptr;
 }
 
-void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph>& g) {
+void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph> g) {
     // arrange
     Kahn                        kahn(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::Start,       StepType::Finish,
-        StepType::ProcessNode, StepType::AddToTopologicalOrder,
-        StepType::PushToQueue, StepType::PopFromQueue};
+    const std::vector<StepType> expectedSteps = { StepType::ProcessNode, StepType::AddToTopologicalOrder };
 
     // act
     REQUIRE_NOTHROW(kahn.execute());

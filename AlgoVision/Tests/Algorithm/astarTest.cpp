@@ -92,22 +92,14 @@ TEST_CASE("A*: negative edge weight", "[AStar]") {
 
 static const char* stepTypeToString(StepType t) {
     switch(t) {
-    case StepType::Start:
-        return "Start";
-    case StepType::Finish:
-        return "Finish";
     case StepType::VisitNode:
         return "VisitNode";
     case StepType::ProcessNode:
         return "ProcessNode";
-    case StepType::MarkNode:
-        return "MarkNode";
     case StepType::ExamineEdge:
         return "ExamineEdge";
-    case StepType::PushToQueue:
-        return "PushToQueue";
-    case StepType::PopFromQueue:
-        return "PopFromQueue";
+    case StepType::SelectEdge:
+        return "SelectEdge";
     case StepType::UpdateDistance:
         return "UpdateDistance";
     case StepType::AddToPath:
@@ -116,14 +108,11 @@ static const char* stepTypeToString(StepType t) {
     return nullptr;
 }
 
-void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph>& g, unsigned startNode,
+void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigned startNode,
                          unsigned goalNode) {
     // arrange
     AStar                       astar(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::Start,          StepType::Finish,      StepType::VisitNode,
-        StepType::ProcessNode,    StepType::AddToPath,   StepType::ExamineEdge,
-        StepType::UpdateDistance, StepType::PushToQueue, StepType::PopFromQueue};
+    const std::vector<StepType> expectedSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::AddToPath, StepType::ExamineEdge, StepType::SelectEdge, StepType::UpdateDistance };
 
     // act
     REQUIRE_NOTHROW(astar.execute(startNode, goalNode));

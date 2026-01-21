@@ -178,3 +178,13 @@ void GraphScene::selectNode(NodeItem* node) {
     // other node is selected
     addEdge(m_firstNodeSelect, node);
 }
+
+// vraca raw pointer (postojeci)
+Graph* GraphScene::getGraphRaw() const {
+    return m_graph;
+}
+
+// pravi shared_ptr za algoritme, ne preuzima vlasnistvo
+std::shared_ptr<Graph> GraphScene::getGraphShared() const {
+    return std::shared_ptr<Graph>(m_graph, [](Graph*){});
+}

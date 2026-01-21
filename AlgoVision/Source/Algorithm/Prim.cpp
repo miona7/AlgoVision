@@ -1,6 +1,6 @@
 #include "Prim.h"
 
-Prim::Prim(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+Prim::Prim(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void Prim::checkConditions() const {

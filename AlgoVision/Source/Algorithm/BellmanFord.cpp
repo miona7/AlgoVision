@@ -1,6 +1,6 @@
 #include "BellmanFord.h"
 
-BellmanFord::BellmanFord(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+BellmanFord::BellmanFord(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void BellmanFord::checkConditions(unsigned start) const {

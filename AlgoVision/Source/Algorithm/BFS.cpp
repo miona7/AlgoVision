@@ -1,6 +1,6 @@
 #include "BFS.h"
 
-BFS::BFS(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+BFS::BFS(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void BFS::checkConditions(unsigned start) const {

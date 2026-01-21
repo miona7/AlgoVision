@@ -1,6 +1,6 @@
 #include "Dijkstra.h"
 
-Dijkstra::Dijkstra(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+Dijkstra::Dijkstra(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 void Dijkstra::checkConditions(unsigned start) const {
@@ -23,25 +23,8 @@ void Dijkstra::checkConditions(unsigned start) const {
 
 void Dijkstra::execute(unsigned idStartNode, unsigned) {
     checkConditions(idStartNode);
-
     clearSteps();
-
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Start;
-        s.m_node    = idStartNode;
-        s.m_message = std::string("Starting Dijkstra.");
-        addStep(s);
-    }
-
     dijkstra(idStartNode);
-
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Finish;
-        s.m_message = std::string("Dijkstra finished.");
-        addStep(s);
-    }
 }
 
 void Dijkstra::dijkstra(unsigned start) {
@@ -69,26 +52,12 @@ void Dijkstra::dijkstra(unsigned start) {
         addStep(s);
     }
 
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::PushToQueue;
-        s.m_node = start;
-        addStep(s);
-    }
-
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
 
     while(!pq.empty()) {
         auto [currentDistance, currentNode] = pq.top();
         pq.pop();
-
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::PopFromQueue;
-            s.m_node = currentNode;
-            addStep(s);
-        }
 
         if(!finished[currentNode]) {
             finished[currentNode] = true;
@@ -132,13 +101,6 @@ void Dijkstra::dijkstra(unsigned start) {
                         }
 
                         pq.emplace(minDistance[neighbourId], neighbourId);
-
-                        {
-                            AlgorithmStep s;
-                            s.m_type = StepType::PushToQueue;
-                            s.m_node = neighbourId;
-                            addStep(s);
-                        }
                     }
                 }
             }

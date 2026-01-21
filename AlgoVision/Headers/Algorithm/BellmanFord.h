@@ -12,7 +12,7 @@
 
 class BellmanFord : public Algorithm {
 public:
-    explicit BellmanFord(const std::shared_ptr<Graph>&);
+    explicit BellmanFord(const std::shared_ptr<Graph>);
 
     void checkConditions(unsigned) const;
     void execute(unsigned, unsigned = 0) override;

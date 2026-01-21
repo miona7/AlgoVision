@@ -12,7 +12,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-AlgorithmTab::AlgorithmTab(QWidget* parent)
+AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
     : QWidget(parent), m_algorithmCombo(new QComboBox(this)),
       m_startRow(new QWidget(this)), m_startLabel(new QLabel("start node:", this)),
       m_startNodeEdit(new QLineEdit(this)), m_endRow(new QWidget(this)),
@@ -20,7 +20,7 @@ AlgorithmTab::AlgorithmTab(QWidget* parent)
       m_noInputLabel(new QLabel(this)), m_helpBtn(new QPushButton("help", this)),
       m_prevBtn(new QToolButton(this)), m_playBtn(new QToolButton(this)),
       m_pauseBtn(new QToolButton(this)), m_nextBtn(new QToolButton(this)),
-      m_restartBtn(new QToolButton(this)) {
+      m_restartBtn(new QToolButton(this)), m_graph(graph), m_applier(m_graph), m_controller(m_applier) {
     initLayout();
     initIcons();
 
@@ -51,6 +51,67 @@ AlgorithmTab::AlgorithmTab(QWidget* parent)
             "- Restart: reset execution to the beginning\n\n";
 
         QMessageBox::information(this, "Algorithm Tab Help", helpText);
+    });
+
+    // povezivanje dugmica
+    // moraju da se hvataju exepctioni -> iskacuci prozori?
+    connect(m_playBtn, &QToolButton::clicked, this, [this]() {
+
+        // parametri trenutnog algoritma
+        AlgorithmTab::AlgorithmConfig newConfig = selectedConfig();
+
+        // ako algoritam ili parametri nisu isti → NOVI START
+        bool needNewRun = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
+
+        if(needNewRun || m_state == RunState::Idle || m_state == RunState::Finished) {
+            // ugasi i obrisi staru nit
+            if(m_worker) {
+                m_worker->quit();
+                m_worker->wait();
+                delete m_worker;
+                m_worker = nullptr;
+            }
+
+            m_controller.reset();  // vrati graf u pocetno stanje
+            m_currentConfig = newConfig;
+            m_worker = new AlgorithmWorker(newConfig.m_algorithmName, m_graph, newConfig.m_startNode, newConfig.m_endNode);
+
+            // pokreni iscrtavanje kad nit zavrsi
+            connect(m_worker, &AlgorithmWorker::stepsReady, this, [this]() {
+                m_state = RunState::Playing;
+                startTimerForPlay();
+            });
+
+            // ucitaj korake algoritma
+            connect(m_worker, &AlgorithmWorker::stepsReady,
+                    &m_controller, &AlgorithmExecutionController::loadSteps);
+
+            m_worker->start();
+            m_state = RunState::Playing;
+            return;
+        }
+
+        //  RESUME –> isti algoritam, bio je pauziran
+        if(m_state == RunState::Paused) {
+            m_state = RunState::Playing;
+            startTimerForPlay();
+        }
+    });
+
+    connect(m_pauseBtn, &QToolButton::clicked, this, [this]() {
+        if(m_timer != nullptr) {
+            m_timer->stop();
+        }
+        m_state = RunState::Paused;
+    });
+    connect(m_nextBtn, &QToolButton::clicked, [this]() { m_controller.nextStep(); });
+    connect(m_prevBtn, &QToolButton::clicked, [this]() { m_controller.prevStep(); });
+    connect(m_restartBtn, &QToolButton::clicked, [this]() {
+        m_controller.reset();
+        if(m_timer != nullptr) {
+            m_timer->stop();
+        }
+        m_state = RunState::Idle;
     });
 }
 
@@ -187,4 +248,34 @@ void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
         m_endNodeEdit->clear();
         m_endRow->hide();
     }
+}
+
+bool AlgorithmTab::AlgorithmConfig::operator==(const AlgorithmConfig& other) const {
+    return m_algorithmName == other.m_algorithmName && m_startNode == other.m_startNode && m_endNode == other.m_endNode;
+}
+
+bool AlgorithmTab::AlgorithmConfig::operator!=(const AlgorithmConfig& other) const {
+    return !(*this == other);
+}
+
+AlgorithmTab::AlgorithmConfig AlgorithmTab::selectedConfig() const {
+    return { m_algorithmCombo->currentText(), m_startNodeEdit->text().toInt(), m_endNodeEdit->text().toInt() };
+}
+
+void AlgorithmTab::startTimerForPlay() {
+    if(m_timer == nullptr) {
+        m_timer = new QTimer(this);
+        connect(m_timer, &QTimer::timeout, this, [this]() {
+            if(m_controller.isFinished()) {
+                m_timer->stop();
+                m_state = RunState::Finished;
+                return;
+            }
+            if(m_state != RunState::Playing) {
+                return;
+            }
+            m_controller.nextStep();
+        });
+    }
+    m_timer->start(500); // 500ms po koraku
 }

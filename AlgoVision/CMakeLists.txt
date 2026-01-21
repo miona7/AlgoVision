@@ -37,6 +37,7 @@ set(PROJECT_SOURCES
 
         Headers/Algorithm/AlgorithmStep.h
         Headers/Algorithm/AlgorithmStepApplier.h Source/Algorithm/AlgorithmStepApplier.cpp
+        Headers/Algorithm/AlgorithmExecutionController.h Source/Algorithm/AlgorithmExecutionController.cpp
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
@@ -66,6 +67,8 @@ set(PROJECT_SOURCES
         Headers/View/DirectedEdgeItem.h Source/View/DirectedEdgeItem.cpp
         Headers/View/GraphScene.h Source/View/GraphScene.cpp
         Headers/View/EditableTextItem.h Source/View/EditableTextItem.cpp
+
+        Headers/Threads/AlgorithmWorker.h Source/Threads/AlgorithmWorker.cpp
 )
 
 qt_add_resources(RESOURCES
@@ -113,6 +116,7 @@ target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/UI
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Serialization
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/View
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Threads
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -149,6 +153,7 @@ add_executable(AlgoVisionTests
     Source/Graph/WeightedUndirectedGraph.cpp
     Source/Graph/WeightedDirectedGraph.cpp
 
+    Source/Algorithm/AlgorithmStepApplier.cpp
     Source/Algorithm/Algorithm.cpp
     Source/Algorithm/AStar.cpp
     Source/Algorithm/DFS.cpp
@@ -169,6 +174,7 @@ add_executable(AlgoVisionTests
     Tests/Graph/nodeTest.cpp
     Tests/Graph/edgeTest.cpp
 
+    Tests/Algorithm/applierTest.cpp
     Tests/Algorithm/astarTest.cpp
     Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp

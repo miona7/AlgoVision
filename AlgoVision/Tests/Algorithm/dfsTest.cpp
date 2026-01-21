@@ -82,32 +82,20 @@ TEST_CASE("DFS throws for invalid start node", "[DFS]") {
 
 static const char* stepTypeToString(StepType t) {
     switch(t) {
-    case StepType::Start:
-        return "Start";
-    case StepType::Finish:
-        return "Finish";
     case StepType::VisitNode:
         return "VisitNode";
     case StepType::ProcessNode:
         return "ProcessNode";
-    case StepType::MarkNode:
-        return "MarkNode";
     case StepType::ExamineEdge:
         return "ExamineEdge";
-    case StepType::PushToStack:
-        return "PushToStack";
-    case StepType::PopFromStack:
-        return "PopFromStack";
     }
     return nullptr;
 }
 
-void runDFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
+void runDFSLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) {
     // arrange
     DFS                         dfs(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::Start,       StepType::Finish,      StepType::VisitNode,   StepType::ProcessNode,
-        StepType::ExamineEdge, StepType::PushToStack, StepType::PopFromStack};
+    const std::vector<StepType> expectedSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::ExamineEdge };
 
     // act
     dfs.execute(startNode);
