@@ -9,6 +9,7 @@ void AlgorithmStepApplier::apply(AlgorithmStep& step) {
     switch(step.m_type) {
     case StepType::VisitNode:
     case StepType::ProcessNode:
+    case StepType::UpdateDistance:
     case StepType::AddToPath:
     case StepType::AddToTopologicalOrder:
     case StepType::AssignComponent: {
@@ -34,6 +35,7 @@ void AlgorithmStepApplier::undo(const AlgorithmStep& step) {
     switch(step.m_type) {
     case StepType::VisitNode:
     case StepType::ProcessNode:
+    case StepType::UpdateDistance:
     case StepType::AddToPath:
     case StepType::AddToTopologicalOrder:
     case StepType::AssignComponent:
@@ -81,6 +83,8 @@ NodeState AlgorithmStepApplier::stepToNodeState(const StepType t) const {
         return NodeState::Visited;
     case StepType::ProcessNode:
         return NodeState::Active;
+    case StepType::UpdateDistance:
+        return NodeState::UpdatedDistance;
     case StepType::AddToPath:
         return NodeState::InPath;
     case StepType::AddToTopologicalOrder:
