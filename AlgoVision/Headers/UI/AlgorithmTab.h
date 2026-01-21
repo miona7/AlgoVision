@@ -2,6 +2,13 @@
 #define ALGORITHMTAB_H
 
 #include <QWidget>
+#include <QTimer>
+#include <QString>
+
+#include <optional>
+
+#include "AlgorithmExecutionController.h"
+#include "AlgorithmWorker.h"
 
 class QComboBox;
 class QLabel;
@@ -13,10 +20,23 @@ class AlgorithmTab : public QWidget {
     Q_OBJECT
 
 public:
-    explicit AlgorithmTab(QWidget* = nullptr);
+    explicit AlgorithmTab(std::shared_ptr<Graph>, QWidget* = nullptr);
     ~AlgorithmTab() override = default;
 
 private:
+    struct AlgorithmConfig {
+        QString m_algorithmName;
+        int m_startNode;
+        int m_endNode;
+
+        bool operator==(const AlgorithmConfig&) const;
+        bool operator!=(const AlgorithmConfig&) const;
+    };
+
+    AlgorithmConfig selectedConfig() const;
+
+    enum class RunState { Idle, Playing, Paused, Finished };
+
     QComboBox* m_algorithmCombo;
 
     QWidget*  m_startRow;
@@ -37,9 +57,19 @@ private:
     QToolButton* m_nextBtn;
     QToolButton* m_restartBtn;
 
+    std::shared_ptr<Graph> m_graph;
+    AlgorithmStepApplier m_applier;
+    AlgorithmExecutionController m_controller;
+    AlgorithmWorker* m_worker = nullptr;
+    QTimer* m_timer = nullptr;
+    RunState m_state = RunState::Idle;
+    std::optional<AlgorithmConfig> m_currentConfig;
+
     void initLayout();
     void initIcons();
     void updateUiForAlgorithm(const QString&);
+
+    void startTimerForPlay();
 };
 
 #endif // ALGORITHMTAB_H

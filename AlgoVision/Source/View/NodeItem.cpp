@@ -191,6 +191,8 @@ const QColor NodeItem::calculateColor() const {
         return Qt::yellow;
     case NodeState::Visited:
         return Qt::blue;
+    case NodeState::UpdatedDistance:
+        return Qt::darkMagenta;
     case NodeState::InPath:
         return Qt::green;
     case NodeState::TopologicalOrder:
@@ -198,6 +200,7 @@ const QColor NodeItem::calculateColor() const {
     case NodeState::AssignedComponent:
         return Qt::cyan;
     default:
+        // return Qt::lightGray;
         return Qt::green;
     }
 }

@@ -153,6 +153,7 @@ add_executable(AlgoVisionTests
     Source/Graph/WeightedUndirectedGraph.cpp
     Source/Graph/WeightedDirectedGraph.cpp
 
+    Source/Algorithm/AlgorithmStepApplier.cpp
     Source/Algorithm/Algorithm.cpp
     Source/Algorithm/AStar.cpp
     Source/Algorithm/DFS.cpp
@@ -173,6 +174,7 @@ add_executable(AlgoVisionTests
     Tests/Graph/nodeTest.cpp
     Tests/Graph/edgeTest.cpp
 
+    Tests/Algorithm/applierTest.cpp
     Tests/Algorithm/astarTest.cpp
     Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp

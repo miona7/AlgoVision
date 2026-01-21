@@ -70,7 +70,7 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     m_editTab = new GraphEditTab(rightTabs);
 
     rightTabs->addTab(m_editTab, "graph");
-    rightTabs->addTab(new AlgorithmTab(rightTabs), "algorithm");
+    rightTabs->addTab(new AlgorithmTab(m_scene->getGraphShared(), rightTabs), "algorithm");
 
     splitter->addWidget(rightTabs);
 
