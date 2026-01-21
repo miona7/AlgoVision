@@ -96,22 +96,12 @@ TEST_CASE("Dijkstra on graph with negative edges", "[DIJKSTRA]") {
 
 static const char* stepTypeToString(StepType t) {
     switch(t) {
-    case StepType::Start:
-        return "Start";
-    case StepType::Finish:
-        return "Finish";
     case StepType::VisitNode:
         return "VisitNode";
     case StepType::ProcessNode:
         return "ProcessNode";
-    case StepType::MarkNode:
-        return "MarkNode";
     case StepType::ExamineEdge:
         return "ExamineEdge";
-    case StepType::PushToQueue:
-        return "PushToQueue";
-    case StepType::PopFromQueue:
-        return "PopFromQueue";
     case StepType::UpdateDistance:
         return "UpdateDistance";
     }
@@ -121,10 +111,7 @@ static const char* stepTypeToString(StepType t) {
 void runDijkstraLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) {
     // arrange
     Dijkstra                    dijkstra(g);
-    const std::vector<StepType> expectedSteps = {StepType::Start,       StepType::Finish,
-                                                 StepType::VisitNode,   StepType::ProcessNode,
-                                                 StepType::ExamineEdge, StepType::UpdateDistance,
-                                                 StepType::PushToQueue, StepType::PopFromQueue};
+    const std::vector<StepType> expectedSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::ExamineEdge, StepType::UpdateDistance };
 
     // act
     REQUIRE_NOTHROW(dijkstra.execute(startNode));
