@@ -34,7 +34,7 @@ TEST_CASE("AlgorithmStepApplier works for all graph types", "[AlgorithmStepAppli
             applier.apply(step);
             // assert
             REQUIRE(n1->getState() == applier.stepToNodeState(type));
-            REQUIRE(step.prevNodeState.value() == oldNodeState);
+            REQUIRE(step.m_prevNodeState.value() == oldNodeState);
 
             // act
             applier.undo(step);
@@ -53,7 +53,7 @@ TEST_CASE("AlgorithmStepApplier works for all graph types", "[AlgorithmStepAppli
             applier.apply(step);
             // assert
             REQUIRE(e->getState() == applier.stepToEdgeState(type));
-            REQUIRE(step.prevEdgeState.value() == oldEdgeState);
+            REQUIRE(step.m_prevEdgeState.value() == oldEdgeState);
 
             // act
             applier.undo(step);
