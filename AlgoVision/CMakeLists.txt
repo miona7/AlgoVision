@@ -37,6 +37,7 @@ set(PROJECT_SOURCES
 
         Headers/Algorithm/AlgorithmStep.h
         Headers/Algorithm/AlgorithmStepApplier.h Source/Algorithm/AlgorithmStepApplier.cpp
+        Headers/Algorithm/AlgorithmExecutionController.h Source/Algorithm/AlgorithmExecutionController.cpp
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
