@@ -27,33 +27,10 @@ void DFS::execute(unsigned idStartNode, unsigned) {
         m_visited[id] = false;
     }
 
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::Start;
-        s.m_node = idStartNode;
-        s.m_message =
-            std::string("DFS traversal starting from node " + std::to_string(idStartNode));
-        addStep(s);
-    }
-
     dfs(idStartNode, std::nullopt);
-
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Finish;
-        s.m_message = std::string("DFS finished.");
-        addStep(s);
-    }
 }
 
 void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::PushToStack;
-        s.m_node = nodeId;
-        addStep(s);
-    }
-
     m_visited[nodeId] = true;
 
     {
@@ -89,13 +66,6 @@ void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
                 dfs(neighbourId, nodeId);
             }
         }
-    }
-
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::PopFromStack;
-        s.m_node = nodeId;
-        addStep(s);
     }
 }
 
