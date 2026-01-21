@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+#include "Node.h"
+#include "Edge.h"
+
 enum class StepType {
     // opsti koraci
     Start,
@@ -43,6 +46,10 @@ struct AlgorithmStep {
     std::optional<int> m_value;
 
     std::optional<std::string> m_message;
+
+    // za undo/redo
+    std::optional<NodeState> prevNodeState;
+    std::optional<EdgeState> prevEdgeState;
 };
 
 #endif // ALGORITHMSTEP_H

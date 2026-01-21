@@ -8,9 +8,13 @@
 
 class AlgorithmStepApplier {
 public:
-    explicit AlgorithmStepApplier(const std::shared_ptr<Graph>&);
+    explicit AlgorithmStepApplier(const std::shared_ptr<Graph>);
 
-    void apply(const AlgorithmStep&);
+    void apply(AlgorithmStep&);
+    void undo(const AlgorithmStep&);
+
+    NodeState stepToNodeState(const StepType) const;
+    EdgeState stepToEdgeState(const StepType) const;
 
 private:
     std::shared_ptr<Graph> m_graph;
