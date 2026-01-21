@@ -142,7 +142,16 @@ void AStar::aStar(unsigned start, unsigned goal) {
 
                 current = parent[current];
             }
+
             m_path.push_back(start);
+
+            {
+                AlgorithmStep s;
+                s.m_type = StepType::AddToPath;
+                s.m_node = start;
+                addStep(s);
+            }
+
             std::reverse(m_path.begin(), m_path.end());
             return;
         }
