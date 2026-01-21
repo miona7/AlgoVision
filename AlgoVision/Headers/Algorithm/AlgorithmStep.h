@@ -9,21 +9,21 @@
 #include "Edge.h"
 
 enum class StepType {
-    // opsti koraci
+    // opsti koraci -> TODO: izbaciti
     Start,
     Finish,
 
     // cvorovi
     VisitNode,
     ProcessNode,
-    MarkNode, // Tarjan, Prim (izbaciti?)
+    MarkNode, // Tarjan, Prim TODO: izbaciti
 
     // grane
     ExamineEdge,
     RelaxEdge,  // Bellman-Ford
     SelectEdge, // Prim
 
-    // (izbaciti sva 4?)
+    // TODO: izbaciti sva 4
     PushToQueue, // BFS, Kahn, A*
     PopFromQueue,
     PushToStack, // DFS, Tarjan
@@ -48,8 +48,8 @@ struct AlgorithmStep {
     std::optional<std::string> m_message;
 
     // za undo/redo
-    std::optional<NodeState> prevNodeState;
-    std::optional<EdgeState> prevEdgeState;
+    std::optional<NodeState> m_prevNodeState;
+    std::optional<EdgeState> m_prevEdgeState;
 };
 
 #endif // ALGORITHMSTEP_H
