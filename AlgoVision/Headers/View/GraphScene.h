@@ -15,6 +15,9 @@ public:
     void resetScene();
     void clearScene();
 
+    Graph* getGraphRaw() const;
+    std::shared_ptr<Graph> getGraphShared() const;
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
@@ -23,7 +26,7 @@ private slots:
     void onNodeSelectTrigger(NodeItem*);
     void onEdgeSelectTrigger(EdgeItem*);
 
-           // reacts to editabletextitem scene change
+    // reacts to editabletextitem scene change
     void setEditGraphSceneTrigger(bool edit, EditableTextItem* label = nullptr);
 
 private:
