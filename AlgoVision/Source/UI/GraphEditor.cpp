@@ -41,7 +41,7 @@ namespace {
 
 GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 
-    m_graph = new UnweightedDirectedGraph();
+    m_graph = new WeightedDirectedGraph();
 
     m_undoStack = new QUndoStack(this);
 
