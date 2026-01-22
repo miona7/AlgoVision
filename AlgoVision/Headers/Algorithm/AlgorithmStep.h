@@ -9,34 +9,23 @@
 #include "Edge.h"
 
 enum class StepType {
-    // opsti koraci -> TODO: izbaciti
-    Start,
-    Finish,
+    DefaultType,
 
-    // cvorovi
     VisitNode,
     ProcessNode,
-    MarkNode, // Tarjan, Prim TODO: izbaciti
 
-    // grane
     ExamineEdge,
-    RelaxEdge,  // Bellman-Ford
-    SelectEdge, // Prim
+    RelaxEdge,
+    SelectEdge,
 
-    // TODO: izbaciti sva 4
-    PushToQueue, // BFS, Kahn, A*
-    PopFromQueue,
-    PushToStack, // DFS, Tarjan
-    PopFromStack,
-
-    UpdateDistance,        // Dijkstra, Bellman-Ford, Floyd-Warshall, A*, (izbaciti?)
-    AddToPath,             // A*
-    AddToTopologicalOrder, // Kahn
-    AssignComponent        // Tarjan
+    UpdateDistance,
+    AddToPath,
+    AddToTopologicalOrder,
+    AssignComponent
 };
 
 struct AlgorithmStep {
-    StepType m_type {StepType::Start};
+    StepType m_type {StepType::DefaultType};
 
     std::optional<unsigned> m_node;
     std::optional<unsigned> m_from;
