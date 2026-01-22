@@ -13,16 +13,8 @@ void FloydWarshall::execute(unsigned, unsigned) {
     checkConditions();
 
     clearSteps();
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Start;
-        s.m_message = std::string("Floyd-Warshall start");
-        addStep(s);
-    }
 
-    std::cout << "Starting Floyd Warshall." << std::endl;
     floydWarshall();
-    std::cout << "Floyd Warshall finished." << std::endl;
 
     std::cout << "All-pairs shortest distances:" << std::endl;
     for(const auto& [u, row]: m_distances) {
@@ -34,13 +26,6 @@ void FloydWarshall::execute(unsigned, unsigned) {
                 std::cout << dist << std::endl;
             }
         }
-    }
-
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Finish;
-        s.m_message = std::string("Floyd-Warshall finish");
-        addStep(s);
     }
 }
 
@@ -76,6 +61,7 @@ void FloydWarshall::floydWarshall() {
         {
             AlgorithmStep s;
             s.m_type    = StepType::UpdateDistance;
+            s.m_node    = edge.startNode();
             s.m_from    = edge.startNode();
             s.m_to      = edge.endNode();
             s.m_value   = edge.getWeight();
@@ -85,6 +71,12 @@ void FloydWarshall::floydWarshall() {
     }
 
     for(const auto& [k, _]: nodes) {
+        {
+            AlgorithmStep s;
+            s.m_type    = StepType::VisitNode;
+            s.m_node    = k; // trenutno posrednik
+            addStep(s);
+        }
         {
             AlgorithmStep s;
             s.m_type    = StepType::ProcessNode;
@@ -117,12 +109,6 @@ void FloydWarshall::floydWarshall() {
 
     for(const auto& [i, _]: nodes) {
         if(m_distances[i][i] < 0) {
-            {
-                AlgorithmStep s;
-                s.m_type    = StepType::Finish;
-                s.m_message = std::string("negative cycle detected");
-                addStep(s);
-            }
             throw std::runtime_error("Graph contains a negative cycle!");
         }
     }
