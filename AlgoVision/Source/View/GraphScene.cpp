@@ -126,6 +126,16 @@ void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest) {
     dest->setNodeSelected(false);
     m_firstNodeSelect = nullptr;
 }
+
+void GraphScene::removeNode(NodeItem* node) {
+    removeItem(node);
+    delete node;
+}
+
+void GraphScene::removeEdge(EdgeItem* edge) {
+    removeItem(edge);
+    delete edge;
+}
 // VIEW
 
 void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
@@ -144,16 +154,16 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     m_firstNodeSelect = nullptr;
 }
 
-void GraphScene::removeEdge(EdgeItem* edge) {
-    // m_graph->removeEdge(edge->modelEdge()->getId());
-    // delete edge;
+// void GraphScene::removeEdge(EdgeItem* edge) {
+//     // m_graph->removeEdge(edge->modelEdge()->getId());
+//     // delete edge;
 
-    const unsigned edgeId = edge->modelEdge()->getId();
+//     const unsigned edgeId = edge->modelEdge()->getId();
 
-    removeItem(edge);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
-    delete edge;                 // onda ukloni UI item + observer
-    m_graph->removeEdge(edgeId); // onda ukloni model
-}
+//     removeItem(edge);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
+//     delete edge;                 // onda ukloni UI item + observer
+//     m_graph->removeEdge(edgeId); // onda ukloni model
+// }
 
 EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest) const {
     EdgeItem* edgeItem   = nullptr;
@@ -176,16 +186,16 @@ EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* des
     return edgeItem;
 }
 
-void GraphScene::removeNode(NodeItem* node) {
-    // m_graph->removeNode(node->modelNode()->getId());
-    // delete node;
+// void GraphScene::removeNode(NodeItem* node) {
+//     // m_graph->removeNode(node->modelNode()->getId());
+//     // delete node;
 
-    const unsigned nodeId = node->modelNode()->getId();
+//     const unsigned nodeId = node->modelNode()->getId();
 
-    removeItem(node);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
-    delete node;                 // onda UI + observer
-    m_graph->removeNode(nodeId); // onda model
-}
+//     removeItem(node);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
+//     delete node;                 // onda UI + observer
+//     m_graph->removeNode(nodeId); // onda model
+// }
 
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
