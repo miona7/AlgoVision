@@ -41,7 +41,7 @@ namespace {
 
 GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 
-    m_graph = new UnweightedDirectedGraph();
+    // m_graph = new UnweightedDirectedGraph();
 
     m_undoStack = new QUndoStack(this);
 
@@ -58,10 +58,12 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
     // splitter->addWidget(m_leftPlaceholder);
 
-    m_scene = new GraphScene(m_graph, splitter);
+    // m_scene = new GraphScene(m_graph, splitter);
     m_view  = new QGraphicsView(splitter);
     m_view->setScene(m_scene);
     splitter->addWidget(m_view);
+
+    m_controller = new GraphController(m_scene, this);
 
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
@@ -114,8 +116,7 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 }
 
 GraphEditor::~GraphEditor() {
-    clear();
-    delete m_graph;
+    m_controller->clear();
 }
 
 void GraphEditor::onAddRequestTrigger() {
@@ -129,10 +130,5 @@ void GraphEditor::onRemoveRequestTrigger() {
 }
 
 void GraphEditor::onClearRequestTrigger() {
-    clear();
-}
-
-void GraphEditor::clear() const {
-    m_scene->resetScene();
-    m_scene->clearScene();
+    m_controller->clear();
 }

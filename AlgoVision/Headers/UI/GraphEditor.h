@@ -6,6 +6,7 @@
 
 #include "Graph.h"
 #include "GraphScene.h"
+#include "GraphController.h"
 
 class QUndoStack;
 class GraphEditTab;
@@ -29,7 +30,8 @@ private:
     QLabel*        m_leftPlaceholder = nullptr;
     QGraphicsView* m_view            = nullptr;
     GraphScene*    m_scene           = nullptr;
-    Graph*         m_graph           = nullptr;
+    GraphController* m_controller    = nullptr;
+    // Graph*         m_graph           = nullptr;
 
     void clear() const;
 
