@@ -116,8 +116,9 @@ void GraphScene::addNode(Node* nodeModel) {
     }
 }
 
-void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest) {
-    EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
+void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest,
+                         bool isDirected, bool isWeighted) {
+    EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest, isDirected, isWeighted);
 
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
@@ -127,49 +128,11 @@ void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest) {
     m_firstNodeSelect = nullptr;
 }
 
-void GraphScene::removeNode(NodeItem* node) {
-    removeItem(node);
-    delete node;
-}
-
-void GraphScene::removeEdge(EdgeItem* edge) {
-    removeItem(edge);
-    delete edge;
-}
-// VIEW
-
-void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
-    unsigned sourceId = source->modelNode()->getId();
-    unsigned destId   = dest->modelNode()->getId();
-    m_graph->addEdge(sourceId, destId);
-
-    Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
-    EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
-
-    addItem(edgeItem);
-    connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
-
-    source->setNodeSelected(false);
-    dest->setNodeSelected(false);
-    m_firstNodeSelect = nullptr;
-}
-
-// void GraphScene::removeEdge(EdgeItem* edge) {
-//     // m_graph->removeEdge(edge->modelEdge()->getId());
-//     // delete edge;
-
-//     const unsigned edgeId = edge->modelEdge()->getId();
-
-//     removeItem(edge);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
-//     delete edge;                 // onda ukloni UI item + observer
-//     m_graph->removeEdge(edgeId); // onda ukloni model
-// }
-
-EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest) const {
+EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest,
+                                   bool isDirected, bool isWeighted) const {
     EdgeItem* edgeItem   = nullptr;
-    bool      isWeighted = m_graph->isWeighted();
 
-    if(m_graph->isDirected()) {
+    if(isDirected) {
         edgeItem = new DirectedEdgeItem(modelEdge, src, dest, isWeighted);
     } else {
         edgeItem = new UndirectedEdgeItem(modelEdge, src, dest, isWeighted);
@@ -185,6 +148,44 @@ EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* des
 
     return edgeItem;
 }
+
+void GraphScene::removeNode(NodeItem* node) {
+    removeItem(node);
+    delete node;
+}
+
+void GraphScene::removeEdge(EdgeItem* edge) {
+    removeItem(edge);
+    delete edge;
+}
+// VIEW
+
+// void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
+//     unsigned sourceId = source->modelNode()->getId();
+//     unsigned destId   = dest->modelNode()->getId();
+//     m_graph->addEdge(sourceId, destId);
+
+//     Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
+//     EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
+
+//     addItem(edgeItem);
+//     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
+
+//     source->setNodeSelected(false);
+//     dest->setNodeSelected(false);
+//     m_firstNodeSelect = nullptr;
+// }
+
+// void GraphScene::removeEdge(EdgeItem* edge) {
+//     // m_graph->removeEdge(edge->modelEdge()->getId());
+//     // delete edge;
+
+//     const unsigned edgeId = edge->modelEdge()->getId();
+
+//     removeItem(edge);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
+//     delete edge;                 // onda ukloni UI item + observer
+//     m_graph->removeEdge(edgeId); // onda ukloni model
+// }
 
 // void GraphScene::removeNode(NodeItem* node) {
 //     // m_graph->removeNode(node->modelNode()->getId());

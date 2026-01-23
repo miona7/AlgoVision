@@ -19,7 +19,7 @@ public:
     std::shared_ptr<Graph> getGraphShared() const;
 
     void addNode(Node*);
-    void addEdge(Edge*, NodeItem*, NodeItem*);
+    void addEdge(Edge*, NodeItem*, NodeItem*, bool, bool);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
 
@@ -43,7 +43,7 @@ private:
     void      selectNode(NodeItem*);
     void      addEdge(NodeItem*, NodeItem*);
 
-    EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*) const;
+    EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*, bool, bool) const;
 };
 
 #endif // GRAPHSCENE_H
