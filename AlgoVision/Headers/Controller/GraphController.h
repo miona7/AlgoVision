@@ -30,6 +30,8 @@ public slots:
 private:
     std::shared_ptr<Graph> m_graph;
     GraphScene* m_scene;
+
+    void connectScene() const;
 };
 
 #endif // GRAPH_CONTROLLER

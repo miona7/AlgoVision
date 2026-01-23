@@ -6,9 +6,11 @@
 #include "UnweightedUndirectedGraph.h"
 
 GraphController::GraphController(QObject *parent) : QObject(parent){
+    connectScene();
 }
 
 GraphController::GraphController(GraphScene *scene, QObject *parent) : QObject(parent), m_scene(scene) {
+    connectScene();
 }
 
 std::shared_ptr<Graph> GraphController::graph() const {
@@ -48,6 +50,13 @@ void GraphController::clear() {
     m_graph->clear(); // onda obrisemo model
 }
 
+void GraphController::connectScene() const {
+    connect(m_scene, &GraphScene::addNodeRequest, this, &GraphController::addNode);
+    connect(m_scene, &GraphScene::addEdgeRequest, this, &GraphController::addEdge);
+    connect(m_scene, &GraphScene::removeNodeRequest, this, &GraphController::removeNode);
+    connect(m_scene, &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
+}
+
 void GraphController::addNode(const QPointF &position) {
     Node* nodeModel = m_graph->addNode(position.x(), position.y());
     m_scene->addNode(nodeModel);
@@ -58,8 +67,7 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
     unsigned destId   = dest->modelNode()->getId();
     m_graph->addEdge(sourceId, destId);
     Edge* edgeModel = m_graph->getEdge(sourceId, destId);
-
-    m_scene->addEdge(edgeModel, source, dest);
+    m_scene->addEdge(edgeModel, source, dest, m_graph->isDirected(), m_graph->isWeighted());
 }
 
 void GraphController::removeNode(NodeItem* nodeItem) {
