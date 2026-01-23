@@ -120,13 +120,11 @@ GraphEditor::~GraphEditor() {
 }
 
 void GraphEditor::onAddRequestTrigger() {
-    m_scene->resetScene();
-    m_scene->setState(GraphScene::State::ADD);
+    m_controller->setAddSceneState();
 }
 
 void GraphEditor::onRemoveRequestTrigger() {
-    m_scene->resetScene();
-    m_scene->setState(GraphScene::State::REMOVE);
+    m_controller->setRemoveSceneState();
 }
 
 void GraphEditor::onClearRequestTrigger() {

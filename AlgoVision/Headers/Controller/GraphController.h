@@ -19,6 +19,9 @@ public:
     GraphScene *scene() const;
     void setScene(GraphScene *newScene);
 
+    void setAddSceneState() const;
+    void setRemoveSceneState() const;
+
 public slots:
     std::shared_ptr<Graph> createGraph(bool isDirected, bool isWeighted);
     void addNode(const QPointF& point);

@@ -29,6 +29,14 @@ void GraphController::setScene(GraphScene* newScene) {
     m_scene = newScene;
 }
 
+void GraphController::setAddSceneState() const {
+    m_scene->setState(GraphScene::State::ADD);
+}
+
+void GraphController::setRemoveSceneState() const {
+    m_scene->setState(GraphScene::State::REMOVE);
+}
+
 std::shared_ptr<Graph> GraphController::createGraph(bool isDirected, bool isWeighted) {
     if (isDirected && isWeighted) {
         return std::make_shared<WeightedDirectedGraph>();
