@@ -18,6 +18,8 @@ public:
     Graph* getGraphRaw() const;
     std::shared_ptr<Graph> getGraphShared() const;
 
+    void addNode(Node*);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;

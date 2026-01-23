@@ -103,6 +103,18 @@ void GraphScene::addNode(QPointF position) {
     }
 }
 
+void GraphScene::addNode(Node* nodeModel) {
+    NodeItem* nodeItem  = new NodeItem(nodeModel);
+    addItem(nodeItem);
+    connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
+    connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
+            &GraphScene::setEditGraphSceneTrigger);
+
+    if(m_firstNodeSelect) {
+        addEdge(m_firstNodeSelect, nodeItem);
+    }
+}
+
 void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     unsigned sourceId = source->modelNode()->getId();
     unsigned destId   = dest->modelNode()->getId();

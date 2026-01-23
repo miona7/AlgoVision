@@ -41,3 +41,8 @@ std::shared_ptr<Graph> GraphController::createGraph(bool isDirected, bool isWeig
 
     return std::make_shared<UnweightedUndirectedGraph>();
 }
+
+void GraphController::addNode(const QPointF &position) {
+    Node* nodeModel = m_graph->addNode(position.x(), position.y());
+    m_scene->addNode(nodeModel);
+}
