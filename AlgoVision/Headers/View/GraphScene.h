@@ -24,6 +24,12 @@ public:
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
 
+signals:
+    void addNodeRequest(const QPointF& point);
+    void addEdgeRequest(NodeItem* source, NodeItem* dest);
+    void removeNodeRequest(NodeItem* nodeItem);
+    void removeEdgeRequest(EdgeItem* edgeItem);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;

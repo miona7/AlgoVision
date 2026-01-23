@@ -42,7 +42,7 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsItem* item     = itemAt(clickPos, QTransform());
 
     if(!item && m_state == State::ADD) {
-        addNode(clickPos);
+        emit addNodeRequest(clickPos); // zahtevamo dodavanje cvora od kontrolera
         event->accept();
         return;
     }
@@ -65,13 +65,13 @@ void GraphScene::onNodeSelectTrigger(NodeItem* node) {
     }
 
     if(m_state == State::REMOVE) {
-        removeNode(node);
+        emit removeNodeRequest(node); // zahtevamo brisanje cvora od kontrolera
     }
 }
 
 void GraphScene::onEdgeSelectTrigger(EdgeItem* edge) {
     if(m_state == State::REMOVE) {
-        removeEdge(edge);
+        emit removeEdgeRequest(edge); // zahtevamo brisanje grane od kontrolera
     }
 }
 
@@ -94,14 +94,13 @@ void GraphScene::addNode(Node* nodeModel) {
             &GraphScene::setEditGraphSceneTrigger);
 
     if(m_firstNodeSelect) {
-        addEdge(m_firstNodeSelect, nodeItem);
+        emit addEdgeRequest(m_firstNodeSelect, nodeItem); // zahtevamo dodavanje grane od kontrolera
     }
 }
 
 void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest,
                          bool isDirected, bool isWeighted) {
     EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest, isDirected, isWeighted);
-
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
 
@@ -156,7 +155,7 @@ void GraphScene::selectNode(NodeItem* node) {
     }
 
     // other node is selected
-    addEdge(m_firstNodeSelect, node);
+    emit addEdgeRequest(m_firstNodeSelect, node); // zahtevamo dodavanje grane od kontrolera
 }
 
 // vraca raw pointer (postojeci)
