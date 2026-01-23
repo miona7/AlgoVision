@@ -37,20 +37,23 @@ void GraphController::setRemoveSceneState() const {
     m_scene->setState(GraphScene::State::REMOVE);
 }
 
-std::shared_ptr<Graph> GraphController::createGraph(bool isDirected, bool isWeighted) {
+void GraphController::createGraph(bool isDirected, bool isWeighted) {
     if (isDirected && isWeighted) {
-        return std::make_shared<WeightedDirectedGraph>();
+        m_graph =  std::make_shared<WeightedDirectedGraph>();
+        return;
     }
 
     if (isDirected && !isWeighted) {
-        return std::make_shared<UnweightedDirectedGraph>();
+        m_graph = std::make_shared<UnweightedDirectedGraph>();
+        return;
     }
 
     if (!isDirected && isWeighted) {
-        return std::make_shared<WeightedUndirectedGraph>();
+        m_graph = std::make_shared<WeightedUndirectedGraph>();
+        return;
     }
 
-    return std::make_shared<UnweightedUndirectedGraph>();
+    m_graph = std::make_shared<UnweightedUndirectedGraph>();
 }
 
 void GraphController::clear() {
