@@ -17,6 +17,9 @@ public:
     GraphScene *scene() const;
     void setScene(GraphScene *newScene);
 
+public slots:
+    std::shared_ptr<Graph> createGraph(bool isDirected, bool isWeighted);
+
 private:
     std::shared_ptr<Graph> m_graph;
     GraphScene* m_scene;

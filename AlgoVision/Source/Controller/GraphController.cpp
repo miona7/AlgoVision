@@ -1,4 +1,8 @@
 #include "GraphController.h"
+#include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
+#include "UnweightedDirectedGraph.h"
+#include "UnweightedUndirectedGraph.h"
 
 GraphController::GraphController(QObject *parent) : QObject(parent){
 }
@@ -22,4 +26,18 @@ void GraphController::setScene(GraphScene* newScene) {
     m_scene = newScene;
 }
 
+std::shared_ptr<Graph> GraphController::createGraph(bool isDirected, bool isWeighted) {
+    if (isDirected && isWeighted) {
+        return std::make_shared<WeightedDirectedGraph>();
+    }
 
+    if (isDirected && !isWeighted) {
+        return std::make_shared<UnweightedDirectedGraph>();
+    }
+
+    if (!isDirected && isWeighted) {
+        return std::make_shared<WeightedUndirectedGraph>();
+    }
+
+    return std::make_shared<UnweightedUndirectedGraph>();
+}
