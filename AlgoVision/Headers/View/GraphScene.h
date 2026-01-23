@@ -39,10 +39,8 @@ private:
     EditableTextItem* m_editLabel {nullptr};
     State             m_state {State::ADD};
     Graph*            m_graph {nullptr};
-    void      addNode(QPointF);
-    void      selectNode(NodeItem*);
-    void      addEdge(NodeItem*, NodeItem*);
 
+    void      selectNode(NodeItem*);
     EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*, bool, bool) const;
 };
 

@@ -90,19 +90,6 @@ void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
     }
 }
 
-void GraphScene::addNode(QPointF position) {
-    Node*     nodeModel = m_graph->addNode(position.x(), position.y());
-    NodeItem* nodeItem  = new NodeItem(nodeModel);
-    addItem(nodeItem);
-    connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
-    connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
-            &GraphScene::setEditGraphSceneTrigger);
-
-    if(m_firstNodeSelect) {
-        addEdge(m_firstNodeSelect, nodeItem);
-    }
-}
-
 // VIEW region
 void GraphScene::addNode(Node* nodeModel) {
     NodeItem* nodeItem  = new NodeItem(nodeModel);
@@ -159,44 +146,6 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     delete edge;
 }
 // VIEW
-
-// void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
-//     unsigned sourceId = source->modelNode()->getId();
-//     unsigned destId   = dest->modelNode()->getId();
-//     m_graph->addEdge(sourceId, destId);
-
-//     Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
-//     EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
-
-//     addItem(edgeItem);
-//     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
-
-//     source->setNodeSelected(false);
-//     dest->setNodeSelected(false);
-//     m_firstNodeSelect = nullptr;
-// }
-
-// void GraphScene::removeEdge(EdgeItem* edge) {
-//     // m_graph->removeEdge(edge->modelEdge()->getId());
-//     // delete edge;
-
-//     const unsigned edgeId = edge->modelEdge()->getId();
-
-//     removeItem(edge);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
-//     delete edge;                 // onda ukloni UI item + observer
-//     m_graph->removeEdge(edgeId); // onda ukloni model
-// }
-
-// void GraphScene::removeNode(NodeItem* node) {
-//     // m_graph->removeNode(node->modelNode()->getId());
-//     // delete node;
-
-//     const unsigned nodeId = node->modelNode()->getId();
-
-//     removeItem(node);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
-//     delete node;                 // onda UI + observer
-//     m_graph->removeNode(nodeId); // onda model
-// }
 
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
