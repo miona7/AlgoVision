@@ -6,6 +6,8 @@
 #include <QGraphicsScene>
 
 class GraphScene : public QGraphicsScene {
+    Q_OBJECT
+
 public:
     explicit GraphScene(Graph*, QObject* = nullptr);
 

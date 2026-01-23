@@ -8,6 +8,8 @@
 #include "GraphScene.h"
 
 class GraphController : public QObject {
+    Q_OBJECT
+
 public:
     explicit GraphController(QObject* parent = nullptr);
     explicit GraphController(GraphScene* scene, QObject* parent = nullptr);
