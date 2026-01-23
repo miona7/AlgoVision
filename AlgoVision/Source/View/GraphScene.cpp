@@ -9,6 +9,10 @@
 #include "NodeItem.h"
 #include "UndirectedEdgeItem.h"
 
+GraphScene::GraphScene(QObject *parent) : QGraphicsScene(parent) {
+    setSceneRect(0, 0, 3000, 3000);
+}
+
 GraphScene::GraphScene(const std::shared_ptr<Graph> &graph, QObject *parent)
     : QGraphicsScene(parent), m_graph(graph) {
     setSceneRect(0, 0, 3000, 3000);
