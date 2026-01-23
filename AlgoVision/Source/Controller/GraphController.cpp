@@ -46,3 +46,12 @@ void GraphController::addNode(const QPointF &position) {
     Node* nodeModel = m_graph->addNode(position.x(), position.y());
     m_scene->addNode(nodeModel);
 }
+
+void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
+    unsigned sourceId = source->modelNode()->getId();
+    unsigned destId   = dest->modelNode()->getId();
+    m_graph->addEdge(sourceId, destId);
+    Edge* edgeModel = m_graph->getEdge(sourceId, destId);
+
+    m_scene->addEdge(edgeModel, source, dest);
+}

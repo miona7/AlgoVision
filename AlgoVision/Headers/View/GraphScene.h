@@ -19,6 +19,7 @@ public:
     std::shared_ptr<Graph> getGraphShared() const;
 
     void addNode(Node*);
+    void addEdge(Edge*, NodeItem*, NodeItem*);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;

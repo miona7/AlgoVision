@@ -103,6 +103,7 @@ void GraphScene::addNode(QPointF position) {
     }
 }
 
+// VIEW region
 void GraphScene::addNode(Node* nodeModel) {
     NodeItem* nodeItem  = new NodeItem(nodeModel);
     addItem(nodeItem);
@@ -114,6 +115,18 @@ void GraphScene::addNode(Node* nodeModel) {
         addEdge(m_firstNodeSelect, nodeItem);
     }
 }
+
+void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest) {
+    EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
+
+    addItem(edgeItem);
+    connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
+
+    source->setNodeSelected(false);
+    dest->setNodeSelected(false);
+    m_firstNodeSelect = nullptr;
+}
+// VIEW
 
 void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     unsigned sourceId = source->modelNode()->getId();
