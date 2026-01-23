@@ -23,6 +23,7 @@ public slots:
     void addEdge(NodeItem* source, NodeItem* dest);
     void removeNode(NodeItem* nodeItem);
     void removeEdge(EdgeItem* edgeItem);
+    void clear();
 
 private:
     std::shared_ptr<Graph> m_graph;

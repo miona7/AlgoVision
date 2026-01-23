@@ -43,6 +43,11 @@ std::shared_ptr<Graph> GraphController::createGraph(bool isDirected, bool isWeig
     return std::make_shared<UnweightedUndirectedGraph>();
 }
 
+void GraphController::clear() {
+    m_scene->clear(); // prvo obrisemo pogled
+    m_graph->clear(); // onda obrisemo model
+}
+
 void GraphController::addNode(const QPointF &position) {
     Node* nodeModel = m_graph->addNode(position.x(), position.y());
     m_scene->addNode(nodeModel);
