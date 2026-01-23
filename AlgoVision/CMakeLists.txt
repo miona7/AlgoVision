@@ -68,6 +68,8 @@ set(PROJECT_SOURCES
         Headers/View/GraphScene.h Source/View/GraphScene.cpp
         Headers/View/EditableTextItem.h Source/View/EditableTextItem.cpp
 
+        Headers/Controller/GraphController.h Source/Controller/GraphController.cpp
+
         Headers/Threads/AlgorithmWorker.h Source/Threads/AlgorithmWorker.cpp
 )
 
@@ -117,6 +119,7 @@ target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Serialization
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/View
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Threads
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Controller
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
