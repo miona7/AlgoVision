@@ -1,4 +1,5 @@
 #include "GraphController.h"
+#include "EdgeItem.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 #include "UnweightedDirectedGraph.h"
@@ -54,4 +55,16 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
     Edge* edgeModel = m_graph->getEdge(sourceId, destId);
 
     m_scene->addEdge(edgeModel, source, dest);
+}
+
+void GraphController::removeNode(NodeItem* nodeItem) {
+    const unsigned nodeId = nodeItem->modelNode()->getId();
+    m_scene->removeNode(nodeItem); // prvo brisemo pogled
+    m_graph->removeNode(nodeId); // pa onda brisemo model
+}
+
+void GraphController::removeEdge(EdgeItem* edgeItem) {
+    const unsigned edgeId = edgeItem->modelEdge()->getId();
+    m_scene->removeEdge(edgeItem); // prvo brisemo pogled
+    m_graph->removeEdge(edgeId); // pa onda brisemo model
 }

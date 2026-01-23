@@ -21,6 +21,8 @@ public slots:
     std::shared_ptr<Graph> createGraph(bool isDirected, bool isWeighted);
     void addNode(const QPointF& point);
     void addEdge(NodeItem* source, NodeItem* dest);
+    void removeNode(NodeItem* nodeItem);
+    void removeEdge(EdgeItem* edgeItem);
 
 private:
     std::shared_ptr<Graph> m_graph;
