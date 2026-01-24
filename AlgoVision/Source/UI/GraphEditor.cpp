@@ -58,7 +58,7 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
     // splitter->addWidget(m_leftPlaceholder);
 
-    // m_scene = new GraphScene(m_graph, splitter);
+    m_scene = new GraphScene(splitter);
     m_view  = new QGraphicsView(splitter);
     m_view->setScene(m_scene);
     splitter->addWidget(m_view);
@@ -129,4 +129,8 @@ void GraphEditor::onRemoveRequestTrigger() {
 
 void GraphEditor::onClearRequestTrigger() {
     m_controller->clear();
+}
+
+GraphController* GraphEditor::controller() const {
+    return m_controller;
 }

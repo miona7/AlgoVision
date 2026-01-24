@@ -78,6 +78,7 @@ MainWindow::~MainWindow() {
     delete m_ui;
 }
 
+// make changes to adapt to newly created GraphController class which has controller role
 void MainWindow::onOpenGraphTriggered() {
     QString filePath = QFileDialog::getOpenFileName(this, "open graph", "", "graph files (*.json)");
 
@@ -119,6 +120,7 @@ void MainWindow::onOpenGraphTriggered() {
                                  "\ndirected: " + QString(loadedDirected ? "true" : "false"));
 }
 
+// changes: initialize graph inside method by calling controller
 void MainWindow::onCreateGraphTriggered() {
 
     QDialog dialog(this);
@@ -152,10 +154,12 @@ void MainWindow::onCreateGraphTriggered() {
     QObject::connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
     QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
 
+    bool directed = false;
+    bool weighted = false;
 
     if(dialog.exec() == QDialog::Accepted) {
-        bool directed = directedBtn->isChecked();
-        bool weighted = weightedBtn->isChecked();
+        directed = directedBtn->isChecked();
+        weighted = weightedBtn->isChecked();
 
         std::cout << "Graph created with options: "
                   << (directed ? "Directed" : "Undirected") << ", "
@@ -165,6 +169,8 @@ void MainWindow::onCreateGraphTriggered() {
 
         return;
     }
+
+    m_graphEditor->controller()->createGraph(directed, weighted);
 
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     this->setWindowTitle(QString::fromLatin1(AppConstants::graphPageDefaultTitle));
@@ -257,6 +263,7 @@ void MainWindow::initMenuToolBar() {
     connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
 }
 
+// this function is, and should be inside GraphController class, remove it later
 std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected) {
     if(isWeighted && isDirected) {
         return std::make_shared<WeightedDirectedGraph>();

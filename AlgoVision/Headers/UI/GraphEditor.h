@@ -19,6 +19,8 @@ public:
     explicit GraphEditor(QWidget* = nullptr);
     ~GraphEditor() override;
 
+    GraphController* controller() const;
+
 private slots:
     void onAddRequestTrigger();
     void onRemoveRequestTrigger();
