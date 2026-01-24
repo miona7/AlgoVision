@@ -25,8 +25,13 @@ EdgeItem::~EdgeItem() {
         m_modelEdge  = nullptr; // sprecavamo ponovno pozivanje
     }
 
-    m_sourceNode->removeEdge(this);
-    m_destNode->removeEdge(this);
+    if(m_sourceNode != nullptr) {
+        m_sourceNode->removeEdge(this);
+    }
+
+    if(m_destNode != nullptr) {
+        m_destNode->removeEdge(this);
+    }
 }
 
 void EdgeItem::initEdgeWeight() {

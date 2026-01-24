@@ -136,6 +136,11 @@ EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* des
 }
 
 void GraphScene::removeNode(NodeItem* node) {
+    auto edges = node->edges();
+    for (EdgeItem* edge : edges) {
+        removeEdge(edge);
+    }
+
     removeItem(node);
     delete node;
 }

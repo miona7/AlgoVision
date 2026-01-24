@@ -27,6 +27,8 @@ public:
     EditableTextItem* label() const;
     void              setLabel(EditableTextItem* newLabel);
 
+    const QSet<EdgeItem *>& edges() const;
+
 signals:
     void nodeSelected(NodeItem*);
 
