@@ -23,23 +23,8 @@ void Prim::execute(unsigned, unsigned) {
     checkConditions();
 
     clearSteps();
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Start;
-        s.m_message = std::string("Prim start");
-        addStep(s);
-    }
 
-    std::cout << "Starting Prim." << std::endl;
     prim();
-    std::cout << "Prim finished." << std::endl;
-
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Finish;
-        s.m_message = std::string("Prim finish");
-        addStep(s);
-    }
 }
 
 void Prim::prim() {
@@ -64,12 +49,6 @@ void Prim::prim() {
 
     {
         AlgorithmStep s;
-        s.m_type = StepType::VisitNode;
-        s.m_node = start;
-        addStep(s);
-    }
-    {
-        AlgorithmStep s;
         s.m_type  = StepType::UpdateDistance;
         s.m_node  = start;
         s.m_value = 0;
@@ -88,15 +67,14 @@ void Prim::prim() {
 
             {
                 AlgorithmStep s;
-                s.m_type = StepType::ProcessNode;
+                s.m_type = StepType::VisitNode;
                 s.m_node = currentNode;
                 addStep(s);
             }
             {
                 AlgorithmStep s;
-                s.m_type  = StepType::MarkNode;
-                s.m_node  = currentNode;
-                s.m_value = 1; // inTree = true
+                s.m_type = StepType::ProcessNode;
+                s.m_node = currentNode;
                 addStep(s);
             }
 
@@ -141,10 +119,8 @@ void Prim::prim() {
 
     int totalWeight = 0;
 
-    std::cout << "Minimum Spanning Tree:" << std::endl;
     for(const auto& [u, v]: parent) {
         if(v) {
-            std::cout << *v << " -> " << u << " edge = " << minDistance[u] << std::endl;
             totalWeight += minDistance[u];
         }
     }

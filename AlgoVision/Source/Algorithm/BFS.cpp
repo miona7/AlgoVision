@@ -18,24 +18,8 @@ void BFS::execute(unsigned idStartNode, unsigned) {
     checkConditions(idStartNode);
 
     clearSteps();
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Start;
-        s.m_node    = idStartNode;
-        s.m_message = std::string("BFS start");
-        addStep(s);
-    }
 
-    std::cout << "BFS traversal starting from node " << idStartNode << ":" << std::endl;
     bfs(idStartNode);
-    std::cout << "BFS finished." << std::endl;
-
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Finish;
-        s.m_message = std::string("BFS finish");
-        addStep(s);
-    }
 }
 
 void BFS::bfs(unsigned start) {
@@ -52,33 +36,13 @@ void BFS::bfs(unsigned start) {
     std::queue<unsigned> q;
     q.push(start);
 
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::VisitNode;
-        s.m_node = start;
-        addStep(s);
-    }
-    {
-        AlgorithmStep s;
-        s.m_type  = StepType::MarkNode;
-        s.m_node  = start;
-        s.m_value = 1;
-        addStep(s);
-    }
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::PushToQueue;
-        s.m_node = start;
-        addStep(s);
-    }
-
     while(!q.empty()) {
         unsigned current = q.front();
         q.pop();
 
         {
             AlgorithmStep s;
-            s.m_type = StepType::PopFromQueue;
+            s.m_type = StepType::VisitNode;
             s.m_node = current;
             addStep(s);
         }
@@ -89,7 +53,6 @@ void BFS::bfs(unsigned start) {
             addStep(s);
         }
 
-        std::cout << "visiting node with id " << current << std::endl;
         if(adjList.find(current) != adjList.end()) {
             for(const auto& [_, neighbourId]: adjList[current]) {
 
@@ -104,27 +67,6 @@ void BFS::bfs(unsigned start) {
                 if(!m_visited[neighbourId]) {
                     m_visited[neighbourId] = true;
                     q.push(neighbourId);
-
-                    {
-                        AlgorithmStep s;
-                        s.m_type = StepType::VisitNode;
-                        s.m_node = neighbourId;
-                        s.m_from = current; // roditelj koji ga je otkrio
-                        addStep(s);
-                    }
-                    {
-                        AlgorithmStep s;
-                        s.m_type  = StepType::MarkNode;
-                        s.m_node  = neighbourId;
-                        s.m_value = 1;
-                        addStep(s);
-                    }
-                    {
-                        AlgorithmStep s;
-                        s.m_type = StepType::PushToQueue;
-                        s.m_node = neighbourId;
-                        addStep(s);
-                    }
                 }
             }
         }
