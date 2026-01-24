@@ -25,7 +25,9 @@ public:
     void removeEdge(EdgeItem*);
 
     EditableTextItem* label() const;
-    void              setLabel(EditableTextItem* newLabel);
+    void              setLabel(EditableTextItem*);
+
+    const QSet<EdgeItem *>& edges() const;
 
 signals:
     void nodeSelected(NodeItem*);
@@ -38,10 +40,10 @@ protected:
     void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void         mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
     void         mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-    void         mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+    void         mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
 
 private slots:
-    void onNameChanged(const QString& name) const;
+    void onNameChanged(const QString&) const;
 
 private:
     Node*             m_modelNode;

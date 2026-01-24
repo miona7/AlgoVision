@@ -9,7 +9,12 @@
 #include "NodeItem.h"
 #include "UndirectedEdgeItem.h"
 
-GraphScene::GraphScene(Graph* graph, QObject* parent) : m_graph(graph), QGraphicsScene(parent) {
+GraphScene::GraphScene(QObject *parent) : QGraphicsScene(parent) {
+    setSceneRect(0, 0, 3000, 3000);
+}
+
+GraphScene::GraphScene(const std::shared_ptr<Graph> &graph, QObject *parent)
+    : QGraphicsScene(parent), m_graph(graph) {
     setSceneRect(0, 0, 3000, 3000);
 }
 
@@ -42,7 +47,7 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsItem* item     = itemAt(clickPos, QTransform());
 
     if(!item && m_state == State::ADD) {
-        addNode(clickPos);
+        emit addNodeRequest(clickPos); // zahtevamo dodavanje cvora od kontrolera
         event->accept();
         return;
     }
@@ -59,24 +64,19 @@ void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsScene::mouseDoubleClickEvent(event);
 }
 
-void GraphScene::clearScene() {
-    clear();          // prvo brisemo sve UI iteme + observere
-    m_graph->clear(); // onda brisemo model
-}
-
 void GraphScene::onNodeSelectTrigger(NodeItem* node) {
     if(m_state == State::ADD || m_state == State::EDIT) {
         selectNode(node);
     }
 
     if(m_state == State::REMOVE) {
-        removeNode(node);
+        emit removeNodeRequest(node); // zahtevamo brisanje cvora od kontrolera
     }
 }
 
 void GraphScene::onEdgeSelectTrigger(EdgeItem* edge) {
     if(m_state == State::REMOVE) {
-        removeEdge(edge);
+        emit removeEdgeRequest(edge); // zahtevamo brisanje grane od kontrolera
     }
 }
 
@@ -90,8 +90,8 @@ void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
     }
 }
 
-void GraphScene::addNode(QPointF position) {
-    Node*     nodeModel = m_graph->addNode(position.x(), position.y());
+// VIEW region
+void GraphScene::addNode(Node* nodeModel) {
     NodeItem* nodeItem  = new NodeItem(nodeModel);
     addItem(nodeItem);
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
@@ -99,18 +99,13 @@ void GraphScene::addNode(QPointF position) {
             &GraphScene::setEditGraphSceneTrigger);
 
     if(m_firstNodeSelect) {
-        addEdge(m_firstNodeSelect, nodeItem);
+        emit addEdgeRequest(m_firstNodeSelect, nodeItem); // zahtevamo dodavanje grane od kontrolera
     }
 }
 
-void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
-    unsigned sourceId = source->modelNode()->getId();
-    unsigned destId   = dest->modelNode()->getId();
-    m_graph->addEdge(sourceId, destId);
-
-    Edge*     edgeModel = m_graph->getEdge(sourceId, destId);
-    EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest);
-
+void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest,
+                         bool isDirected, bool isWeighted) {
+    EdgeItem* edgeItem  = makeEdgeItem(edgeModel, source, dest, isDirected, isWeighted);
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
 
@@ -119,22 +114,11 @@ void GraphScene::addEdge(NodeItem* source, NodeItem* dest) {
     m_firstNodeSelect = nullptr;
 }
 
-void GraphScene::removeEdge(EdgeItem* edge) {
-    // m_graph->removeEdge(edge->modelEdge()->getId());
-    // delete edge;
-
-    const unsigned edgeId = edge->modelEdge()->getId();
-
-    removeItem(edge);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
-    delete edge;                 // onda ukloni UI item + observer
-    m_graph->removeEdge(edgeId); // onda ukloni model
-}
-
-EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest) const {
+EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest,
+                                   bool isDirected, bool isWeighted) const {
     EdgeItem* edgeItem   = nullptr;
-    bool      isWeighted = m_graph->isWeighted();
 
-    if(m_graph->isDirected()) {
+    if(isDirected) {
         edgeItem = new DirectedEdgeItem(modelEdge, src, dest, isWeighted);
     } else {
         edgeItem = new UndirectedEdgeItem(modelEdge, src, dest, isWeighted);
@@ -152,15 +136,21 @@ EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* des
 }
 
 void GraphScene::removeNode(NodeItem* node) {
-    // m_graph->removeNode(node->modelNode()->getId());
-    // delete node;
+    auto edges = node->edges();
+    for (EdgeItem* edge : edges) {
+        removeEdge(edge);
+    }
 
-    const unsigned nodeId = node->modelNode()->getId();
-
-    removeItem(node);            // prvo ukloni item sa scene, da bi mogao bezbedno da se obrise
-    delete node;                 // onda UI + observer
-    m_graph->removeNode(nodeId); // onda model
+    removeItem(node);
+    delete node;
 }
+
+void GraphScene::removeEdge(EdgeItem* edge) {
+    edge->disconnectNodes();
+    removeItem(edge);
+    delete edge;
+}
+// VIEW
 
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
@@ -176,15 +166,15 @@ void GraphScene::selectNode(NodeItem* node) {
     }
 
     // other node is selected
-    addEdge(m_firstNodeSelect, node);
+    emit addEdgeRequest(m_firstNodeSelect, node); // zahtevamo dodavanje grane od kontrolera
 }
 
 // vraca raw pointer (postojeci)
 Graph* GraphScene::getGraphRaw() const {
-    return m_graph;
+    return m_graph.get();
 }
 
 // pravi shared_ptr za algoritme, ne preuzima vlasnistvo
 std::shared_ptr<Graph> GraphScene::getGraphShared() const {
-    return std::shared_ptr<Graph>(m_graph, [](Graph*){});
+    return m_graph;
 }

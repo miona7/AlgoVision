@@ -59,25 +59,14 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(btnOpenGraph, &QPushButton::clicked, this, &MainWindow::onOpenGraphTriggered);
     connect(btnCreateGraph, &QPushButton::clicked, this, &MainWindow::onCreateGraphTriggered);
-
-           // ===== GRAPH PAGE CONTENT =====
-    QWidget* graphPage = m_ui->graphPage;
-
-           // layout
-    if(graphPage->layout() == nullptr) {
-        auto* graphLayout = new QVBoxLayout(graphPage);
-        graphLayout->setContentsMargins(0, 0, 0, 0);
-
-        auto* graphEditor = new GraphEditor(graphPage);
-        m_graphEditor     = graphEditor;
-        graphLayout->addWidget(graphEditor);
-    }
 }
 
 MainWindow::~MainWindow() {
     delete m_ui;
 }
 
+// napravi promene tako da se prilagodis kontroleru, kontroler je odgovoran za menjanje modela i pogleda
+// klikom na open graph treba da se napravi novi graf editor
 void MainWindow::onOpenGraphTriggered() {
     QString filePath = QFileDialog::getOpenFileName(this, "open graph", "", "graph files (*.json)");
 
@@ -152,10 +141,12 @@ void MainWindow::onCreateGraphTriggered() {
     QObject::connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
     QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
 
+    bool directed = false;
+    bool weighted = false;
 
     if(dialog.exec() == QDialog::Accepted) {
-        bool directed = directedBtn->isChecked();
-        bool weighted = weightedBtn->isChecked();
+        directed = directedBtn->isChecked();
+        weighted = weightedBtn->isChecked();
 
         std::cout << "Graph created with options: "
                   << (directed ? "Directed" : "Undirected") << ", "
@@ -166,12 +157,15 @@ void MainWindow::onCreateGraphTriggered() {
         return;
     }
 
+    createGraphEditor(directed, weighted);
+
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     this->setWindowTitle(QString::fromLatin1(AppConstants::graphPageDefaultTitle));
     initMenuToolBar();
 }
 
 
+// prilagodi da koristis graf iz kontrolera
 void MainWindow::onSaveGraphTriggered() {
     QString filePath = QFileDialog::getSaveFileName(this, "save graph", "", "graph files (*.json)");
 
@@ -257,6 +251,26 @@ void MainWindow::initMenuToolBar() {
     connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
 }
 
+// na osnovu informacija kakav je graf, pravi controler i graf pre nego li napravi graf editor
+void MainWindow::createGraphEditor(bool isDirected, bool isWeighted) {
+    // prvo pravimo kontroler i graf(model + pogled)
+    std::shared_ptr<GraphController> controller = std::make_shared<GraphController>();
+    controller->createGraph(isDirected, isWeighted);
+
+    // onda postavljamo graf editor(UI) koji je vezan za kontroler(model + pogled)
+    QWidget* graphPage = m_ui->graphPage;
+
+    if(graphPage->layout() == nullptr) {
+        auto* graphLayout = new QVBoxLayout(graphPage);
+        graphLayout->setContentsMargins(0, 0, 0, 0);
+
+        auto* graphEditor = new GraphEditor(controller, graphPage);
+        m_graphEditor     = graphEditor;
+        graphLayout->addWidget(graphEditor);
+    }
+}
+
+// ukloni ovaj metod, treba i vec postoji u okviru kontolera, treba ga ukloniti odavde
 std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected) {
     if(isWeighted && isDirected) {
         return std::make_shared<WeightedDirectedGraph>();

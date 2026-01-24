@@ -3,9 +3,11 @@
 
 #include <QGraphicsView>
 #include <QWidget>
+#include <memory>
 
 #include "Graph.h"
 #include "GraphScene.h"
+#include "GraphController.h"
 
 class QUndoStack;
 class GraphEditTab;
@@ -15,8 +17,12 @@ class GraphEditor : public QWidget {
     Q_OBJECT
 
 public:
-    explicit GraphEditor(QWidget* = nullptr);
+    // kontroler mora da se postavi i da postoji pre graf editora, kako bi klase vezane za
+    // algoritme koristile ispravan graf (koji nije nullptr)
+    explicit GraphEditor(const std::shared_ptr<GraphController>&, QWidget* = nullptr);
     ~GraphEditor() override;
+
+    std::shared_ptr<GraphController> graphController() const;
 
 private slots:
     void onAddRequestTrigger();
@@ -28,10 +34,7 @@ private:
     GraphEditTab*  m_editTab         = nullptr;
     QLabel*        m_leftPlaceholder = nullptr;
     QGraphicsView* m_view            = nullptr;
-    GraphScene*    m_scene           = nullptr;
-    Graph*         m_graph           = nullptr;
-
-    void clear() const;
+    std::shared_ptr<GraphController> m_graphController;
 
     int m_dummyState = 0; // samo za test
 };

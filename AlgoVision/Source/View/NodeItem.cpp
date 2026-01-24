@@ -33,12 +33,6 @@ NodeItem::~NodeItem() {
         m_observerId = 0;
         m_modelNode  = nullptr;
     }
-
-    for(auto* edge: m_edges) {
-        delete edge;
-    }
-
-    m_edges.clear();
 }
 
 Node* NodeItem::modelNode() const {
@@ -155,6 +149,10 @@ EditableTextItem* NodeItem::label() const {
 
 void NodeItem::setLabel(EditableTextItem* newLabel) {
     m_label = newLabel;
+}
+
+const QSet<EdgeItem *> &NodeItem::edges() const {
+    return m_edges;
 }
 
 void NodeItem::setNodeSelected(bool newNodeSelected) {

@@ -10,8 +10,7 @@ EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bo
     setFlag(ItemIsSelectable);
     setAcceptedMouseButtons(Qt::LeftButton);
 
-    m_sourceNode->addEdge(this);
-    m_destNode->addEdge(this);
+    connectNodes();
 
     if(m_modelEdge != nullptr) {
         m_observerId = m_modelEdge->addObserver([this](Edge&) { this->onEdgeUpdated(); });
@@ -24,9 +23,6 @@ EdgeItem::~EdgeItem() {
         m_observerId = 0;
         m_modelEdge  = nullptr; // sprecavamo ponovno pozivanje
     }
-
-    m_sourceNode->removeEdge(this);
-    m_destNode->removeEdge(this);
 }
 
 void EdgeItem::initEdgeWeight() {
@@ -41,6 +37,26 @@ void EdgeItem::initEdgeWeight() {
 void EdgeItem::adjust() {
     prepareGeometryChange();
     adjustPointsGeometry();
+}
+
+void EdgeItem::connectNodes() {
+    if(m_sourceNode != nullptr) {
+        m_sourceNode->addEdge(this);
+    }
+
+    if(m_destNode != nullptr) {
+        m_destNode->addEdge(this);
+    }
+}
+
+void EdgeItem::disconnectNodes() {
+    if(m_sourceNode != nullptr) {
+        m_sourceNode->removeEdge(this);
+    }
+
+    if(m_destNode != nullptr) {
+        m_destNode->removeEdge(this);
+    }
 }
 
 void EdgeItem::adjustPointsGeometry() {

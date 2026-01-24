@@ -39,9 +39,10 @@ namespace {
     };
 } // namespace
 
-GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
+GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController, QWidget* parent)
+    : m_graphController(graphController), QWidget(parent) {
 
-    m_graph = new WeightedDirectedGraph();
+    // m_graph = new UnweightedDirectedGraph();
 
     m_undoStack = new QUndoStack(this);
 
@@ -58,10 +59,11 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
     // splitter->addWidget(m_leftPlaceholder);
 
-    m_scene = new GraphScene(m_graph, splitter);
     m_view  = new QGraphicsView(splitter);
-    m_view->setScene(m_scene);
+    m_view->setScene(m_graphController->scene());
     splitter->addWidget(m_view);
+
+    // m_graphController = new GraphController(m_scene, this);
 
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
@@ -70,7 +72,7 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     m_editTab = new GraphEditTab(rightTabs);
 
     rightTabs->addTab(m_editTab, "graph");
-    rightTabs->addTab(new AlgorithmTab(m_scene->getGraphShared(), rightTabs), "algorithm");
+    rightTabs->addTab(new AlgorithmTab(m_graphController->graph(), rightTabs), "algorithm");
 
     splitter->addWidget(rightTabs);
 
@@ -114,25 +116,21 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 }
 
 GraphEditor::~GraphEditor() {
-    clear();
-    delete m_graph;
+    m_graphController->clear();
 }
 
 void GraphEditor::onAddRequestTrigger() {
-    m_scene->resetScene();
-    m_scene->setState(GraphScene::State::ADD);
+    m_graphController->setAddSceneState();
 }
 
 void GraphEditor::onRemoveRequestTrigger() {
-    m_scene->resetScene();
-    m_scene->setState(GraphScene::State::REMOVE);
+    m_graphController->setRemoveSceneState();
 }
 
 void GraphEditor::onClearRequestTrigger() {
-    clear();
+    m_graphController->clear();
 }
 
-void GraphEditor::clear() const {
-    m_scene->resetScene();
-    m_scene->clearScene();
+std::shared_ptr<GraphController> GraphEditor::graphController() const {
+    return m_graphController;
 }
