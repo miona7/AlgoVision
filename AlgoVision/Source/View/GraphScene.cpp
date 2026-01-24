@@ -146,6 +146,7 @@ void GraphScene::removeNode(NodeItem* node) {
 }
 
 void GraphScene::removeEdge(EdgeItem* edge) {
+    edge->disconnectNodes();
     removeItem(edge);
     delete edge;
 }

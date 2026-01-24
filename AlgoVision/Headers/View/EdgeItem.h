@@ -22,6 +22,9 @@ public:
     QPainterPath         shape() const override                                               = 0;
     void                 paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override = 0;
 
+    void connectNodes();
+    void disconnectNodes();
+
     Edge* modelEdge() const;
     void  setModelEdge(Edge*);
 
