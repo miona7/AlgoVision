@@ -40,13 +40,14 @@ private:
     ThemeManager*   m_themeManager;
 
     std::unique_ptr<Serializer> m_serializer;
+    // treba ukloniti m_graph, nema potrebe da se nalazi u MainWindow klasi
     std::shared_ptr<Graph>      m_graph;
     GraphEditor*                m_graphEditor = nullptr;
 
     void                   initMenuToolBar();
     void createGraphEditor(bool, bool);
 
-    // ukloni ovaj metod, treba i vec postoji u okviru kontolera
+    // ukloni ovaj metod, treba i vec postoji u okviru kontolera, treba ga ukloniti odavde
     std::shared_ptr<Graph> createGraph(bool, bool);
 };
 

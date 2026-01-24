@@ -9,10 +9,6 @@ GraphController::GraphController(QObject *parent) : QObject(parent){
     connectScene();
 }
 
-// GraphController::GraphController(GraphScene *scene, QObject *parent) : QObject(parent), m_scene(scene) {
-//     connectScene();
-// }
-
 std::shared_ptr<Graph> GraphController::graph() const {
     return m_graph;
 }
@@ -57,6 +53,7 @@ GraphScene* GraphController::scene() const {
     return m_scene.get();
 }
 
+// scena zahteva promene od kontrolera, ne vrsi ih direktno nad modelom, a ni nad sobom
 void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::addNodeRequest, this, &GraphController::addNode);
     connect(m_scene.get(), &GraphScene::addEdgeRequest, this, &GraphController::addEdge);

@@ -17,6 +17,8 @@ class GraphEditor : public QWidget {
     Q_OBJECT
 
 public:
+    // kontroler mora da se postavi i da postoji pre graf editora, kako bi klase vezane za
+    // algoritme koristile ispravan graf (koji nije nullptr)
     explicit GraphEditor(const std::shared_ptr<GraphController>&, QWidget* = nullptr);
     ~GraphEditor() override;
 
@@ -33,8 +35,6 @@ private:
     QLabel*        m_leftPlaceholder = nullptr;
     QGraphicsView* m_view            = nullptr;
     std::shared_ptr<GraphController> m_graphController;
-
-    void clear() const;
 
     int m_dummyState = 0; // samo za test
 };

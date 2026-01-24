@@ -65,7 +65,8 @@ MainWindow::~MainWindow() {
     delete m_ui;
 }
 
-// make changes to adapt to newly created GraphController class which has controller role
+// napravi promene tako da se prilagodis kontroleru, kontroler je odgovoran za menjanje modela i pogleda
+// klikom na open graph treba da se napravi novi graf editor
 void MainWindow::onOpenGraphTriggered() {
     QString filePath = QFileDialog::getOpenFileName(this, "open graph", "", "graph files (*.json)");
 
@@ -107,7 +108,6 @@ void MainWindow::onOpenGraphTriggered() {
                                  "\ndirected: " + QString(loadedDirected ? "true" : "false"));
 }
 
-// changes: initialize graph inside method by calling controller
 void MainWindow::onCreateGraphTriggered() {
 
     QDialog dialog(this);
@@ -165,6 +165,7 @@ void MainWindow::onCreateGraphTriggered() {
 }
 
 
+// prilagodi da koristis graf iz kontrolera
 void MainWindow::onSaveGraphTriggered() {
     QString filePath = QFileDialog::getSaveFileName(this, "save graph", "", "graph files (*.json)");
 
@@ -250,8 +251,7 @@ void MainWindow::initMenuToolBar() {
     connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
 }
 
-// na osnovu informacija kakav je graf, pravi graf controler i graf,
-// pre nego li napravi graf editor, koji se pravi onda po potrebi, a ne u konstruktoru ove klase
+// na osnovu informacija kakav je graf, pravi controler i graf pre nego li napravi graf editor
 void MainWindow::createGraphEditor(bool isDirected, bool isWeighted) {
     // prvo pravimo kontroler i graf(model + pogled)
     std::shared_ptr<GraphController> controller = std::make_shared<GraphController>();
@@ -270,7 +270,7 @@ void MainWindow::createGraphEditor(bool isDirected, bool isWeighted) {
     }
 }
 
-// this function is, and should be inside GraphController class, remove it later
+// ukloni ovaj metod, treba i vec postoji u okviru kontolera, treba ga ukloniti odavde
 std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected) {
     if(isWeighted && isDirected) {
         return std::make_shared<WeightedDirectedGraph>();

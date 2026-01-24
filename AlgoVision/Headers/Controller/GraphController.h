@@ -12,7 +12,6 @@ class GraphController : public QObject {
 
 public:
     explicit GraphController(QObject* parent = nullptr);
-    // explicit GraphController(GraphScene* scene, QObject* parent = nullptr);
 
     std::shared_ptr<Graph> graph() const;
     void setGraph(const std::shared_ptr<Graph> &newGraph);
@@ -28,11 +27,15 @@ public slots:
     void addEdge(NodeItem* source, NodeItem* dest);
     void removeNode(NodeItem* nodeItem);
     void removeEdge(EdgeItem* edgeItem);
+
+    // ova metoda brise sadrzaj modela grafa(grane i cvorove) i
+    // pogleda grafa(cvor/grana ajteme), ali se nikad ne brisu m_graph i m_scene
+    // oni postoje dok postoji i kontroler
     void clear();
 
+// kontroler je vlasnik i upravlja nad modelom i pogledom grafa
 private:
     std::shared_ptr<Graph> m_graph;
-    // scena treba da se nalazi samo u okviru kontrolera, i on je vlasnik scene
     std::unique_ptr<GraphScene> m_scene = std::make_unique<GraphScene>();
 
     void connectScene() const;
