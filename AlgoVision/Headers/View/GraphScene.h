@@ -12,7 +12,7 @@ class GraphScene : public QGraphicsScene {
 
 public:
     explicit GraphScene(QObject* parent = nullptr);
-    explicit GraphScene(const std::shared_ptr<Graph> &graph, QObject* parent = nullptr);
+    explicit GraphScene(const std::shared_ptr<Graph>&, QObject* = nullptr);
 
     enum class State { ADD, REMOVE, EDIT };
 
@@ -28,21 +28,21 @@ public:
     void removeEdge(EdgeItem*);
 
 signals:
-    void addNodeRequest(const QPointF& point);
-    void addEdgeRequest(NodeItem* source, NodeItem* dest);
-    void removeNodeRequest(NodeItem* nodeItem);
-    void removeEdgeRequest(EdgeItem* edgeItem);
+    void addNodeRequest(const QPointF&);
+    void addEdgeRequest(NodeItem*, NodeItem*);
+    void removeNodeRequest(NodeItem*);
+    void removeEdgeRequest(EdgeItem*);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
 
 private slots:
     void onNodeSelectTrigger(NodeItem*);
     void onEdgeSelectTrigger(EdgeItem*);
 
     // reacts to editabletextitem scene change
-    void setEditGraphSceneTrigger(bool edit, EditableTextItem* label = nullptr);
+    void setEditGraphSceneTrigger(bool, EditableTextItem* = nullptr);
 
 private:
     NodeItem*         m_firstNodeSelect {nullptr};

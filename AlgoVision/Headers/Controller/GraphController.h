@@ -11,10 +11,10 @@ class GraphController : public QObject {
     Q_OBJECT
 
 public:
-    explicit GraphController(QObject* parent = nullptr);
+    explicit GraphController(QObject* = nullptr);
 
     std::shared_ptr<Graph> graph() const;
-    void setGraph(const std::shared_ptr<Graph> &newGraph);
+    void setGraph(const std::shared_ptr<Graph>&);
 
     void setAddSceneState() const;
     void setRemoveSceneState() const;
@@ -22,11 +22,11 @@ public:
     GraphScene* scene() const;
 
 public slots:
-    void createGraph(bool isDirected, bool isWeighted);
-    void addNode(const QPointF& point);
-    void addEdge(NodeItem* source, NodeItem* dest);
-    void removeNode(NodeItem* nodeItem);
-    void removeEdge(EdgeItem* edgeItem);
+    void createGraph(bool, bool);
+    void addNode(const QPointF&);
+    void addEdge(NodeItem*, NodeItem*);
+    void removeNode(NodeItem*);
+    void removeEdge(EdgeItem*);
 
     // ova metoda brise sadrzaj modela grafa(grane i cvorove) i
     // pogleda grafa(cvor/grana ajteme), ali se nikad ne brisu m_graph i m_scene
