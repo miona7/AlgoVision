@@ -14,16 +14,9 @@ void Tarjan::execute(unsigned, unsigned) {
     checkConditions();
 
     clearSteps();
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Start;
-        s.m_message = std::string("Tarjan SCC start");
-        addStep(s);
-    }
 
     init();
 
-    std::cout << "Starting Tarjan for strongly connected component." << std::endl;
     int  component = 0;
     auto nodes     = m_graph->getNodes();
     for(const auto& [id, node]: nodes) {
@@ -31,7 +24,6 @@ void Tarjan::execute(unsigned, unsigned) {
             tarjan(id, component);
         }
     }
-    std::cout << "Tarjan finished." << std::endl;
 
     std::cout << "Strongly connected components:" << std::endl;
     std::map<int, std::vector<unsigned>> comps;
@@ -44,14 +36,7 @@ void Tarjan::execute(unsigned, unsigned) {
         for(auto id: nodesVec) {
             std::cout << id << " ";
         }
-        std::cout << "\n";
-    }
-
-    {
-        AlgorithmStep s;
-        s.m_type    = StepType::Finish;
-        s.m_message = std::string("Tarjan SCC finish");
-        addStep(s);
+        std::cout << std::endl;
     }
 }
 
@@ -67,6 +52,12 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
     }
     {
         AlgorithmStep s;
+        s.m_type    = StepType::ProcessNode;
+        s.m_node    = nodeId;
+        addStep(s);
+    }
+    {
+        AlgorithmStep s;
         s.m_type    = StepType::UpdateDistance; // koristimo kao "lowlink update"
         s.m_node    = nodeId;
         s.m_value   = m_lowLink[nodeId];
@@ -75,12 +66,6 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
     }
     m_tourOrder.push(nodeId);
     m_onStack[nodeId] = true;
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::PushToStack;
-        s.m_node = nodeId;
-        addStep(s);
-    }
 
     auto adjList = m_graph->getAdjacencyList();
     if(adjList.find(nodeId) != adjList.end()) {
@@ -126,12 +111,6 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
             m_tourOrder.pop();
             {
                 AlgorithmStep s;
-                s.m_type = StepType::PopFromStack;
-                s.m_node = componentNodeId;
-                addStep(s);
-            }
-            {
-                AlgorithmStep s;
                 s.m_type  = StepType::AssignComponent;
                 s.m_node  = componentNodeId;
                 s.m_value = component;
@@ -147,8 +126,6 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
         }
         component++;
     }
-
-    // TODO: ispis kroz spdlog
 }
 
 void Tarjan::init() {
