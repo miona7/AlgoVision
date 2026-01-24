@@ -59,19 +59,6 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(btnOpenGraph, &QPushButton::clicked, this, &MainWindow::onOpenGraphTriggered);
     connect(btnCreateGraph, &QPushButton::clicked, this, &MainWindow::onCreateGraphTriggered);
-
-           // ===== GRAPH PAGE CONTENT =====
-    QWidget* graphPage = m_ui->graphPage;
-
-           // layout
-    if(graphPage->layout() == nullptr) {
-        auto* graphLayout = new QVBoxLayout(graphPage);
-        graphLayout->setContentsMargins(0, 0, 0, 0);
-
-        auto* graphEditor = new GraphEditor(graphPage);
-        m_graphEditor     = graphEditor;
-        graphLayout->addWidget(graphEditor);
-    }
 }
 
 MainWindow::~MainWindow() {
@@ -170,7 +157,7 @@ void MainWindow::onCreateGraphTriggered() {
         return;
     }
 
-    m_graphEditor->controller()->createGraph(directed, weighted);
+    createGraphEditor(directed, weighted);
 
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     this->setWindowTitle(QString::fromLatin1(AppConstants::graphPageDefaultTitle));
@@ -261,6 +248,26 @@ void MainWindow::initMenuToolBar() {
             &MainWindow::onChangeThemeTriggered);
 
     connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
+}
+
+// na osnovu informacija kakav je graf, pravi graf controler i graf,
+// pre nego li napravi graf editor, koji se pravi onda po potrebi, a ne u konstruktoru ove klase
+void MainWindow::createGraphEditor(bool isDirected, bool isWeighted) {
+    // prvo pravimo kontroler i graf(model + pogled)
+    std::shared_ptr<GraphController> controller = std::make_shared<GraphController>();
+    controller->createGraph(isDirected, isWeighted);
+
+    // onda postavljamo graf editor(UI) koji je vezan za kontroler(model + pogled)
+    QWidget* graphPage = m_ui->graphPage;
+
+    if(graphPage->layout() == nullptr) {
+        auto* graphLayout = new QVBoxLayout(graphPage);
+        graphLayout->setContentsMargins(0, 0, 0, 0);
+
+        auto* graphEditor = new GraphEditor(controller, graphPage);
+        m_graphEditor     = graphEditor;
+        graphLayout->addWidget(graphEditor);
+    }
 }
 
 // this function is, and should be inside GraphController class, remove it later

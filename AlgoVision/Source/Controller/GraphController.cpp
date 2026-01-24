@@ -9,9 +9,9 @@ GraphController::GraphController(QObject *parent) : QObject(parent){
     connectScene();
 }
 
-GraphController::GraphController(GraphScene *scene, QObject *parent) : QObject(parent), m_scene(scene) {
-    connectScene();
-}
+// GraphController::GraphController(GraphScene *scene, QObject *parent) : QObject(parent), m_scene(scene) {
+//     connectScene();
+// }
 
 std::shared_ptr<Graph> GraphController::graph() const {
     return m_graph;
@@ -19,14 +19,6 @@ std::shared_ptr<Graph> GraphController::graph() const {
 
 void GraphController::setGraph(const std::shared_ptr<Graph>& newGraph) {
     m_graph = newGraph;
-}
-
-GraphScene *GraphController::scene() const {
-    return m_scene;
-}
-
-void GraphController::setScene(GraphScene* newScene) {
-    m_scene = newScene;
 }
 
 void GraphController::setAddSceneState() const {
@@ -61,11 +53,15 @@ void GraphController::clear() {
     m_graph->clear(); // onda obrisemo model
 }
 
+GraphScene* GraphController::scene() const {
+    return m_scene.get();
+}
+
 void GraphController::connectScene() const {
-    connect(m_scene, &GraphScene::addNodeRequest, this, &GraphController::addNode);
-    connect(m_scene, &GraphScene::addEdgeRequest, this, &GraphController::addEdge);
-    connect(m_scene, &GraphScene::removeNodeRequest, this, &GraphController::removeNode);
-    connect(m_scene, &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
+    connect(m_scene.get(), &GraphScene::addNodeRequest, this, &GraphController::addNode);
+    connect(m_scene.get(), &GraphScene::addEdgeRequest, this, &GraphController::addEdge);
+    connect(m_scene.get(), &GraphScene::removeNodeRequest, this, &GraphController::removeNode);
+    connect(m_scene.get(), &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
 }
 
 void GraphController::addNode(const QPointF &position) {

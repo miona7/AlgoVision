@@ -3,6 +3,7 @@
 
 #include <QGraphicsView>
 #include <QWidget>
+#include <memory>
 
 #include "Graph.h"
 #include "GraphScene.h"
@@ -16,10 +17,10 @@ class GraphEditor : public QWidget {
     Q_OBJECT
 
 public:
-    explicit GraphEditor(QWidget* = nullptr);
+    explicit GraphEditor(const std::shared_ptr<GraphController>&, QWidget* = nullptr);
     ~GraphEditor() override;
 
-    GraphController* controller() const;
+    std::shared_ptr<GraphController> graphController() const;
 
 private slots:
     void onAddRequestTrigger();
@@ -31,9 +32,7 @@ private:
     GraphEditTab*  m_editTab         = nullptr;
     QLabel*        m_leftPlaceholder = nullptr;
     QGraphicsView* m_view            = nullptr;
-    GraphScene*    m_scene           = nullptr;
-    GraphController* m_controller    = nullptr;
-    // Graph*         m_graph           = nullptr;
+    std::shared_ptr<GraphController> m_graphController;
 
     void clear() const;
 

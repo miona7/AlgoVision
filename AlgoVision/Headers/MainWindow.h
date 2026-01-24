@@ -7,6 +7,7 @@
 #include "AppConstants.h"
 #include "MenuToolBar.h"
 #include "ThemeManager.h"
+#include "GraphController.h"
 
 class Graph;
 class Serializer;
@@ -43,6 +44,9 @@ private:
     GraphEditor*                m_graphEditor = nullptr;
 
     void                   initMenuToolBar();
+    void createGraphEditor(bool, bool);
+
+    // ukloni ovaj metod, treba i vec postoji u okviru kontolera
     std::shared_ptr<Graph> createGraph(bool, bool);
 };
 

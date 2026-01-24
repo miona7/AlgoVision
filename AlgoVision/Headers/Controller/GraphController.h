@@ -12,15 +12,15 @@ class GraphController : public QObject {
 
 public:
     explicit GraphController(QObject* parent = nullptr);
-    explicit GraphController(GraphScene* scene, QObject* parent = nullptr);
+    // explicit GraphController(GraphScene* scene, QObject* parent = nullptr);
 
     std::shared_ptr<Graph> graph() const;
     void setGraph(const std::shared_ptr<Graph> &newGraph);
-    GraphScene *scene() const;
-    void setScene(GraphScene *newScene);
 
     void setAddSceneState() const;
     void setRemoveSceneState() const;
+
+    GraphScene* scene() const;
 
 public slots:
     void createGraph(bool isDirected, bool isWeighted);
@@ -32,7 +32,8 @@ public slots:
 
 private:
     std::shared_ptr<Graph> m_graph;
-    GraphScene* m_scene;
+    // scena treba da se nalazi samo u okviru kontrolera, i on je vlasnik scene
+    std::unique_ptr<GraphScene> m_scene = std::make_unique<GraphScene>();
 
     void connectScene() const;
 };

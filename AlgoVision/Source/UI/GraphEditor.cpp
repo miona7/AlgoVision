@@ -39,7 +39,8 @@ namespace {
     };
 } // namespace
 
-GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
+GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController, QWidget* parent)
+    : m_graphController(graphController), QWidget(parent) {
 
     // m_graph = new UnweightedDirectedGraph();
 
@@ -58,12 +59,11 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
     // splitter->addWidget(m_leftPlaceholder);
 
-    m_scene = new GraphScene(splitter);
     m_view  = new QGraphicsView(splitter);
-    m_view->setScene(m_scene);
+    m_view->setScene(m_graphController->scene());
     splitter->addWidget(m_view);
 
-    m_controller = new GraphController(m_scene, this);
+    // m_graphController = new GraphController(m_scene, this);
 
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
@@ -72,7 +72,7 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
     m_editTab = new GraphEditTab(rightTabs);
 
     rightTabs->addTab(m_editTab, "graph");
-    rightTabs->addTab(new AlgorithmTab(m_scene->getGraphShared(), rightTabs), "algorithm");
+    rightTabs->addTab(new AlgorithmTab(m_graphController->graph(), rightTabs), "algorithm");
 
     splitter->addWidget(rightTabs);
 
@@ -116,21 +116,21 @@ GraphEditor::GraphEditor(QWidget* parent) : QWidget(parent) {
 }
 
 GraphEditor::~GraphEditor() {
-    m_controller->clear();
+    m_graphController->clear();
 }
 
 void GraphEditor::onAddRequestTrigger() {
-    m_controller->setAddSceneState();
+    m_graphController->setAddSceneState();
 }
 
 void GraphEditor::onRemoveRequestTrigger() {
-    m_controller->setRemoveSceneState();
+    m_graphController->setRemoveSceneState();
 }
 
 void GraphEditor::onClearRequestTrigger() {
-    m_controller->clear();
+    m_graphController->clear();
 }
 
-GraphController* GraphEditor::controller() const {
-    return m_controller;
+std::shared_ptr<GraphController> GraphEditor::graphController() const {
+    return m_graphController;
 }
