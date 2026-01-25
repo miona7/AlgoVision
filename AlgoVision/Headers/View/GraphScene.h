@@ -1,26 +1,21 @@
 #ifndef GRAPHSCENE_H
 #define GRAPHSCENE_H
 
-#include <memory>
-
-#include <Graph.h>
-#include <NodeItem.h>
 #include <QGraphicsScene>
+
+#include "NodeItem.h"
+#include "Edge.h"
 
 class GraphScene : public QGraphicsScene {
     Q_OBJECT
 
 public:
     explicit GraphScene(QObject* = nullptr);
-    explicit GraphScene(const std::shared_ptr<Graph>&, QObject* = nullptr);
 
     enum class State { ADD, REMOVE, EDIT };
 
     void setState(GraphScene::State);
     void resetScene();
-
-    Graph*                 getGraphRaw() const;
-    std::shared_ptr<Graph> getGraphShared() const;
 
     void addNode(Node*);
     void addEdge(Edge*, NodeItem*, NodeItem*, bool, bool);
@@ -48,9 +43,6 @@ private:
     NodeItem*         m_firstNodeSelect {nullptr};
     EditableTextItem* m_editLabel {nullptr};
     State             m_state {State::ADD};
-
-    // treba skloniti m_graph, view ne treba da bude svestan modela
-    std::shared_ptr<Graph> m_graph;
 
     void      selectNode(NodeItem*);
     EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*, bool, bool) const;

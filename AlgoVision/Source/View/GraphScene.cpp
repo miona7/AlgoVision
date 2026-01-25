@@ -13,11 +13,6 @@ GraphScene::GraphScene(QObject* parent) : QGraphicsScene(parent) {
     setSceneRect(0, 0, 3000, 3000);
 }
 
-GraphScene::GraphScene(const std::shared_ptr<Graph>& graph, QObject* parent)
-    : QGraphicsScene(parent), m_graph(graph) {
-    setSceneRect(0, 0, 3000, 3000);
-}
-
 void GraphScene::setState(GraphScene::State state) {
     m_state = state;
 }
@@ -167,14 +162,4 @@ void GraphScene::selectNode(NodeItem* node) {
 
     // other node is selected
     emit addEdgeRequest(m_firstNodeSelect, node); // zahtevamo dodavanje grane od kontrolera
-}
-
-// vraca raw pointer (postojeci)
-Graph* GraphScene::getGraphRaw() const {
-    return m_graph.get();
-}
-
-// pravi shared_ptr za algoritme, ne preuzima vlasnistvo
-std::shared_ptr<Graph> GraphScene::getGraphShared() const {
-    return m_graph;
 }
