@@ -32,6 +32,7 @@ public slots:
     // pogleda grafa(cvor/grana ajteme), ali se nikad ne brisu m_graph i m_scene
     // oni postoje dok postoji i kontroler
     void clear();
+    void clearScene() const;
 
     // kontroler je vlasnik i upravlja nad modelom i pogledom grafa
 private:

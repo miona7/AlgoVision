@@ -49,6 +49,10 @@ void GraphController::clear() {
     m_graph->clear(); // onda obrisemo model
 }
 
+void GraphController::clearScene() const {
+    m_scene->clear();
+}
+
 GraphScene* GraphController::scene() const {
     return m_scene.get();
 }
