@@ -19,15 +19,17 @@ TEST_CASE("AlgorithmStepApplier works for all graph types", "[AlgorithmStepAppli
         graph->addEdge(n1->getId(), n2->getId(), 1);
         Edge* e = graph->getEdge(n1->getId(), n2->getId());
 
-        std::vector<StepType> nodeSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::AddToPath,
-                                           StepType::AddToTopologicalOrder, StepType::AssignComponent };
+        std::vector<StepType> nodeSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                           StepType::AddToPath, StepType::AddToTopologicalOrder,
+                                           StepType::AssignComponent};
 
-        std::vector<StepType> edgeSteps = { StepType::ExamineEdge, StepType::RelaxEdge, StepType::SelectEdge };
+        std::vector<StepType> edgeSteps = {StepType::ExamineEdge, StepType::RelaxEdge,
+                                           StepType::SelectEdge};
 
         for(auto type: nodeSteps) {
             AlgorithmStep step;
-            step.m_type = type;
-            step.m_node = n1->getId();
+            step.m_type            = type;
+            step.m_node            = n1->getId();
             NodeState oldNodeState = n1->getState();
 
             // act
@@ -44,9 +46,9 @@ TEST_CASE("AlgorithmStepApplier works for all graph types", "[AlgorithmStepAppli
 
         for(auto type: edgeSteps) {
             AlgorithmStep step;
-            step.m_type = type;
-            step.m_from = n1->getId();
-            step.m_to   = n2->getId();
+            step.m_type            = type;
+            step.m_from            = n1->getId();
+            step.m_to              = n2->getId();
             EdgeState oldEdgeState = e->getState();
 
             // act

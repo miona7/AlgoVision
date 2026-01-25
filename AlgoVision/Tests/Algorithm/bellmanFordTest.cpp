@@ -2,8 +2,8 @@
 #include <catch2/catch_all.hpp>
 
 #include "BellmanFord.h"
-#include "WeightedDirectedGraph.h"
 #include "UnweightedDirectedGraph.h"
+#include "WeightedDirectedGraph.h"
 
 static const char* stepTypeToString(StepType t) {
     switch(t) {
@@ -23,14 +23,10 @@ static const char* stepTypeToString(StepType t) {
 }
 
 void runBellmanFordLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
-    BellmanFord bf(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::VisitNode,
-        StepType::ProcessNode,
-        StepType::ExamineEdge,
-        StepType::RelaxEdge,
-        StepType::UpdateDistance
-    };
+    BellmanFord                 bf(g);
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                                 StepType::ExamineEdge, StepType::RelaxEdge,
+                                                 StepType::UpdateDistance};
 
     REQUIRE_NOTHROW(bf.execute(startNode));
 
@@ -60,10 +56,8 @@ void runBellmanFordLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNo
     }
 
     for(auto expected: expectedSteps) {
-        bool found = std::any_of(
-            steps.begin(), steps.end(),
-            [&](const auto& s) { return s.m_type == expected; }
-            );
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 }

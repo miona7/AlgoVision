@@ -5,7 +5,6 @@
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 
-
 static const char* stepTypeToString(StepType t) {
     switch(t) {
     case StepType::VisitNode:
@@ -24,14 +23,10 @@ static const char* stepTypeToString(StepType t) {
 }
 
 void runTarjanLoggingTest(const std::shared_ptr<Graph>& g) {
-    Tarjan tarjan(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::VisitNode,
-        StepType::ProcessNode,
-        StepType::ExamineEdge,
-        StepType::UpdateDistance,
-        StepType::AssignComponent
-    };
+    Tarjan                      tarjan(g);
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                                 StepType::ExamineEdge, StepType::UpdateDistance,
+                                                 StepType::AssignComponent};
 
     REQUIRE_NOTHROW(tarjan.execute());
 
@@ -61,14 +56,11 @@ void runTarjanLoggingTest(const std::shared_ptr<Graph>& g) {
     }
 
     for(auto expected: expectedSteps) {
-        bool found = std::any_of(
-            steps.begin(), steps.end(),
-            [&](const auto& s) { return s.m_type == expected; }
-            );
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 }
-
 
 TEST_CASE("Tarjan works on directed graph with multiple SCCs", "[TARJAN]") {
     auto g = std::make_shared<UnweightedDirectedGraph>();

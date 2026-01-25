@@ -23,14 +23,10 @@ static const char* stepTypeToString(StepType t) {
 }
 
 void runPrimLoggingTest(const std::shared_ptr<Graph>& g) {
-    Prim prim(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::VisitNode,
-        StepType::ProcessNode,
-        StepType::ExamineEdge,
-        StepType::UpdateDistance,
-        StepType::SelectEdge
-    };
+    Prim                        prim(g);
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                                 StepType::ExamineEdge, StepType::UpdateDistance,
+                                                 StepType::SelectEdge};
 
     REQUIRE_NOTHROW(prim.execute());
 
@@ -60,10 +56,8 @@ void runPrimLoggingTest(const std::shared_ptr<Graph>& g) {
     }
 
     for(auto expected: expectedSteps) {
-        bool found = std::any_of(
-            steps.begin(), steps.end(),
-            [&](const auto& s) { return s.m_type == expected; }
-            );
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 }

@@ -7,27 +7,27 @@ class EditableTextItem : public QGraphicsTextItem {
     Q_OBJECT
 
 public:
-    explicit EditableTextItem(QGraphicsItem* parent = nullptr);
+    explicit EditableTextItem(QGraphicsItem* = nullptr);
 
     QString oldText() const;
-    void    setOldText(const QString& newOldText);
+    void    setOldText(const QString&);
 
     void startEditing();
-    void finishEditing(bool commit);
+    void finishEditing(bool);
     void centerText();
 
     QPointF center() const;
-    void    setCenter(const QPointF& newCenter);
-    void    setCenter(qreal x, qreal y);
+    void    setCenter(const QPointF&);
+    void    setCenter(qreal, qreal);
 
 protected:
-    void keyPressEvent(QKeyEvent* event) override;
+    void keyPressEvent(QKeyEvent*) override;
 
 signals:
     void textCommited(const QString& text);
 
     // notify graphscene if it's EDIT state or not (then it's ADD state)
-    void setEditGraphSceneState(bool edit, EditableTextItem* label = nullptr);
+    void setEditGraphSceneState(bool, EditableTextItem* = nullptr);
 
 private:
     QString m_oldText;

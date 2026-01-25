@@ -71,7 +71,8 @@ static const char* stepTypeToString(StepType t) {
 void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph> g) {
     // arrange
     Kahn                        kahn(g);
-    const std::vector<StepType> expectedSteps = { StepType::ProcessNode, StepType::AddToTopologicalOrder };
+    const std::vector<StepType> expectedSteps = {StepType::ProcessNode,
+                                                 StepType::AddToTopologicalOrder};
 
     // act
     REQUIRE_NOTHROW(kahn.execute());

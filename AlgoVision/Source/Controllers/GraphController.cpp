@@ -1,11 +1,11 @@
 #include "GraphController.h"
 #include "EdgeItem.h"
-#include "WeightedDirectedGraph.h"
-#include "WeightedUndirectedGraph.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
+#include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
 
-GraphController::GraphController(QObject *parent) : QObject(parent){
+GraphController::GraphController(QObject* parent) : QObject(parent) {
     connectScene();
 }
 
@@ -26,17 +26,17 @@ void GraphController::setRemoveSceneState() const {
 }
 
 void GraphController::createGraph(bool isDirected, bool isWeighted) {
-    if (isDirected && isWeighted) {
-        m_graph =  std::make_shared<WeightedDirectedGraph>();
+    if(isDirected && isWeighted) {
+        m_graph = std::make_shared<WeightedDirectedGraph>();
         return;
     }
 
-    if (isDirected && !isWeighted) {
+    if(isDirected && !isWeighted) {
         m_graph = std::make_shared<UnweightedDirectedGraph>();
         return;
     }
 
-    if (!isDirected && isWeighted) {
+    if(!isDirected && isWeighted) {
         m_graph = std::make_shared<WeightedUndirectedGraph>();
         return;
     }
@@ -61,7 +61,7 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
 }
 
-void GraphController::addNode(const QPointF &position) {
+void GraphController::addNode(const QPointF& position) {
     Node* nodeModel = m_graph->addNode(position.x(), position.y());
     m_scene->addNode(nodeModel);
 }
@@ -77,11 +77,11 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
 void GraphController::removeNode(NodeItem* nodeItem) {
     const unsigned nodeId = nodeItem->modelNode()->getId();
     m_scene->removeNode(nodeItem); // prvo brisemo pogled
-    m_graph->removeNode(nodeId); // pa onda brisemo model
+    m_graph->removeNode(nodeId);   // pa onda brisemo model
 }
 
 void GraphController::removeEdge(EdgeItem* edgeItem) {
     const unsigned edgeId = edgeItem->modelEdge()->getId();
     m_scene->removeEdge(edgeItem); // prvo brisemo pogled
-    m_graph->removeEdge(edgeId); // pa onda brisemo model
+    m_graph->removeEdge(edgeId);   // pa onda brisemo model
 }

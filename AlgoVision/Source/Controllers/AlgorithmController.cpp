@@ -1,16 +1,17 @@
-#include "AlgorithmExecutionController.h"
+#include "AlgorithmController.h"
 
-AlgorithmExecutionController::AlgorithmExecutionController(AlgorithmStepApplier& applier, QObject* parent) : m_applier(applier), QObject(parent) {
+AlgorithmController::AlgorithmController(AlgorithmStepApplier& applier, QObject* parent)
+    : m_applier(applier), QObject(parent) {
 }
 
-void AlgorithmExecutionController::loadSteps(const std::vector<AlgorithmStep>& steps) {
-    m_steps = steps;
+void AlgorithmController::loadSteps(const std::vector<AlgorithmStep>& steps) {
+    m_steps        = steps;
     m_currentIndex = -1;
     m_undoStack.clear();
     m_redoStack.clear();
 }
 
-void AlgorithmExecutionController::nextStep() {
+void AlgorithmController::nextStep() {
     if(m_currentIndex + 1 >= m_steps.size()) {
         return;
     }
@@ -21,7 +22,7 @@ void AlgorithmExecutionController::nextStep() {
     m_redoStack.clear();
 }
 
-void AlgorithmExecutionController::prevStep() {
+void AlgorithmController::prevStep() {
     if(m_undoStack.empty()) {
         return;
     }
@@ -32,11 +33,11 @@ void AlgorithmExecutionController::prevStep() {
     m_currentIndex--;
 }
 
-void AlgorithmExecutionController::undo() {
+void AlgorithmController::undo() {
     prevStep();
 }
 
-void AlgorithmExecutionController::redo() {
+void AlgorithmController::redo() {
     if(m_redoStack.empty()) {
         return;
     }
@@ -47,7 +48,7 @@ void AlgorithmExecutionController::redo() {
     m_currentIndex++;
 }
 
-void AlgorithmExecutionController::reset() {
+void AlgorithmController::reset() {
     while(!m_undoStack.empty()) {
         AlgorithmStep& step = m_undoStack.back();
         m_applier.undo(step);
@@ -57,7 +58,6 @@ void AlgorithmExecutionController::reset() {
     m_currentIndex = -1;
 }
 
-bool AlgorithmExecutionController::isFinished() const {
+bool AlgorithmController::isFinished() const {
     return m_currentIndex + 1 >= m_steps.size();
 }
-

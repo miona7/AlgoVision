@@ -21,12 +21,9 @@ static const char* stepTypeToString(StepType t) {
 }
 
 void runBFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
-    BFS bfs(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::VisitNode,
-        StepType::ProcessNode,
-        StepType::ExamineEdge
-    };
+    BFS                         bfs(g);
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                                 StepType::ExamineEdge};
 
     bfs.execute(startNode);
 
@@ -57,16 +54,13 @@ void runBFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     }
 
     for(auto expected: expectedSteps) {
-        bool found = std::any_of(
-            steps.begin(), steps.end(),
-            [&](const auto& s) { return s.m_type == expected; }
-            );
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 
     REQUIRE(visited.at(startNode));
 }
-
 
 TEST_CASE("BFS on Unweighted Directed Graph", "[BFS]") {
     auto g = std::make_shared<UnweightedDirectedGraph>();

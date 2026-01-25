@@ -32,7 +32,7 @@ private slots:
     void onSaveGraphTriggered();
     void onSaveImageTriggered();
     void onChangeThemeTriggered();
-    void onHelpTriggered(); // <- slot za Help dugme
+    void onHelpTriggered();
 
 private:
     Ui::MainWindow* m_ui;
@@ -44,7 +44,7 @@ private:
     std::shared_ptr<Graph>      m_graph;
     GraphEditor*                m_graphEditor = nullptr;
 
-    void                   initMenuToolBar();
+    void initMenuToolBar();
     void createGraphEditor(bool, bool);
 
     // ukloni ovaj metod, treba i vec postoji u okviru kontolera, treba ga ukloniti odavde

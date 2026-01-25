@@ -112,7 +112,9 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigne
                          unsigned goalNode) {
     // arrange
     AStar                       astar(g);
-    const std::vector<StepType> expectedSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::AddToPath, StepType::ExamineEdge, StepType::SelectEdge, StepType::UpdateDistance };
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode,  StepType::ProcessNode,
+                                                 StepType::AddToPath,  StepType::ExamineEdge,
+                                                 StepType::SelectEdge, StepType::UpdateDistance};
 
     // act
     REQUIRE_NOTHROW(astar.execute(startNode, goalNode));

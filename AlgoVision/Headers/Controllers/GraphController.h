@@ -14,7 +14,7 @@ public:
     explicit GraphController(QObject* = nullptr);
 
     std::shared_ptr<Graph> graph() const;
-    void setGraph(const std::shared_ptr<Graph>&);
+    void                   setGraph(const std::shared_ptr<Graph>&);
 
     void setAddSceneState() const;
     void setRemoveSceneState() const;
@@ -33,9 +33,9 @@ public slots:
     // oni postoje dok postoji i kontroler
     void clear();
 
-// kontroler je vlasnik i upravlja nad modelom i pogledom grafa
+    // kontroler je vlasnik i upravlja nad modelom i pogledom grafa
 private:
-    std::shared_ptr<Graph> m_graph;
+    std::shared_ptr<Graph>      m_graph;
     std::unique_ptr<GraphScene> m_scene = std::make_unique<GraphScene>();
 
     void connectScene() const;

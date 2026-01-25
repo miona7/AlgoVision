@@ -1,7 +1,9 @@
 #include "AlgorithmWorker.h"
 
-AlgorithmWorker::AlgorithmWorker(const QString& algorithm, std::shared_ptr<Graph> graph, unsigned start, unsigned end)
-    : m_algorithm(algorithm), m_graph(graph), m_start(start), m_end(end) {}
+AlgorithmWorker::AlgorithmWorker(const QString& algorithm, std::shared_ptr<Graph> graph,
+                                 unsigned start, unsigned end)
+    : m_algorithm(algorithm), m_graph(graph), m_start(start), m_end(end) {
+}
 
 void AlgorithmWorker::run() {
     std::vector<AlgorithmStep> steps;

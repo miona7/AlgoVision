@@ -73,8 +73,8 @@ void FloydWarshall::floydWarshall() {
     for(const auto& [k, _]: nodes) {
         {
             AlgorithmStep s;
-            s.m_type    = StepType::VisitNode;
-            s.m_node    = k; // trenutno posrednik
+            s.m_type = StepType::VisitNode;
+            s.m_node = k; // trenutno posrednik
             addStep(s);
         }
         {

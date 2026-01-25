@@ -111,7 +111,8 @@ static const char* stepTypeToString(StepType t) {
 void runDijkstraLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) {
     // arrange
     Dijkstra                    dijkstra(g);
-    const std::vector<StepType> expectedSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::ExamineEdge, StepType::UpdateDistance };
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                                 StepType::ExamineEdge, StepType::UpdateDistance};
 
     // act
     REQUIRE_NOTHROW(dijkstra.execute(startNode));
