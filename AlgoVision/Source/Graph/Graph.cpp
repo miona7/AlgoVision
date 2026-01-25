@@ -162,6 +162,16 @@ const Node* Graph::getNode(unsigned id) const {
     return (it != m_nodes.end()) ? &it->second : nullptr;
 }
 
+Edge* Graph::getEdge(unsigned id) {
+    auto it = m_edges.find(id);
+    return (it != m_edges.end()) ? &it->second : nullptr;
+}
+
+const Edge* Graph::getEdge(unsigned id) const {
+    auto it = m_edges.find(id);
+    return (it != m_edges.end()) ? &it->second : nullptr;
+}
+
 Edge* Graph::getEdge(unsigned from, unsigned to) {
     for(auto& [_, edge]: m_edges) {
         if(edge.startNode() == from && edge.endNode() == to) {
