@@ -31,6 +31,12 @@ void GraphScene::resetScene() {
     m_state = State::ADD;
 }
 
+void GraphScene::clear() {
+    resetScene();
+    m_nodeItems.clear();
+    QGraphicsScene::clear();
+}
+
 void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if(m_state == State::EDIT) {
         m_editLabel->finishEditing(true);

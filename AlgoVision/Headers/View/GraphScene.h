@@ -16,7 +16,12 @@ public:
     enum class State { ADD, REMOVE, EDIT };
 
     void setState(GraphScene::State);
+
+    // vraca scenu na pocetno stanje (koje je ADD) sa resetovanim pomocnim privatnim clanicama
     void resetScene();
+
+    // pored ciscenja scene, dodatno brise mapu nodeItem-a, i vraca scenu na pocetno stanje
+    void clear();
 
     void addNode(Node*);
     void addEdge(Edge*, bool, bool);
