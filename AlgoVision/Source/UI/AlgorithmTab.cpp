@@ -216,7 +216,7 @@ void AlgorithmTab::initIcons() {
 void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
     const bool needsStart = algorithmName == "BFS" || algorithmName == "DFS" ||
                             algorithmName == "Dijkstra" || algorithmName == "Bellman-Ford" ||
-                            algorithmName == "Prim" || algorithmName == "A*";
+                            algorithmName == "A*";
 
     const bool needsEnd = algorithmName == "A*";
 
