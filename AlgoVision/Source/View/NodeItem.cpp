@@ -197,8 +197,8 @@ const QColor NodeItem::calculateColor() const {
     case NodeState::AssignedComponent:
         return Qt::cyan;
     default:
-        // return Qt::lightGray;
-        return Qt::green;
+        return Qt::lightGray;
+        // return Qt::green;
     }
 }
 

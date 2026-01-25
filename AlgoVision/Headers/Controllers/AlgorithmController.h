@@ -1,18 +1,18 @@
-#ifndef EXECUTION_H
-#define EXECUTION_H
-
-#include <vector>
+#ifndef ALGORITHM_CONTROLLER_H
+#define ALGORITHM_CONTROLLER_H
 
 #include <QObject>
+
+#include <vector>
 
 #include "AlgorithmStep.h"
 #include "AlgorithmStepApplier.h"
 
-class AlgorithmExecutionController : public QObject {
+class AlgorithmController : public QObject {
     Q_OBJECT
 public:
-    AlgorithmExecutionController(AlgorithmStepApplier&, QObject* = nullptr);
-    ~AlgorithmExecutionController() override = default;
+    AlgorithmController(AlgorithmStepApplier&, QObject* = nullptr);
+    ~AlgorithmController() override = default;
 
 public slots:
     void loadSteps(const std::vector<AlgorithmStep>&);
@@ -36,5 +36,5 @@ private:
     void redo();
 };
 
-#endif // EXECUTION_H
+#endif // ALGORITHM_CONTROLLER_H
 

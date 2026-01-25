@@ -5,7 +5,7 @@
 #include <QThread>
 
 #include "AlgorithmStep.h"
-#include "AlgorithmExecutionController.h"
+#include "AlgorithmController.h"
 #include "AlgorithmStepApplier.h"
 #include "Graph.h"
 #include "AStar.h"

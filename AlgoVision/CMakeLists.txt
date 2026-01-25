@@ -37,7 +37,6 @@ set(PROJECT_SOURCES
 
         Headers/Algorithm/AlgorithmStep.h
         Headers/Algorithm/AlgorithmStepApplier.h Source/Algorithm/AlgorithmStepApplier.cpp
-        Headers/Algorithm/AlgorithmExecutionController.h Source/Algorithm/AlgorithmExecutionController.cpp
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
@@ -68,7 +67,8 @@ set(PROJECT_SOURCES
         Headers/View/GraphScene.h Source/View/GraphScene.cpp
         Headers/View/EditableTextItem.h Source/View/EditableTextItem.cpp
 
-        Headers/Controller/GraphController.h Source/Controller/GraphController.cpp
+        Headers/Controllers/GraphController.h Source/Controllers/GraphController.cpp
+        Headers/Controllers/AlgorithmController.h Source/Controllers/AlgorithmController.cpp
 
         Headers/Threads/AlgorithmWorker.h Source/Threads/AlgorithmWorker.cpp
 )
@@ -119,7 +119,7 @@ target_include_directories(AlgoVision PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Serialization
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/View
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Threads
-    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Controller
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Controllers
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

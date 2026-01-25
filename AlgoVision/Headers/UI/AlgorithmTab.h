@@ -7,7 +7,7 @@
 
 #include <optional>
 
-#include "AlgorithmExecutionController.h"
+#include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
 
 class QComboBox;
@@ -59,7 +59,7 @@ private:
 
     std::shared_ptr<Graph> m_graph;
     AlgorithmStepApplier m_applier;
-    AlgorithmExecutionController m_controller;
+    AlgorithmController m_algorithmController;
     AlgorithmWorker* m_worker = nullptr;
     QTimer* m_timer = nullptr;
     RunState m_state = RunState::Idle;
