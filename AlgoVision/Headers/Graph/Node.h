@@ -31,7 +31,7 @@ public:
     friend std::ostream& operator<<(std::ostream&, const Node&);
 
     QString getName() const;
-    void    setName(const QString& newName);
+    void    setName(const QString&);
 
 private:
     unsigned                  m_id;

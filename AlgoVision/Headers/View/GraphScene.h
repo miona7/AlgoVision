@@ -11,7 +11,7 @@ class GraphScene : public QGraphicsScene {
     Q_OBJECT
 
 public:
-    explicit GraphScene(QObject* parent = nullptr);
+    explicit GraphScene(QObject* = nullptr);
     explicit GraphScene(const std::shared_ptr<Graph>&, QObject* = nullptr);
 
     enum class State { ADD, REMOVE, EDIT };
