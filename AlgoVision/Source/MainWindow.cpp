@@ -6,16 +6,15 @@
 #include <QString>
 #include <QVBoxLayout>
 #include <QVariantMap>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 #include <iostream>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-
-#include <QGroupBox>
-#include <QRadioButton>
-#include <QDialog>
-#include <QDialogButtonBox>
 
 #include "Graph.h"
 #include "GraphEditor.h"
@@ -203,7 +202,10 @@ void MainWindow::onSaveImageTriggered() {
         filePath += ".png";
     }
 
-    QPixmap pixmap = m_ui->graphPage->grab();
+
+    // cuvamo samo scenu
+    QGraphicsView* view = m_graphEditor->graphController()->scene()->views().first();
+    QPixmap pixmap = view->viewport()->grab();
 
     if(pixmap.save(filePath, "PNG")) {
         QMessageBox::information(this, "saved", "image saved to: " + filePath);
@@ -284,7 +286,6 @@ std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected)
     return std::make_shared<UnweightedUndirectedGraph>();
 }
 
-// NOVO: Help dialog
 void MainWindow::onHelpTriggered() {
     QString helpText =
         "Graph Editor Help:\n\n"

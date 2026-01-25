@@ -32,7 +32,7 @@ private slots:
     void onSaveGraphTriggered();
     void onSaveImageTriggered();
     void onChangeThemeTriggered();
-    void onHelpTriggered(); // <- slot za Help dugme
+    void onHelpTriggered();
 
 private:
     Ui::MainWindow* m_ui;
