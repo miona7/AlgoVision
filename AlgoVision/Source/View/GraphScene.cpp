@@ -89,6 +89,7 @@ void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
 void GraphScene::addNode(Node* nodeModel) {
     NodeItem* nodeItem = new NodeItem(nodeModel);
     addItem(nodeItem);
+    m_nodeItems[nodeModel->getId()] = nodeItem;
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
     connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
             &GraphScene::setEditGraphSceneTrigger);
@@ -136,6 +137,7 @@ void GraphScene::removeNode(NodeItem* node) {
         removeEdge(edge);
     }
 
+    m_nodeItems.erase(node->modelNode()->getId());
     removeItem(node);
     delete node;
 }

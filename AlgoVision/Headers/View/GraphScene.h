@@ -2,6 +2,7 @@
 #define GRAPHSCENE_H
 
 #include <QGraphicsScene>
+#include <map>
 
 #include "NodeItem.h"
 #include "Edge.h"
@@ -43,6 +44,11 @@ private:
     NodeItem*         m_firstNodeSelect {nullptr};
     EditableTextItem* m_editLabel {nullptr};
     State             m_state {State::ADD};
+
+    // cuva NodeItem-e, kako bi mogli da se koriste prilikom pravljenja pogleda grafa od vec ucitanog modela
+    // sluzi kao veza modela cvora sa odgovarajucim pogledom
+    // ne poseduje NodeItem-e, samo ih koristi
+    std::map<unsigned, NodeItem*> m_nodeItems;
 
     void      selectNode(NodeItem*);
     EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*, bool, bool) const;
