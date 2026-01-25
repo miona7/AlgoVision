@@ -64,9 +64,7 @@ void GraphController::buildScene() const {
     // onda dodajemo sve grane
     for (auto& [id, _] : m_graph->getEdges()){
         Edge* edgeModel = m_graph->getEdge(id);
-        auto src = m_scene->findNodeItemById(edgeModel->startNode());
-        auto dest = m_scene->findNodeItemById(edgeModel->endNode());
-        m_scene->addEdge(edgeModel, src, dest, m_graph->isDirected(), m_graph->isWeighted());
+        m_scene->addEdge(edgeModel, m_graph->isDirected(), m_graph->isWeighted());
     }
 }
 
@@ -92,7 +90,7 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
     unsigned destId   = dest->modelNode()->getId();
     m_graph->addEdge(sourceId, destId);
     Edge* edgeModel = m_graph->getEdge(sourceId, destId);
-    m_scene->addEdge(edgeModel, source, dest, m_graph->isDirected(), m_graph->isWeighted());
+    m_scene->addEdge(edgeModel, m_graph->isDirected(), m_graph->isWeighted());
 }
 
 void GraphController::removeNode(NodeItem* nodeItem) const {

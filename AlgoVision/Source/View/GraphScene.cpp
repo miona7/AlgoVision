@@ -98,25 +98,20 @@ void GraphScene::addNode(Node* nodeModel) {
     }
 }
 
-void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest, bool isDirected,
-                         bool isWeighted) {
-    EdgeItem* edgeItem = makeEdgeItem(edgeModel, source, dest, isDirected, isWeighted);
-    addItem(edgeItem);
-    connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
+void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
+    NodeItem* src = findNodeItemById(edgeModel->startNode());
+    NodeItem* dest = findNodeItemById(edgeModel->endNode());
 
-    source->setNodeSelected(false);
-    dest->setNodeSelected(false);
-    m_firstNodeSelect = nullptr;
-}
+    if (edgeModel == nullptr || src == nullptr || dest == nullptr) {
+        return;
+    }
 
-EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest, bool isDirected,
-                                   bool isWeighted) const {
     EdgeItem* edgeItem = nullptr;
 
     if(isDirected) {
-        edgeItem = new DirectedEdgeItem(modelEdge, src, dest, isWeighted);
+        edgeItem = new DirectedEdgeItem(edgeModel, src, dest, isWeighted);
     } else {
-        edgeItem = new UndirectedEdgeItem(modelEdge, src, dest, isWeighted);
+        edgeItem = new UndirectedEdgeItem(edgeModel, src, dest, isWeighted);
     }
 
     if(isWeighted) {
@@ -126,8 +121,12 @@ EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* des
     }
 
     edgeItem->adjust();
+    addItem(edgeItem);
+    connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
 
-    return edgeItem;
+    src->setNodeSelected(false);
+    dest->setNodeSelected(false);
+    m_firstNodeSelect = nullptr;
 }
 
 void GraphScene::removeNode(NodeItem* node) {

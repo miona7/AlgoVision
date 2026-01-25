@@ -19,7 +19,7 @@ public:
     void resetScene();
 
     void addNode(Node*);
-    void addEdge(Edge*, NodeItem*, NodeItem*, bool, bool);
+    void addEdge(Edge*, bool, bool);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
 
@@ -53,7 +53,6 @@ private:
     std::map<unsigned, NodeItem*> m_nodeItems;
 
     void      selectNode(NodeItem*);
-    EdgeItem* makeEdgeItem(Edge*, NodeItem*, NodeItem*, bool, bool) const;
 };
 
 #endif // GRAPHSCENE_H
