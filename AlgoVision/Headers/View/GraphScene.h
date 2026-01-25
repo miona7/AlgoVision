@@ -23,6 +23,8 @@ public:
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
 
+    NodeItem* findNodeItemById(const unsigned) const;
+
 signals:
     void addNodeRequest(const QPointF&);
     void addEdgeRequest(NodeItem*, NodeItem*);

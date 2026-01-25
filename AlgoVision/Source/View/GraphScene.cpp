@@ -85,7 +85,6 @@ void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
     }
 }
 
-// VIEW region
 void GraphScene::addNode(Node* nodeModel) {
     NodeItem* nodeItem = new NodeItem(nodeModel);
     addItem(nodeItem);
@@ -147,7 +146,11 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     removeItem(edge);
     delete edge;
 }
-// VIEW
+
+NodeItem *GraphScene::findNodeItemById(const unsigned id) const {
+    auto it = m_nodeItems.find(id);
+    return (it != m_nodeItems.end()) ? it->second : nullptr;
+}
 
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
