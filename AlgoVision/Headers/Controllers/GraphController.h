@@ -23,15 +23,15 @@ public:
 
 public slots:
     void createGraph(bool, bool);
-    void addNode(const QPointF&);
-    void addEdge(NodeItem*, NodeItem*);
-    void removeNode(NodeItem*);
-    void removeEdge(EdgeItem*);
+    void addNode(const QPointF&) const;
+    void addEdge(NodeItem*, NodeItem*) const;
+    void removeNode(NodeItem*) const;
+    void removeEdge(EdgeItem*) const;
 
     // ova metoda brise sadrzaj modela grafa(grane i cvorove) i
     // pogleda grafa(cvor/grana ajteme), ali se nikad ne brisu m_graph i m_scene
     // oni postoje dok postoji i kontroler
-    void clear();
+    void clear() const;
     void clearScene() const;
 
     // kontroler je vlasnik i upravlja nad modelom i pogledom grafa

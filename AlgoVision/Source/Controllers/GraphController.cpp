@@ -44,7 +44,7 @@ void GraphController::createGraph(bool isDirected, bool isWeighted) {
     m_graph = std::make_shared<UnweightedUndirectedGraph>();
 }
 
-void GraphController::clear() {
+void GraphController::clear() const {
     m_scene->clear(); // prvo obrisemo pogled
     m_graph->clear(); // onda obrisemo model
 }
@@ -65,12 +65,12 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
 }
 
-void GraphController::addNode(const QPointF& position) {
+void GraphController::addNode(const QPointF& position) const {
     Node* nodeModel = m_graph->addNode(position.x(), position.y());
     m_scene->addNode(nodeModel);
 }
 
-void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
+void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
     unsigned sourceId = source->modelNode()->getId();
     unsigned destId   = dest->modelNode()->getId();
     m_graph->addEdge(sourceId, destId);
@@ -78,13 +78,13 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
     m_scene->addEdge(edgeModel, source, dest, m_graph->isDirected(), m_graph->isWeighted());
 }
 
-void GraphController::removeNode(NodeItem* nodeItem) {
+void GraphController::removeNode(NodeItem* nodeItem) const {
     const unsigned nodeId = nodeItem->modelNode()->getId();
     m_scene->removeNode(nodeItem); // prvo brisemo pogled
     m_graph->removeNode(nodeId);   // pa onda brisemo model
 }
 
-void GraphController::removeEdge(EdgeItem* edgeItem) {
+void GraphController::removeEdge(EdgeItem* edgeItem) const {
     const unsigned edgeId = edgeItem->modelEdge()->getId();
     m_scene->removeEdge(edgeItem); // prvo brisemo pogled
     m_graph->removeEdge(edgeId);   // pa onda brisemo model
