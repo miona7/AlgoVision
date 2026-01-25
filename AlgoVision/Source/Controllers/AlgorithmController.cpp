@@ -1,10 +1,11 @@
 #include "AlgorithmController.h"
 
-AlgorithmController::AlgorithmController(AlgorithmStepApplier& applier, QObject* parent) : m_applier(applier), QObject(parent) {
+AlgorithmController::AlgorithmController(AlgorithmStepApplier& applier, QObject* parent)
+    : m_applier(applier), QObject(parent) {
 }
 
 void AlgorithmController::loadSteps(const std::vector<AlgorithmStep>& steps) {
-    m_steps = steps;
+    m_steps        = steps;
     m_currentIndex = -1;
     m_undoStack.clear();
     m_redoStack.clear();
@@ -60,4 +61,3 @@ void AlgorithmController::reset() {
 bool AlgorithmController::isFinished() const {
     return m_currentIndex + 1 >= m_steps.size();
 }
-

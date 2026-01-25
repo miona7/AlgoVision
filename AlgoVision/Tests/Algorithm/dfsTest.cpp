@@ -95,7 +95,8 @@ static const char* stepTypeToString(StepType t) {
 void runDFSLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) {
     // arrange
     DFS                         dfs(g);
-    const std::vector<StepType> expectedSteps = { StepType::VisitNode, StepType::ProcessNode, StepType::ExamineEdge };
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                                 StepType::ExamineEdge};
 
     // act
     dfs.execute(startNode);

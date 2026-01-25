@@ -19,7 +19,7 @@ public:
     void setState(GraphScene::State);
     void resetScene();
 
-    Graph* getGraphRaw() const;
+    Graph*                 getGraphRaw() const;
     std::shared_ptr<Graph> getGraphShared() const;
 
     void addNode(Node*);

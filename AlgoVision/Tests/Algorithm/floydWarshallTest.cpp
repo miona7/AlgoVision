@@ -21,13 +21,9 @@ static const char* stepTypeToString(StepType t) {
 }
 
 void runFloydWarshallLoggingTest(const std::shared_ptr<Graph>& g) {
-    FloydWarshall fw(g);
-    const std::vector<StepType> expectedSteps = {
-        StepType::VisitNode,
-        StepType::ProcessNode,
-        StepType::ExamineEdge,
-        StepType::UpdateDistance
-    };
+    FloydWarshall               fw(g);
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                                 StepType::ExamineEdge, StepType::UpdateDistance};
 
     REQUIRE_NOTHROW(fw.execute());
 
@@ -57,10 +53,8 @@ void runFloydWarshallLoggingTest(const std::shared_ptr<Graph>& g) {
     }
 
     for(auto expected: expectedSteps) {
-        bool found = std::any_of(
-            steps.begin(), steps.end(),
-            [&](const auto& s) { return s.m_type == expected; }
-            );
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
 }

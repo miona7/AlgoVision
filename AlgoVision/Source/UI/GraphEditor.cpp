@@ -59,7 +59,7 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
     // splitter->addWidget(m_leftPlaceholder);
 
-    m_view  = new QGraphicsView(splitter);
+    m_view = new QGraphicsView(splitter);
     m_view->setScene(m_graphController->scene());
     splitter->addWidget(m_view);
 

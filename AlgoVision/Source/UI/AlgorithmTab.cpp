@@ -13,14 +13,14 @@
 #include <QVBoxLayout>
 
 AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
-    : QWidget(parent), m_algorithmCombo(new QComboBox(this)),
-      m_startRow(new QWidget(this)), m_startLabel(new QLabel("start node:", this)),
-      m_startNodeEdit(new QLineEdit(this)), m_endRow(new QWidget(this)),
-      m_endLabel(new QLabel("end node:", this)), m_endNodeEdit(new QLineEdit(this)),
-      m_noInputLabel(new QLabel(this)), m_helpBtn(new QPushButton("help", this)),
-      m_prevBtn(new QToolButton(this)), m_playBtn(new QToolButton(this)),
-      m_pauseBtn(new QToolButton(this)), m_nextBtn(new QToolButton(this)),
-      m_restartBtn(new QToolButton(this)), m_graph(graph), m_applier(m_graph), m_algorithmController(m_applier) {
+    : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startRow(new QWidget(this)),
+      m_startLabel(new QLabel("start node:", this)), m_startNodeEdit(new QLineEdit(this)),
+      m_endRow(new QWidget(this)), m_endLabel(new QLabel("end node:", this)),
+      m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
+      m_helpBtn(new QPushButton("help", this)), m_prevBtn(new QToolButton(this)),
+      m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),
+      m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)), m_graph(graph),
+      m_applier(m_graph), m_algorithmController(m_applier) {
     initLayout();
     initIcons();
 
@@ -56,7 +56,6 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
     // povezivanje dugmica
     // moraju da se hvataju exepctioni -> iskacuci prozori?
     connect(m_playBtn, &QToolButton::clicked, this, [this]() {
-
         // parametri trenutnog algoritma
         AlgorithmTab::AlgorithmConfig newConfig = selectedConfig();
 
@@ -72,9 +71,10 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
                 m_worker = nullptr;
             }
 
-            m_algorithmController.reset();  // vrati graf u pocetno stanje
+            m_algorithmController.reset(); // vrati graf u pocetno stanje
             m_currentConfig = newConfig;
-            m_worker = new AlgorithmWorker(newConfig.m_algorithmName, m_graph, newConfig.m_startNode, newConfig.m_endNode);
+            m_worker        = new AlgorithmWorker(newConfig.m_algorithmName, m_graph,
+                                                  newConfig.m_startNode, newConfig.m_endNode);
 
             // pokreni iscrtavanje kad nit zavrsi
             connect(m_worker, &AlgorithmWorker::stepsReady, this, [this]() {
@@ -83,8 +83,8 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
             });
 
             // ucitaj korake algoritma
-            connect(m_worker, &AlgorithmWorker::stepsReady,
-                    &m_algorithmController, &AlgorithmController::loadSteps);
+            connect(m_worker, &AlgorithmWorker::stepsReady, &m_algorithmController,
+                    &AlgorithmController::loadSteps);
 
             m_worker->start();
             m_state = RunState::Playing;
@@ -251,7 +251,8 @@ void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
 }
 
 bool AlgorithmTab::AlgorithmConfig::operator==(const AlgorithmConfig& other) const {
-    return m_algorithmName == other.m_algorithmName && m_startNode == other.m_startNode && m_endNode == other.m_endNode;
+    return m_algorithmName == other.m_algorithmName && m_startNode == other.m_startNode &&
+           m_endNode == other.m_endNode;
 }
 
 bool AlgorithmTab::AlgorithmConfig::operator!=(const AlgorithmConfig& other) const {
@@ -259,7 +260,8 @@ bool AlgorithmTab::AlgorithmConfig::operator!=(const AlgorithmConfig& other) con
 }
 
 AlgorithmTab::AlgorithmConfig AlgorithmTab::selectedConfig() const {
-    return { m_algorithmCombo->currentText(), m_startNodeEdit->text().toInt(), m_endNodeEdit->text().toInt() };
+    return {m_algorithmCombo->currentText(), m_startNodeEdit->text().toInt(),
+            m_endNodeEdit->text().toInt()};
 }
 
 void AlgorithmTab::startTimerForPlay() {

@@ -52,8 +52,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
     }
     {
         AlgorithmStep s;
-        s.m_type    = StepType::ProcessNode;
-        s.m_node    = nodeId;
+        s.m_type = StepType::ProcessNode;
+        s.m_node = nodeId;
         addStep(s);
     }
     {

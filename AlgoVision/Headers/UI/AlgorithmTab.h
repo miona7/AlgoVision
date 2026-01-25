@@ -1,9 +1,9 @@
 #ifndef ALGORITHMTAB_H
 #define ALGORITHMTAB_H
 
-#include <QWidget>
-#include <QTimer>
 #include <QString>
+#include <QTimer>
+#include <QWidget>
 
 #include <optional>
 
@@ -26,8 +26,8 @@ public:
 private:
     struct AlgorithmConfig {
         QString m_algorithmName;
-        int m_startNode;
-        int m_endNode;
+        int     m_startNode;
+        int     m_endNode;
 
         bool operator==(const AlgorithmConfig&) const;
         bool operator!=(const AlgorithmConfig&) const;
@@ -39,12 +39,12 @@ private:
 
     QComboBox* m_algorithmCombo;
 
-    QWidget*  m_startRow;
-    QLabel*   m_startLabel;
+    QWidget*   m_startRow;
+    QLabel*    m_startLabel;
     QLineEdit* m_startNodeEdit;
 
-    QWidget*  m_endRow;
-    QLabel*   m_endLabel;
+    QWidget*   m_endRow;
+    QLabel*    m_endLabel;
     QLineEdit* m_endNodeEdit;
 
     QLabel* m_noInputLabel;
@@ -57,12 +57,12 @@ private:
     QToolButton* m_nextBtn;
     QToolButton* m_restartBtn;
 
-    std::shared_ptr<Graph> m_graph;
-    AlgorithmStepApplier m_applier;
-    AlgorithmController m_algorithmController;
-    AlgorithmWorker* m_worker = nullptr;
-    QTimer* m_timer = nullptr;
-    RunState m_state = RunState::Idle;
+    std::shared_ptr<Graph>         m_graph;
+    AlgorithmStepApplier           m_applier;
+    AlgorithmController            m_algorithmController;
+    AlgorithmWorker*               m_worker = nullptr;
+    QTimer*                        m_timer  = nullptr;
+    RunState                       m_state  = RunState::Idle;
     std::optional<AlgorithmConfig> m_currentConfig;
 
     void initLayout();

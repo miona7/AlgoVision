@@ -151,7 +151,7 @@ void NodeItem::setLabel(EditableTextItem* newLabel) {
     m_label = newLabel;
 }
 
-const QSet<EdgeItem *> &NodeItem::edges() const {
+const QSet<EdgeItem*>& NodeItem::edges() const {
     return m_edges;
 }
 

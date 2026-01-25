@@ -6,8 +6,8 @@
 #include <memory>
 
 #include "Graph.h"
-#include "GraphScene.h"
 #include "GraphController.h"
+#include "GraphScene.h"
 
 class QUndoStack;
 class GraphEditTab;
@@ -30,10 +30,10 @@ private slots:
     void onClearRequestTrigger();
 
 private:
-    QUndoStack*    m_undoStack       = nullptr;
-    GraphEditTab*  m_editTab         = nullptr;
-    QLabel*        m_leftPlaceholder = nullptr;
-    QGraphicsView* m_view            = nullptr;
+    QUndoStack*                      m_undoStack       = nullptr;
+    GraphEditTab*                    m_editTab         = nullptr;
+    QLabel*                          m_leftPlaceholder = nullptr;
+    QGraphicsView*                   m_view            = nullptr;
     std::shared_ptr<GraphController> m_graphController;
 
     int m_dummyState = 0; // samo za test

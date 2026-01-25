@@ -17,14 +17,14 @@ GraphEditTab::GraphEditTab(QWidget* parent)
       m_nodeSizeSlider(new QSlider(Qt::Horizontal, this)) {
     initLayout();
 
-           // emitujemo signale (GraphEditor se onda pita)
+    // emitujemo signale (GraphEditor se onda pita)
     connect(m_undoBtn, &QPushButton::clicked, this, &GraphEditTab::undoRequested);
     connect(m_redoBtn, &QPushButton::clicked, this, &GraphEditTab::redoRequested);
     connect(m_addBtn, &QPushButton::clicked, this, &GraphEditTab::addRequested);
     connect(m_removeBtn, &QPushButton::clicked, this, &GraphEditTab::removeRequested);
     connect(m_clearBtn, &QPushButton::clicked, this, &GraphEditTab::clearRequested);
 
-           // default stanje
+    // default stanje
     m_undoBtn->setEnabled(false);
     m_redoBtn->setEnabled(false);
 }
@@ -42,7 +42,7 @@ void GraphEditTab::initLayout() {
     mainLayout->setSpacing(8);
 
     // edit
-    auto* graphEditBox = new QGroupBox("edit graph", this);
+    auto* graphEditBox    = new QGroupBox("edit graph", this);
     auto* graphEditLayout = new QGridLayout(graphEditBox);
     graphEditLayout->setSpacing(6);
 
@@ -52,7 +52,7 @@ void GraphEditTab::initLayout() {
     mainLayout->addWidget(graphEditBox);
 
     // history
-    auto* historyBox = new QGroupBox("history", this);
+    auto* historyBox    = new QGroupBox("history", this);
     auto* historyLayout = new QGridLayout(historyBox);
     historyLayout->setSpacing(6);
 
@@ -62,7 +62,7 @@ void GraphEditTab::initLayout() {
     mainLayout->addWidget(historyBox);
 
     // view
-    auto* viewBox = new QGroupBox("view", this);
+    auto* viewBox    = new QGroupBox("view", this);
     auto* viewLayout = new QGridLayout(viewBox);
     viewLayout->setSpacing(6);
 
@@ -72,7 +72,7 @@ void GraphEditTab::initLayout() {
     mainLayout->addWidget(viewBox);
 
     // scene
-    auto* sceneBox = new QGroupBox("scene", this);
+    auto* sceneBox    = new QGroupBox("scene", this);
     auto* sceneLayout = new QGridLayout(sceneBox);
     sceneLayout->setSpacing(6);
 
@@ -82,7 +82,7 @@ void GraphEditTab::initLayout() {
     mainLayout->addWidget(sceneBox);
 
     // node settings
-    auto* nodeBox = new QGroupBox("node settings", this);
+    auto* nodeBox    = new QGroupBox("node settings", this);
     auto* nodeLayout = new QVBoxLayout(nodeBox);
     nodeLayout->setSpacing(6);
 

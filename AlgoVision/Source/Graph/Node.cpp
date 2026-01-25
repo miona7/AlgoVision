@@ -1,6 +1,7 @@
 #include "Node.h"
 
-Node::Node(unsigned id, double x, double y) : m_id(id), m_name(QString("node %1").arg(id)), m_position {x, y} {
+Node::Node(unsigned id, double x, double y)
+    : m_id(id), m_name(QString("node %1").arg(id)), m_position {x, y} {
 }
 
 unsigned Node::getId() const {
@@ -31,7 +32,7 @@ QString Node::getName() const {
     return m_name;
 }
 
-void Node::setName(const QString &newName) {
+void Node::setName(const QString& newName) {
     m_name = newName;
 }
 

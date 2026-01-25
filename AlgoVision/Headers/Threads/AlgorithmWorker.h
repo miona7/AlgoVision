@@ -4,19 +4,19 @@
 #include <QObject>
 #include <QThread>
 
-#include "AlgorithmStep.h"
-#include "AlgorithmController.h"
-#include "AlgorithmStepApplier.h"
-#include "Graph.h"
 #include "AStar.h"
+#include "AlgorithmController.h"
+#include "AlgorithmStep.h"
+#include "AlgorithmStepApplier.h"
 #include "BFS.h"
-#include "DFS.h"
-#include "Tarjan.h"
-#include "Kahn.h"
 #include "BellmanFord.h"
-#include "FloydWarshall.h"
-#include "Prim.h"
+#include "DFS.h"
 #include "Dijkstra.h"
+#include "FloydWarshall.h"
+#include "Graph.h"
+#include "Kahn.h"
+#include "Prim.h"
+#include "Tarjan.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
@@ -34,12 +34,10 @@ protected:
     void run() override;
 
 private:
-    QString m_algorithm;
+    QString                m_algorithm;
     std::shared_ptr<Graph> m_graph;
-    unsigned m_start;
-    unsigned m_end;
+    unsigned               m_start;
+    unsigned               m_end;
 };
 
 #endif // WORKER_H
-
-
