@@ -53,6 +53,23 @@ void GraphController::clearScene() const {
     m_scene->clear();
 }
 
+// trenutno netestiran metod, jer cuvanje i otvaranje grafa nije povezano
+void GraphController::buildScene() const {
+    // prvo dodajemo sve cvorove
+    for (auto& [id, _] : m_graph->getNodes()){
+        Node* nodeModel = m_graph->getNode(id);
+        m_scene->addNode(nodeModel);
+    }
+
+    // onda dodajemo sve grane
+    for (auto& [id, _] : m_graph->getEdges()){
+        Edge* edgeModel = m_graph->getEdge(id);
+        auto src = m_scene->findNodeItemById(edgeModel->startNode());
+        auto dest = m_scene->findNodeItemById(edgeModel->endNode());
+        m_scene->addEdge(edgeModel, src, dest, m_graph->isDirected(), m_graph->isWeighted());
+    }
+}
+
 GraphScene* GraphController::scene() const {
     return m_scene.get();
 }
