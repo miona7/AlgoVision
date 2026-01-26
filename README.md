@@ -36,6 +36,20 @@ Aplikacija omogućava potpunu kontrolu toka izvršavanja algoritma:
 Ovakav način rada omogućava detaljno razumevanje svakog algoritma i lak povratak na prethodna stanja.
 
 ---
+## 🎹 Prečice (Shortcuts)
+
+Da bi rad sa aplikacijom bio brži i efikasniji, podržane su sledeće prečice na tastaturi:
+
+| Akcija               | Shortcut       |
+|----------------------|----------------|
+| Kreiraj graf         | Ctrl + N       |
+| Otvori graf          | Ctrl + O       |
+| Sačuvaj graf         | Ctrl + S       |
+| Sačuvaj sliku grafa  | Ctrl + I       |
+| Promeni temu         | Ctrl + T       |
+| Pomoć                | Ctrl + H       |
+
+---
 
 ## 🎨 Vizuelne i interaktivne mogućnosti
 
