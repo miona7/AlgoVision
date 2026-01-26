@@ -1,6 +1,6 @@
 #include "AlgorithmWorker.h"
 
-AlgorithmWorker::AlgorithmWorker(const QString& algorithm, std::shared_ptr<Graph> graph,
+AlgorithmWorker::AlgorithmWorker(const QString& algorithm, const std::shared_ptr<Graph> graph,
                                  unsigned start, unsigned end)
     : m_algorithm(algorithm), m_graph(graph), m_start(start), m_end(end) {
 }
