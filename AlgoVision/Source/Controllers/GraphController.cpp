@@ -81,7 +81,7 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::addEdgeRequest, this, &GraphController::addEdge);
     connect(m_scene.get(), &GraphScene::removeNodeRequest, this, &GraphController::removeNode);
     connect(m_scene.get(), &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
-    connect(m_scene.get(), &GraphScene::nodeEditNameRequest, this, &GraphController::editNodeName);
+    connect(m_scene.get(), &GraphScene::editNodeNameRequest, this, &GraphController::editNodeName);
     connect(m_scene.get(), &GraphScene::editEdgeWeightRequest, this, &GraphController::editEdgeWeight);
 }
 
@@ -133,7 +133,7 @@ void GraphController::removeEdge(EdgeItem* edgeItem) const {
     m_graph->removeEdge(edgeId);   // pa onda brisemo model
 }
 
-void GraphController::editNodeName(NodeItem* nodeItem, const QString& name) const {
+void GraphController::editNodeName(const NodeItem* nodeItem, const QString& name) const {
     nodeItem->modelNode()->setName(name);
 }
 
