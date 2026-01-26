@@ -80,6 +80,7 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::addEdgeRequest, this, &GraphController::addEdge);
     connect(m_scene.get(), &GraphScene::removeNodeRequest, this, &GraphController::removeNode);
     connect(m_scene.get(), &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
+    connect(m_scene.get(), &GraphScene::nodeEditNameRequest, this, &GraphController::editNodeName);
 }
 
 void GraphController::addNode(const QPointF& position) const {
@@ -128,4 +129,8 @@ void GraphController::removeEdge(EdgeItem* edgeItem) const {
     const unsigned edgeId = edgeItem->modelEdge()->getId();
     m_scene->removeEdge(edgeItem); // prvo brisemo pogled
     m_graph->removeEdge(edgeId);   // pa onda brisemo model
+}
+
+void GraphController::editNodeName(NodeItem* nodeItem, const QString& name) const {
+    nodeItem->modelNode()->setName(name);
 }

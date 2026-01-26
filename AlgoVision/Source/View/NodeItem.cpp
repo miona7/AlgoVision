@@ -139,8 +139,8 @@ void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     emit nodeSelected(this);
 }
 
-void NodeItem::onNameChanged(const QString& name) const {
-    m_modelNode->setName(name);
+void NodeItem::onNameChanged(const QString& name) {
+    emit nodeEditNameRequest(this, name);
 }
 
 EditableTextItem* NodeItem::label() const {

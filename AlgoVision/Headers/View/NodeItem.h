@@ -31,6 +31,7 @@ public:
 
 signals:
     void nodeSelected(NodeItem*);
+    void nodeEditNameRequest(NodeItem*, const QString&);
 
 protected:
     QRectF       boundingRect() const override;
@@ -43,7 +44,7 @@ protected:
     void         mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
 
 private slots:
-    void onNameChanged(const QString&) const;
+    void onNameChanged(const QString&);
 
 private:
     Node*             m_modelNode;

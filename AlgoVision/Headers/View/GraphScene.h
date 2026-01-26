@@ -35,6 +35,7 @@ signals:
     void addEdgeRequest(NodeItem*, NodeItem*);
     void removeNodeRequest(NodeItem*);
     void removeEdgeRequest(EdgeItem*);
+    void nodeEditNameRequest(NodeItem*, const QString&);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent*) override;

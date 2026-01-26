@@ -100,6 +100,7 @@ void GraphScene::addNode(Node* nodeModel) {
     addItem(nodeItem);
     m_nodeItems[nodeModel->getId()] = nodeItem;
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
+    connect(nodeItem, &NodeItem::nodeEditNameRequest, this, &GraphScene::nodeEditNameRequest);
     connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
             &GraphScene::setEditGraphSceneTrigger);
 
