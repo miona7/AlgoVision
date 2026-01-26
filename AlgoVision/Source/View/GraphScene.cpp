@@ -92,6 +92,10 @@ void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
 }
 
 void GraphScene::addNode(Node* nodeModel) {
+    if(nodeModel == nullptr) {
+        return;
+    }
+
     NodeItem* nodeItem = new NodeItem(nodeModel);
     addItem(nodeItem);
     m_nodeItems[nodeModel->getId()] = nodeItem;
@@ -105,6 +109,10 @@ void GraphScene::addNode(Node* nodeModel) {
 }
 
 void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
+    if(edgeModel == nullptr) {
+        return;
+    }
+
     NodeItem* src = findNodeItemById(edgeModel->startNode());
     NodeItem* dest = findNodeItemById(edgeModel->endNode());
 
@@ -136,6 +144,10 @@ void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
 }
 
 void GraphScene::removeNode(NodeItem* node) {
+    if(node == nullptr) {
+        return;
+    }
+
     auto edges = node->edges();
     for(EdgeItem* edge: edges) {
         removeEdge(edge);
@@ -147,6 +159,10 @@ void GraphScene::removeNode(NodeItem* node) {
 }
 
 void GraphScene::removeEdge(EdgeItem* edge) {
+    if(edge == nullptr) {
+        return;
+    }
+
     edge->disconnectNodes();
     removeItem(edge);
     delete edge;
