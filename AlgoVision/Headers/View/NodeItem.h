@@ -31,6 +31,7 @@ public:
 
 signals:
     void nodeSelected(NodeItem*);
+    void editNodeNameRequest(const NodeItem*, const QString&) const;
 
 protected:
     QRectF       boundingRect() const override;

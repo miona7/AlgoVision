@@ -100,6 +100,7 @@ void GraphScene::addNode(Node* nodeModel) {
     addItem(nodeItem);
     m_nodeItems[nodeModel->getId()] = nodeItem;
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
+    connect(nodeItem, &NodeItem::editNodeNameRequest, this, &GraphScene::editNodeNameRequest);
     connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
             &GraphScene::setEditGraphSceneTrigger);
 
@@ -137,6 +138,7 @@ void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
     edgeItem->adjust();
     addItem(edgeItem);
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
+    connect(edgeItem, &EdgeItem::editEdgeWeightRequest, this, &GraphScene::editEdgeWeightRequest);
 
     src->setNodeSelected(false);
     dest->setNodeSelected(false);

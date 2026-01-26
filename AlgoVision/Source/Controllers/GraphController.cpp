@@ -1,5 +1,6 @@
 #include "GraphController.h"
 #include "EdgeItem.h"
+#include "EditableTextItem.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
@@ -80,6 +81,8 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::addEdgeRequest, this, &GraphController::addEdge);
     connect(m_scene.get(), &GraphScene::removeNodeRequest, this, &GraphController::removeNode);
     connect(m_scene.get(), &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
+    connect(m_scene.get(), &GraphScene::editNodeNameRequest, this, &GraphController::editNodeName);
+    connect(m_scene.get(), &GraphScene::editEdgeWeightRequest, this, &GraphController::editEdgeWeight);
 }
 
 void GraphController::addNode(const QPointF& position) const {
@@ -128,4 +131,21 @@ void GraphController::removeEdge(EdgeItem* edgeItem) const {
     const unsigned edgeId = edgeItem->modelEdge()->getId();
     m_scene->removeEdge(edgeItem); // prvo brisemo pogled
     m_graph->removeEdge(edgeId);   // pa onda brisemo model
+}
+
+void GraphController::editNodeName(const NodeItem* nodeItem, const QString& name) const {
+    nodeItem->modelNode()->setName(name);
+}
+
+// ako korisnik unese nevalidnu tezinu grane, tezina grane se resetuje na prethodnu validnu
+void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& weight) const {
+    bool isNumber;
+    int  number = weight.toInt(&isNumber);
+    if(isNumber) {
+        edgeItem->modelEdge()->setWeight(number);
+        edgeItem->adjustWeightGeometry();
+    } else {
+        EditableTextItem* weightLabel = edgeItem->weight();
+        weightLabel->setPlainText(weightLabel->oldText());
+    }
 }
