@@ -4,8 +4,8 @@
 #include <QGraphicsScene>
 #include <map>
 
-#include "NodeItem.h"
 #include "Edge.h"
+#include "NodeItem.h"
 
 class GraphScene : public QGraphicsScene {
     Q_OBJECT
@@ -52,12 +52,12 @@ private:
     EditableTextItem* m_editLabel {nullptr};
     State             m_state {State::ADD};
 
-    // cuva NodeItem-e, kako bi mogli da se koriste prilikom pravljenja pogleda grafa od vec ucitanog modela
-    // sluzi kao veza modela cvora sa odgovarajucim pogledom
-    // ne poseduje NodeItem-e, samo ih koristi
+    // cuva NodeItem-e, kako bi mogli da se koriste prilikom pravljenja pogleda grafa od vec
+    // ucitanog modela sluzi kao veza modela cvora sa odgovarajucim pogledom ne poseduje NodeItem-e,
+    // samo ih koristi
     std::map<unsigned, NodeItem*> m_nodeItems;
 
-    void      selectNode(NodeItem*);
+    void selectNode(NodeItem*);
 };
 
 #endif // GRAPHSCENE_H

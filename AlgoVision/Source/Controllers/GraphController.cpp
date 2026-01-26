@@ -58,13 +58,13 @@ void GraphController::clearScene() const {
 // trenutno netestiran metod, jer cuvanje i otvaranje grafa nije povezano
 void GraphController::buildScene() const {
     // prvo dodajemo sve cvorove
-    for (auto& [id, _] : m_graph->getNodes()){
+    for(auto& [id, _]: m_graph->getNodes()) {
         Node* nodeModel = m_graph->getNode(id);
         m_scene->addNode(nodeModel);
     }
 
     // onda dodajemo sve grane
-    for (auto& [id, _] : m_graph->getEdges()){
+    for(auto& [id, _]: m_graph->getEdges()) {
         Edge* edgeModel = m_graph->getEdge(id);
         m_scene->addEdge(edgeModel, m_graph->isDirected(), m_graph->isWeighted());
     }
@@ -96,7 +96,7 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
     unsigned destId   = dest->modelNode()->getId();
 
     // sprecavamo da dodamo vec postojecu granu, da dodamo istu granu vise puta
-    if (m_graph->getEdge(sourceId, destId) != nullptr) {
+    if(m_graph->getEdge(sourceId, destId) != nullptr) {
         // mozda je stanje scene naruseno, cvor je selektovan i promenjena mu je boja, a operacija
         // je nevalidna
         source->setNodeSelected(false);

@@ -33,7 +33,10 @@ public slots:
     // oni postoje dok postoji i kontroler
     void clear() const;
     void clearScene() const;
+
+    // pravi scenu od vec ucitanog grafa
     void buildScene() const;
+
     // kontroler je vlasnik i upravlja nad modelom i pogledom grafa
 private:
     std::shared_ptr<Graph>      m_graph;

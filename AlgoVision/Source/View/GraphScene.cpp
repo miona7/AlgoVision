@@ -113,10 +113,10 @@ void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
         return;
     }
 
-    NodeItem* src = findNodeItemById(edgeModel->startNode());
+    NodeItem* src  = findNodeItemById(edgeModel->startNode());
     NodeItem* dest = findNodeItemById(edgeModel->endNode());
 
-    if (edgeModel == nullptr || src == nullptr || dest == nullptr) {
+    if(edgeModel == nullptr || src == nullptr || dest == nullptr) {
         return;
     }
 
@@ -168,7 +168,7 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     delete edge;
 }
 
-NodeItem *GraphScene::findNodeItemById(const unsigned id) const {
+NodeItem* GraphScene::findNodeItemById(const unsigned id) const {
     auto it = m_nodeItems.find(id);
     return (it != m_nodeItems.end()) ? it->second : nullptr;
 }
