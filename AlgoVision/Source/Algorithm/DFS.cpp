@@ -27,20 +27,16 @@ void DFS::execute(unsigned idStartNode, unsigned) {
         m_visited[id] = false;
     }
 
-    dfs(idStartNode, std::nullopt);
+    dfs(idStartNode);
 }
 
-void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
+void DFS::dfs(unsigned nodeId) {
     m_visited[nodeId] = true;
 
     {
         AlgorithmStep s;
         s.m_type = StepType::VisitNode;
         s.m_node = nodeId;
-        if(parent.has_value()) {
-            s.m_from = parent;
-        }
-        s.m_to = nodeId;
         addStep(s);
     }
     {
@@ -63,7 +59,7 @@ void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
             }
 
             if(!m_visited[neighbourId]) {
-                dfs(neighbourId, nodeId);
+                dfs(neighbourId);
             }
         }
     }
