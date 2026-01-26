@@ -5,7 +5,7 @@
 
 #include "Observable.h"
 
-enum class EdgeState { Default, Examined, Relaxed, Selected, InPath };
+enum class EdgeState { Default, Examined, Relaxed, Selected };
 
 class Edge : public Observable<Edge> {
 public:
