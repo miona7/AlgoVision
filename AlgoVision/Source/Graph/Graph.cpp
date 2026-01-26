@@ -53,6 +53,8 @@ void Graph::removeNode(unsigned id) {
 void Graph::clear() {
     m_numOfNodes = 0;
     m_numOfEdges = 0;
+    m_nodeId = 0;
+    m_edgeId = 0;
     m_adjacencyList.clear();
     m_nodes.clear();
     m_edges.clear();
@@ -160,6 +162,16 @@ Node* Graph::getNode(unsigned id) {
 const Node* Graph::getNode(unsigned id) const {
     auto it = m_nodes.find(id);
     return (it != m_nodes.end()) ? &it->second : nullptr;
+}
+
+Edge* Graph::getEdge(unsigned id) {
+    auto it = m_edges.find(id);
+    return (it != m_edges.end()) ? &it->second : nullptr;
+}
+
+const Edge* Graph::getEdge(unsigned id) const {
+    auto it = m_edges.find(id);
+    return (it != m_edges.end()) ? &it->second : nullptr;
 }
 
 Edge* Graph::getEdge(unsigned from, unsigned to) {

@@ -36,6 +36,8 @@ public:
     Node*       getNode(unsigned);
     const Node* getNode(unsigned) const;
 
+    Edge*       getEdge(unsigned);
+    const Edge* getEdge(unsigned) const;
     Edge*       getEdge(unsigned, unsigned);
     const Edge* getEdge(unsigned, unsigned) const;
 

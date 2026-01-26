@@ -13,11 +13,6 @@ GraphScene::GraphScene(QObject* parent) : QGraphicsScene(parent) {
     setSceneRect(0, 0, 3000, 3000);
 }
 
-GraphScene::GraphScene(const std::shared_ptr<Graph>& graph, QObject* parent)
-    : QGraphicsScene(parent), m_graph(graph) {
-    setSceneRect(0, 0, 3000, 3000);
-}
-
 void GraphScene::setState(GraphScene::State state) {
     m_state = state;
 }
@@ -34,6 +29,12 @@ void GraphScene::resetScene() {
     }
 
     m_state = State::ADD;
+}
+
+void GraphScene::clear() {
+    resetScene();
+    m_nodeItems.clear();
+    QGraphicsScene::clear();
 }
 
 void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
@@ -90,10 +91,14 @@ void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
     }
 }
 
-// VIEW region
 void GraphScene::addNode(Node* nodeModel) {
+    if(nodeModel == nullptr) {
+        return;
+    }
+
     NodeItem* nodeItem = new NodeItem(nodeModel);
     addItem(nodeItem);
+    m_nodeItems[nodeModel->getId()] = nodeItem;
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
     connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
             &GraphScene::setEditGraphSceneTrigger);
@@ -103,25 +108,24 @@ void GraphScene::addNode(Node* nodeModel) {
     }
 }
 
-void GraphScene::addEdge(Edge* edgeModel, NodeItem* source, NodeItem* dest, bool isDirected,
-                         bool isWeighted) {
-    EdgeItem* edgeItem = makeEdgeItem(edgeModel, source, dest, isDirected, isWeighted);
-    addItem(edgeItem);
-    connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
+void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
+    if(edgeModel == nullptr) {
+        return;
+    }
 
-    source->setNodeSelected(false);
-    dest->setNodeSelected(false);
-    m_firstNodeSelect = nullptr;
-}
+    NodeItem* src  = findNodeItemById(edgeModel->startNode());
+    NodeItem* dest = findNodeItemById(edgeModel->endNode());
 
-EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* dest, bool isDirected,
-                                   bool isWeighted) const {
+    if(edgeModel == nullptr || src == nullptr || dest == nullptr) {
+        return;
+    }
+
     EdgeItem* edgeItem = nullptr;
 
     if(isDirected) {
-        edgeItem = new DirectedEdgeItem(modelEdge, src, dest, isWeighted);
+        edgeItem = new DirectedEdgeItem(edgeModel, src, dest, isWeighted);
     } else {
-        edgeItem = new UndirectedEdgeItem(modelEdge, src, dest, isWeighted);
+        edgeItem = new UndirectedEdgeItem(edgeModel, src, dest, isWeighted);
     }
 
     if(isWeighted) {
@@ -131,26 +135,43 @@ EdgeItem* GraphScene::makeEdgeItem(Edge* modelEdge, NodeItem* src, NodeItem* des
     }
 
     edgeItem->adjust();
+    addItem(edgeItem);
+    connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
 
-    return edgeItem;
+    src->setNodeSelected(false);
+    dest->setNodeSelected(false);
+    m_firstNodeSelect = nullptr;
 }
 
 void GraphScene::removeNode(NodeItem* node) {
+    if(node == nullptr) {
+        return;
+    }
+
     auto edges = node->edges();
     for(EdgeItem* edge: edges) {
         removeEdge(edge);
     }
 
+    m_nodeItems.erase(node->modelNode()->getId());
     removeItem(node);
     delete node;
 }
 
 void GraphScene::removeEdge(EdgeItem* edge) {
+    if(edge == nullptr) {
+        return;
+    }
+
     edge->disconnectNodes();
     removeItem(edge);
     delete edge;
 }
-// VIEW
+
+NodeItem* GraphScene::findNodeItemById(const unsigned id) const {
+    auto it = m_nodeItems.find(id);
+    return (it != m_nodeItems.end()) ? it->second : nullptr;
+}
 
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
@@ -167,14 +188,4 @@ void GraphScene::selectNode(NodeItem* node) {
 
     // other node is selected
     emit addEdgeRequest(m_firstNodeSelect, node); // zahtevamo dodavanje grane od kontrolera
-}
-
-// vraca raw pointer (postojeci)
-Graph* GraphScene::getGraphRaw() const {
-    return m_graph.get();
-}
-
-// pravi shared_ptr za algoritme, ne preuzima vlasnistvo
-std::shared_ptr<Graph> GraphScene::getGraphShared() const {
-    return m_graph;
 }
