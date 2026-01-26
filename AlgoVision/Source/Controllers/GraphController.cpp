@@ -88,6 +88,10 @@ void GraphController::addNode(const QPointF& position) const {
 }
 
 void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
+    if(source == nullptr || dest == nullptr) {
+        return;
+    }
+
     unsigned sourceId = source->modelNode()->getId();
     unsigned destId   = dest->modelNode()->getId();
 
@@ -107,12 +111,20 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
 }
 
 void GraphController::removeNode(NodeItem* nodeItem) const {
+    if(nodeItem == nullptr) {
+        return;
+    }
+
     const unsigned nodeId = nodeItem->modelNode()->getId();
     m_scene->removeNode(nodeItem); // prvo brisemo pogled
     m_graph->removeNode(nodeId);   // pa onda brisemo model
 }
 
 void GraphController::removeEdge(EdgeItem* edgeItem) const {
+    if(edgeItem == nullptr) {
+        return;
+    }
+
     const unsigned edgeId = edgeItem->modelEdge()->getId();
     m_scene->removeEdge(edgeItem); // prvo brisemo pogled
     m_graph->removeEdge(edgeId);   // pa onda brisemo model
