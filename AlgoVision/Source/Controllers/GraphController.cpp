@@ -18,10 +18,12 @@ void GraphController::setGraph(const std::shared_ptr<Graph>& newGraph) {
 }
 
 void GraphController::setAddSceneState() const {
+    m_scene->resetScene();
     m_scene->setState(GraphScene::State::ADD);
 }
 
 void GraphController::setRemoveSceneState() const {
+    m_scene->resetScene();
     m_scene->setState(GraphScene::State::REMOVE);
 }
 
