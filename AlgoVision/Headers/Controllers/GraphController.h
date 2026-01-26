@@ -47,4 +47,4 @@ private:
     void connectScene() const;
 };
 
-#endif // GRAPH_CONTROLLER
+#endif // GRAPH_CONTROLLER_H
