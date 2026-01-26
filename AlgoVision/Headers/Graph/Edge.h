@@ -21,8 +21,6 @@ public:
     void setWeight(int);
     void setState(EdgeState);
 
-    friend std::ostream& operator<<(std::ostream&, const Edge&);
-
 private:
     int       m_weight;
     unsigned  m_id;
@@ -30,7 +28,5 @@ private:
     unsigned  m_idEndNode;
     EdgeState m_state = EdgeState::Default;
 };
-
-std::ostream& operator<<(std::ostream&, const Edge&);
 
 #endif // EDGE_H

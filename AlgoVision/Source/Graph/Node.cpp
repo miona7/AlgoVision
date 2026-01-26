@@ -35,7 +35,3 @@ QString Node::getName() const {
 void Node::setName(const QString& newName) {
     m_name = newName;
 }
-
-std::ostream& operator<<(std::ostream& s, const Node& n) {
-    return s << "Node {id = " << n.m_id << "}" << std::endl;
-}

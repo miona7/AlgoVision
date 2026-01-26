@@ -28,8 +28,6 @@ public:
     void setPosition(double, double);
     void setState(NodeState);
 
-    friend std::ostream& operator<<(std::ostream&, const Node&);
-
     QString getName() const;
     void    setName(const QString&);
 
@@ -39,7 +37,5 @@ private:
     std::pair<double, double> m_position; // x, y koordinata cvora
     NodeState                 m_state = NodeState::Default;
 };
-
-std::ostream& operator<<(std::ostream&, const Node&);
 
 #endif // NODE_H
