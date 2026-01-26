@@ -17,6 +17,8 @@ public:
 
     void                 initEdgeWeight();
     void                 adjust();
+    void adjustPointsGeometry();
+    void adjustWeightGeometry() const;
     virtual QPainterPath edgePath() const                                                     = 0;
     QRectF               boundingRect() const override                                        = 0;
     QPainterPath         shape() const override                                               = 0;
@@ -36,6 +38,7 @@ public:
 
 signals:
     void edgeSelected(EdgeItem*);
+    void editEdgeWeightRequest(const EdgeItem*, const QString&) const;
 
 private slots:
     void onEdgeWeightChanged(const QString&) const;
@@ -62,9 +65,6 @@ protected:
     QPointF getEdgeCenter() const;
     QPointF calculateNormal() const;
     QPointF getWeightPosition() const;
-
-    void adjustPointsGeometry();
-    void adjustWeightGeometry() const;
 
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
 };

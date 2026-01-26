@@ -118,16 +118,8 @@ void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     }
 }
 
-// if user didn't change weight to number, reset back to old edge weight
 void EdgeItem::onEdgeWeightChanged(const QString& name) const {
-    bool isNumber;
-    int  number = name.toInt(&isNumber);
-    if(isNumber) {
-        m_modelEdge->setWeight(number);
-        adjustWeightGeometry();
-    } else {
-        m_weight->setPlainText(m_weight->oldText());
-    }
+    emit editEdgeWeightRequest(this, name);
 }
 
 EditableTextItem* EdgeItem::weight() const {
