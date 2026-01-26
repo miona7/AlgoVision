@@ -88,6 +88,17 @@ void GraphController::addNode(const QPointF& position) const {
 void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
     unsigned sourceId = source->modelNode()->getId();
     unsigned destId   = dest->modelNode()->getId();
+
+    // sprecavamo da dodamo vec postojecu granu, da dodamo istu granu vise puta
+    if (m_graph->getEdge(sourceId, destId) != nullptr) {
+        // mozda je stanje scene naruseno, cvor je selektovan i promenjena mu je boja, a operacija
+        // je nevalidna
+        source->setNodeSelected(false);
+        dest->setNodeSelected(false);
+        m_scene->resetScene();
+        return;
+    }
+
     m_graph->addEdge(sourceId, destId);
     Edge* edgeModel = m_graph->getEdge(sourceId, destId);
     m_scene->addEdge(edgeModel, m_graph->isDirected(), m_graph->isWeighted());
