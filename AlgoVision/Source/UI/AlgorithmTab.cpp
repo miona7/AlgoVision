@@ -271,6 +271,7 @@ void AlgorithmTab::startTimerForPlay() {
             if(m_algorithmController.isFinished()) {
                 m_timer->stop();
                 m_state = RunState::Finished;
+                m_algorithmController.clear();
                 return;
             }
             if(m_state != RunState::Playing) {

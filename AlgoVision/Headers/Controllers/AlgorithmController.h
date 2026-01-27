@@ -14,6 +14,8 @@ public:
     AlgorithmController(AlgorithmStepApplier&, QObject* = nullptr);
     ~AlgorithmController() override = default;
 
+    void clear();
+
 public slots:
     void loadSteps(const std::vector<AlgorithmStep>&);
 
