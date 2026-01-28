@@ -177,13 +177,19 @@ void NodeItem::setRadius(qreal newRadius) {
 }
 
 const QColor NodeItem::calculateColor() const {
-    // return (!m_nodeSelected) ? Qt::green : Qt::red;
-
     if(m_nodeSelected) {
         return Qt::red;
     }
 
     switch(m_modelNode->getState()) {
+    case NodeState::AssignedComponent: {
+        int colorId = m_modelNode->getComponentColor();
+        if(colorId >= 0) {
+            int hue = (colorId * 137) % 360;
+            return QColor::fromHsl(hue, 200, 150);
+        }
+        return Qt::cyan; // fallback
+    }
     case NodeState::Active:
         return Qt::yellow;
     case NodeState::Visited:
@@ -194,8 +200,6 @@ const QColor NodeItem::calculateColor() const {
         return Qt::green;
     case NodeState::TopologicalOrder:
         return Qt::darkYellow;
-    case NodeState::AssignedComponent:
-        return Qt::cyan;
     default:
         return Qt::lightGray;
         // return Qt::green;
