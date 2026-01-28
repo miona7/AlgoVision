@@ -31,7 +31,7 @@ Aplikacija omogućava potpunu kontrolu toka izvršavanja algoritma:
 - ⏸️ Pause – pauziranje izvršavanja
 - ⏭️ Step forward – prelazak na sledeći korak
 - ⏮️ Step back – povratak na prethodni korak
-- 🔄 Undo / Redo – poništavanje i ponovno izvršavanje koraka
+- 🔁 Reset - povratak na početak
 
 Ovakav način rada omogućava detaljno razumevanje svakog algoritma i lak povratak na prethodna stanja.
 
