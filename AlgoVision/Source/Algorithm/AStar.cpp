@@ -180,18 +180,10 @@ int AStar::heuristic(unsigned node, unsigned goal) const {
         auto [x1, y1] = itNode->second.getPosition();
         auto [x2, y2] = itGoal->second.getPosition();
 
-        if(m_heuristic == HeuristicType::Euclidean) {
-            return static_cast<int>(std::sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
-        } else if(m_heuristic == HeuristicType::Manhattan) {
-            return static_cast<int>(std::abs(x1 - x2) + std::abs(y1 - y2));
-        }
+        return static_cast<int>(std::sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
 
     return 0; // fallback heuristika
-}
-
-void AStar::setHeuristic(HeuristicType h) {
-    m_heuristic = h;
 }
 
 const std::vector<unsigned>& AStar::getPath() const {

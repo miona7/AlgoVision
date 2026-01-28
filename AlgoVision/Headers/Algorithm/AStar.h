@@ -13,17 +13,10 @@
 
 class AStar : public Algorithm {
 public:
-    enum class HeuristicType {
-        Euclidean,
-        Manhattan
-    };
-
     explicit AStar(const std::shared_ptr<Graph>);
 
     void checkConditions(unsigned, unsigned) const;
     void execute(unsigned, unsigned) override;
-
-    void setHeuristic(HeuristicType);
 
     const std::vector<unsigned>& getPath() const;
     int                          getTotalCost() const;
@@ -34,7 +27,6 @@ private:
 
     std::vector<unsigned> m_path;
     int                   m_totalCost = 0;
-    HeuristicType m_heuristic = HeuristicType::Euclidean;
 };
 
 #endif // ASTAR_H
