@@ -89,6 +89,7 @@ QVariant Graph::toVariant() const {
         n["id"] = id;
         n["x"]  = pos.first;
         n["y"]  = pos.second;
+        n["name"] = node.getName();
 
         nodes.push_back(n);
     }
@@ -120,13 +121,24 @@ void Graph::fromVariant(const QVariant& variant) {
 
     clear();
 
+    unsigned maxNodeId = 0;
+    unsigned maxEdgeId = 0;
+
     const QVariantList nodes = graph.value("nodes").toList();
     for(const QVariant& v: nodes) {
         const QVariantMap n  = v.toMap();
         const unsigned    id = n.value("id").toUInt();
         const double      x  = n.value("x").toDouble();
         const double      y  = n.value("y").toDouble();
+        const QString name = n.value("name").toString();
         addNode(id, x, y);
+
+        Node* node = getNode(id);
+        if(node != nullptr && !name.isEmpty()) {
+            node->setName(name);
+        }
+
+        maxNodeId = std::max(maxNodeId, id);
     }
 
     const QVariantList edges = graph.value("edges").toList();
@@ -139,7 +151,12 @@ void Graph::fromVariant(const QVariant& variant) {
         const int      w      = e.value("weight", 1).toInt();
 
         addEdgeSerialized(edgeId, from, to, w);
+
+        maxEdgeId = std::max(maxEdgeId, edgeId); // proveriti da li je potrebno u serializeru isto ovo
     }
+
+    m_nodeId = nodes.isEmpty() ? 0 : maxNodeId + 1;
+    m_edgeId = edges.isEmpty() ? 0 : maxEdgeId + 1;
 }
 
 std::map<unsigned, std::map<unsigned, unsigned>> Graph::getAdjacencyList() const {

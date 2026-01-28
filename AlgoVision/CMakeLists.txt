@@ -50,8 +50,6 @@ set(PROJECT_SOURCES
 
         Headers/Serialization/Serializable.h
         Headers/Serialization/Serializer.h Source/Serialization/Serializer.cpp
-        Headers/Serialization/SaveFile.h Source/Serialization/SaveFile.cpp
-        Headers/Serialization/LoadFile.h Source/Serialization/LoadFile.cpp
 
         Headers/UI/AppConstants.h
         Headers/UI/MenuToolBar.h Source/UI/MenuToolBar.cpp
@@ -71,6 +69,8 @@ set(PROJECT_SOURCES
         Headers/Controllers/AlgorithmController.h Source/Controllers/AlgorithmController.cpp
 
         Headers/Threads/AlgorithmWorker.h Source/Threads/AlgorithmWorker.cpp
+        Headers/Threads/SaveFileWorker.h Source/Threads/SaveFileWorker.cpp
+        Headers/Threads/LoadFileWorker.h Source/Threads/LoadFileWorker.cpp
 )
 
 qt_add_resources(RESOURCES
@@ -168,10 +168,6 @@ add_executable(AlgoVisionTests
     Source/Algorithm/BellmanFord.cpp
     Source/Algorithm/FloydWarshall.cpp
 
-    Source/Serialization/Serializer.cpp
-    Source/Serialization/SaveFile.cpp
-    Source/Serialization/LoadFile.cpp
-
 
     Tests/Graph/graphTest.cpp
     Tests/Graph/nodeTest.cpp
@@ -187,12 +183,10 @@ add_executable(AlgoVisionTests
     Tests/Algorithm/primTest.cpp
     Tests/Algorithm/bellmanFordTest.cpp
     Tests/Algorithm/floydWarshallTest.cpp
-
-    Tests/Serialization/SerializationTest.cpp
 )
 
-target_link_libraries(AlgoVisionTests
-    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+target_link_libraries(AlgoVisionTests PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
     Catch2::Catch2WithMain
 )
 

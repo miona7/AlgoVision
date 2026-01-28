@@ -1,5 +1,5 @@
-#ifndef SAVEFILE_H
-#define SAVEFILE_H
+#ifndef SAVEFILEWORKER_H
+#define SAVEFILEWORKER_H
 
 #include <QString>
 #include <QThread>
@@ -7,9 +7,9 @@
 #include "Serializable.h"
 #include "Serializer.h"
 
-class SaveFile : public QThread {
+class SaveFileWorker : public QThread {
 public:
-    SaveFile(Serializer*, Serializable*, const QString&, bool, bool, QObject* = nullptr);
+    SaveFileWorker(Serializer*, Serializable*, const QString&, bool, bool, QObject* = nullptr);
 
     void run() override;
 
@@ -23,4 +23,4 @@ private:
     bool m_isDirected = false;
 };
 
-#endif // SAVEFILE_H
+#endif // SAVEFILEWORKER_H

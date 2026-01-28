@@ -1,12 +1,12 @@
-#include "SaveFile.h"
+#include "SaveFileWorker.h"
 
-SaveFile::SaveFile(Serializer* serializer, Serializable* serializable, const QString& filePath,
+SaveFileWorker::SaveFileWorker(Serializer* serializer, Serializable* serializable, const QString& filePath,
                    bool isWeighted, bool isDirected, QObject* parent)
     : QThread(parent), m_serializer(serializer), m_filePath(filePath), m_serializable(serializable),
       m_isWeighted(isWeighted), m_isDirected(isDirected) {
 }
 
-void SaveFile::run() {
+void SaveFileWorker::run() {
     if(m_serializer == nullptr || m_serializable == nullptr) {
         return;
     }

@@ -29,7 +29,6 @@ MainWindow::MainWindow(QWidget* parent)
     m_ui->setupUi(this);
 
     m_serializer = std::make_unique<Serializer>();
-    m_graph      = createGraph(false, false); // default unweighted, undirected
 
     this->setStyleSheet(m_themeManager->styleSheet());
 
@@ -64,8 +63,6 @@ MainWindow::~MainWindow() {
     delete m_ui;
 }
 
-// napravi promene tako da se prilagodis kontroleru, kontroler je odgovoran za menjanje modela i pogleda
-// klikom na open graph treba da se napravi novi graf editor
 void MainWindow::onOpenGraphTriggered() {
     QString filePath = QFileDialog::getOpenFileName(this, "open graph", "", "graph files (*.json)");
 
@@ -89,11 +86,8 @@ void MainWindow::onOpenGraphTriggered() {
     const bool        isWeighted = root.value("isWeighted").toBool();
     const bool        isDirected = root.value("isDirected").toBool();
 
-    m_graph = createGraph(isWeighted, isDirected);
-
     bool loadedWeighted = false;
     bool loadedDirected = false;
-    m_serializer->load(*m_graph, filePath, loadedWeighted, loadedDirected);
 
     m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
     std::cout << "btnOpenGraph clicked: "
@@ -163,8 +157,6 @@ void MainWindow::onCreateGraphTriggered() {
     initMenuToolBar();
 }
 
-
-// prilagodi da koristis graf iz kontrolera
 void MainWindow::onSaveGraphTriggered() {
     QString filePath = QFileDialog::getSaveFileName(this, "save graph", "", "graph files (*.json)");
 
@@ -176,15 +168,9 @@ void MainWindow::onSaveGraphTriggered() {
         filePath += ".json";
     }
 
-    if(m_graph == nullptr || m_serializer == nullptr) {
-        QMessageBox::warning(this, "error", "graph/serializer is not initialized");
-        return;
-    }
-
     QFile file(filePath);
     if(file.open(QIODevice::WriteOnly)) {
         file.close();
-        m_serializer->save(*m_graph, filePath, m_graph->isWeighted(), m_graph->isDirected());
         QMessageBox::information(this, "saved", "graph saved to: " + filePath);
     } else {
         QMessageBox::warning(this, "error", "could not save file: " + filePath);
@@ -253,7 +239,6 @@ void MainWindow::initMenuToolBar() {
     connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
 }
 
-// na osnovu informacija kakav je graf, pravi controler i graf pre nego li napravi graf editor
 void MainWindow::createGraphEditor(bool isDirected, bool isWeighted) {
     // prvo pravimo kontroler i graf(model + pogled)
     std::shared_ptr<GraphController> controller = std::make_shared<GraphController>();
@@ -270,20 +255,6 @@ void MainWindow::createGraphEditor(bool isDirected, bool isWeighted) {
         m_graphEditor     = graphEditor;
         graphLayout->addWidget(graphEditor);
     }
-}
-
-// ukloni ovaj metod, treba i vec postoji u okviru kontolera, treba ga ukloniti odavde
-std::shared_ptr<Graph> MainWindow::createGraph(bool isWeighted, bool isDirected) {
-    if(isWeighted && isDirected) {
-        return std::make_shared<WeightedDirectedGraph>();
-    }
-    if(isWeighted && !isDirected) {
-        return std::make_shared<WeightedUndirectedGraph>();
-    }
-    if(!isWeighted && isDirected) {
-        return std::make_shared<UnweightedDirectedGraph>();
-    }
-    return std::make_shared<UnweightedUndirectedGraph>();
 }
 
 void MainWindow::onHelpTriggered() {

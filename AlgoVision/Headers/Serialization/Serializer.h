@@ -14,7 +14,7 @@ public:
 
     virtual void save(const Serializable&, const QString&, bool, bool);
 
-    virtual void load(Serializable&, const QString&, bool&, bool&);
+    virtual void load(Serializable&, const QVariant&);
 };
 
 #endif // SERIALIZER_H
