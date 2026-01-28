@@ -13,6 +13,8 @@ static const char* stepTypeToString(StepType t) {
         return "ProcessNode";
     case StepType::ExamineEdge:
         return "ExamineEdge";
+    case StepType::SelectEdge:
+        return "SelectEdge";
     case StepType::UpdateDistance:
         return "UpdateDistance";
     default:
@@ -23,7 +25,7 @@ static const char* stepTypeToString(StepType t) {
 void runFloydWarshallLoggingTest(const std::shared_ptr<Graph>& g) {
     FloydWarshall               fw(g);
     const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
-                                                 StepType::ExamineEdge, StepType::UpdateDistance};
+                                                 StepType::ExamineEdge, StepType::SelectEdge, StepType::UpdateDistance};
 
     REQUIRE_NOTHROW(fw.execute());
 
