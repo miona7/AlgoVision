@@ -24,29 +24,11 @@ void Serializer::save(const Serializable& s, const QString& filePath, bool isWei
     file.write(jsonDoc.toJson());
 }
 
-void Serializer::load(Serializable& s, const QString& filePath, bool& isWeighted,
-                      bool& isDirected) {
-
-    if(filePath.isEmpty()) {
-        return;
+void Serializer::load(Serializable& serializable, const QVariant& data) {
+    QVariantMap root = data.toMap();
+    if(root.isEmpty()) {
+        return; // prazno ili nevalidno
     }
 
-    QFile file(filePath);
-    if(!file.open(QFile::ReadOnly)) {
-        return;
-    }
-
-    const auto        jsonDoc = QJsonDocument::fromJson(file.readAll());
-    const QVariant    rootVar = jsonDoc.toVariant();
-    const QVariantMap root    = rootVar.toMap();
-
-    isWeighted = root.value("isWeighted").toBool();
-    isDirected = root.value("isDirected").toBool();
-
-    const QVariant graphVar = root.value("graph");
-    if(!graphVar.isValid()) {
-        return;
-    }
-
-    s.fromVariant(graphVar);
+    serializable.fromVariant(root);
 }
