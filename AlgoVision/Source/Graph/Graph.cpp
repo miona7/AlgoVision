@@ -53,8 +53,8 @@ void Graph::removeNode(unsigned id) {
 void Graph::clear() {
     m_numOfNodes = 0;
     m_numOfEdges = 0;
-    m_nodeId = 0;
-    m_edgeId = 0;
+    m_nodeId     = 0;
+    m_edgeId     = 0;
     m_adjacencyList.clear();
     m_nodes.clear();
     m_edges.clear();

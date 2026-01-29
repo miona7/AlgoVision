@@ -64,7 +64,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
 
         if(needNewRun || m_state == RunState::Idle || m_state == RunState::Finished) {
             // ugasi i obrisi staru nit
-            if(m_worker) {
+            if(m_worker != nullptr) {
                 m_worker->quit();
                 m_worker->wait();
                 delete m_worker;
@@ -271,6 +271,7 @@ void AlgorithmTab::startTimerForPlay() {
             if(m_algorithmController.isFinished()) {
                 m_timer->stop();
                 m_state = RunState::Finished;
+                m_algorithmController.clear();
                 return;
             }
             if(m_state != RunState::Playing) {

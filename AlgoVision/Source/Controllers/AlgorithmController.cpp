@@ -4,6 +4,10 @@ AlgorithmController::AlgorithmController(AlgorithmStepApplier& applier, QObject*
     : m_applier(applier), QObject(parent) {
 }
 
+void AlgorithmController::clear() {
+    m_steps.clear();
+}
+
 void AlgorithmController::loadSteps(const std::vector<AlgorithmStep>& steps) {
     m_steps        = steps;
     m_currentIndex = -1;

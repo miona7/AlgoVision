@@ -35,8 +35,3 @@ void Edge::setState(EdgeState state) {
     m_state = state;
     notifyObservers(*this);
 }
-
-std::ostream& operator<<(std::ostream& s, const Edge& e) {
-    return s << "Edge {id = " << e.m_id << ", from node " << e.m_idStartNode << " to node "
-             << e.m_idEndNode << ", with weight = " << e.m_weight << "}" << std::endl;
-}

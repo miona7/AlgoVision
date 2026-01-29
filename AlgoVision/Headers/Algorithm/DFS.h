@@ -19,7 +19,7 @@ public:
 private:
     std::map<unsigned, bool> m_visited;
 
-    void dfs(unsigned, std::optional<unsigned>);
+    void dfs(unsigned);
 };
 
 #endif // DFS_H

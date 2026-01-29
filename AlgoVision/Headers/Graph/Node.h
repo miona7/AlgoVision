@@ -8,8 +8,8 @@
 
 enum class NodeState {
     Default,
-    Active,  // InProcess -> trenutno se obradjuje
-    Visited, // posecen -> obradjen
+    Active,
+    Visited,
     UpdatedDistance,
     InPath,
     TopologicalOrder,
@@ -24,22 +24,21 @@ public:
     unsigned                         getId() const;
     const std::pair<double, double>& getPosition() const;
     NodeState                        getState() const;
+    QString                          getName() const;
+    int                              getComponentColor() const;
 
     void setPosition(double, double);
     void setState(NodeState);
-
-    friend std::ostream& operator<<(std::ostream&, const Node&);
-
-    QString getName() const;
-    void    setName(const QString&);
+    void setName(const QString&);
+    void setComponentColor(int);
 
 private:
     unsigned                  m_id;
     QString                   m_name;
     std::pair<double, double> m_position; // x, y koordinata cvora
     NodeState                 m_state = NodeState::Default;
-};
 
-std::ostream& operator<<(std::ostream&, const Node&);
+    int m_componentColor = -1;
+};
 
 #endif // NODE_H

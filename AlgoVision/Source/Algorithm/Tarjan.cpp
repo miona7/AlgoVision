@@ -120,6 +120,11 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
             m_components[componentNodeId] = component;
             m_onStack[componentNodeId]    = false;
 
+            Node* node = m_graph->getNode(componentNodeId);
+            if(node != nullptr) {
+                node->setComponentColor(component);
+            }
+
             if(componentNodeId == nodeId) {
                 break;
             }

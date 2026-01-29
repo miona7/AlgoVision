@@ -16,6 +16,14 @@ NodeState Node::getState() const {
     return m_state;
 }
 
+QString Node::getName() const {
+    return m_name;
+}
+
+int Node::getComponentColor() const {
+    return m_componentColor;
+}
+
 void Node::setPosition(double x, double y) {
     m_position = {x, y};
 }
@@ -28,14 +36,10 @@ void Node::setState(NodeState state) {
     notifyObservers(*this); // obavestavamo sve posmatrace da se stanje promenilo
 }
 
-QString Node::getName() const {
-    return m_name;
-}
-
 void Node::setName(const QString& newName) {
     m_name = newName;
 }
 
-std::ostream& operator<<(std::ostream& s, const Node& n) {
-    return s << "Node {id = " << n.m_id << "}" << std::endl;
+void Node::setComponentColor(int colorId) {
+    m_componentColor = colorId;
 }
