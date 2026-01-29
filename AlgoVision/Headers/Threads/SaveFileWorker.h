@@ -8,9 +8,15 @@
 #include "Serializer.h"
 
 class SaveFileWorker : public QThread {
+    Q_OBJECT
 public:
     SaveFileWorker(Serializer*, Serializable*, const QString&, bool, bool, QObject* = nullptr);
 
+signals:
+    void finished();
+    void failed(const QString&);
+
+protected:
     void run() override;
 
 private:
