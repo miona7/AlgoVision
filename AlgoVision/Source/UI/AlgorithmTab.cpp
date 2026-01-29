@@ -135,7 +135,7 @@ void AlgorithmTab::initLayout() {
                // make it look like a section header
         QFont f = item->font();
         f.setBold(true);
-        f.setUnderline(true);
+        //f.setUnderline(true);
         item->setFont(f);
 
         item->setTextAlignment(Qt::AlignCenter);
@@ -149,7 +149,7 @@ void AlgorithmTab::initLayout() {
     m_algorithmCombo->addItem("Dijkstra");
     m_algorithmCombo->addItem("Bellman-Ford");
     m_algorithmCombo->addItem("Floyd-Warshall");
-    m_algorithmCombo->addItem("A*");
+    m_algorithmCombo->addItem("A* (Euclidean heuristic)");
 
     addHeader("Topological sort");
     m_algorithmCombo->addItem("Kahn");
