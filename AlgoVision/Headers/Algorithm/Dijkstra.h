@@ -13,7 +13,7 @@ public:
     explicit Dijkstra(const std::shared_ptr<Graph>);
 
     void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned) override;
+    void execute(unsigned, unsigned = 0) override;
 
 private:
     void dijkstra(unsigned);

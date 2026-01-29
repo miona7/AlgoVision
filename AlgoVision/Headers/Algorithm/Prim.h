@@ -15,7 +15,7 @@ public:
     explicit Prim(const std::shared_ptr<Graph>);
 
     void checkConditions() const;
-    void execute(unsigned, unsigned) override;
+    void execute(unsigned = 0, unsigned = 0) override;
 
 private:
     void prim();
