@@ -1,0 +1,13 @@
+services:
+  coverage:
+    build:
+      context: .
+      dockerfile: Dockerfile.coverage
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "
+        ./coverage.sh || echo 'Coverage failed, continuing';
+        python3 -m http.server 8080 --bind 0.0.0.0 --directory build-coverage/coverage-report"
