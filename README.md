@@ -19,7 +19,7 @@ AlgoVision trenutno podržava sledeće grafovske algoritme:
 - 🔄 Floyd–Warshall
 - 🌲 Prim 
 - 🧩 Kahn (Topološko sortiranje)
-- 🔗 Tarjan za jake komponente povezanosti
+- ⛓️ Tarjan za jake komponente povezanosti
 
 ---
 
@@ -85,7 +85,18 @@ Za izgradnju i pokretanje projekta potrebno je:
 - 🏗️ Qt 6
 - 🛠️ CMake (verzija 3.16 ili novija)
 - 🐧 Linux ili 🖥️ Windows
-- 💡 Opcionalno: clang-format i clang-tidy za proveru stila i automatsko formatiranje koda
+
+---
+
+### 🔹 Pokretanje projekta u Qt Creator-u
+
+1. Otvoriti **Qt Creator**.  
+2. Izabrati **File → Open File or Project**.  
+3. Navigirati do direktorijuma gde je kloniran projekat i izabrati `CMakeLists.txt`.  
+4. Qt Creator će automatski prepoznati CMake projekat i tražiti build folder (možete kreirati novi, npr. `build`).  
+5. Konfigurisati build tip (Debug ili Release).  
+6. Kliknuti **Configure Project** i sačekati da se projekat učita.  
+7. Nakon toga možete koristiti **Run** dugme za pokretanje aplikacije iz Qt Creator-a.  
 
 ---
 
@@ -102,15 +113,9 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 # 3️⃣ Kompajliranje
 cmake --build build
 
-# 4️⃣ (Opcionalno) Formatiranje koda
-# Omogućiti globbing u bash-u
-shopt -s globstar
-clang-format -i Source/**/*.cpp Headers/**/*.h Tests/**/*.cpp
+# 4️⃣ Pokretanje aplikacije
+./build/AlgoVision
 
-# 5️⃣ (Opcionalno) Analiza sa clang-tidy
-clang-tidy Source/**/*.cpp Tests/**/*.cpp -p build
-# Automatska primena popravki
-clang-tidy Source/**/*.cpp Tests/**/*.cpp -p build --fix
 ```
 
 ---
@@ -128,29 +133,18 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 # 3️⃣ Kompajliranje
 cmake --build build
 
-# 4️⃣ (Opcionalno) Formatiranje koda
-clang-format -i Source\**\*.cpp Headers\**\*.h Tests\**\*.cpp
+# 4️⃣ Pokretanje aplikacije
+.\build\Release\AlgoVision.exe
 
-# 5️⃣ (Opcionalno) Analiza sa clang-tidy
-clang-tidy Source\**\*.cpp Tests\**\*.cpp -p build
-# Automatska primena popravki
-clang-tidy Source\**\*.cpp Tests\**\*.cpp -p build --fix
 ```
 
 ---
 
-### Napomena o Qt i compile_commands.json
-- Kada build-ujete projekat **iz Qt Creator-a**, `compile_commands.json` se NE generiše automatski.
-- Potrebno je ili:
-  1. Pokrenuti build iz terminala sa CMake-om kao gore navedeno (`-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`)
-  2. Ili u Qt Creator-u omogućiti **CMake opciju za export compile commands** u postavkama projekta.
+## Demo snimak 🎥
 
-- clang-tidy koristi taj fajl da bi znao:
-  - Include foldere (`-I`)
-  - C++ standard (`-std=c++20`)
-  - Sve flags koje projekat koristi
+---
 
-- Bez `compile_commands.json`, clang-tidy neće moći da analizira kod ispravno.
+## Screenshots 📸
 
 ---
 
