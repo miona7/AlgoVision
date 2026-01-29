@@ -2,6 +2,7 @@
 #define ASA_H
 
 #include <exception>
+#include <memory>
 
 #include "AlgorithmStep.h"
 #include "Graph.h"
