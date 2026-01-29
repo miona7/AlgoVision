@@ -13,7 +13,7 @@ public:
     explicit BFS(const std::shared_ptr<Graph>);
 
     void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned = 0) override;
+    void execute(unsigned, unsigned) override;
 
     const std::map<unsigned, bool>& getVisited() const;
 

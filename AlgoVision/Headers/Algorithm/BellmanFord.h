@@ -15,7 +15,7 @@ public:
     explicit BellmanFord(const std::shared_ptr<Graph>);
 
     void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned = 0) override;
+    void execute(unsigned, unsigned) override;
 
     bool hasNegativeCycle() const;
 

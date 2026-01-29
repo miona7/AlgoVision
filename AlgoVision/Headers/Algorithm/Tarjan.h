@@ -15,7 +15,7 @@ public:
     explicit Tarjan(const std::shared_ptr<Graph>);
 
     void checkConditions() const;
-    void execute(unsigned = 0, unsigned = 0) override;
+    void execute(unsigned, unsigned) override;
 
 private:
     int                      m_arrivalTime = 0;   // vreme dolaska

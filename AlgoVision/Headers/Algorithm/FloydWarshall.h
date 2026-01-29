@@ -15,7 +15,7 @@ public:
     explicit FloydWarshall(const std::shared_ptr<Graph>);
 
     void checkConditions() const;
-    void execute(unsigned = 0, unsigned = 0) override;
+    void execute(unsigned, unsigned) override;
 
 private:
     std::map<unsigned, std::map<unsigned, int>> m_distances;
