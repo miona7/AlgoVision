@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QHash>
 #include <memory>
 
 #include "AppConstants.h"
@@ -23,8 +24,18 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
+    struct TabInfo {
+        GraphEditor* m_editor;
+        QString m_filePath;   // prazan ako je novi / untitled
+        bool m_isModified;
+        QString m_imagePath;  // fajl slike (ako se eksportuje)
+        bool m_isImageModified; // za sliku (zvezdica)
+    };
+
     explicit MainWindow(QWidget* = nullptr);
     ~MainWindow() override;
+
+    void showStartPage();
 
 private slots:
     void onOpenGraphTriggered();
@@ -34,18 +45,25 @@ private slots:
     void onChangeThemeTriggered();
     void onHelpTriggered();
 
+    void onGraphLoadedNewTab(const QVariant&, bool, bool, const QString&);
+    void onGraphLoadFailed(const QString&);
+    void connectGraphModifiedSignal(GraphEditor*);
+
+protected:
+    void closeEvent(QCloseEvent*) override;
+
 private:
     Ui::MainWindow* m_ui;
     MenuToolBar*    m_menuToolBar = nullptr;
     ThemeManager*   m_themeManager;
+    QTabWidget* m_tabWidget = nullptr;
+    QHash<GraphEditor*, TabInfo> m_tabs;
 
     std::unique_ptr<Serializer> m_serializer;
 
     GraphEditor*                m_graphEditor = nullptr;
 
     void initMenuToolBar();
-    void createGraphEditor(bool, bool);
 };
 
 #endif // MAINWINDOW_H
-
