@@ -191,3 +191,14 @@ void GraphScene::selectNode(NodeItem* node) {
     // other node is selected
     emit addEdgeRequest(m_firstNodeSelect, node); // zahtevamo dodavanje grane od kontrolera
 }
+
+void GraphScene::updateNodeScalling(){
+    for(auto* item : items()){
+        for(auto* item : items()){
+            if(auto* n = dynamic_cast<NodeItem*>(item))
+                n->updateSize();
+        }
+    }
+    update();
+}
+

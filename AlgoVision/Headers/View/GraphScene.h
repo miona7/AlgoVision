@@ -17,6 +17,8 @@ public:
 
     void setState(GraphScene::State);
 
+    void updateNodeScalling();
+
     // vraca scenu na pocetno stanje (koje je ADD) sa resetovanim pomocnim privatnim clanicama
     void resetScene();
 

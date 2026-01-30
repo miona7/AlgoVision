@@ -94,3 +94,7 @@ void GraphEditTab::initLayout() {
 
     mainLayout->addStretch();
 }
+
+QSlider* GraphEditTab::getNodeSizeSlider() const{
+    return m_nodeSizeSlider;
+}

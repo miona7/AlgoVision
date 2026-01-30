@@ -13,6 +13,8 @@ public:
     void         paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 
     QPainterPath edgePath() const override;
+    QPointF calculateNormal() const;
+
 
 private:
     qreal m_skewness {70.0};
