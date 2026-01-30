@@ -6,6 +6,7 @@
 
 #include "Edge.h"
 #include "NodeItem.h"
+#include "ThemeManager.h"
 
 class GraphScene : public QGraphicsScene {
     Q_OBJECT
@@ -29,6 +30,7 @@ public:
     void addEdge(Edge*, bool, bool);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
+    void applyTheme(ThemeManager::Theme theme);
 
     NodeItem* findNodeItemById(const unsigned) const;
 

@@ -235,6 +235,11 @@ void MainWindow::onChangeThemeTriggered() {
     }
 
     this->setStyleSheet(m_themeManager->styleSheet());
+
+    if(m_graphEditor) {
+        auto* scene = m_graphEditor->graphController()->scene();
+        scene->applyTheme(m_themeManager->currentTheme());
+    }
 }
 
 void MainWindow::initMenuToolBar() {

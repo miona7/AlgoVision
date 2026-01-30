@@ -203,3 +203,21 @@ void GraphScene::updateNodeScalling(){
     update();
 }
 
+void GraphScene::applyTheme(ThemeManager::Theme theme) {
+    switch(theme) {
+    case ThemeManager::Theme::LIGHT:
+        setBackgroundBrush(QColor(245, 245, 245)); // skoro bela
+        break;
+
+    case ThemeManager::Theme::DARK:
+        setBackgroundBrush(QColor(60, 60, 60)); // svetlija tamna
+        break;
+
+    case ThemeManager::Theme::PURPLE:
+        setBackgroundBrush(QColor(90, 70, 120)); // svetla ljubičasta
+        break;
+    }
+
+    update();
+}
+
