@@ -189,35 +189,87 @@ void MainWindow::onCreateGraphTriggered() {
                   << (weighted ? "Weighted" : "Unweighted") << std::endl;
 
     } else {
-
         return;
     }
 
-    createGraphEditor(directed, weighted);
+    auto controller = std::make_shared<GraphController>();
+    controller->createGraph(directed, weighted);
 
-    m_ui->stackedWidget->setCurrentWidget(m_ui->graphPage);
-    this->setWindowTitle(QString::fromLatin1(AppConstants::graphPageDefaultTitle));
+    auto* editor = new GraphEditor(controller);
+    controller->buildScene();
+    connectGraphModifiedSignal(editor);
+
+    TabInfo info;
+    info.m_editor = editor;
+    info.m_filePath = "";  // nema fajla
+    info.m_isModified = true; // graf je nesacuvan
+    info.m_imagePath = "";         // nema slike
+    info.m_isImageModified = true; // slika nesacuvana
+    m_tabs.insert(editor, info);
+
+           // naslov taba
+    int index = m_tabWidget->addTab(editor, "untitled*");
+    m_tabWidget->setCurrentIndex(index);
+
+    m_tabWidget->setCurrentWidget(editor);
+
+    if(!m_tabWidget->isVisible()) {
+        m_tabWidget->show();
+    }
+
+    if(m_menuToolBar != nullptr) {
+        m_menuToolBar->show();  // prikazi toolbar
+    }
+
+    m_ui->stackedWidget->setCurrentWidget(m_tabWidget);
+    this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
+
     initMenuToolBar();
 }
 
 void MainWindow::onSaveGraphTriggered() {
-    QString filePath = QFileDialog::getSaveFileName(this, "save graph", "", "graph files (*.json)");
-
-    if(filePath.isEmpty()) {
+    auto* currentEditor = qobject_cast<GraphEditor*>(m_tabWidget->currentWidget());
+    if(currentEditor == nullptr) {
+        QMessageBox::warning(this, "error", "no active graph editor!");
         return;
     }
 
+    int index = m_tabWidget->currentIndex();
+    TabInfo& tabInfo = m_tabs[currentEditor];
+
+    QString filePath = tabInfo.m_filePath;
+    if(filePath.isEmpty()) {
+        filePath = QFileDialog::getSaveFileName(this, "save graph", "", "graph files (*.json)");
+        if(filePath.isEmpty()) {
+            return;
+        }
         if(!filePath.endsWith(".json")) {
             filePath += ".json";
         }
-
-    QFile file(filePath);
-    if(file.open(QIODevice::WriteOnly)) {
-        file.close();
-        QMessageBox::information(this, "saved", "graph saved to: " + filePath);
-    } else {
-        QMessageBox::warning(this, "error", "could not save file: " + filePath);
     }
+
+    auto graph = currentEditor->graphController()->graph();
+    if(graph == nullptr) {
+        QMessageBox::warning(this, "error", "graph is not initialized!");
+        return;
+    }
+
+    auto* saveThread = new SaveFileWorker(m_serializer.get(), graph.get(), filePath, graph->isWeighted(), graph->isDirected(), this);
+
+    connect(saveThread, &SaveFileWorker::finished, this, [this, saveThread, &tabInfo, index, filePath]() {
+        tabInfo.m_filePath = filePath;
+        tabInfo.m_isModified = false;
+        m_tabWidget->setTabText(index, QFileInfo(filePath).fileName());
+        QMessageBox::information(this, "saved", "graph saved to: " + filePath);
+        saveThread->deleteLater();
+    });
+
+    connect(saveThread, &SaveFileWorker::failed, this, [this, saveThread](const QString& error) {
+        QMessageBox::warning(this, "error", "could not save file: " + error);
+        saveThread->deleteLater();
+    });
+
+    saveThread->start();
 }
 
 void MainWindow::onSaveImageTriggered() {
@@ -263,6 +315,7 @@ void MainWindow::onSaveImageTriggered() {
     }
 }
 
+
 void MainWindow::onChangeThemeTriggered() {
     switch(m_themeManager->currentTheme()) {
     case ThemeManager::Theme::DARK:
@@ -302,24 +355,6 @@ void MainWindow::initMenuToolBar() {
     connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
 }
 
-void MainWindow::createGraphEditor(bool isDirected, bool isWeighted) {
-    // prvo pravimo kontroler i graf(model + pogled)
-    std::shared_ptr<GraphController> controller = std::make_shared<GraphController>();
-    controller->createGraph(isDirected, isWeighted);
-
-    // onda postavljamo graf editor(UI) koji je vezan za kontroler(model + pogled)
-    QWidget* graphPage = m_ui->graphPage;
-
-    if(graphPage->layout() == nullptr) {
-        auto* graphLayout = new QVBoxLayout(graphPage);
-        graphLayout->setContentsMargins(0, 0, 0, 0);
-
-        auto* graphEditor = new GraphEditor(controller, graphPage);
-        m_graphEditor     = graphEditor;
-        graphLayout->addWidget(graphEditor);
-    }
-}
-
 void MainWindow::onHelpTriggered() {
     QString helpText =
         "Graph Editor Help:\n\n"
@@ -331,4 +366,119 @@ void MainWindow::onHelpTriggered() {
 
     QMessageBox::information(this, "Help", helpText);
 }
+
+void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool directed, const QString& filePath) {
+    // napravi novi kontroler
+    auto controller = std::make_shared<GraphController>();
+    controller->createGraph(directed, weighted);
+
+    m_serializer->load(*controller->graph(), data);
+
+           // napravi novi GraphEditor i povezi sa kontrolerom
+    auto* editor = new GraphEditor(controller);
+    controller->buildScene();
+    connectGraphModifiedSignal(editor);
+
+           // kreiraj TabInfo
+    TabInfo info;
+    info.m_editor = editor;
+    info.m_filePath = filePath;  // sada imamo ime fajla
+    info.m_isModified = false;   // graf je učitan iz fajla, nije izmenjen
+    info.m_imagePath = "";
+    info.m_isImageModified = true;
+    m_tabs.insert(editor, info);
+
+           // naziv taba: ime fajla
+    QString tabName = QFileInfo(filePath).fileName();
+    int index = m_tabWidget->addTab(editor, tabName);
+    m_tabWidget->setCurrentIndex(index);
+
+
+           // prikaz tab widgeta
+    m_ui->stackedWidget->setCurrentWidget(m_tabWidget);
+    this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
+
+           // prikazi toolbar ako vec postoji
+    if(m_menuToolBar != nullptr) {
+        m_menuToolBar->show();
+    }
+}
+
+void MainWindow::onGraphLoadFailed(const QString& error) {
+    QMessageBox::warning(this, "load error", error);
+}
+
+void MainWindow::connectGraphModifiedSignal(GraphEditor* editor) {
+    connect(editor->graphController().get(), &GraphController::sceneModified, this, [this, editor]() {
+        if(!m_tabs.contains(editor)) {
+            return;
+        }
+
+        TabInfo& tabInfo = m_tabs[editor];
+        tabInfo.m_isModified = true;
+
+        QString tabName;
+        if(tabInfo.m_filePath.isEmpty()) {
+            tabName = "untitled";
+        } else {
+            tabName = QFileInfo(tabInfo.m_filePath).fileName();
+        }
+
+        if(!tabName.endsWith("*")) {
+            tabName += "*";
+        }
+
+        int index = m_tabWidget->indexOf(editor);
+        if(index >= 0) {
+            m_tabWidget->setTabText(index, tabName);
+        }
+
+    });
+}
+
+void MainWindow::closeEvent(QCloseEvent* event) {
+    QStringList unsavedTabs;
+
+           // proveri sve tabove
+    for(auto it = m_tabs.begin(); it != m_tabs.end(); ++it) {
+        if(it.value().m_isModified) {
+            QString name;
+            if(it.value().m_filePath.isEmpty()) {
+                name = "untitled";
+            } else {
+                name = QFileInfo(it.value().m_filePath).fileName();
+            }
+            unsavedTabs.append(name);
+        }
+    }
+
+    if(!unsavedTabs.isEmpty()) {
+        QString tabList = unsavedTabs.join("\n");
+        QMessageBox::StandardButton reply = QMessageBox::question(
+            this,
+            "Unsaved Changes",
+            "The following tabs have unsaved changes:\n" + tabList +
+                "\n\nDo you want to save them before exiting?",
+            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
+            );
+
+        if(reply == QMessageBox::Yes) {
+            // sacuvaj svaki nesacuvan tab
+            for(auto it = m_tabs.begin(); it != m_tabs.end(); ++it) {
+                if (it.value().m_isModified) {
+                    m_tabWidget->setCurrentWidget(it.key()); // postavi tab
+                    onSaveGraphTriggered();                  // pozovi save
+                }
+            }
+            event->accept();
+        } else if(reply == QMessageBox::No) {
+            event->accept(); // izlazi bez cuvanja
+        } else { // cancel
+            event->ignore(); // ne zatvaraj prozor
+        }
+    } else {
+        event->accept(); // sve je sacuvano, zatvori prozor
+    }
+}
+
 
