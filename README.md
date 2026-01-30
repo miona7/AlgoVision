@@ -31,11 +31,12 @@ Aplikacija omogućava potpunu kontrolu toka izvršavanja algoritma:
 - ⏸️ Pause – pauziranje izvršavanja
 - ⏭️ Step forward – prelazak na sledeći korak
 - ⏮️ Step back – povratak na prethodni korak
-- 🔁 Reset - povratak na početak
+- ⏹️ Reset - povratak na početak
 
 Ovakav način rada omogućava detaljno razumevanje svakog algoritma i lak povratak na prethodna stanja.
 
 ---
+
 ## 🎹 Prečice (Shortcuts)
 
 Da bi rad sa aplikacijom bio brži i efikasniji, podržane su sledeće prečice na tastaturi:
@@ -48,6 +49,8 @@ Da bi rad sa aplikacijom bio brži i efikasniji, podržane su sledeće prečice 
 | Sačuvaj sliku grafa  | Ctrl + I       |
 | Promeni temu         | Ctrl + T       |
 | Pomoć                | Ctrl + H       |
+| Undo                 | Ctrl + Z       |
+| Redo                 | Ctrl + Y       |
 
 ---
 
@@ -137,14 +140,6 @@ cmake --build build
 .\build\Release\AlgoVision.exe
 
 ```
-
----
-
-## Demo snimak 🎥
-
----
-
-## Screenshots 📸
 
 ---
 
