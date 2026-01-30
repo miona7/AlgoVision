@@ -24,8 +24,8 @@ public:
     unsigned                         getId() const;
     const std::pair<double, double>& getPosition() const;
     NodeState                        getState() const;
-    QString getName() const;
-    int getComponentColor() const;
+    QString                          getName() const;
+    int                              getComponentColor() const;
 
     void setPosition(double, double);
     void setState(NodeState);

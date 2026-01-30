@@ -88,8 +88,8 @@ void FloydWarshall::floydWarshall() {
                             m_distances[i][j] = throughK;
                             {
                                 AlgorithmStep s;
-                                s.m_type  = StepType::UpdateDistance;
-                                s.m_node  = i;
+                                s.m_type = StepType::UpdateDistance;
+                                s.m_node = i;
                                 addStep(s);
                             }
                             auto* edge = m_graph->getEdge(i, k);
@@ -110,8 +110,8 @@ void FloydWarshall::floydWarshall() {
                             }
                             {
                                 AlgorithmStep s;
-                                s.m_type  = StepType::UpdateDistance;
-                                s.m_node  = j;
+                                s.m_type = StepType::UpdateDistance;
+                                s.m_node = j;
                                 addStep(s);
                             }
                         }

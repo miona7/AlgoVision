@@ -13,7 +13,7 @@ class NodeItem : public QGraphicsObject {
 
 public:
     explicit NodeItem(Node*);
-    ~NodeItem();
+    ~NodeItem() override;
 
     Node* modelNode() const;
     void  setModelNode(Node*);

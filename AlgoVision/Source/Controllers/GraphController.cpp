@@ -82,7 +82,8 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::removeNodeRequest, this, &GraphController::removeNode);
     connect(m_scene.get(), &GraphScene::removeEdgeRequest, this, &GraphController::removeEdge);
     connect(m_scene.get(), &GraphScene::editNodeNameRequest, this, &GraphController::editNodeName);
-    connect(m_scene.get(), &GraphScene::editEdgeWeightRequest, this, &GraphController::editEdgeWeight);
+    connect(m_scene.get(), &GraphScene::editEdgeWeightRequest, this,
+            &GraphController::editEdgeWeight);
 }
 
 void GraphController::addNode(const QPointF& position) const {

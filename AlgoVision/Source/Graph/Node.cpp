@@ -43,5 +43,3 @@ void Node::setName(const QString& newName) {
 void Node::setComponentColor(int colorId) {
     m_componentColor = colorId;
 }
-
-

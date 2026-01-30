@@ -11,7 +11,7 @@
 class AlgorithmController : public QObject {
     Q_OBJECT
 public:
-    AlgorithmController(AlgorithmStepApplier&, QObject* = nullptr);
+    explicit AlgorithmController(AlgorithmStepApplier&, QObject* = nullptr);
     ~AlgorithmController() override = default;
 
     void clear();
