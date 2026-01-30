@@ -27,6 +27,8 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     if(m_modelNode != nullptr) {
         m_observerId = m_modelNode->addObserver([this](Node&) { this->onNodeUpdated(); });
     }
+    updateSize();
+
 }
 
 NodeItem::~NodeItem() {
@@ -183,6 +185,7 @@ void NodeItem::updateSize() {
 
     m_label->setTextWidth(2 * m_radius);
     m_label->centerText();
+
 
 }
 
