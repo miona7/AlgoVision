@@ -1,4 +1,5 @@
 #include <QGraphicsSceneEvent>
+#include <QFont>
 
 #include "EdgeItem.h"
 #include "EditableTextItem.h"
@@ -216,3 +217,13 @@ void EdgeItem::onEdgeUpdated() {
     }
     update();
 }
+void EdgeItem::updateSize() {
+    if(!m_hasWeight || !m_weight) return;
+
+    QFont f = m_weight->font();
+    f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
+    m_weight->setFont(f);
+
+    adjustWeightGeometry(); // da se lepo repozicionira posle skaliranja
+}
+

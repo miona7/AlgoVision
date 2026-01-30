@@ -194,10 +194,11 @@ void GraphScene::selectNode(NodeItem* node) {
 
 void GraphScene::updateNodeScalling(){
     for(auto* item : items()){
-        for(auto* item : items()){
-            if(auto* n = dynamic_cast<NodeItem*>(item))
-                n->updateSize();
-        }
+        if(auto* n = dynamic_cast<NodeItem*>(item))
+            n->updateSize();
+
+        if(auto* e = dynamic_cast<EdgeItem*>(item))
+            e->updateSize();
     }
     update();
 }

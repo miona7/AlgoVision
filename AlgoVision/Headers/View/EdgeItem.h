@@ -36,6 +36,8 @@ public:
     EditableTextItem* weight() const;
     void              setWeight(EditableTextItem*);
 
+    void updateSize();
+
 signals:
     void edgeSelected(EdgeItem*);
     void editEdgeWeightRequest(const EdgeItem*, const QString&) const;
