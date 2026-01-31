@@ -20,7 +20,6 @@ void DFS::execute(unsigned idStartNode, unsigned) {
     checkConditions(idStartNode);
 
     clearSteps();
-
     m_visited.clear();
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
@@ -33,6 +32,7 @@ void DFS::execute(unsigned idStartNode, unsigned) {
 void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
     m_visited[nodeId] = true;
 
+    m_order.push_back(nodeId);
     {
         AlgorithmStep s;
         s.m_type = StepType::VisitNode;
@@ -71,4 +71,12 @@ void DFS::dfs(unsigned nodeId, std::optional<unsigned> parent) {
 
 const std::map<unsigned, bool>& DFS::getVisited() const {
     return m_visited;
+}
+
+QString DFS::resultString() const {
+    QString res = "DFS order: ";
+    for(unsigned v : m_order) {
+        res += QString::number(v) + " ";
+    }
+    return res;
 }

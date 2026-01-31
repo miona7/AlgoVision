@@ -15,10 +15,12 @@ public:
     void execute(unsigned, unsigned = 0) override;
 
     const std::map<unsigned, bool>& getVisited() const;
+    QString resultString() const;
+
 
 private:
     std::map<unsigned, bool> m_visited;
-
+    std::vector<int> m_order;
     void dfs(unsigned, std::optional<unsigned>);
 };
 
