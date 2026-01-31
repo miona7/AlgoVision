@@ -16,9 +16,14 @@ public:
 
     const std::vector<AlgorithmStep>& getSteps() const;
 
+    virtual QString resultString() const = 0;
+
+
 protected:
     std::shared_ptr<Graph>     m_graph;
     std::vector<AlgorithmStep> m_steps;
+    QString m_resultString;
+
 
     void addStep(const AlgorithmStep&);
     void clearSteps();
