@@ -14,12 +14,15 @@ public:
 
     void checkConditions(unsigned) const;
     void execute(unsigned, unsigned = 0) override;
+    QString resultString() const;
+
 
     const std::map<unsigned, bool>& getVisited() const;
 
+
 private:
     std::map<unsigned, bool> m_visited;
-
+    std::vector<int> m_order;
     void bfs(unsigned);
 };
 
