@@ -5,6 +5,7 @@
 #include <map>
 
 #include "Edge.h"
+#include "EdgeItem.h"
 #include "NodeItem.h"
 
 class GraphScene : public QGraphicsScene {
@@ -29,6 +30,7 @@ public:
     void removeEdge(EdgeItem*);
 
     NodeItem* findNodeItemById(const unsigned) const;
+    EdgeItem* findEdgeItemByNodes(unsigned, unsigned) const;
 
 signals:
     void addNodeRequest(const QPointF&);

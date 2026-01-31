@@ -1,5 +1,7 @@
 #include <QHBoxLayout>
+#include <QKeySequence>
 #include <QLabel>
+#include <QShortcut>
 #include <QSplitter>
 #include <QTabWidget>
 #include <QUndoCommand>
@@ -44,20 +46,18 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
 
     // m_graph = new UnweightedDirectedGraph();
 
-    m_undoStack = new QUndoStack(this);
+    m_undoStack = m_graphController->undoStack();
+
+    // Ctrl+Z
+    auto* undoSc = new QShortcut(QKeySequence::Undo, this);
+    connect(undoSc, &QShortcut::activated, m_undoStack, &QUndoStack::undo);
+
+    // Ctrl+Y
+    auto* redoCtrlY = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y), this);
+    connect(redoCtrlY, &QShortcut::activated, m_undoStack, &QUndoStack::redo);
 
     // main splitter for the left and right page sides
     QSplitter* splitter = new QSplitter(Qt::Horizontal, this);
-
-    // left side (placeholder)
-    // QLabel* leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
-    // leftPlaceholder->setAlignment(Qt::AlignCenter);
-    // leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
-
-    // m_leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
-    // m_leftPlaceholder->setAlignment(Qt::AlignCenter);
-    // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
-    // splitter->addWidget(m_leftPlaceholder);
 
     m_view = new QGraphicsView(splitter);
     m_view->setScene(m_graphController->scene());
@@ -97,26 +97,11 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     connect(m_editTab, &GraphEditTab::removeRequested, this, &GraphEditor::onRemoveRequestTrigger);
 
     connect(m_editTab, &GraphEditTab::clearRequested, this, &GraphEditor::onClearRequestTrigger);
-    // Dummy test
-    // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
-    //     const int before = m_dummyState;
-    //     const int after  = before + 1;
-
-    //     m_undoStack->push(new LambdaCommand(
-    //         [this, after]() {
-    //             m_dummyState = after;
-    //             m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
-    //         },
-    //         [this, before]() {
-    //             m_dummyState = before;
-    //             m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
-    //         },
-    //         "Add dummy"));
-    // });
 }
 
 GraphEditor::~GraphEditor() {
-    m_graphController->clear();
+    // m_graphController->clear();
+    m_graphController->clearNoHistory();
 }
 
 void GraphEditor::onAddRequestTrigger() {

@@ -97,6 +97,8 @@ void GraphScene::addNode(Node* nodeModel) {
     }
 
     NodeItem* nodeItem = new NodeItem(nodeModel);
+    auto      pos      = nodeModel->getPosition();
+    nodeItem->setPos(pos.first, pos.second);
     addItem(nodeItem);
     m_nodeItems[nodeModel->getId()] = nodeItem;
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
@@ -175,6 +177,22 @@ NodeItem* GraphScene::findNodeItemById(const unsigned id) const {
     return (it != m_nodeItems.end()) ? it->second : nullptr;
 }
 
+EdgeItem* GraphScene::findEdgeItemByNodes(unsigned from, unsigned to) const {
+    const QList<QGraphicsItem*> all = items();
+    for(QGraphicsItem* it: all) {
+        auto* edgeItem = dynamic_cast<EdgeItem*>(it);
+        if(edgeItem == nullptr || !edgeItem->modelEdge())
+            continue;
+
+        const unsigned a = edgeItem->modelEdge()->startNode();
+        const unsigned b = edgeItem->modelEdge()->endNode();
+
+        if((a == from && b == to) || (a == to && b == from)) {
+            return edgeItem;
+        }
+    }
+    return nullptr;
+}
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
     if(m_firstNodeSelect == nullptr) {
