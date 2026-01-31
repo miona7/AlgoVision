@@ -245,7 +245,6 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     m_legendLayout->addWidget(title);
 
     m_legendLayout->addWidget(new QLabel("<b>Nodes</b>"));
-    m_legendLayout->addWidget(makeLegendItem(Qt::red, "Selected"));
     m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
     m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
 
@@ -254,32 +253,36 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
         m_legendLayout->addWidget(makeLegendItem(Qt::magenta, "Distance updated"));
     }
 
-    if(name == "Dijkstra" || name == "A*" || name == "Prim") {
+    if(name == "A*") {
         m_legendLayout->addWidget(makeLegendItem(Qt::green, "In final path"));
     }
 
+    if(name == "Kahn") {
+        m_legendLayout->addWidget(makeLegendItem(QColor(184, 134, 11), "Added to topological order"));
+    }
+
     if(name == "Tarjan") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::cyan, "Strongly connected component"));
+        m_legendLayout->addWidget(new QLabel("Each component is colored differently."));
     }
 
     m_legendLayout->addWidget(new QLabel("<b>Edges</b>"));
     m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Examined"));
 
-    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A*" || name == "Prim") {
+    if(name == "Bellman-Ford") {
         m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Relaxed"));
     }
 
-    if(name == "Prim" || name == "Kahn") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::red, "Selected"));
+           // A* ima crvenu granu = u konačnoj putanji
+    if(name == "A*") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
     }
 
-    m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
-
-    /*if(name == "Dijkstra" || name == "Bellman-Ford" ||
-       name == "A*" || name == "Floyd-Warshall" || name == "Prim") {
-        m_legendLayout->addWidget(new QLabel("m_legendLabeltances."));
+    if(name == "Prim") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::red, "In minimum spanning tree"));
     }
-    */
+
+    //m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
+
     if(name == "Tarjan") {
         m_legendLayout->addWidget(new QLabel("Strongly connected components."));
     }
