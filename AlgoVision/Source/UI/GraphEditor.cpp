@@ -84,9 +84,13 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(splitter);
 
-    connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
+    connect(m_editTab, &GraphEditTab::undoRequested, this, &GraphEditor::onUndoRequestTrigger);
 
-    connect(m_editTab, &GraphEditTab::redoRequested, m_undoStack, &QUndoStack::redo);
+    connect(m_editTab, &GraphEditTab::redoRequested, this, &GraphEditor::onRedoRequestTrigger);
+
+    connect(this, &GraphEditor::undoRequested, m_undoStack, &QUndoStack::undo);
+
+    connect(this, &GraphEditor::redoRequested, m_undoStack, &QUndoStack::redo);
 
     connect(m_undoStack, &QUndoStack::canUndoChanged, m_editTab, &GraphEditTab::setUndoEnabled);
 
@@ -114,6 +118,16 @@ void GraphEditor::onRemoveRequestTrigger() {
 
 void GraphEditor::onClearRequestTrigger() {
     m_graphController->clear();
+}
+
+void GraphEditor::onUndoRequestTrigger() {
+    m_graphController->scene()->resetScene();
+    emit undoRequested();
+}
+
+void GraphEditor::onRedoRequestTrigger() {
+    m_graphController->scene()->resetScene();
+    emit redoRequested();
 }
 
 std::shared_ptr<GraphController> GraphEditor::graphController() const {

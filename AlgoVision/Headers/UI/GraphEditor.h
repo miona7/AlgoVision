@@ -24,10 +24,16 @@ public:
 
     std::shared_ptr<GraphController> graphController() const;
 
+signals:
+    void undoRequested();
+    void redoRequested();
+
 private slots:
     void onAddRequestTrigger();
     void onRemoveRequestTrigger();
     void onClearRequestTrigger();
+    void onUndoRequestTrigger();
+    void onRedoRequestTrigger();
 
 private:
     QUndoStack*                      m_undoStack       = nullptr;
