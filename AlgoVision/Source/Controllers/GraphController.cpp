@@ -286,6 +286,7 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::editNodeNameRequest, this, &GraphController::editNodeName);
     connect(m_scene.get(), &GraphScene::editEdgeWeightRequest, this,
             &GraphController::editEdgeWeight);
+    connect(m_scene.get(), &GraphScene::moveNodeRequest, this, &GraphController::moveNode);
 }
 
 void GraphController::addNode(const QPointF& position) {
@@ -394,6 +395,10 @@ void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& we
 
     m_undoStack->push(
         new EditEdgeWeightCommand(this, from, to, beforeW, beforeText, afterW, afterText));
+}
+
+void GraphController::moveNode(const NodeItem* nodeItem, const QPointF& oldPos, const QPointF& newPos) {
+    //move command logic
 }
 
 void GraphController::addNodeNoHistory(const QPointF& pos, unsigned& outId) {

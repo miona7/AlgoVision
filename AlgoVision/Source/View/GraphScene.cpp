@@ -106,6 +106,7 @@ void GraphScene::addNode(Node* nodeModel) {
     connect(nodeItem, &NodeItem::editNodeNameRequest, this, &GraphScene::editNodeNameRequest);
     connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
             &GraphScene::setEditGraphSceneTrigger);
+    connect(nodeItem, &NodeItem::moveNodeRequest, this, &GraphScene::moveNodeRequest);
 
     if(m_firstNodeSelect) {
         emit addEdgeRequest(m_firstNodeSelect, nodeItem); // zahtevamo dodavanje grane od kontrolera

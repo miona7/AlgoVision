@@ -11,6 +11,7 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
     setPos(modelNode->getPosition().first, modelNode->getPosition().second);
+    m_oldCenter = QPointF(modelNode->getPosition().first, modelNode->getPosition().second);
 
     // node name
     m_label = new EditableTextItem(this);
@@ -95,6 +96,7 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) 
 // test: right click on node delete itself
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     m_hasChangePosition = false;
+    m_oldCenter = pos();
     QGraphicsItem::mousePressEvent(event);
 }
 
@@ -112,6 +114,11 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
     if(m_ignoreNextMouseRealese) {
         m_ignoreNextMouseRealese = false;
+    }
+
+    if(m_hasChangePosition) {
+        auto newCenter = pos();
+        emit moveNodeRequest(this, m_oldCenter, newCenter);
     }
 
     QGraphicsItem::mouseReleaseEvent(event);

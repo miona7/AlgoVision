@@ -37,6 +37,7 @@ public slots:
     void removeEdge(EdgeItem*);
     void editNodeName(const NodeItem*, const QString&);
     void editEdgeWeight(const EdgeItem*, const QString&);
+    void moveNode(const NodeItem*, const QPointF&, const QPointF&);
 
     // ova metoda brise sadrzaj modela grafa(grane i cvorove) i
     // pogleda grafa(cvor/grana ajteme), ali se nikad ne brisu m_graph i m_scene

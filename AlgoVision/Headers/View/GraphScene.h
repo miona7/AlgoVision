@@ -37,6 +37,7 @@ signals:
     void addEdgeRequest(NodeItem*, NodeItem*);
     void removeNodeRequest(NodeItem*);
     void removeEdgeRequest(EdgeItem*);
+    void moveNodeRequest(const NodeItem*, const QPointF&, const QPointF&);
     void editNodeNameRequest(const NodeItem*, const QString&) const;
     void editEdgeWeightRequest(const EdgeItem*, const QString&) const;
 

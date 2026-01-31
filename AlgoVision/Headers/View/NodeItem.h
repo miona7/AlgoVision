@@ -32,6 +32,7 @@ public:
 signals:
     void nodeSelected(NodeItem*);
     void editNodeNameRequest(const NodeItem*, const QString&) const;
+    void moveNodeRequest(const NodeItem*, const QPointF&, const QPointF&);
 
 protected:
     QRectF       boundingRect() const override;
@@ -50,6 +51,8 @@ private:
     Node*             m_modelNode;
     EditableTextItem* m_label;
     QSet<EdgeItem*>   m_edges;
+    // u koordinatama scene, sluzi za cuvanje centra pre move komande
+    QPointF m_oldCenter;
 
     qreal m_radius {AppConstants::defaultRadius};
     qreal m_borderWidth {AppConstants::defaultBorderWidth};
