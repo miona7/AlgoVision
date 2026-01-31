@@ -172,8 +172,6 @@ void AStar::aStar(unsigned start, unsigned goal) {
 }
 
 int AStar::heuristic(unsigned node, unsigned goal) const {
-    // euklidsko rastojanje izmedju koordinata cvorova
-
     auto nodes  = m_graph->getNodes();
     auto itNode = nodes.find(node);
     auto itGoal = nodes.find(goal);

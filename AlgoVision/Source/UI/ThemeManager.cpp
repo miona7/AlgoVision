@@ -1,6 +1,6 @@
 #include "ThemeManager.h"
 
-ThemeManager::ThemeManager() : m_settings("MyCompany", "MyApp") {
+ThemeManager::ThemeManager() : m_settings("MyProject", "AlgoVision") {
     loadTheme();
 }
 

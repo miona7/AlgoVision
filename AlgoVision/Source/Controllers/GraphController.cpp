@@ -64,7 +64,7 @@ void GraphController::buildScene() const {
         m_scene->addNode(nodeModel);
     }
 
-    // onda dodajemo sve grane
+           // onda dodajemo sve grane
     for(auto& [id, _]: m_graph->getEdges()) {
         Edge* edgeModel = m_graph->getEdge(id);
         m_scene->addEdge(edgeModel, m_graph->isDirected(), m_graph->isWeighted());
@@ -86,12 +86,14 @@ void GraphController::connectScene() const {
             &GraphController::editEdgeWeight);
 }
 
-void GraphController::addNode(const QPointF& position) const {
+void GraphController::addNode(const QPointF& position) {
     Node* nodeModel = m_graph->addNode(position.x(), position.y());
     m_scene->addNode(nodeModel);
+
+    emit sceneModified();
 }
 
-void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
+void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
     if(source == nullptr || dest == nullptr) {
         return;
     }
@@ -99,7 +101,7 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
     unsigned sourceId = source->modelNode()->getId();
     unsigned destId   = dest->modelNode()->getId();
 
-    // sprecavamo da dodamo vec postojecu granu, da dodamo istu granu vise puta
+           // sprecavamo da dodamo vec postojecu granu, da dodamo istu granu vise puta
     if(m_graph->getEdge(sourceId, destId) != nullptr) {
         // mozda je stanje scene naruseno, cvor je selektovan i promenjena mu je boja, a operacija
         // je nevalidna
@@ -112,9 +114,11 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) const {
     m_graph->addEdge(sourceId, destId);
     Edge* edgeModel = m_graph->getEdge(sourceId, destId);
     m_scene->addEdge(edgeModel, m_graph->isDirected(), m_graph->isWeighted());
+
+    emit sceneModified();
 }
 
-void GraphController::removeNode(NodeItem* nodeItem) const {
+void GraphController::removeNode(NodeItem* nodeItem) {
     if(nodeItem == nullptr) {
         return;
     }
@@ -122,9 +126,11 @@ void GraphController::removeNode(NodeItem* nodeItem) const {
     const unsigned nodeId = nodeItem->modelNode()->getId();
     m_scene->removeNode(nodeItem); // prvo brisemo pogled
     m_graph->removeNode(nodeId);   // pa onda brisemo model
+
+    emit sceneModified();
 }
 
-void GraphController::removeEdge(EdgeItem* edgeItem) const {
+void GraphController::removeEdge(EdgeItem* edgeItem) {
     if(edgeItem == nullptr) {
         return;
     }
@@ -132,19 +138,25 @@ void GraphController::removeEdge(EdgeItem* edgeItem) const {
     const unsigned edgeId = edgeItem->modelEdge()->getId();
     m_scene->removeEdge(edgeItem); // prvo brisemo pogled
     m_graph->removeEdge(edgeId);   // pa onda brisemo model
+
+    emit sceneModified();
 }
 
-void GraphController::editNodeName(const NodeItem* nodeItem, const QString& name) const {
+void GraphController::editNodeName(const NodeItem* nodeItem, const QString& name) {
     nodeItem->modelNode()->setName(name);
+
+    emit sceneModified();
 }
 
 // ako korisnik unese nevalidnu tezinu grane, tezina grane se resetuje na prethodnu validnu
-void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& weight) const {
+void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& weight) {
     bool isNumber;
     int  number = weight.toInt(&isNumber);
     if(isNumber) {
         edgeItem->modelEdge()->setWeight(number);
         edgeItem->adjustWeightGeometry();
+
+        emit sceneModified();
     } else {
         EditableTextItem* weightLabel = edgeItem->weight();
         weightLabel->setPlainText(weightLabel->oldText());

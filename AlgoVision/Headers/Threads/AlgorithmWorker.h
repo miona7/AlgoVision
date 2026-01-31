@@ -25,7 +25,7 @@
 class AlgorithmWorker : public QThread {
     Q_OBJECT
 public:
-    AlgorithmWorker(const QString&, std::shared_ptr<Graph>, unsigned = 0, unsigned = 0);
+    AlgorithmWorker(const QString&, const std::shared_ptr<Graph>, unsigned = 0, unsigned = 0);
 
 signals:
     void stepsReady(const std::vector<AlgorithmStep>&);

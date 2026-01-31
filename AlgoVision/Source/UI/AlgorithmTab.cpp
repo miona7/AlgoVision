@@ -11,6 +11,9 @@
 #include <QStyle>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QStandardItem>
+#include <QStandardItemModel>
+#include <QAbstractItemView>
 
 AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
     : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startRow(new QWidget(this)),
@@ -52,12 +55,14 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
                                  "Choose algorithm, set parameters and use controls to run.");
     });
 
-    // ===== PLAY =====
+           // povezivanje dugmica
+           // moraju da se hvataju exepctioni -> iskacuci prozori?
     connect(m_playBtn, &QToolButton::clicked, this, [this]() {
         // parametri trenutnog algoritma
-        AlgorithmConfig newConfig = selectedConfig();
-        // ako algoritam ili parametri nisu isti → NOVI START
-        bool needNewRun           = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
+        AlgorithmTab::AlgorithmConfig newConfig = selectedConfig();
+
+               // ako algoritam ili parametri nisu isti → NOVI START
+        bool needNewRun = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
 
         if(needNewRun || m_state == RunState::Idle || m_state == RunState::Finished) {
 
@@ -65,7 +70,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
             updateLegendForAlgorithm(newConfig.m_algorithmName);
 
             // ugasi i obrisi staru nit
-            if(m_worker) {
+            if(m_worker != nullptr) {
                 m_worker->quit();
                 m_worker->wait();
                 delete m_worker;
@@ -78,13 +83,13 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
             m_worker = new AlgorithmWorker(newConfig.m_algorithmName, m_graph,
                                            newConfig.m_startNode, newConfig.m_endNode);
 
-            // pokreni iscrtavanje kad nit zavrsi
+                   // pokreni iscrtavanje kad nit zavrsi
             connect(m_worker, &AlgorithmWorker::stepsReady, this, [this]() {
                 m_state = RunState::Playing;
                 startTimerForPlay();
             });
 
-            // ucitaj korake algoritma
+                   // ucitaj korake algoritma
             connect(m_worker, &AlgorithmWorker::stepsReady, &m_algorithmController,
                     &AlgorithmController::loadSteps);
 
@@ -97,7 +102,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
             return;
         }
 
-        //  RESUME –> isti algoritam, bio je pauziran
+               //  RESUME –> isti algoritam, bio je pauziran
         if(m_state == RunState::Paused) {
             m_state = RunState::Playing;
             startTimerForPlay();
@@ -129,42 +134,89 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
 void AlgorithmTab::initLayout() {
     auto* mainLayout = new QVBoxLayout(this);
 
-    // algorithm choice
+           // algorithm choice
     auto* chooseAlgoBox    = new QGroupBox("choose algorithm", this);
     auto* chooseAlgoLayout = new QVBoxLayout(chooseAlgoBox);
 
-    m_algorithmCombo->addItem("A*");
-    m_algorithmCombo->addItem("Bellman-Ford");
+    auto* model = qobject_cast<QStandardItemModel*>(m_algorithmCombo->model());
+
+    auto addHeader = [&](const QString& title) {
+        m_algorithmCombo->addItem(title);
+        auto* item = model->item(model->rowCount() - 1);
+        item->setFlags(Qt::NoItemFlags); // disabled / not selectable
+
+               // make it look like a section header
+        QFont f = item->font();
+        f.setBold(true);
+        //f.setUnderline(true);
+        item->setFont(f);
+
+        item->setTextAlignment(Qt::AlignCenter);
+    };
+
+    addHeader("Graph traversal");
     m_algorithmCombo->addItem("BFS");
     m_algorithmCombo->addItem("DFS");
+
+    addHeader("Shortest path");
     m_algorithmCombo->addItem("Dijkstra");
+    m_algorithmCombo->addItem("Bellman-Ford");
     m_algorithmCombo->addItem("Floyd-Warshall");
+    m_algorithmCombo->addItem("A* (Euclidean heuristic)");
+
+    addHeader("Topological sort");
     m_algorithmCombo->addItem("Kahn");
-    m_algorithmCombo->addItem("Prim");
+
+    addHeader("Strongly connected components");
     m_algorithmCombo->addItem("Tarjan");
+
+    addHeader("Spanning tree");
+    m_algorithmCombo->addItem("Prim");
+
+           // try to show the whole dropdown without scrolling
+    m_algorithmCombo->setMaxVisibleItems(m_algorithmCombo->count());
+
+           // try to reduce hover/selection visual effects on the popup list
+    m_algorithmCombo->view()->setMouseTracking(false);
+    m_algorithmCombo->view()->setStyleSheet("QListView::item:hover { background: transparent; }");
 
     chooseAlgoLayout->addWidget(m_algorithmCombo);
     mainLayout->addWidget(chooseAlgoBox);
 
-    // algorithm attributes
+           // set initial selection to the first enabled item (so headers never become initial selection)
+    int firstValid = -1;
+    if(model) {
+        for(int i = 0; i < model->rowCount(); i++) {
+            QStandardItem* item = model->item(i);
+            if(item && (item->flags() & Qt::ItemIsEnabled)) {
+                firstValid = i;
+                break;
+            }
+        }
+    }
+    if(firstValid >= 0) {
+        m_algorithmCombo->setCurrentIndex(firstValid);
+    }
+
+           // algorithm attributes
     auto* attributesBox    = new QGroupBox("algorithm attributes", this);
     auto* attributesLayout = new QVBoxLayout(attributesBox);
 
-    // start row (label + edit) as one widget
+           // start row (label + edit) as one widget
     auto* startRowLayout = new QHBoxLayout(m_startRow);
     startRowLayout->addWidget(m_startLabel);
     startRowLayout->addWidget(m_startNodeEdit);
     m_startNodeEdit->setPlaceholderText("e.g. 0");
     attributesLayout->addWidget(m_startRow);
 
-    // end row (label + edit) as one widget
+           // end row (label + edit) as one widget
     auto* endRowLayout = new QHBoxLayout(m_endRow);
     endRowLayout->addWidget(m_endLabel);
     endRowLayout->addWidget(m_endNodeEdit);
     m_endNodeEdit->setPlaceholderText("e.g. 5");
     attributesLayout->addWidget(m_endRow);
 
-    // message when no input needed
+           // message when no input needed
     m_noInputLabel->setText("No additional input needed.");
     m_noInputLabel->setWordWrap(true);
     m_noInputLabel->hide();
@@ -172,13 +224,13 @@ void AlgorithmTab::initLayout() {
 
     mainLayout->addWidget(attributesBox);
 
-    // separator 1
+           // separator 1
     auto* separator1 = new QFrame(this);
     separator1->setFrameShape(QFrame::HLine);
     separator1->setFrameShadow(QFrame::Sunken);
     mainLayout->addWidget(separator1);
 
-    // run algorithm
+           // run algorithm
     auto* runBox    = new QGroupBox("run algorithm", this);
     auto* runLayout = new QHBoxLayout(runBox);
     runLayout->setSpacing(6);
@@ -203,13 +255,13 @@ void AlgorithmTab::initLayout() {
 
     mainLayout->addWidget(runBox);
 
-    // separator 2
+           // separator 2
     auto* separator2 = new QFrame(this);
     separator2->setFrameShape(QFrame::HLine);
     separator2->setFrameShadow(QFrame::Sunken);
     mainLayout->addWidget(separator2);
 
-    // help
+           // help
     m_helpBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     mainLayout->addWidget(m_helpBtn);
 
@@ -315,7 +367,7 @@ void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
 
     const bool needsEnd = algorithmName == "A*";
 
-    // show/hide whole rows
+           // show/hide whole rows
     if(!needsStart && !needsEnd) {
         m_startNodeEdit->clear();
         m_endNodeEdit->clear();
@@ -372,9 +424,11 @@ void AlgorithmTab::startTimerForPlay() {
                     m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
                     m_legendLayout->addWidget(new QLabel(result));
                 }
+
+                m_algorithmController.clear();
+                
                 return;
             }
-
             if(m_state != RunState::Playing) {
                 return;
             }

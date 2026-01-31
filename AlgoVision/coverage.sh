@@ -4,11 +4,11 @@ set -e  # prekida skriptu ako neka komanda padne
 
 echo "--- building project with coverage flags ---"
 
-mkdir build-coverage
+mkdir -p build-coverage
 cd build-coverage
 
-cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
-cmake --build .
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS_ONLY=ON -DCMAKE_CXX_FLAGS="--coverage"
+cmake --build . --target AlgoVisionTests
 
 echo "--- running tests ---"
 ./AlgoVisionTests
@@ -27,4 +27,4 @@ lcov -a coverage_graph.info -a coverage_algorithm.info -o coverage_total.info
 
 genhtml coverage_total.info --output-directory coverage-report
 
-google-chrome coverage-report/index.html
+# google-chrome coverage-report/index.html

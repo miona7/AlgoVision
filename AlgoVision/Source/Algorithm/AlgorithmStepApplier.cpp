@@ -58,8 +58,10 @@ void AlgorithmStepApplier::undo(const AlgorithmStep& step) {
 
 void AlgorithmStepApplier::check(const AlgorithmStep& step) const {
     switch(step.m_type) {
+    case StepType::DefaultType:
     case StepType::VisitNode:
     case StepType::ProcessNode:
+    case StepType::UpdateDistance:
     case StepType::AddToPath:
     case StepType::AddToTopologicalOrder:
     case StepType::AssignComponent:

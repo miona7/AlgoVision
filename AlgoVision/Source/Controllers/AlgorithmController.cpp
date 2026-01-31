@@ -5,6 +5,7 @@ AlgorithmController::AlgorithmController(AlgorithmStepApplier& applier, QObject*
 }
 
 void AlgorithmController::clear() {
+    m_steps.clear();
     m_resultString.clear();
 }
 

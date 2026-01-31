@@ -203,8 +203,6 @@ const QColor EdgeItem::calculateColor() const {
         return Qt::yellow;
     case EdgeState::Selected:
         return Qt::red;
-    case EdgeState::InPath:
-        return Qt::green;
     default:
         return Qt::black;
     }

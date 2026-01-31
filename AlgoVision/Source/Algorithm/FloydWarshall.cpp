@@ -29,7 +29,6 @@ void FloydWarshall::execute(unsigned, unsigned) {
     }
 }
 
-// Belezi promene samo kada dodje do smanjenja distanci jer je O(n^3)
 void FloydWarshall::floydWarshall() {
     auto nodes = m_graph->getNodes();
     auto edges = m_graph->getEdges();
@@ -50,26 +49,6 @@ void FloydWarshall::floydWarshall() {
         m_distances[edge.startNode()][edge.endNode()] = edge.getWeight();
     }
 
-    for(const auto& [_, edge]: edges) {
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::ExamineEdge;
-            s.m_from = edge.startNode();
-            s.m_to   = edge.endNode();
-            addStep(s);
-        }
-        {
-            AlgorithmStep s;
-            s.m_type    = StepType::UpdateDistance;
-            s.m_node    = edge.startNode();
-            s.m_from    = edge.startNode();
-            s.m_to      = edge.endNode();
-            s.m_value   = edge.getWeight();
-            s.m_message = std::string("init edge weight");
-            addStep(s);
-        }
-    }
-
     for(const auto& [k, _]: nodes) {
         {
             AlgorithmStep s;
@@ -86,20 +65,55 @@ void FloydWarshall::floydWarshall() {
         }
         for(const auto& [i, _]: nodes) {
             if(m_distances[i][k] != std::numeric_limits<int>::max()) {
+                auto* edge = m_graph->getEdge(i, k);
+                if(edge != nullptr) {
+                    AlgorithmStep s;
+                    s.m_type = StepType::ExamineEdge;
+                    s.m_from = i;
+                    s.m_to   = k;
+                    addStep(s);
+                }
                 for(const auto& [j, _]: nodes) {
                     if(m_distances[k][j] != std::numeric_limits<int>::max()) {
-
+                        auto* edge = m_graph->getEdge(k, j);
+                        if(edge != nullptr) {
+                            AlgorithmStep s;
+                            s.m_type = StepType::ExamineEdge;
+                            s.m_from = k;
+                            s.m_to   = j;
+                            addStep(s);
+                        }
                         int throughK = m_distances[i][k] + m_distances[k][j];
                         if(throughK < m_distances[i][j]) {
                             m_distances[i][j] = throughK;
-
-                            AlgorithmStep s;
-                            s.m_type  = StepType::UpdateDistance;
-                            s.m_node  = k; // cvor koji je omogućio poboljšanje
-                            s.m_from  = i; // od i
-                            s.m_to    = j; // do j
-                            s.m_value = throughK;
-                            addStep(s);
+                            {
+                                AlgorithmStep s;
+                                s.m_type = StepType::UpdateDistance;
+                                s.m_node = i;
+                                addStep(s);
+                            }
+                            auto* edge = m_graph->getEdge(i, k);
+                            if(edge != nullptr) {
+                                AlgorithmStep s;
+                                s.m_type = StepType::SelectEdge;
+                                s.m_from = i;
+                                s.m_to   = k;
+                                addStep(s);
+                            }
+                            edge = m_graph->getEdge(k, j);
+                            if(edge != nullptr) {
+                                AlgorithmStep s;
+                                s.m_type = StepType::SelectEdge;
+                                s.m_from = k;
+                                s.m_to   = j;
+                                addStep(s);
+                            }
+                            {
+                                AlgorithmStep s;
+                                s.m_type = StepType::UpdateDistance;
+                                s.m_node = j;
+                                addStep(s);
+                            }
                         }
                     }
                 }
