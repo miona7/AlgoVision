@@ -3,16 +3,18 @@
 
 #include <memory>
 #include <vector>
+#include <optional>
 
 #include "AlgorithmStep.h"
 #include "Graph.h"
+#include "AlgorithmError.h"
 
 class Algorithm {
 public:
     explicit Algorithm(const std::shared_ptr<Graph>);
     virtual ~Algorithm() = default;
 
-    virtual void execute(unsigned = 0, unsigned = 0) = 0;
+    virtual std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) = 0;
 
     const std::vector<AlgorithmStep>& getSteps() const;
 
