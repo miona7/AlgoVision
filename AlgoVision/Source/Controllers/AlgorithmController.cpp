@@ -61,3 +61,12 @@ void AlgorithmController::reset() {
 bool AlgorithmController::isFinished() const {
     return m_currentIndex + 1 >= m_steps.size();
 }
+
+QString AlgorithmController::resultString() const {
+    return m_resultString;
+}
+
+void AlgorithmController::clear() {
+    m_resultString.clear();
+}
+
