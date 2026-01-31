@@ -137,6 +137,7 @@ void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
 
     edgeItem->adjust();
     addItem(edgeItem);
+    edgeItem->updateSize();
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
     connect(edgeItem, &EdgeItem::editEdgeWeightRequest, this, &GraphScene::editEdgeWeightRequest);
 
