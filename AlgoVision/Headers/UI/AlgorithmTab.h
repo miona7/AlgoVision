@@ -6,6 +6,11 @@
 #include <QWidget>
 
 #include <optional>
+#include <QScrollArea>
+
+#include <QVBoxLayout>
+#include <QColor>
+
 
 #include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
@@ -49,6 +54,11 @@ private:
 
     QLabel* m_noInputLabel;
 
+    QScrollArea* m_legendScroll;
+
+    QVBoxLayout* m_legendLayout;
+    QWidget*     m_legendContainer;
+
     QPushButton* m_helpBtn;
 
     QToolButton* m_prevBtn;
@@ -68,6 +78,9 @@ private:
     void initLayout();
     void initIcons();
     void updateUiForAlgorithm(const QString&);
+    void updateLegendForAlgorithm(const QString& name);
+    QWidget* makeLegendItem(const QColor& color, const QString& text);
+
 
     void startTimerForPlay();
 };
