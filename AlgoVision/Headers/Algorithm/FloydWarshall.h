@@ -16,6 +16,7 @@ public:
 
     void checkConditions() const;
     void execute(unsigned = 0, unsigned = 0) override;
+    QString resultString() const;
 
 private:
     std::map<unsigned, std::map<unsigned, int>> m_distances;

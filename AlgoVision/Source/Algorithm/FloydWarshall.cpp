@@ -1,5 +1,8 @@
 #include "FloydWarshall.h"
 
+#include <limits>
+
+
 FloydWarshall::FloydWarshall(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
@@ -112,4 +115,20 @@ void FloydWarshall::floydWarshall() {
             throw std::runtime_error("Graph contains a negative cycle!");
         }
     }
+}
+
+
+QString FloydWarshall::resultString() const {
+    QString res = "All-pairs shortest paths:\n";
+
+    for(const auto& [i, row] : m_distances) {
+        for(const auto& [j, dist] : row) {
+            if(dist == std::numeric_limits<int>::max()) {
+                res += QString("(%1 -> %2): unreachable\n").arg(i).arg(j);
+            } else {
+                res += QString("(%1 -> %2): %3\n").arg(i).arg(j).arg(dist);
+            }
+        }
+    }
+    return res;
 }
