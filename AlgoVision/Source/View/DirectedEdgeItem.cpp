@@ -4,6 +4,7 @@
 
 #include "AppConstants.h"
 #include "DirectedEdgeItem.h"
+#include "EdgeItem.h"
 
 DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
                                    bool hasWeight)
@@ -52,11 +53,11 @@ void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*,
 
 QPainterPath DirectedEdgeItem::edgePath() const {
     QPainterPath path;
-    QPointF      normal = calculateNormal();
+    QPointF      normalVec = calculateNormal();
 
-    if(!(qFuzzyCompare(normal.x(), 0.0) && qFuzzyCompare(normal.y(), 0.0))) {
+    if(!(qFuzzyCompare(normalVec.x(), 0.0) && qFuzzyCompare(normalVec.y(), 0.0))) {
         path.moveTo(m_sourcePoint);
-        QPointF middle = (m_sourcePoint + m_destPoint) / 2.0 - normal * m_skewness;
+        QPointF middle = (m_sourcePoint + m_destPoint) / 2.0 - normalVec * m_skewness;
         path.quadTo(middle, m_destPoint);
     }
 
@@ -69,11 +70,11 @@ QPainterPath DirectedEdgeItem::arrowPath(const QPainterPath& edgePath) const {
 
     qreal arrowSize = m_arrowSize * AppConstants::NodeScale;
 
-    QPointF p1 = m_destPoint - QPointF(m_arrowSize * std::cos(angle - m_arrowAngle),
-                                       m_arrowSize * std::sin(angle - m_arrowAngle));
+    QPointF p1 = m_destPoint - QPointF(arrowSize * std::cos(angle - m_arrowAngle),
+                                       arrowSize * std::sin(angle - m_arrowAngle));
 
-    QPointF p2 = m_destPoint - QPointF(m_arrowSize * std::cos(angle + m_arrowAngle),
-                                       m_arrowSize * std::sin(angle + m_arrowAngle));
+    QPointF p2 = m_destPoint - QPointF(arrowSize * std::cos(angle + m_arrowAngle),
+                                       arrowSize * std::sin(angle + m_arrowAngle));
 
     QPainterPath arrowPath;
     arrowPath.moveTo(m_destPoint);
@@ -83,7 +84,7 @@ QPainterPath DirectedEdgeItem::arrowPath(const QPainterPath& edgePath) const {
     return arrowPath;
 }
 
-QPointF DirectedEdgeItem::calculateNormal() const {
+/*QPointF DirectedEdgeItem::calculateNormal() const {
     QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
     QPoint  normal(-line.y(), line.x());
     qreal   length = std::hypot(normal.x(), normal.y());
@@ -93,3 +94,4 @@ QPointF DirectedEdgeItem::calculateNormal() const {
 
     return normal / length;
 }
+*/
