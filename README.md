@@ -111,7 +111,7 @@ git clone git@gitlab.com:matf-bg-ac-rs/course-rs/projects-2025-2026/AlgoVision.g
 cd /putanja/do/projekta
 
 # 2️⃣ Kreiranje build direktorijuma
-cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake -B build -DCMAKE_BUILD_TYPE=Release 
 
 # 3️⃣ Kompajliranje
 cmake --build build
@@ -131,7 +131,7 @@ git clone git@gitlab.com:matf-bg-ac-rs/course-rs/projects-2025-2026/AlgoVision.g
 cd C:\putanja\do\projekta
 
 # 2️⃣ Kreiranje build direktorijuma
-cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake -B build -DCMAKE_BUILD_TYPE=Release
 
 # 3️⃣ Kompajliranje
 cmake --build build
@@ -140,6 +140,11 @@ cmake --build build
 .\build\Release\AlgoVision.exe
 
 ```
+---
+
+## Demo snimak 🎥
+
+[!demo]()
 
 ---
 
