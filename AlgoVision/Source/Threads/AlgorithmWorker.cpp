@@ -7,51 +7,57 @@ AlgorithmWorker::AlgorithmWorker(const QString& algorithm, std::shared_ptr<Graph
 
 void AlgorithmWorker::run() {
     std::vector<AlgorithmStep> steps;
+    Algorithm* algo = nullptr;
+
     if(m_algorithm == "A*") {
-        AStar astar(m_graph);
-        astar.execute(m_start, m_end);
-        steps = astar.getSteps();
+        algo = new AStar(m_graph);
+        algo->execute(m_start, m_end);
     }
-    if(m_algorithm == "BFS") {
-        BFS bfs(m_graph);
-        bfs.execute(m_start);
-        steps = bfs.getSteps();
+    else if(m_algorithm == "BFS") {
+        algo = new BFS(m_graph);
+        algo->execute(m_start);
     }
-    if(m_algorithm == "Bellman-Ford") {
-        BellmanFord bf(m_graph);
-        bf.execute(m_start);
-        steps = bf.getSteps();
+    else if(m_algorithm == "Bellman-Ford") {
+        algo = new BellmanFord(m_graph);
+        algo->execute(m_start);
     }
-    if(m_algorithm == "DFS") {
-        DFS dfs(m_graph);
-        dfs.execute(m_start);
-        steps = dfs.getSteps();
+    else if(m_algorithm == "DFS") {
+        algo = new DFS(m_graph);
+        algo->execute(m_start);
     }
-    if(m_algorithm == "Dijkstra") {
-        Dijkstra dijkstra(m_graph);
-        dijkstra.execute(m_start);
-        steps = dijkstra.getSteps();
+    else if(m_algorithm == "Dijkstra") {
+        algo = new Dijkstra(m_graph);
+        algo->execute(m_start);
     }
-    if(m_algorithm == "Prim") {
-        Prim prim(m_graph);
-        prim.execute();
-        steps = prim.getSteps();
+    else if(m_algorithm == "Prim") {
+        algo = new Prim(m_graph);
+        algo->execute();
     }
-    if(m_algorithm == "Floyd-Warshall") {
-        FloydWarshall fw(m_graph);
-        fw.execute(m_start);
-        steps = fw.getSteps();
+    else if(m_algorithm == "Floyd-Warshall") {
+        algo = new FloydWarshall(m_graph);
+        algo->execute(m_start);
     }
-    if(m_algorithm == "Tarjan") {
-        Tarjan tarjan(m_graph);
-        tarjan.execute();
-        steps = tarjan.getSteps();
+    else if(m_algorithm == "Tarjan") {
+        algo = new Tarjan(m_graph);
+        algo->execute();
     }
-    if(m_algorithm == "Kahn") {
-        Kahn kahn(m_graph);
-        kahn.execute();
-        steps = kahn.getSteps();
+    else if(m_algorithm == "Kahn") {
+        algo = new Kahn(m_graph);
+        algo->execute();
     }
 
-    emit stepsReady(steps); // signal da su koraci spremni, u isto vreme ih i saljemo
+    if(algo) {
+        steps = algo->getSteps();
+
+        QString result = algo->resultString();
+
+        qDebug() << "ALGO:" << m_algorithm;
+        qDebug() << "RESULT STRING:" << result;
+
+        emit stepsReady(steps);
+        emit resultReady(result);
+
+        delete algo;
+    }
 }
+

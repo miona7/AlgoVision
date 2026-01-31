@@ -29,9 +29,11 @@ public:
 
 signals:
     void stepsReady(const std::vector<AlgorithmStep>&);
+    void resultReady(const QString&);
 
 protected:
     void run() override;
+
 
 private:
     QString                m_algorithm;
