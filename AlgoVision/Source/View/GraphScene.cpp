@@ -192,8 +192,8 @@ void GraphScene::selectNode(NodeItem* node) {
     emit addEdgeRequest(m_firstNodeSelect, node); // zahtevamo dodavanje grane od kontrolera
 }
 
-void GraphScene::updateNodeScalling(){
-    for(auto* item : items()){
+void GraphScene::updateNodeScalling() {
+    for(auto* item: items()) {
         if(auto* n = dynamic_cast<NodeItem*>(item))
             n->updateSize();
 
@@ -220,4 +220,3 @@ void GraphScene::applyTheme(ThemeManager::Theme theme) {
 
     update();
 }
-

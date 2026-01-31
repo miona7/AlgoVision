@@ -17,7 +17,7 @@ public:
     void execute(unsigned = 0, unsigned = 0) override;
 
     const std::vector<unsigned>& getSorted() const;
-    QString resultString() const;
+    QString                      resultString() const override;
 
 private:
     std::vector<unsigned> m_sorted;

@@ -29,11 +29,10 @@ namespace AppConstants {
     constexpr double MinNodeScale = 0.4;
     constexpr double MaxNodeScale = 3.0;
 
-    constexpr double EdgePadding = 6.0;
+    constexpr double EdgePadding   = 6.0;
     constexpr double BaseEdgeWidth = 2.0;
 
     static constexpr double BaseFontSize = 10.0;
-
 
 } // namespace AppConstants
 

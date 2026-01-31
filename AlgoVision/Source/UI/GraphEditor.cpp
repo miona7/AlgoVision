@@ -5,8 +5,8 @@
 #include <QUndoCommand>
 #include <QUndoStack>
 
-#include <functional>
 #include <QSlider>
+#include <functional>
 
 #include "AlgorithmTab.h"
 #include "GraphEditTab.h"
@@ -99,15 +99,13 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
 
     connect(m_editTab, &GraphEditTab::clearRequested, this, &GraphEditor::onClearRequestTrigger);
 
-    connect(m_editTab->getNodeSizeSlider(), &QSlider::valueChanged, this, [&](int v){
-        double t = v / 100.0;
-        AppConstants::NodeScale =
-            AppConstants::MinNodeScale +
-            t * (AppConstants::MaxNodeScale - AppConstants::MinNodeScale);
+    connect(m_editTab->getNodeSizeSlider(), &QSlider::valueChanged, this, [&](int v) {
+        double t                = v / 100.0;
+        AppConstants::NodeScale = AppConstants::MinNodeScale +
+                                  t * (AppConstants::MaxNodeScale - AppConstants::MinNodeScale);
 
         m_graphController->scene()->updateNodeScalling();
     });
-
 
     // Dummy test
     // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {

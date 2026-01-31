@@ -13,7 +13,7 @@ public:
     AlgorithmController(AlgorithmStepApplier&, QObject* = nullptr);
     ~AlgorithmController() override = default;
 
-    void clear();
+    void    clear();
     QString resultString() const;
 
 public slots:
@@ -23,24 +23,21 @@ public slots:
     void prevStep();
     void reset();
     bool isFinished() const;
-    void setResultString(const QString& s) {
-        m_resultString = s;
-    }
+    void setResultString(const QString&);
 
 private:
-    AlgorithmStepApplier&       m_applier;
+    // kontroler ne poseduje applier, samo ga koristi
+    AlgorithmStepApplier&      m_applier;
     std::vector<AlgorithmStep> m_steps;
-    int                        m_currentIndex = -1;
+    int                        m_currentIndex = -1; // na pocetku nemamo stanja
 
     std::vector<AlgorithmStep> m_undoStack;
     std::vector<AlgorithmStep> m_redoStack;
 
     QString m_resultString;
 
-
     void undo();
     void redo();
 };
 
 #endif // ALGORITHM_CONTROLLER_H
-

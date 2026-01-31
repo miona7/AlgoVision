@@ -7,46 +7,38 @@ AlgorithmWorker::AlgorithmWorker(const QString& algorithm, std::shared_ptr<Graph
 
 void AlgorithmWorker::run() {
     std::vector<AlgorithmStep> steps;
-    Algorithm* algo = nullptr;
+    Algorithm*                 algo = nullptr;
 
     if(m_algorithm == "A*") {
         algo = new AStar(m_graph);
         algo->execute(m_start, m_end);
-    }
-    else if(m_algorithm == "BFS") {
+    } else if(m_algorithm == "BFS") {
         algo = new BFS(m_graph);
         algo->execute(m_start);
-    }
-    else if(m_algorithm == "Bellman-Ford") {
+    } else if(m_algorithm == "Bellman-Ford") {
         algo = new BellmanFord(m_graph);
         algo->execute(m_start);
-    }
-    else if(m_algorithm == "DFS") {
+    } else if(m_algorithm == "DFS") {
         algo = new DFS(m_graph);
         algo->execute(m_start);
-    }
-    else if(m_algorithm == "Dijkstra") {
+    } else if(m_algorithm == "Dijkstra") {
         algo = new Dijkstra(m_graph);
         algo->execute(m_start);
-    }
-    else if(m_algorithm == "Prim") {
+    } else if(m_algorithm == "Prim") {
         algo = new Prim(m_graph);
         algo->execute();
-    }
-    else if(m_algorithm == "Floyd-Warshall") {
+    } else if(m_algorithm == "Floyd-Warshall") {
         algo = new FloydWarshall(m_graph);
         algo->execute(m_start);
-    }
-    else if(m_algorithm == "Tarjan") {
+    } else if(m_algorithm == "Tarjan") {
         algo = new Tarjan(m_graph);
         algo->execute();
-    }
-    else if(m_algorithm == "Kahn") {
+    } else if(m_algorithm == "Kahn") {
         algo = new Kahn(m_graph);
         algo->execute();
     }
 
-    if(algo) {
+    if(algo != nullptr) {
         steps = algo->getSteps();
 
         QString result = algo->resultString();
@@ -60,4 +52,3 @@ void AlgorithmWorker::run() {
         delete algo;
     }
 }
-

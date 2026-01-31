@@ -23,7 +23,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
       m_applier(m_graph), m_algorithmController(m_applier) {
 
     m_legendContainer = new QWidget;
-    m_legendLayout = new QVBoxLayout(m_legendContainer);
+    m_legendLayout    = new QVBoxLayout(m_legendContainer);
     m_legendLayout->setAlignment(Qt::AlignTop);
 
     m_legendScroll = new QScrollArea(this);
@@ -45,23 +45,26 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
             &AlgorithmTab::updateLegendForAlgorithm);
 
-           // ===== HELP =====
+    // ===== HELP =====
     connect(m_helpBtn, &QPushButton::clicked, this, [this]() {
         QMessageBox::information(this, "Algorithm Tab Help",
                                  "Algorithm Tab — Help\n\n"
                                  "Choose algorithm, set parameters and use controls to run.");
     });
 
-           // ===== PLAY =====
+    // ===== PLAY =====
     connect(m_playBtn, &QToolButton::clicked, this, [this]() {
+        // parametri trenutnog algoritma
         AlgorithmConfig newConfig = selectedConfig();
-        bool needNewRun = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
+        // ako algoritam ili parametri nisu isti → NOVI START
+        bool needNewRun           = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
 
         if(needNewRun || m_state == RunState::Idle || m_state == RunState::Finished) {
 
             // reset legend (da ne bude duplo)
             updateLegendForAlgorithm(newConfig.m_algorithmName);
 
+            // ugasi i obrisi staru nit
             if(m_worker) {
                 m_worker->quit();
                 m_worker->wait();
@@ -69,60 +72,59 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
                 m_worker = nullptr;
             }
 
-            m_algorithmController.reset();
+            m_algorithmController.reset(); // vrati graf u pocetno stanje
             m_currentConfig = newConfig;
 
-            m_worker = new AlgorithmWorker(
-                newConfig.m_algorithmName,
-                m_graph,
-                newConfig.m_startNode,
-                newConfig.m_endNode
-                );
+            m_worker = new AlgorithmWorker(newConfig.m_algorithmName, m_graph,
+                                           newConfig.m_startNode, newConfig.m_endNode);
 
+            // pokreni iscrtavanje kad nit zavrsi
             connect(m_worker, &AlgorithmWorker::stepsReady, this, [this]() {
                 m_state = RunState::Playing;
                 startTimerForPlay();
             });
 
-            connect(m_worker, &AlgorithmWorker::stepsReady,
-                    &m_algorithmController,
+            // ucitaj korake algoritma
+            connect(m_worker, &AlgorithmWorker::stepsReady, &m_algorithmController,
                     &AlgorithmController::loadSteps);
 
-            connect(m_worker, &AlgorithmWorker::resultReady,
-                    &m_algorithmController, &AlgorithmController::setResultString);
+            // ucitaj rezultat algoritma
+            connect(m_worker, &AlgorithmWorker::resultReady, &m_algorithmController,
+                    &AlgorithmController::setResultString);
 
             m_worker->start();
             m_state = RunState::Playing;
             return;
         }
 
-               // resume
+        //  RESUME –> isti algoritam, bio je pauziran
         if(m_state == RunState::Paused) {
             m_state = RunState::Playing;
             startTimerForPlay();
         }
     });
 
-           // ===== PAUSE =====
+    // ===== PAUSE =====
     connect(m_pauseBtn, &QToolButton::clicked, this, [this]() {
-        if(m_timer) m_timer->stop();
+        if(m_timer != nullptr) {
+            m_timer->stop();
+        }
         m_state = RunState::Paused;
     });
 
-    connect(m_nextBtn, &QToolButton::clicked,
-            [this]() { m_algorithmController.nextStep(); });
+    connect(m_nextBtn, &QToolButton::clicked, [this]() { m_algorithmController.nextStep(); });
 
-    connect(m_prevBtn, &QToolButton::clicked,
-            [this]() { m_algorithmController.prevStep(); });
+    connect(m_prevBtn, &QToolButton::clicked, [this]() { m_algorithmController.prevStep(); });
 
     connect(m_restartBtn, &QToolButton::clicked, this, [this]() {
         m_algorithmController.reset();
-        if(m_timer) m_timer->stop();
+        if(m_timer != nullptr) {
+            m_timer->stop();
+        }
         m_state = RunState::Idle;
         updateLegendForAlgorithm(m_algorithmCombo->currentText());
     });
 }
-
 
 void AlgorithmTab::initLayout() {
     auto* mainLayout = new QVBoxLayout(this);
@@ -215,15 +217,13 @@ void AlgorithmTab::initLayout() {
     mainLayout->addStretch();
 }
 QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) {
-    QWidget* row = new QWidget(this);
-    auto* layout = new QHBoxLayout(row);
+    QWidget* row    = new QWidget(this);
+    auto*    layout = new QHBoxLayout(row);
     layout->setContentsMargins(2, 2, 2, 2);
 
     QLabel* box = new QLabel;
     box->setFixedSize(14, 14);
-    box->setStyleSheet(QString(
-                           "background-color: %1; border: 1px solid black;"
-                           ).arg(color.name()));
+    box->setStyleSheet(QString("background-color: %1; border: 1px solid black;").arg(color.name()));
 
     QLabel* label = new QLabel(text);
 
@@ -233,7 +233,6 @@ QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) 
 
     return row;
 }
-
 
 void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     QLayoutItem* child;
@@ -250,8 +249,8 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
     m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
 
-    if(name == "Dijkstra" || name == "Bellman-Ford" ||
-       name == "A*" || name == "Floyd-Warshall" || name == "Prim") {
+    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A*" || name == "Floyd-Warshall" ||
+       name == "Prim") {
         m_legendLayout->addWidget(makeLegendItem(Qt::magenta, "Distance updated"));
     }
 
@@ -266,8 +265,7 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     m_legendLayout->addWidget(new QLabel("<b>Edges</b>"));
     m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Examined"));
 
-    if(name == "Dijkstra" || name == "Bellman-Ford" ||
-       name == "A*" || name == "Prim") {
+    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A*" || name == "Prim") {
         m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Relaxed"));
     }
 
@@ -296,8 +294,6 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
 
     m_legendLayout->addStretch();
 }
-
-
 
 void AlgorithmTab::initIcons() {
     m_prevBtn->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
@@ -374,12 +370,14 @@ void AlgorithmTab::startTimerForPlay() {
                 return;
             }
 
-            if(m_state != RunState::Playing) return;
+            if(m_state != RunState::Playing) {
+                return;
+            }
             m_algorithmController.nextStep();
         });
     }
 
-    m_timer->start(500);
+    m_timer->start(500); // 500ms po koraku
 
     if(m_algorithmController.isFinished()) {
         m_timer->stop();
@@ -392,5 +390,4 @@ void AlgorithmTab::startTimerForPlay() {
         }
         return;
     }
-
 }

@@ -1,12 +1,12 @@
 #include <EditableTextItem.h>
 #include <QGraphicsSceneEvent>
+#include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QPen>
-#include <QGraphicsSceneMouseEvent>
 
+#include "AppConstants.h"
 #include "EdgeItem.h"
 #include "NodeItem.h"
-#include "AppConstants.h"
 
 NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
@@ -28,7 +28,6 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
         m_observerId = m_modelNode->addObserver([this](Node&) { this->onNodeUpdated(); });
     }
     updateSize();
-
 }
 
 NodeItem::~NodeItem() {
@@ -164,17 +163,16 @@ void NodeItem::setNodeSelected(bool newNodeSelected) {
     update();
 }
 
-
 void NodeItem::updateSize() {
 
     prepareGeometryChange();
-    m_radius = AppConstants::defaultRadius * AppConstants::NodeScale;
+    m_radius      = AppConstants::defaultRadius * AppConstants::NodeScale;
     m_borderWidth = AppConstants::defaultBorderWidth * AppConstants::NodeScale;
 
     update();
 
-    for(auto edge : m_edges) {
-        if(edge){
+    for(auto edge: m_edges) {
+        if(edge) {
             edge->adjust();
         }
     }
@@ -185,11 +183,7 @@ void NodeItem::updateSize() {
 
     m_label->setTextWidth(2 * m_radius);
     m_label->centerText();
-
-
 }
-
-
 
 void NodeItem::addEdge(EdgeItem* edgeItem) {
     m_edges.insert(edgeItem);

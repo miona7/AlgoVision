@@ -15,10 +15,9 @@ class AStar : public Algorithm {
 public:
     explicit AStar(const std::shared_ptr<Graph>);
 
-    void checkConditions(unsigned, unsigned) const;
-    void execute(unsigned, unsigned) override;
-    QString resultString() const;
-
+    void    checkConditions(unsigned, unsigned) const;
+    void    execute(unsigned, unsigned) override;
+    QString resultString() const override;
 
     const std::vector<unsigned>& getPath() const;
     int                          getTotalCost() const;

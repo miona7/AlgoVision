@@ -53,8 +53,8 @@ void Graph::removeNode(unsigned id) {
 void Graph::clear() {
     m_numOfNodes = 0;
     m_numOfEdges = 0;
-    m_nodeId = 0;
-    m_edgeId = 0;
+    m_nodeId     = 0;
+    m_edgeId     = 0;
     m_adjacencyList.clear();
     m_nodes.clear();
     m_edges.clear();
@@ -86,9 +86,9 @@ QVariant Graph::toVariant() const {
         const auto& pos = node.getPosition();
 
         QVariantMap n;
-        n["id"] = id;
-        n["x"]  = pos.first;
-        n["y"]  = pos.second;
+        n["id"]   = id;
+        n["x"]    = pos.first;
+        n["y"]    = pos.second;
         n["name"] = node.getName();
 
         nodes.push_back(n);
@@ -126,11 +126,11 @@ void Graph::fromVariant(const QVariant& variant) {
 
     const QVariantList nodes = graph.value("nodes").toList();
     for(const QVariant& v: nodes) {
-        const QVariantMap n  = v.toMap();
-        const unsigned    id = n.value("id").toUInt();
-        const double      x  = n.value("x").toDouble();
-        const double      y  = n.value("y").toDouble();
-        const QString name = n.value("name").toString();
+        const QVariantMap n    = v.toMap();
+        const unsigned    id   = n.value("id").toUInt();
+        const double      x    = n.value("x").toDouble();
+        const double      y    = n.value("y").toDouble();
+        const QString     name = n.value("name").toString();
         addNode(id, x, y);
 
         Node* node = getNode(id);
@@ -152,7 +152,8 @@ void Graph::fromVariant(const QVariant& variant) {
 
         addEdgeSerialized(edgeId, from, to, w);
 
-        maxEdgeId = std::max(maxEdgeId, edgeId); // proveriti da li je potrebno u serializeru isto ovo
+        maxEdgeId =
+            std::max(maxEdgeId, edgeId); // proveriti da li je potrebno u serializeru isto ovo
     }
 
     m_nodeId = nodes.isEmpty() ? 0 : maxNodeId + 1;

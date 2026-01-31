@@ -1,7 +1,8 @@
 #include "SaveFileWorker.h"
 
-SaveFileWorker::SaveFileWorker(Serializer* serializer, Serializable* serializable, const QString& filePath,
-                   bool isWeighted, bool isDirected, QObject* parent)
+SaveFileWorker::SaveFileWorker(Serializer* serializer, Serializable* serializable,
+                               const QString& filePath, bool isWeighted, bool isDirected,
+                               QObject* parent)
     : QThread(parent), m_serializer(serializer), m_filePath(filePath), m_serializable(serializable),
       m_isWeighted(isWeighted), m_isDirected(isDirected) {
 }

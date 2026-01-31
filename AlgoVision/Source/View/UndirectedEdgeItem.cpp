@@ -1,8 +1,8 @@
 #include <QPainter>
 #include <QPen>
 
-#include "UndirectedEdgeItem.h"
 #include "AppConstants.h"
+#include "UndirectedEdgeItem.h"
 
 UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
                                        bool hasWeight)
@@ -23,7 +23,7 @@ QRectF UndirectedEdgeItem::boundingRect() const {
 
 QPainterPath UndirectedEdgeItem::shape() const {
     QPainterPathStroker stroker;
-    qreal               offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale + m_shapeStroke;
+    qreal offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale + m_shapeStroke;
     stroker.setWidth(offset);
     return stroker.createStroke(edgePath());
 }

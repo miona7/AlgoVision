@@ -34,7 +34,6 @@ signals:
 protected:
     void run() override;
 
-
 private:
     QString                m_algorithm;
     std::shared_ptr<Graph> m_graph;

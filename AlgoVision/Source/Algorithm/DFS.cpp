@@ -75,7 +75,7 @@ const std::map<unsigned, bool>& DFS::getVisited() const {
 
 QString DFS::resultString() const {
     QString res = "DFS order: ";
-    for(unsigned v : m_order) {
+    for(unsigned v: m_order) {
         res += QString::number(v) + " ";
     }
     return res;

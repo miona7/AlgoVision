@@ -81,7 +81,7 @@ const std::map<unsigned, bool>& BFS::getVisited() const {
 
 QString BFS::resultString() const {
     QString res = "BFS order: ";
-    for(unsigned v : m_order)
+    for(unsigned v: m_order)
         res += QString::number(v) + " ";
     return res;
 }

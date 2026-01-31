@@ -2,8 +2,8 @@
 #include <QPen>
 #include <cmath>
 
-#include "DirectedEdgeItem.h"
 #include "AppConstants.h"
+#include "DirectedEdgeItem.h"
 
 DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
                                    bool hasWeight)
@@ -19,7 +19,7 @@ QRectF DirectedEdgeItem::boundingRect() const {
 
 QPainterPath DirectedEdgeItem::shape() const {
     QPainterPathStroker stroker;
-    qreal               offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale + m_shapeStroke;
+    qreal offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale + m_shapeStroke;
 
     stroker.setWidth(offset);
 
@@ -31,8 +31,7 @@ QPainterPath DirectedEdgeItem::shape() const {
     return shape;
 }
 
-void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*,
-                             QWidget*) {
+void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
     QLineF line(m_sourcePoint, m_destPoint);
     if(qFuzzyCompare(line.length(), 0.0)) {
         return;
@@ -84,16 +83,13 @@ QPainterPath DirectedEdgeItem::arrowPath(const QPainterPath& edgePath) const {
     return arrowPath;
 }
 
-QPointF DirectedEdgeItem::calculateNormal() const{
-    QPointF line (m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
-    QPoint normal(-line.y(), line.x());
-    qreal length = std::hypot(normal.x(), normal.y());
+QPointF DirectedEdgeItem::calculateNormal() const {
+    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
+    QPoint  normal(-line.y(), line.x());
+    qreal   length = std::hypot(normal.x(), normal.y());
 
     if(qFuzzyCompare(length, 0.0))
         return QPointF(0, 0);
 
     return normal / length;
 }
-
-
-

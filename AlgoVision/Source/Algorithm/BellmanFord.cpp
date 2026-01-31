@@ -134,11 +134,8 @@ bool BellmanFord::hasNegativeCycle() const {
 
 QString BellmanFord::resultString() const {
     QString res = "Distances:\n";
-    for(const auto& [node, dist] :m_minDistance) {
-        res += QString("Node %1 : %2\n")
-        .arg(node)
-            .arg(dist);
+    for(const auto& [node, dist]: m_minDistance) {
+        res += QString("Node %1 : %2\n").arg(node).arg(dist);
     }
     return res;
 }
-

@@ -1,5 +1,5 @@
-#include <QGraphicsSceneEvent>
 #include <QFont>
+#include <QGraphicsSceneEvent>
 
 #include "EdgeItem.h"
 #include "EditableTextItem.h"
@@ -38,18 +38,17 @@ void EdgeItem::initEdgeWeight() {
 void EdgeItem::adjust() {
 
     QLineF line(mapFromItem(m_sourceNode, 0, 0), mapFromItem(m_destNode, 0, 0));
-    qreal length = line.length();
+    qreal  length = line.length();
 
     qreal r = m_sourceNode->radius() + AppConstants::EdgePadding * AppConstants::NodeScale;
 
     prepareGeometryChange();
 
-    if (length > 2 * r){
+    if(length > 2 * r) {
         QPointF offset((line.dx() * r) / length, (line.dy() * r) / length);
         m_sourcePoint = line.p1() + offset;
-        m_destPoint = line.p2() - offset;
-    }
-    else{
+        m_destPoint   = line.p2() - offset;
+    } else {
         m_sourcePoint = m_destPoint = line.p1();
     }
     adjustPointsGeometry();
@@ -218,7 +217,8 @@ void EdgeItem::onEdgeUpdated() {
     update();
 }
 void EdgeItem::updateSize() {
-    if(!m_hasWeight || !m_weight) return;
+    if(!m_hasWeight || !m_weight)
+        return;
 
     QFont f = m_weight->font();
     f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
@@ -226,4 +226,3 @@ void EdgeItem::updateSize() {
 
     adjustWeightGeometry(); // da se lepo repozicionira posle skaliranja
 }
-

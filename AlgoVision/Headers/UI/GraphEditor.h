@@ -30,11 +30,11 @@ private slots:
     void onClearRequestTrigger();
 
 private:
-    QUndoStack*                      m_undoStack       = nullptr;
-    GraphEditTab*                    m_editTab         = nullptr;
-    QLabel*                          m_leftPlaceholder = nullptr;
-    QGraphicsView*                   m_view            = nullptr;
-    GraphScene* m_graphScene = nullptr;
+    QUndoStack*    m_undoStack       = nullptr;
+    GraphEditTab*  m_editTab         = nullptr;
+    QLabel*        m_leftPlaceholder = nullptr;
+    QGraphicsView* m_view            = nullptr;
+    GraphScene*    m_graphScene      = nullptr;
 
     std::shared_ptr<GraphController> m_graphController;
 

@@ -4,6 +4,14 @@ AlgorithmController::AlgorithmController(AlgorithmStepApplier& applier, QObject*
     : m_applier(applier), QObject(parent) {
 }
 
+void AlgorithmController::clear() {
+    m_resultString.clear();
+}
+
+QString AlgorithmController::resultString() const {
+    return m_resultString;
+}
+
 void AlgorithmController::loadSteps(const std::vector<AlgorithmStep>& steps) {
     m_steps        = steps;
     m_currentIndex = -1;
@@ -33,21 +41,6 @@ void AlgorithmController::prevStep() {
     m_currentIndex--;
 }
 
-void AlgorithmController::undo() {
-    prevStep();
-}
-
-void AlgorithmController::redo() {
-    if(m_redoStack.empty()) {
-        return;
-    }
-    AlgorithmStep& step = m_redoStack.back();
-    m_applier.apply(step);
-    m_redoStack.pop_back();
-    m_undoStack.push_back(step);
-    m_currentIndex++;
-}
-
 void AlgorithmController::reset() {
     while(!m_undoStack.empty()) {
         AlgorithmStep& step = m_undoStack.back();
@@ -62,11 +55,21 @@ bool AlgorithmController::isFinished() const {
     return m_currentIndex + 1 >= m_steps.size();
 }
 
-QString AlgorithmController::resultString() const {
-    return m_resultString;
+void AlgorithmController::setResultString(const QString& s) {
+    m_resultString = s;
 }
 
-void AlgorithmController::clear() {
-    m_resultString.clear();
+void AlgorithmController::undo() {
+    prevStep();
 }
 
+void AlgorithmController::redo() {
+    if(m_redoStack.empty()) {
+        return;
+    }
+    AlgorithmStep& step = m_redoStack.back();
+    m_applier.apply(step);
+    m_redoStack.pop_back();
+    m_undoStack.push_back(step);
+    m_currentIndex++;
+}

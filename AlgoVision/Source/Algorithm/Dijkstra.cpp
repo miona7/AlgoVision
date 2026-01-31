@@ -25,8 +25,6 @@ void Dijkstra::execute(unsigned idStartNode, unsigned) {
     checkConditions(idStartNode);
     clearSteps();
     dijkstra(idStartNode);
-
-
 }
 
 void Dijkstra::dijkstra(unsigned start) {
@@ -118,9 +116,7 @@ void Dijkstra::dijkstra(unsigned start) {
             m_resultString += QString("Node %1: %2\n").arg(id).arg(dist);
         }
     }
-
 }
 QString Dijkstra::resultString() const {
     return m_resultString;
 }
-

@@ -17,8 +17,8 @@ public:
 
     void                 initEdgeWeight();
     void                 adjust();
-    void adjustPointsGeometry();
-    void adjustWeightGeometry() const;
+    void                 adjustPointsGeometry();
+    void                 adjustWeightGeometry() const;
     virtual QPainterPath edgePath() const                                                     = 0;
     QRectF               boundingRect() const override                                        = 0;
     QPainterPath         shape() const override                                               = 0;

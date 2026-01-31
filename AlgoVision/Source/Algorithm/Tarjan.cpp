@@ -153,4 +153,3 @@ void Tarjan::init() {
 QString Tarjan::resultString() const {
     return QString("Number of SCC: %1").arg(m_sccCount);
 }
-

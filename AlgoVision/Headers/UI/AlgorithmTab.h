@@ -5,12 +5,11 @@
 #include <QTimer>
 #include <QWidget>
 
-#include <optional>
 #include <QScrollArea>
+#include <optional>
 
-#include <QVBoxLayout>
 #include <QColor>
-
+#include <QVBoxLayout>
 
 #include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
@@ -75,12 +74,11 @@ private:
     RunState                       m_state  = RunState::Idle;
     std::optional<AlgorithmConfig> m_currentConfig;
 
-    void initLayout();
-    void initIcons();
-    void updateUiForAlgorithm(const QString&);
-    void updateLegendForAlgorithm(const QString& name);
-    QWidget* makeLegendItem(const QColor& color, const QString& text);
-
+    void     initLayout();
+    void     initIcons();
+    void     updateUiForAlgorithm(const QString&);
+    void     updateLegendForAlgorithm(const QString&);
+    QWidget* makeLegendItem(const QColor&, const QString&);
 
     void startTimerForPlay();
 };
