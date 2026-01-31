@@ -73,12 +73,18 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 
 QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) {
     switch(change) {
-    case QGraphicsItem::ItemPositionHasChanged:
+    case QGraphicsItem::ItemPositionHasChanged:{
+        // azuriraj pozicije modela pri pomeranju cvora
+        auto p = value.toPointF();
+        m_modelNode->setPosition(p.x(), p.y());
+
+        // azuriraj pozicije grana
         for(auto* edge: m_edges) {
             edge->adjust();
         }
 
         break;
+    }
     default:
         break;
     }

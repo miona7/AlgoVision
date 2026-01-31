@@ -97,8 +97,9 @@ void GraphScene::addNode(Node* nodeModel) {
     }
 
     NodeItem* nodeItem = new NodeItem(nodeModel);
-    auto      pos      = nodeModel->getPosition();
-    nodeItem->setPos(pos.first, pos.second);
+    // ovo se svakako desava pri konstrukciji NodeItem-a
+    // auto      pos      = nodeModel->getPosition();
+    // nodeItem->setPos(pos.first, pos.second);
     addItem(nodeItem);
     m_nodeItems[nodeModel->getId()] = nodeItem;
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
