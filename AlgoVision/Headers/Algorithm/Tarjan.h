@@ -16,6 +16,9 @@ public:
 
     void checkConditions() const;
     void execute(unsigned = 0, unsigned = 0) override;
+    QString resultString() const;
+
+    int m_sccCount = 0;
 
 private:
     int                      m_arrivalTime = 0;   // vreme dolaska

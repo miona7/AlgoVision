@@ -21,6 +21,7 @@ void Tarjan::execute(unsigned, unsigned) {
     auto nodes     = m_graph->getNodes();
     for(const auto& [id, node]: nodes) {
         if(m_components[id] == -1) {
+            m_sccCount++;
             tarjan(id, component);
         }
     }
@@ -148,3 +149,8 @@ void Tarjan::init() {
         m_components[id]        = -1; // komponenta nije dodeljena
     }
 }
+
+QString Tarjan::resultString() const {
+    return QString("Number of SCC: %1").arg(m_sccCount);
+}
+
