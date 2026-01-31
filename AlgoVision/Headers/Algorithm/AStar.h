@@ -17,6 +17,8 @@ public:
 
     void checkConditions(unsigned, unsigned) const;
     void execute(unsigned, unsigned) override;
+    QString resultString() const;
+
 
     const std::vector<unsigned>& getPath() const;
     int                          getTotalCost() const;

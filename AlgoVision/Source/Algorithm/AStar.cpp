@@ -195,3 +195,8 @@ const std::vector<unsigned>& AStar::getPath() const {
 int AStar::getTotalCost() const {
     return m_totalCost;
 }
+
+
+QString AStar::resultString() const {
+    return QString("Total path cost: %1").arg(m_totalCost);
+}
