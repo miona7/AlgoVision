@@ -10,8 +10,7 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
     setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
-    setPos(modelNode->getPosition().first, modelNode->getPosition().second);
-    m_oldCenter = QPointF(modelNode->getPosition().first, modelNode->getPosition().second);
+    updateNodePosition();
 
     // node name
     m_label = new EditableTextItem(this);
@@ -179,6 +178,11 @@ void NodeItem::addEdge(EdgeItem* edgeItem) {
 
 void NodeItem::removeEdge(EdgeItem* edgeItem) {
     m_edges.remove(edgeItem);
+}
+
+void NodeItem::updateNodePosition() {
+    m_oldCenter = QPointF(m_modelNode->getPosition().first, m_modelNode->getPosition().second);
+    setPos(m_oldCenter);
 }
 
 qreal NodeItem::radius() const {

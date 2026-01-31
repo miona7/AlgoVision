@@ -24,6 +24,9 @@ public:
     void addEdge(EdgeItem*);
     void removeEdge(EdgeItem*);
 
+    // sluzi za azuriranje pozicije cvora(centra) na osnovu modela
+    void updateNodePosition();
+
     EditableTextItem* label() const;
     void              setLabel(EditableTextItem*);
 

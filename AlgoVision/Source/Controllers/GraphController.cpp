@@ -277,6 +277,11 @@ GraphScene* GraphController::scene() const {
     return m_scene.get();
 }
 
+void GraphController::updateNodePosition(NodeItem* nodeItem, const QPointF &point) {
+    nodeItem->modelNode()->setPosition(point.x(), point.y());
+    nodeItem->updateNodePosition();
+}
+
 // scena zahteva promene od kontrolera, ne vrsi ih direktno nad modelom, a ni nad sobom
 void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::addNodeRequest, this, &GraphController::addNode);

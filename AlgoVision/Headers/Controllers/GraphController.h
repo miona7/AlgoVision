@@ -24,6 +24,9 @@ public:
 
     GraphScene* scene() const;
 
+    // metoda za eksplicitno postavljanje pozicije cvora
+    void updateNodePosition(NodeItem* nodeItem, const QPointF& point);
+
 signals:
 
     void sceneModified();
