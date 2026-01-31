@@ -80,3 +80,7 @@ void Kahn::kahn() {
 const std::vector<unsigned>& Kahn::getSorted() const {
     return m_sorted;
 }
+
+QString Kahn::resultString() const {
+    return "Topological ordering completed.";
+}
