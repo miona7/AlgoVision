@@ -16,6 +16,11 @@ public:
 
     void checkConditions() const;
     void execute(unsigned = 0, unsigned = 0) override;
+    QString resultString() const;
+    std::vector<std::pair<unsigned,unsigned>> m_mstEdges;
+
+    double m_totalWeight = 0;
+
 
 private:
     void prim();

@@ -124,6 +124,11 @@ void Prim::prim() {
             totalWeight += minDistance[u];
         }
     }
+    m_totalWeight = totalWeight;
 
     std::cout << "Total weight of MST is " << totalWeight << std::endl;
 }
+QString Prim::resultString() const {
+    return QString("Total MST weight: %1").arg(m_totalWeight);
+}
+
