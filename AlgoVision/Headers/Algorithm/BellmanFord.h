@@ -16,6 +16,8 @@ public:
 
     void checkConditions(unsigned) const;
     void execute(unsigned, unsigned = 0) override;
+    QString resultString() const;
+
 
     bool hasNegativeCycle() const;
 
