@@ -281,6 +281,8 @@ void MainWindow::createGraphEditor(bool isDirected, bool isWeighted) {
         m_graphEditor     = graphEditor;
         graphLayout->addWidget(graphEditor);
     }
+    auto* scene = m_graphEditor->graphController()->scene();
+    scene->applyTheme(m_themeManager->currentTheme());
 }
 
 void MainWindow::onHelpTriggered() {
