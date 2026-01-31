@@ -14,9 +14,16 @@ public:
 
     void checkConditions(unsigned) const;
     void execute(unsigned, unsigned = 0) override;
+    QString resultString() const;
+    std::map<unsigned, double> m_dist;
+
+
 
 private:
     void dijkstra(unsigned);
+    QString m_resultString;
+
 };
+
 
 #endif // DIJKSTRA_H
