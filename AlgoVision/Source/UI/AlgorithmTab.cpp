@@ -265,8 +265,10 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
         m_legendLayout->addWidget(new QLabel("Each component is colored differently."));
     }
 
-    m_legendLayout->addWidget(new QLabel("<b>Edges</b>"));
-    m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Examined"));
+    if(name != "Kahn") {
+        m_legendLayout->addWidget(new QLabel("<b>Edges</b>"));
+        m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Examined"));
+    }
 
     if(name == "Bellman-Ford") {
         m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Relaxed"));
