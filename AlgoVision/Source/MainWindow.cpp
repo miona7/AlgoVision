@@ -106,7 +106,7 @@ void MainWindow::onCreateGraphTriggered() {
     QDialog dialog(this);
     dialog.setWindowTitle("Create Graph Options");
     dialog.setModal(true);
-    dialog.setMinimumSize(400, 250);
+    dialog.setMinimumSize(AppConstants::createGraphDialogMinWidth,AppConstants::createGraphDialogMinHeight);
     dialog.setSizeGripEnabled(true);
     dialog.setWindowFlags(dialog.windowFlags() | Qt::WindowMinMaxButtonsHint);
 

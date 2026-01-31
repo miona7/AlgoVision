@@ -34,6 +34,9 @@ namespace AppConstants {
 
     static constexpr double BaseFontSize = 10.0;
 
+    // dialogs
+    constexpr int createGraphDialogMinWidth  = 400;
+    constexpr int createGraphDialogMinHeight = 250;
 } // namespace AppConstants
 
 #endif // APPCONSTANT
