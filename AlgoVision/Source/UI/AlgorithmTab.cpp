@@ -447,6 +447,7 @@ void AlgorithmTab::startTimerForPlay() {
             m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
             m_legendLayout->addWidget(new QLabel(result));
         }
+        m_algorithmController.clear();
         return;
     }
 }
