@@ -23,6 +23,13 @@ public:
     explicit AlgorithmTab(std::shared_ptr<Graph>, QWidget* = nullptr);
     ~AlgorithmTab() override = default;
 
+public slots:
+    void showAlgorithmErrorDialog(const AlgorithmError& error, bool allowContinue);
+
+signals:
+    void errorDialogContinue();
+    void errorDialogCancelled();
+
 private:
     struct AlgorithmConfig {
         QString m_algorithmName;
