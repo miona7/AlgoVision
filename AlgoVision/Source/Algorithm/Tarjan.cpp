@@ -26,7 +26,7 @@ void Tarjan::execute(unsigned, unsigned) {
         }
     }
 
-    std::cout << "Strongly connected components:" << std::endl;
+    //std::cout << "Strongly connected components:" << std::endl;
     std::map<int, std::vector<unsigned>> comps;
     for(const auto& [nodeId, compId]: m_components) {
         comps[compId].emplace_back(nodeId);

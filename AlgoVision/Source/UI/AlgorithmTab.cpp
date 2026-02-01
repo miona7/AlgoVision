@@ -336,11 +336,11 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     }
 
     //m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
-
+/*
     if(name == "Tarjan") {
         m_legendLayout->addWidget(new QLabel("Strongly connected components."));
     }
-
+*/
     if(name == "Kahn") {
         m_legendLayout->addWidget(new QLabel("Topological ordering."));
     }
