@@ -30,6 +30,8 @@ std::optional<AlgorithmError> BFS::execute(unsigned idStartNode, unsigned) {
     clearSteps();
 
     bfs(idStartNode);
+
+    return std::nullopt;
 }
 
 void BFS::bfs(unsigned start) {
