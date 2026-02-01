@@ -35,6 +35,7 @@ signals:
 public slots:
     void createGraph(bool, bool);
     void addNode(const QPointF&);
+    void addNodeAndEdge(const QPointF&, NodeItem*);
     void addEdge(NodeItem*, NodeItem*);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
