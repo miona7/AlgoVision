@@ -4,7 +4,7 @@ AStar::AStar(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
 std::optional<AlgorithmError> AStar::checkConditions(unsigned start, unsigned goal) const {
-    if(!m_graph || m_graph->getNodes().empty()) {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
         return AlgorithmError{
             AlgorithmErrorType::GraphNotInitialized,
             "Graph is not initialized or empty."
