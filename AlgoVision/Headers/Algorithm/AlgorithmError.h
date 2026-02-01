@@ -13,8 +13,8 @@ enum class AlgorithmErrorType {
 };
 
 struct AlgorithmError {
-    AlgorithmErrorType type;
-    std::string message;
+    AlgorithmErrorType m_type;
+    std::string m_message;
 };
 
 #endif // ALGORITHMERROR_H
