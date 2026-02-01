@@ -45,6 +45,8 @@ std::optional<AlgorithmError> Prim::execute(unsigned, unsigned) {
     clearSteps();
 
     prim();
+
+    return std::nullopt;
 }
 
 void Prim::prim() {
