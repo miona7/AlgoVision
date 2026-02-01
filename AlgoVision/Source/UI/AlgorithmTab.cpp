@@ -308,8 +308,8 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
     m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
 
-    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A*" || name == "Floyd-Warshall" ||
-       name == "Prim") {
+    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" || name == "Floyd-Warshall" ||
+       name == "Prim", name == Tarjan) {
         m_legendLayout->addWidget(makeLegendItem(Qt::darkMagenta, "Distance updated"));
     }
 
