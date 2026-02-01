@@ -12,8 +12,8 @@ class BFS : public Algorithm {
 public:
     explicit BFS(const std::shared_ptr<Graph>);
 
-    void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions(unsigned) const;
+    std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
     const std::map<unsigned, bool>& getVisited() const;
 
