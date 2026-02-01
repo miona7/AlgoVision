@@ -18,6 +18,8 @@ std::optional<AlgorithmError> DFS::checkConditions(unsigned start) const {
             "Start node does not exist in the graph."
         };
     }
+
+    return std::nullopt;
 }
 
 std::optional<AlgorithmError> DFS::execute(unsigned idStartNode, unsigned) {
