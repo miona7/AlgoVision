@@ -9,7 +9,8 @@ enum class AlgorithmErrorType {
     StartNodeMissing,
     GoalNodeMissing,
     NegativeEdgeWeights,
-    NoPathFound
+    NoPathFound,
+    NegativeCycle
 };
 
 struct AlgorithmError {
