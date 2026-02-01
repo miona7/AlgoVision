@@ -102,6 +102,12 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     connect(m_editTab, &GraphEditTab::removeRequested, this, &GraphEditor::onRemoveRequestTrigger);
 
     connect(m_editTab, &GraphEditTab::clearRequested, this, &GraphEditor::onClearRequestTrigger);
+
+    connect(m_editTab, &GraphEditTab::panRequested, this, &GraphEditor::onPanRequestTrigger);
+
+    connect(m_editTab, &GraphEditTab::zoomInRequested, this, &GraphEditor::onZoomInRequestTrigger);
+
+    connect(m_editTab, &GraphEditTab::zoomOutRequested, this, &GraphEditor::onZoomOutRequestTrigger);
     // Dummy test
     // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
     //     const int before = m_dummyState;
@@ -125,15 +131,36 @@ GraphEditor::~GraphEditor() {
 }
 
 void GraphEditor::onAddRequestTrigger() {
+    m_view->resetState();
     m_graphController->setAddSceneState();
 }
 
 void GraphEditor::onRemoveRequestTrigger() {
+    m_view->resetState();
     m_graphController->setRemoveSceneState();
 }
 
 void GraphEditor::onClearRequestTrigger() {
+    m_view->resetState();
     m_graphController->clear();
+}
+
+void GraphEditor::onPanRequestTrigger() {
+    // resetuj stanje scene na podrazumevano
+    m_graphController->scene()->resetScene();
+    m_view->setState(GraphView::State::PAN);
+}
+
+void GraphEditor::onZoomInRequestTrigger() {
+    // resetuj stanje scene na podrazumevano
+    m_graphController->scene()->resetScene();
+    m_view->setState(GraphView::State::ZOOM_IN);
+}
+
+void GraphEditor::onZoomOutRequestTrigger() {
+    // resetuj stanje scene na podrazumevano
+    m_graphController->scene()->resetScene();
+    m_view->setState(GraphView::State::ZOOM_OUT);
 }
 
 std::shared_ptr<GraphController> GraphEditor::graphController() const {

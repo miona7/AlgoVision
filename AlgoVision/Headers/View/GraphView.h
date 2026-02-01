@@ -6,15 +6,14 @@
 
 class GraphView : public QGraphicsView {
 public:
-    enum class State {
-        IDLE
-    };
+    enum class State {IDLE, PAN, ZOOM_IN, ZOOM_OUT};
 
     explicit GraphView(QWidget* = nullptr);
     explicit GraphView(QGraphicsScene*, QWidget* = nullptr);
 
     GraphView::State state() const;
     void setState(GraphView::State);
+    void resetState();
 
 protected:
     void mousePressEvent(QMouseEvent*) override;

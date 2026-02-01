@@ -1,5 +1,9 @@
 #include "GraphView.h"
 
+#include <qevent.h>
+
+
+
 GraphView::GraphView(QWidget* parent) : QGraphicsView(parent) {
     init();
 }
@@ -16,23 +20,46 @@ void GraphView::setState(GraphView::State newState){
     m_state = newState;
 }
 
+void GraphView::resetState() {
+    m_state = GraphView::State::IDLE;
+}
+
 
 void GraphView::mousePressEvent(QMouseEvent* event) {
-    if(m_state == GraphView::State::IDLE) {
-        return;
+    switch (m_state) {
+    case GraphView::State::PAN: {
+        // pan logic
+
+        event->accept();
+        break;
+    }
+
+    case GraphView::State::ZOOM_IN: {
+        // zoom in logic
+
+        event->accept();
+        break;
+    }
+
+    case GraphView::State::ZOOM_OUT: {
+        // zoom out logic
+
+        event->accept();
+        break;
+    }
+
+    default:
+        QGraphicsView::mousePressEvent(event);
+        break;
     }
 }
 
 void GraphView::mouseMoveEvent(QMouseEvent* event) {
-    if(m_state == GraphView::State::IDLE) {
-        return;
-    }
+    QGraphicsView::mouseMoveEvent(event);
 }
 
 void GraphView::mouseReleaseEvent(QMouseEvent* event) {
-    if(m_state == GraphView::State::IDLE) {
-        return;
-    }
+    QGraphicsView::mouseReleaseEvent(event);
 }
 
 void GraphView::init() {

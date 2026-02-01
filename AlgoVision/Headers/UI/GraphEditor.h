@@ -29,6 +29,9 @@ private slots:
     void onAddRequestTrigger();
     void onRemoveRequestTrigger();
     void onClearRequestTrigger();
+    void onPanRequestTrigger();
+    void onZoomInRequestTrigger();
+    void onZoomOutRequestTrigger();
 
 private:
     QUndoStack*                      m_undoStack       = nullptr;

@@ -20,6 +20,10 @@ signals:
     void removeRequested();
     void clearRequested();
 
+    void panRequested();
+    void zoomInRequested();
+    void zoomOutRequested();
+
 public slots:
     void setUndoEnabled(bool);
     void setRedoEnabled(bool);
