@@ -26,35 +26,36 @@ void GraphView::resetState() {
 
 
 void GraphView::mousePressEvent(QMouseEvent* event) {
-    switch (m_state) {
-    case GraphView::State::PAN: {
-        // pan logic
+    if (m_state == GraphView::State::PAN_IDLE) {
+        // pan init
+        m_state = GraphView::State::PAN_ACTIVE;
+        m_lastMousePos = event->pos();
+        setCursor(Qt::ClosedHandCursor);
 
         event->accept();
-        break;
+        return;
     }
 
-    case GraphView::State::ZOOM_IN: {
-        // zoom in logic
-
+    if (m_state != GraphView::State::IDLE) {
         event->accept();
-        break;
+        return;
     }
 
-    case GraphView::State::ZOOM_OUT: {
-        // zoom out logic
-
-        event->accept();
-        break;
-    }
-
-    default:
-        QGraphicsView::mousePressEvent(event);
-        break;
-    }
+    QGraphicsView::mousePressEvent(event);
 }
 
 void GraphView::mouseMoveEvent(QMouseEvent* event) {
+    if (m_state == GraphView::State::PAN_ACTIVE) {
+        // pan update logic (u koordinatama scene, da ne zavise proracuni od zoom-a)
+
+        QPoint delta = event->pos() - m_lastMousePos;
+        translate(-delta.x(), -delta.y());
+        m_lastMousePos = event->pos();
+
+        event->accept();
+        return;
+    }
+
     if (m_state != GraphView::State::IDLE) {
         event->accept();
         return;
@@ -64,6 +65,13 @@ void GraphView::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void GraphView::mouseReleaseEvent(QMouseEvent* event) {
+    if (m_state == GraphView::State::PAN_ACTIVE) {
+        m_state = GraphView::State::PAN_IDLE;
+        setCursor(Qt::ArrowCursor);
+        event->accept();
+        return;
+    }
+
     if (m_state != GraphView::State::IDLE) {
         event->accept();
         return;
@@ -84,6 +92,15 @@ void GraphView::mouseDoubleClickEvent(QMouseEvent* event) {
 void GraphView::init() {
     setRenderHint(QPainter::Antialiasing);
     setAlignment(Qt::AlignCenter);
-    setTransformationAnchor(QGraphicsView::AnchorViewCenter);
-    setResizeAnchor(QGraphicsView::AnchorViewCenter);
+    setTransformationAnchor(QGraphicsView::NoAnchor);
+    setResizeAnchor(QGraphicsView::NoAnchor);
+}
+
+QPointF GraphView::center() const {
+    return m_center;
+}
+
+void GraphView::setCenter(QPointF newCenter) {
+    m_center = newCenter;
+    centerOn(m_center);
 }

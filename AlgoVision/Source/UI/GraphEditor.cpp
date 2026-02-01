@@ -66,6 +66,7 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // splitter->addWidget(m_view);
 
     m_view = new GraphView(m_graphController->scene(), this);
+    m_view->setCenter(m_graphController->scene()->sceneRect().center());
     splitter->addWidget(m_view);
 
     // m_graphController = new GraphController(m_scene, this);
@@ -148,7 +149,7 @@ void GraphEditor::onClearRequestTrigger() {
 void GraphEditor::onPanRequestTrigger() {
     // resetuj stanje scene na podrazumevano
     m_graphController->scene()->resetScene();
-    m_view->setState(GraphView::State::PAN);
+    m_view->setState(GraphView::State::PAN_IDLE);
 }
 
 void GraphEditor::onZoomInRequestTrigger() {

@@ -6,7 +6,7 @@
 
 class GraphView : public QGraphicsView {
 public:
-    enum class State {IDLE, PAN, ZOOM_IN, ZOOM_OUT};
+    enum class State {IDLE, PAN_IDLE, PAN_ACTIVE, ZOOM_IN, ZOOM_OUT};
 
     explicit GraphView(QWidget* = nullptr);
     explicit GraphView(QGraphicsScene*, QWidget* = nullptr);
@@ -14,6 +14,9 @@ public:
     GraphView::State state() const;
     void setState(GraphView::State);
     void resetState();
+
+    QPointF center() const;
+    void setCenter(QPointF newCenter);
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
@@ -26,6 +29,10 @@ private:
 
     // inicijalna podesavanja
     void init();
+
+    // pan state (u koordinatama scene)
+    QPoint m_lastMousePos;
+    QPointF m_center;
 };
 
 #endif // GRAPH_VIEW
