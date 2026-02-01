@@ -57,6 +57,7 @@ public slots:
     void addEdgeNoHistory(unsigned, unsigned, int);
     void removeEdgeNoHistory(unsigned, unsigned);
     void setEdgeWeightNoHistory(unsigned, unsigned, int, const QString&);
+    void setNodeNameNoHistory(unsigned nodeId, const QString& name);
     void clearNoHistory();
 
     // kontroler je vlasnik i upravlja nad modelom i pogledom grafa

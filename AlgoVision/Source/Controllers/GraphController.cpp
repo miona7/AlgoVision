@@ -196,6 +196,37 @@ private:
     QString          m_beforeText, m_afterText;
 };
 
+class EditNodeNameCommand : public QUndoCommand {
+public:
+    EditNodeNameCommand(GraphController* c, unsigned nodeId, QString beforeName, QString afterName)
+        : m_c(c),
+          m_nodeId(nodeId),
+          m_beforeName(std::move(beforeName)),
+          m_afterName(std::move(afterName)) {
+        setText("Edit node name");
+    }
+
+    void redo() override {
+        if(m_c == nullptr) {
+            return;
+        }
+        m_c->setNodeNameNoHistory(m_nodeId, m_afterName);
+    }
+
+    void undo() override {
+        if(m_c == nullptr) {
+            return;
+        }
+        m_c->setNodeNameNoHistory(m_nodeId, m_beforeName);
+    }
+
+private:
+    GraphController* m_c;
+    unsigned         m_nodeId;
+    QString          m_beforeName;
+    QString          m_afterName;
+};
+
 GraphController::GraphController(QObject* parent) : QObject(parent) {
     m_undoStack = new QUndoStack(this);
     connectScene();
@@ -357,9 +388,28 @@ void GraphController::removeEdge(EdgeItem* edgeItem) {
 }
 
 void GraphController::editNodeName(const NodeItem* nodeItem, const QString& name) {
-    nodeItem->modelNode()->setName(name);
+    if(m_graph == nullptr || m_undoStack == nullptr) {
+        return;
+    }
+    if(nodeItem == nullptr || nodeItem->modelNode() == nullptr) {
+        return;
+    }
 
-    emit sceneModified();
+    const unsigned nodeId = nodeItem->modelNode()->getId();
+
+    Node* n = m_graph->getNode(nodeId);
+    if(n == nullptr) {
+        return;
+    }
+
+    const QString beforeName = n->getName();
+    const QString afterName  = name;
+
+    if(beforeName == afterName) {
+        return;
+    }
+
+    m_undoStack->push(new EditNodeNameCommand(this, nodeId, beforeName, afterName));
 }
 
 // ako korisnik unese nevalidnu tezinu grane, tezina grane se resetuje na prethodnu validnu
@@ -517,6 +567,26 @@ void GraphController::setEdgeWeightNoHistory(unsigned from, unsigned to, int wei
             w->centerText();
         }
         ei->adjustWeightGeometry();
+    }
+
+    emit sceneModified();
+}
+
+void GraphController::setNodeNameNoHistory(unsigned nodeId, const QString& name) {
+    if(m_graph == nullptr) {
+        return;
+    }
+
+    if(Node* n = m_graph->getNode(nodeId)) {
+        n->setName(name);
+    }
+
+    if(NodeItem* ni = m_scene->findNodeItemById(nodeId)) {
+        if(auto* lbl = ni->label()) {
+            lbl->setPlainText(name);
+            lbl->setOldText(name);
+            lbl->centerText();
+        }
     }
 
     emit sceneModified();
