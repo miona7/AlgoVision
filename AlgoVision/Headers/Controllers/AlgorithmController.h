@@ -7,6 +7,7 @@
 
 #include "AlgorithmStep.h"
 #include "AlgorithmStepApplier.h"
+#include "AlgorithmError.h"
 
 class AlgorithmController : public QObject {
     Q_OBJECT
@@ -23,6 +24,11 @@ public slots:
     void prevStep();
     void reset();
     bool isFinished() const;
+
+    void onAlgorithmError(const AlgorithmError& error);
+
+signals:
+    void requestErrorDialog(const AlgorithmError& error, bool allowContinue);
 
 private:
     // kontroler ne poseduje applier, samo ga koristi
