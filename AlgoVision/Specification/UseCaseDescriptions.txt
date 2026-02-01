@@ -8,7 +8,7 @@ UC1: Load graph
 – Korisnik 
 
 • Preduslovi:
-– Aplikacija je pokrenuta i prikazuje glavni prozor.
+– Aplikacija je pokrenuta i prikazuje glavni prozor. 
 – Korisnik ima pristup sistemu datoteka.
 
 • Postuslovi:
