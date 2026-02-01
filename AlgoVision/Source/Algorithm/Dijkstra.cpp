@@ -3,26 +3,38 @@
 Dijkstra::Dijkstra(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void Dijkstra::checkConditions(unsigned start) const {
-    if(!m_graph || m_graph->getNodes().empty()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError{
+            AlgorithmErrorType::GraphNotInitialized,
+            "Graph is not initialized or empty."
+        };
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        throw std::runtime_error("Start node does not exist in graph!");
+        return AlgorithmError{
+            AlgorithmErrorType::StartNodeMissing,
+            "Start node does not exist in the graph."
+        };
     }
 
     auto edges = m_graph->getEdges();
     for(const auto& [_, edge]: edges) {
         if(edge.getWeight() < 0) {
-            throw std::runtime_error("Graph contains edge with negative weight!");
+            return AlgorithmError{
+                AlgorithmErrorType::NegativeEdgeWeights,
+                "Graph contains edge with negative weight."
+            };
         }
     }
 }
 
-void Dijkstra::execute(unsigned idStartNode, unsigned) {
-    checkConditions(idStartNode);
+std::optional<AlgorithmError> Dijkstra::execute(unsigned idStartNode, unsigned) {
+    if(auto err = checkConditions(idStartNode)) {
+        return err;
+    }
+
     clearSteps();
     dijkstra(idStartNode);
 }
