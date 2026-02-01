@@ -7,6 +7,7 @@
 #include <memory>
 #include <stdexcept>
 #include <vector>
+#include <optional>
 
 #include "Algorithm.h"
 
@@ -14,8 +15,8 @@ class BellmanFord : public Algorithm {
 public:
     explicit BellmanFord(const std::shared_ptr<Graph>);
 
-    void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions(unsigned) const;
+    std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
     bool hasNegativeCycle() const;
 

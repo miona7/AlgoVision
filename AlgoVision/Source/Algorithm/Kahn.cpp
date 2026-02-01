@@ -3,24 +3,45 @@
 Kahn::Kahn(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void Kahn::checkConditions() const {
-    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> Kahn::checkConditions() const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError{
+            AlgorithmErrorType::GraphNotInitialized,
+            "Graph is not initialized or empty."
+        };
     }
+
+    if(!m_graph->isDirected()) {
+        return AlgorithmError{
+            AlgorithmErrorType::GraphTypeInvalid,
+            "Graph type is invalid."
+        };
+    }
+
+    return std::nullopt;
 }
 
-void Kahn::execute(unsigned, unsigned) {
-    checkConditions();
+std::optional<AlgorithmError> Kahn::execute(unsigned, unsigned) {
+    if(auto err = checkConditions()) {
+        return err;
+    }
+
     clearSteps();
-    kahn();
+
+    if(auto err = kahn()) {
+        return err;
+    }
+
     std::cout << "Topological order:" << std::endl;
     for(unsigned node: m_sorted) {
         std::cout << node << " ";
     }
     std::cout << std::endl;
+
+    return std::nullopt;
 }
 
-void Kahn::kahn() {
+std::optional<AlgorithmError> Kahn::kahn() {
     m_sorted.clear();
 
     auto                         nodes = m_graph->getNodes();
@@ -73,8 +94,13 @@ void Kahn::kahn() {
     }
 
     if(m_sorted.size() != nodes.size()) {
-        throw std::runtime_error("Graph contains a cycle, topological sort not possible!");
+        return AlgorithmError{
+            AlgorithmErrorType::GraphHasCycle,
+            "Graph contains a cycle."
+        };
     }
+
+    return std::nullopt;
 }
 
 const std::vector<unsigned>& Kahn::getSorted() const {

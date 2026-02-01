@@ -3,15 +3,28 @@
 Tarjan::Tarjan(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void Tarjan::checkConditions() const {
-    // usmereni graf postoji i ima bar 1 cvor
-    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> Tarjan::checkConditions() const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError{
+            AlgorithmErrorType::GraphNotInitialized,
+            "Graph is not initialized or empty."
+        };
     }
+
+    if(!m_graph->isDirected()) {
+        return AlgorithmError{
+            AlgorithmErrorType::GraphTypeInvalid,
+            "Graph type is invalid."
+        };
+    }
+
+    return std::nullopt;
 }
 
-void Tarjan::execute(unsigned, unsigned) {
-    checkConditions();
+std::optional<AlgorithmError> Tarjan::execute(unsigned, unsigned) {
+    if(auto err = checkConditions()) {
+        return err;
+    }
 
     clearSteps();
 
@@ -38,6 +51,8 @@ void Tarjan::execute(unsigned, unsigned) {
         }
         std::cout << std::endl;
     }
+
+    return std::nullopt;
 }
 
 void Tarjan::tarjan(unsigned nodeId, int& component) {

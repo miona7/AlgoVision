@@ -3,23 +3,35 @@
 BFS::BFS(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void BFS::checkConditions(unsigned start) const {
-    if(!m_graph || m_graph->getNodes().empty()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> BFS::checkConditions(unsigned start) const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError{
+            AlgorithmErrorType::GraphNotInitialized,
+            "Graph is not initialized or empty."
+        };
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        throw std::runtime_error("Start node does not exist in graph!");
+        return AlgorithmError{
+            AlgorithmErrorType::StartNodeMissing,
+            "Start node does not exist in the graph."
+        };
     }
+
+    return std::nullopt;
 }
 
-void BFS::execute(unsigned idStartNode, unsigned) {
-    checkConditions(idStartNode);
+std::optional<AlgorithmError> BFS::execute(unsigned idStartNode, unsigned) {
+    if(auto err = checkConditions(idStartNode)) {
+        return err;
+    }
 
     clearSteps();
 
     bfs(idStartNode);
+
+    return std::nullopt;
 }
 
 void BFS::bfs(unsigned start) {

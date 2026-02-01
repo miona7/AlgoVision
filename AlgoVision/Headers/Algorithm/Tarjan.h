@@ -7,6 +7,7 @@
 #include <stack>
 #include <stdexcept>
 #include <vector>
+#include <optional>
 
 #include "Algorithm.h"
 
@@ -14,8 +15,8 @@ class Tarjan : public Algorithm {
 public:
     explicit Tarjan(const std::shared_ptr<Graph>);
 
-    void checkConditions() const;
-    void execute(unsigned = 0, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions() const;
+    std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) override;
 
 private:
     int                      m_arrivalTime = 0;   // vreme dolaska

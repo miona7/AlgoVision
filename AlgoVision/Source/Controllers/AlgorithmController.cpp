@@ -65,3 +65,29 @@ void AlgorithmController::reset() {
 bool AlgorithmController::isFinished() const {
     return m_currentIndex + 1 >= m_steps.size();
 }
+
+void AlgorithmController::onAlgorithmError(const AlgorithmError& error) {
+    bool allowContinue = false;
+
+    switch (error.m_type) {
+    case AlgorithmErrorType::GraphTypeInvalid:
+    case AlgorithmErrorType::NegativeEdgeWeights:
+    case AlgorithmErrorType::NoPathFound:
+    case AlgorithmErrorType::GraphHasNegativeCycle:
+    case AlgorithmErrorType::GraphHasCycle:
+    case AlgorithmErrorType::GraphNotConnected:
+        // ove greške imaju smisla za Continue
+        allowContinue = true;
+        break;
+
+    case AlgorithmErrorType::GraphNotInitialized:
+    case AlgorithmErrorType::StartNodeMissing:
+    case AlgorithmErrorType::GoalNodeMissing:
+        // samo upozorenje
+        allowContinue = false;
+        break;
+    }
+
+    emit requestErrorDialog(error, allowContinue);
+}
+
