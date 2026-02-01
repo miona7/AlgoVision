@@ -52,6 +52,8 @@ std::optional<AlgorithmError> BellmanFord::execute(unsigned idStartNode, unsigne
     if(m_hasNegativeCycle) {
         std::cout << "Graph contains a negative cycle!" << std::endl;
     }
+
+    return std::nullopt;
 }
 
 void BellmanFord::bellmanFord(unsigned start) {
