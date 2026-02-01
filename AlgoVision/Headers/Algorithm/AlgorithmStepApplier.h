@@ -17,6 +17,10 @@ public:
     NodeState stepToNodeState(const StepType) const;
     EdgeState stepToEdgeState(const StepType) const;
 
+    void setGraph(std::shared_ptr<Graph>);
+
+    void resetGraphState();
+
 private:
     std::shared_ptr<Graph> m_graph;
 
