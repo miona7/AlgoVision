@@ -227,6 +227,46 @@ private:
     QString          m_afterName;
 };
 
+class AddNodeAndEdgeCommand : public QUndoCommand {
+public:
+    AddNodeAndEdgeCommand(GraphController* c, unsigned fromId, const QPointF& pos)
+        : m_c(c), m_fromId(fromId), m_pos(pos) {
+        setText("Add node and edge");
+    }
+
+    void redo() override {
+        if(m_c == nullptr) {
+            return;
+        }
+
+        if(!m_hasId) {
+            m_c->addNodeNoHistory(m_pos, m_newId);
+            m_hasId = true;
+        } else {
+            m_c->addNodeWithIdNoHistory(m_newId, m_pos);
+        }
+
+        m_c->addEdgeNoHistory(m_fromId, m_newId, 1);
+    }
+
+    void undo() override {
+        if(m_c == nullptr) {
+            return;
+        }
+
+        m_c->removeEdgeNoHistory(m_fromId, m_newId);
+        m_c->removeNodeNoHistory(m_newId);
+    }
+
+private:
+    GraphController* m_c;
+    unsigned         m_fromId;
+    QPointF          m_pos;
+
+    unsigned m_newId  = 0;
+    bool     m_hasId  = false;
+};
+
 GraphController::GraphController(QObject* parent) : QObject(parent) {
     m_undoStack = new QUndoStack(this);
     connectScene();
@@ -334,19 +374,16 @@ void GraphController::addNode(const QPointF& position) {
 }
 
 void GraphController::addNodeAndEdge(const QPointF& point, NodeItem* selectedNodeItem) {
-    if(selectedNodeItem == nullptr) {
+    if(m_graph == nullptr || m_undoStack == nullptr) {
+        return;
+    }
+    if(selectedNodeItem == nullptr || selectedNodeItem->modelNode() == nullptr) {
         return;
     }
 
-    // prvo dodajemo u model
-    Node* nodeModel = m_graph->addNode(point.x(), point.y());
-    unsigned srcId = selectedNodeItem->modelNode()->getId(); // fromID
-    unsigned destId = nodeModel->getId(); // toID
-    m_graph->addEdge(srcId, destId);
+    const unsigned fromId = selectedNodeItem->modelNode()->getId();
 
-    // onda dodajemo u pogled
-    Edge* edgeModel = m_graph->getEdge(srcId, destId);
-    m_scene->addNodeAndEdge(nodeModel, edgeModel, m_graph->isDirected(), m_graph->isWeighted());
+    m_undoStack->push(new AddNodeAndEdgeCommand(this, fromId, point));
 }
 
 void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
