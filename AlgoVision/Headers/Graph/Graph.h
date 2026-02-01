@@ -36,10 +36,14 @@ public:
     Node*       getNode(unsigned);
     const Node* getNode(unsigned) const;
 
+    std::vector<Node*> getNodesMutable();
+
     Edge*       getEdge(unsigned);
     const Edge* getEdge(unsigned) const;
     Edge*       getEdge(unsigned, unsigned);
     const Edge* getEdge(unsigned, unsigned) const;
+
+    std::vector<Edge*> getEdgesMutable();
 
     QVariant toVariant() const override;
     void     fromVariant(const QVariant&) override;

@@ -15,15 +15,15 @@
 #include <QStandardItemModel>
 #include <QAbstractItemView>
 
-AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
+AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWidget* parent)
     : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startRow(new QWidget(this)),
       m_startLabel(new QLabel("start node:", this)), m_startNodeEdit(new QLineEdit(this)),
       m_endRow(new QWidget(this)), m_endLabel(new QLabel("end node:", this)),
       m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
       m_helpBtn(new QPushButton("help", this)), m_prevBtn(new QToolButton(this)),
       m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),
-      m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)), m_graph(graph),
-      m_applier(m_graph), m_algorithmController(m_applier) {
+      m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)), m_graphController(graphController),
+      m_applier(m_graphController->graph()), m_algorithmController(m_applier) {
 
     m_legendContainer = new QWidget;
     m_legendLayout    = new QVBoxLayout(m_legendContainer);
@@ -66,6 +66,9 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
 
         if(needNewRun || m_state == RunState::Idle || m_state == RunState::Finished) {
 
+            m_applier.resetGraphState();
+            m_algorithmController.clear();
+
             // reset legend (da ne bude duplo)
             updateLegendForAlgorithm(newConfig.m_algorithmName);
 
@@ -77,10 +80,14 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
                 m_worker = nullptr;
             }
 
-            m_algorithmController.reset(); // vrati graf u pocetno stanje
+            auto graph = m_graphController->graph();
+            m_applier.setGraph(graph);
+
+            // m_algorithmController.clear();
+            // m_algorithmController.reset(); // vrati graf u pocetno stanje
             m_currentConfig = newConfig;
 
-            m_worker = new AlgorithmWorker(newConfig.m_algorithmName, m_graph,
+            m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph,
                                            newConfig.m_startNode, newConfig.m_endNode);
 
                    // pokreni iscrtavanje kad nit zavrsi
@@ -97,8 +104,9 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
             connect(m_worker, &AlgorithmWorker::resultReady, &m_algorithmController,
                     &AlgorithmController::setResultString);
 
+            m_state = RunState::Idle;
             m_worker->start();
-            m_state = RunState::Playing;
+            // m_state = RunState::Playing;
             return;
         }
 
@@ -300,12 +308,12 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
     m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
 
-    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A*" || name == "Floyd-Warshall" ||
-       name == "Prim") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::magenta, "Distance updated"));
+    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" || name == "Floyd-Warshall" ||
+       name == "Prim" || name == "Tarjan") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::darkMagenta, "Distance updated"));
     }
 
-    if(name == "A*") {
+    if(name == "A* (Euclidean heuristic)") {
         m_legendLayout->addWidget(makeLegendItem(Qt::green, "In final path"));
     }
 
@@ -327,7 +335,7 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     }
 
            // A* ima crvenu granu = u konačnoj putanji
-    if(name == "A*") {
+    if(name == "A* (Euclidean heuristic)") {
         m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
     }
 
@@ -363,9 +371,9 @@ void AlgorithmTab::initIcons() {
 void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
     const bool needsStart = algorithmName == "BFS" || algorithmName == "DFS" ||
                             algorithmName == "Dijkstra" || algorithmName == "Bellman-Ford" ||
-                            algorithmName == "A*";
+                            algorithmName == "A* (Euclidean heuristic)";
 
-    const bool needsEnd = algorithmName == "A*";
+    const bool needsEnd = algorithmName == "A* (Euclidean heuristic)";
 
            // show/hide whole rows
     if(!needsStart && !needsEnd) {
@@ -437,17 +445,4 @@ void AlgorithmTab::startTimerForPlay() {
     }
 
     m_timer->start(500); // 500ms po koraku
-
-    if(m_algorithmController.isFinished()) {
-        m_timer->stop();
-        m_state = RunState::Finished;
-
-        QString result = m_algorithmController.resultString();
-        if(!result.isEmpty()) {
-            m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
-            m_legendLayout->addWidget(new QLabel(result));
-        }
-        m_algorithmController.clear();
-        return;
-    }
 }
