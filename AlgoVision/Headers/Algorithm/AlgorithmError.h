@@ -11,7 +11,8 @@ enum class AlgorithmErrorType {
     NegativeEdgeWeights,
     NoPathFound,
     GraphHasNegativeCycle,
-    GraphHasCycle
+    GraphHasCycle,
+    GraphNotConnected
 };
 
 struct AlgorithmError {
