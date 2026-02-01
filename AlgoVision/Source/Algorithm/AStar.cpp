@@ -48,7 +48,9 @@ std::optional<AlgorithmError> AStar::execute(unsigned start, unsigned goal) {
 
     clearSteps();
 
-    aStar(start, goal);
+    if(auto err = aStar(start, goal)) {
+        return err;
+    }
 
     std::cout << "Path: ";
     for(int i = 0; i < m_path.size(); i++) {
@@ -58,6 +60,7 @@ std::optional<AlgorithmError> AStar::execute(unsigned start, unsigned goal) {
         }
     }
     std::cout << std::endl << "Total cost: " << m_totalCost << std::endl;
+
     return std::nullopt;
 }
 
