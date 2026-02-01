@@ -82,6 +82,7 @@ void GraphView::mouseDoubleClickEvent(QMouseEvent* event) {
 }
 
 void GraphView::init() {
+    setRenderHint(QPainter::Antialiasing);
     setAlignment(Qt::AlignCenter);
     setTransformationAnchor(QGraphicsView::AnchorViewCenter);
     setResizeAnchor(QGraphicsView::AnchorViewCenter);
