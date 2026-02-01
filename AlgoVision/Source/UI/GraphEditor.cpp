@@ -73,7 +73,7 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     m_editTab = new GraphEditTab(rightTabs);
 
     rightTabs->addTab(m_editTab, "graph");
-    rightTabs->addTab(new AlgorithmTab(m_graphController->graph(), rightTabs), "algorithm");
+    rightTabs->addTab(new AlgorithmTab(m_graphController, rightTabs), "algorithm");
 
     splitter->addWidget(rightTabs);
 

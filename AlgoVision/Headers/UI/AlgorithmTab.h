@@ -13,6 +13,7 @@
 
 #include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
+#include "GraphController.h"
 
 class QComboBox;
 class QLabel;
@@ -24,7 +25,7 @@ class AlgorithmTab : public QWidget {
     Q_OBJECT
 
 public:
-    explicit AlgorithmTab(std::shared_ptr<Graph>, QWidget* = nullptr);
+    explicit AlgorithmTab(std::shared_ptr<GraphController>, QWidget* = nullptr);
     ~AlgorithmTab() override = default;
 
 private:
@@ -66,7 +67,8 @@ private:
     QToolButton* m_nextBtn;
     QToolButton* m_restartBtn;
 
-    std::shared_ptr<Graph>         m_graph;
+    // std::shared_ptr<Graph>         m_prevGraph;
+    std::shared_ptr<GraphController> m_graphController;
     AlgorithmStepApplier           m_applier;
     AlgorithmController            m_algorithmController;
     AlgorithmWorker*               m_worker = nullptr;
