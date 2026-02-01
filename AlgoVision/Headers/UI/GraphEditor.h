@@ -9,6 +9,7 @@
 #include "GraphController.h"
 #include "GraphScene.h"
 
+class GraphView;
 class QUndoStack;
 class GraphEditTab;
 class QLabel;
@@ -33,7 +34,7 @@ private:
     QUndoStack*                      m_undoStack       = nullptr;
     GraphEditTab*                    m_editTab         = nullptr;
     QLabel*                          m_leftPlaceholder = nullptr;
-    QGraphicsView*                   m_view            = nullptr;
+    GraphView*                       m_view            = nullptr;
     std::shared_ptr<GraphController> m_graphController;
 
     int m_dummyState = 0; // samo za test
