@@ -30,7 +30,10 @@ std::optional<AlgorithmError> BellmanFord::checkConditions(unsigned start) const
 }
 
 std::optional<AlgorithmError> BellmanFord::execute(unsigned idStartNode, unsigned) {
-    checkConditions(idStartNode);
+
+    if(auto err = checkConditions(idStartNode)) {
+        return err;
+    }
 
     clearSteps();
 
