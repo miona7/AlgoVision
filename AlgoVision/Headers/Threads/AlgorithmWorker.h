@@ -21,6 +21,7 @@
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
+#include "AlgorithmError.h"
 
 class AlgorithmWorker : public QThread {
     Q_OBJECT
@@ -29,6 +30,7 @@ public:
 
 signals:
     void stepsReady(const std::vector<AlgorithmStep>&);
+    void algorithmErrorOccurred(const AlgorithmError&);
 
 protected:
     void run() override;
