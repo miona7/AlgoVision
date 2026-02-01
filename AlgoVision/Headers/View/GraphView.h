@@ -19,6 +19,7 @@ protected:
     void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
     GraphView::State m_state {GraphView::State::IDLE};

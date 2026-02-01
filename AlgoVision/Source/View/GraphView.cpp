@@ -55,11 +55,30 @@ void GraphView::mousePressEvent(QMouseEvent* event) {
 }
 
 void GraphView::mouseMoveEvent(QMouseEvent* event) {
+    if (m_state != GraphView::State::IDLE) {
+        event->accept();
+        return;
+    }
+
     QGraphicsView::mouseMoveEvent(event);
 }
 
 void GraphView::mouseReleaseEvent(QMouseEvent* event) {
+    if (m_state != GraphView::State::IDLE) {
+        event->accept();
+        return;
+    }
+
     QGraphicsView::mouseReleaseEvent(event);
+}
+
+void GraphView::mouseDoubleClickEvent(QMouseEvent* event) {
+    if (m_state != GraphView::State::IDLE) {
+        event->accept();
+        return;
+    }
+
+    QGraphicsView::mouseDoubleClickEvent(event);
 }
 
 void GraphView::init() {
