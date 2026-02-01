@@ -310,10 +310,10 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
 
     if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A*" || name == "Floyd-Warshall" ||
        name == "Prim") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::magenta, "Distance updated"));
+        m_legendLayout->addWidget(makeLegendItem(Qt::darkMagenta, "Distance updated"));
     }
 
-    if(name == "A*") {
+    if(name == "A* (Euclidean heuristic)") {
         m_legendLayout->addWidget(makeLegendItem(Qt::green, "In final path"));
     }
 
@@ -335,7 +335,7 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     }
 
            // A* ima crvenu granu = u konačnoj putanji
-    if(name == "A*") {
+    if(name == "A* (Euclidean heuristic)") {
         m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
     }
 
@@ -371,9 +371,9 @@ void AlgorithmTab::initIcons() {
 void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
     const bool needsStart = algorithmName == "BFS" || algorithmName == "DFS" ||
                             algorithmName == "Dijkstra" || algorithmName == "Bellman-Ford" ||
-                            algorithmName == "A*";
+                            algorithmName == "A* (Euclidean heuristic)";
 
-    const bool needsEnd = algorithmName == "A*";
+    const bool needsEnd = algorithmName == "A* (Euclidean heuristic)";
 
            // show/hide whole rows
     if(!needsStart && !needsEnd) {

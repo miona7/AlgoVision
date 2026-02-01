@@ -9,7 +9,7 @@ void AlgorithmWorker::run() {
     std::vector<AlgorithmStep> steps;
     Algorithm*                 algo = nullptr;
 
-    if(m_algorithm == "A*") {
+    if(m_algorithm == "A* (Euclidean heuristic)") {
         algo = new AStar(m_graph);
         algo->execute(m_start, m_end);
     } else if(m_algorithm == "BFS") {
