@@ -17,12 +17,14 @@ void Tarjan::execute(unsigned, unsigned) {
 
     init();
 
-    int  component = 0;
+    // int  component = 0;
+    // m_numComponents = 0;
     auto nodes     = m_graph->getNodes();
     for(const auto& [id, node]: nodes) {
         if(m_components[id] == -1) {
-            m_sccCount++;
-            tarjan(id, component);
+            // m_sccCount++;
+            // tarjan(id, component);
+            tarjan(id);
         }
     }
 
@@ -41,7 +43,7 @@ void Tarjan::execute(unsigned, unsigned) {
     }
 }
 
-void Tarjan::tarjan(unsigned nodeId, int& component) {
+void Tarjan::tarjan(unsigned nodeId) {
     m_incomingNumbering[nodeId] = m_lowLink[nodeId] = m_arrivalTime++;
     {
         AlgorithmStep s;
@@ -79,7 +81,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 addStep(s);
             }
             if(m_incomingNumbering[neighbourId] == -1) {
-                tarjan(neighbourId, component);
+                // tarjan(neighbourId, component);
+                tarjan(neighbourId);
                 int oldLow        = m_lowLink[nodeId];
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_lowLink[neighbourId]);
                 if(m_lowLink[nodeId] != oldLow) {
@@ -114,28 +117,32 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 AlgorithmStep s;
                 s.m_type  = StepType::AssignComponent;
                 s.m_node  = componentNodeId;
-                s.m_value = component;
+                s.m_value = m_numComponents; // component;
                 addStep(s);
             }
 
-            m_components[componentNodeId] = component;
+            // m_components[componentNodeId] = component;
+            m_components[componentNodeId] = m_numComponents;
             m_onStack[componentNodeId]    = false;
 
             Node* node = m_graph->getNode(componentNodeId);
             if(node != nullptr) {
-                node->setComponentColor(component);
+                // node->setComponentColor(component);
+                node->setComponentColor(m_numComponents);
             }
 
             if(componentNodeId == nodeId) {
                 break;
             }
         }
-        component++;
+        // component++;
+        m_numComponents++;
     }
 }
 
 void Tarjan::init() {
     m_arrivalTime = 0;
+    m_numComponents = 0;
 
     m_incomingNumbering.clear();
     m_lowLink.clear();
@@ -156,5 +163,6 @@ void Tarjan::init() {
 }
 
 QString Tarjan::resultString() const {
-    return QString("Number of SCC: %1").arg(m_sccCount);
+    // return QString("Number of SCC: %1").arg(m_sccCount);
+    return QString("Number of SCC: %1").arg(m_numComponents);
 }

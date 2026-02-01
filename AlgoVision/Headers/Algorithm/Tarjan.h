@@ -18,7 +18,7 @@ public:
     void    execute(unsigned = 0, unsigned = 0) override;
     QString resultString() const override;
 
-    int m_sccCount = 0;
+    // int m_sccCount = 0;
 
 private:
     int                      m_arrivalTime = 0;   // vreme dolaska
@@ -27,8 +27,9 @@ private:
     std::stack<unsigned>     m_tourOrder;         // redosled u obilasku
     std::map<unsigned, bool> m_onStack;
     std::map<unsigned, int>  m_components; // id cvora -> komponenta kojoj pripada
+    int m_numComponents = 0; // broj komponenti povezanosti
 
-    void tarjan(unsigned, int&);
+    void tarjan(unsigned);
     void init();
 };
 
