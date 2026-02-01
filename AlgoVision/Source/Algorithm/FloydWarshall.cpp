@@ -17,6 +17,8 @@ std::optional<AlgorithmError> FloydWarshall::checkConditions() const {
             "Graph type is invalid."
         };
     }
+
+    return std::nullopt;
 }
 
 std::optional<AlgorithmError> FloydWarshall::execute(unsigned, unsigned) {
