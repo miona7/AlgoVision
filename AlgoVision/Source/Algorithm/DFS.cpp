@@ -36,6 +36,8 @@ std::optional<AlgorithmError> DFS::execute(unsigned idStartNode, unsigned) {
     }
 
     dfs(idStartNode);
+
+    return std::nullopt;
 }
 
 void DFS::dfs(unsigned nodeId) {
