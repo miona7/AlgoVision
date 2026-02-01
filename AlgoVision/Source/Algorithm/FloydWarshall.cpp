@@ -140,7 +140,7 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
     for(const auto& [i, _]: nodes) {
         if(m_distances[i][i] < 0) {
             return AlgorithmError{
-                AlgorithmErrorType::NegativeCycle,
+                AlgorithmErrorType::GraphHasNegativeCycle,
                 "Graph contains a negative cycle."
             };
         }

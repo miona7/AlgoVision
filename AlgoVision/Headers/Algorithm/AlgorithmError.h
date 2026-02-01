@@ -10,7 +10,7 @@ enum class AlgorithmErrorType {
     GoalNodeMissing,
     NegativeEdgeWeights,
     NoPathFound,
-    NegativeCycle,
+    GraphHasNegativeCycle,
     GraphHasCycle
 };
 
