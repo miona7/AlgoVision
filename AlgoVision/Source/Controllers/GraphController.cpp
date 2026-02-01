@@ -292,6 +292,7 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::editEdgeWeightRequest, this,
             &GraphController::editEdgeWeight);
     connect(m_scene.get(), &GraphScene::moveNodeRequest, this, &GraphController::moveNode);
+    connect(m_scene.get(), &GraphScene::addNodeAndEdgeRequest, this, &GraphController::addNodeAndEdge);
 }
 
 void GraphController::addNode(const QPointF& position) {
@@ -299,6 +300,22 @@ void GraphController::addNode(const QPointF& position) {
         return;
     }
     m_undoStack->push(new AddNodeCommand(this, position));
+}
+
+void GraphController::addNodeAndEdge(const QPointF& point, NodeItem* selectedNodeItem) {
+    if(selectedNodeItem == nullptr) {
+        return;
+    }
+
+    // prvo dodajemo u model
+    Node* nodeModel = m_graph->addNode(point.x(), point.y());
+    unsigned srcId = selectedNodeItem->modelNode()->getId(); // fromID
+    unsigned destId = nodeModel->getId(); // toID
+    m_graph->addEdge(srcId, destId);
+
+    // onda dodajemo u pogled
+    Edge* edgeModel = m_graph->getEdge(srcId, destId);
+    m_scene->addNodeAndEdge(nodeModel, edgeModel, m_graph->isDirected(), m_graph->isWeighted());
 }
 
 void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
