@@ -28,6 +28,8 @@ std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
             };
         }
     }
+
+    return std::nullopt;
 }
 
 std::optional<AlgorithmError> Dijkstra::execute(unsigned idStartNode, unsigned) {
@@ -37,6 +39,8 @@ std::optional<AlgorithmError> Dijkstra::execute(unsigned idStartNode, unsigned) 
 
     clearSteps();
     dijkstra(idStartNode);
+
+    return std::nullopt;
 }
 
 void Dijkstra::dijkstra(unsigned start) {
