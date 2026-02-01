@@ -17,6 +17,8 @@ std::optional<AlgorithmError> Tarjan::checkConditions() const {
             "Graph type is invalid."
         };
     }
+
+    return std::nullopt;
 }
 
 std::optional<AlgorithmError> Tarjan::execute(unsigned, unsigned) {
