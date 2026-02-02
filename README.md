@@ -17,8 +17,8 @@ AlgoVision trenutno podržava sledeće grafovske algoritme:
 - 📏 Dijkstra
 - 🔁 Bellman–Ford
 - 🔄 Floyd–Warshall
-- 🌲 Prim 
 - 🧩 Kahn (Topološko sortiranje)
+- 🌲 Prim (Minimalno razapinjuće stablo)
 - ⛓️ Tarjan za jake komponente povezanosti
 
 ---
@@ -37,23 +37,23 @@ Ovakav način rada omogućava detaljno razumevanje svakog algoritma i lak povrat
 
 ---
 
-## 🎹 Prečice (Shortcuts)
+## 🎹 Prečice
 
 Da bi rad sa aplikacijom bio brži i efikasniji, podržane su sledeće prečice na tastaturi:
 
-| Akcija               | Shortcut       |
-|----------------------|----------------|
-| Kreiraj graf         | Ctrl + N       |
-| Otvori graf          | Ctrl + O       |
-| Sačuvaj graf         | Ctrl + S       |
-| Sačuvaj sliku grafa  | Ctrl + I       |
-| Promeni temu         | Ctrl + T       |
-| Pomoć                | Ctrl + H       |
-| Undo                 | Ctrl + Z       |
-| Redo                 | Ctrl + Y       |
-| Pan                  | Ctrl + P       |
-| Zoom in              | Ctrl + +       |
-| Zoom out             | Ctrl + -       |
+| Akcija           | Prečica        |
+|------------------|----------------|
+| Create graph     | Ctrl + N       |
+| Open graph       | Ctrl + O       |
+| Save graph       | Ctrl + S       |
+| Save image       | Ctrl + I       |
+| Change theme     | Ctrl + T       |
+| Help             | Ctrl + H       |
+| Undo             | Ctrl + Z       |
+| Redo             | Ctrl + Y       |
+| Pan              | Ctrl + P       |
+| Zoom in          | Ctrl + +       |
+| Zoom out         | Ctrl + -       |
 
 ---
 
