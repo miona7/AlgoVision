@@ -28,6 +28,8 @@ SpaceBeforeParensOptions:
 # razmaci oko operatora
 SpaceBeforeAssignmentOperators: true
 # SpaceAroundOperators: true
+SpaceAfterComma: true
+SpaceBeforeComma: false
 
 BraceWrapping:
   AfterControlStatement: false
