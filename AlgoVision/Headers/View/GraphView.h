@@ -15,7 +15,6 @@ public:
     void setState(GraphView::State);
     void resetState();
 
-public slots:
     void zoomIn();
     void zoomOut();
 
