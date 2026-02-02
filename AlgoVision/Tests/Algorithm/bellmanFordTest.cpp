@@ -5,6 +5,60 @@
 #include "UnweightedDirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 
+static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
+    REQUIRE_FALSE(err.has_value());
+}
+
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+    REQUIRE(err.has_value());
+    REQUIRE(err->m_type == expectedType);
+    REQUIRE(err->m_message == expectedMessage);
+}
+
+TEST_CASE("Bellman-Ford throws on invalid start node", "[BELLMAN_FORD]") {
+    auto g = std::make_shared<WeightedDirectedGraph>();
+
+    g->addNode(1);
+    g->addNode(2);
+    g->addEdge(1, 2, 5);
+
+    BellmanFord bf(g);
+    auto err = bf.execute(0);
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing, "Start node does not exist in the graph.");
+}
+
+TEST_CASE("Bellman-Ford throws on unweighted graph", "[BELLMAN_FORD]") {
+    auto g = std::make_shared<UnweightedDirectedGraph>();
+
+    g->addNode(1);
+    g->addNode(2);
+    g->addEdge(1, 2);
+
+    BellmanFord bf(g);
+    auto err = bf.execute(1);
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
+}
+
+TEST_CASE("Bellman-Ford detects negative cycle", "[BELLMAN_FORD]") {
+    auto g = std::make_shared<WeightedDirectedGraph>();
+
+    g->addNode(1);
+    g->addNode(2);
+    g->addNode(3);
+
+    g->addEdge(1, 2, 1);
+    g->addEdge(2, 3, -1);
+    g->addEdge(3, 1, -1);
+
+    BellmanFord bf(g);
+    auto err = bf.execute(1);
+
+    REQUIRE_SUCCESS(err);
+    REQUIRE(bf.hasNegativeCycle());
+}
+
 static const char* stepTypeToString(StepType t) {
     switch(t) {
     case StepType::VisitNode:
@@ -28,7 +82,8 @@ void runBellmanFordLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNo
                                                  StepType::ExamineEdge, StepType::RelaxEdge,
                                                  StepType::UpdateDistance};
 
-    REQUIRE_NOTHROW(bf.execute(startNode));
+    auto err = bf.execute(startNode);
+    REQUIRE_SUCCESS(err);
 
     const auto& steps = bf.getSteps();
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
@@ -79,44 +134,5 @@ TEST_CASE("Bellman-Ford on weighted directed graph", "[BELLMAN_FORD]") {
     g->addEdge(4, 2, -2);
     g->addEdge(5, 4, 7);
 
-    REQUIRE_NOTHROW(runBellmanFordLoggingTest(g, 1));
-}
-
-TEST_CASE("Bellman-Ford throws on invalid start node", "[BELLMAN_FORD]") {
-    auto g = std::make_shared<WeightedDirectedGraph>();
-
-    g->addNode(1);
-    g->addNode(2);
-    g->addEdge(1, 2, 5);
-
-    BellmanFord bf(g);
-    REQUIRE_THROWS_AS(bf.execute(0), std::runtime_error);
-}
-
-TEST_CASE("Bellman-Ford throws on unweighted graph", "[BELLMAN_FORD]") {
-    auto g = std::make_shared<UnweightedDirectedGraph>();
-
-    g->addNode(1);
-    g->addNode(2);
-    g->addEdge(1, 2);
-
-    BellmanFord bf(g);
-    REQUIRE_THROWS_AS(bf.execute(1), std::runtime_error);
-}
-
-TEST_CASE("Bellman-Ford detects negative cycle", "[BELLMAN_FORD]") {
-    auto g = std::make_shared<WeightedDirectedGraph>();
-
-    g->addNode(1);
-    g->addNode(2);
-    g->addNode(3);
-
-    g->addEdge(1, 2, 1);
-    g->addEdge(2, 3, -1);
-    g->addEdge(3, 1, -1);
-
-    BellmanFord bf(g);
-    bf.execute(1);
-
-    REQUIRE(bf.hasNegativeCycle());
+    runBellmanFordLoggingTest(g, 1);
 }
