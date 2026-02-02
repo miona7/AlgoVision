@@ -25,6 +25,14 @@ void GraphView::resetState() {
     m_state = GraphView::State::IDLE;
 }
 
+void GraphView::zoomIn() {
+    scale(m_zoomFactor, m_zoomFactor);
+}
+
+void GraphView::zoomOut() {
+    scale(1.0 / m_zoomFactor, 1.0 / m_zoomFactor);
+}
+
 
 void GraphView::mousePressEvent(QMouseEvent* event) {
     if (m_state == GraphView::State::PAN_IDLE) {

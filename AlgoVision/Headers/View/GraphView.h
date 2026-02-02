@@ -15,6 +15,10 @@ public:
     void setState(GraphView::State);
     void resetState();
 
+public slots:
+    void zoomIn();
+    void zoomOut();
+
 protected:
     void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
@@ -29,6 +33,7 @@ private:
 
     // pan state (u koordinatama scene)
     QPoint m_lastMousePos;
+    qreal m_zoomFactor {1.15};
 };
 
 #endif // GRAPH_VIEW

@@ -105,9 +105,9 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
 
     connect(m_editTab, &GraphEditTab::panRequested, this, &GraphEditor::onPanRequestTrigger);
 
-    connect(m_editTab, &GraphEditTab::zoomInRequested, this, &GraphEditor::onZoomInRequestTrigger);
+    connect(m_editTab, &GraphEditTab::zoomInRequested, m_view, &GraphView::zoomIn);
 
-    connect(m_editTab, &GraphEditTab::zoomOutRequested, this, &GraphEditor::onZoomOutRequestTrigger);
+    connect(m_editTab, &GraphEditTab::zoomOutRequested, m_view, &GraphView::zoomOut);
     // Dummy test
     // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
     //     const int before = m_dummyState;
