@@ -1,5 +1,6 @@
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QShortcut>
 #include <QSplitter>
 #include <QTabWidget>
 #include <QUndoCommand>
@@ -88,6 +89,20 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // layout for the whole GraphEditor
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(splitter);
+
+    // keyboard shortcuts
+
+    // pan: Ctrl + P
+    QShortcut* panShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_P), this);
+    connect(panShortcut, &QShortcut::activated, this, &GraphEditor::onPanRequestTrigger);
+
+    // zoom in: Ctrl + '+'
+    QShortcut* zoomInShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Plus), this);
+    connect(zoomInShortcut, &QShortcut::activated, this, &GraphEditor::onZoomInRequestTrigger);
+
+    // zoom out: Ctrl + '-'
+    QShortcut* zoomOutShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), this);
+    connect(zoomOutShortcut, &QShortcut::activated, this, &GraphEditor::onZoomOutRequestTrigger);
 
     connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
 
