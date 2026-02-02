@@ -38,6 +38,7 @@ set(PROJECT_SOURCES
         Headers/Graph/WeightedDirectedGraph.h Source/Graph/WeightedDirectedGraph.cpp
 
         Headers/Algorithm/AlgorithmStep.h
+        Headers/Algorithm/AlgorithmError.h
         Headers/Algorithm/AlgorithmStepApplier.h Source/Algorithm/AlgorithmStepApplier.cpp
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
@@ -66,6 +67,7 @@ set(PROJECT_SOURCES
         Headers/View/DirectedEdgeItem.h Source/View/DirectedEdgeItem.cpp
         Headers/View/GraphScene.h Source/View/GraphScene.cpp
         Headers/View/EditableTextItem.h Source/View/EditableTextItem.cpp
+        Headers/View/GraphView.h Source/View/GraphView.cpp
 
         Headers/Controllers/GraphController.h Source/Controllers/GraphController.cpp
         Headers/Controllers/AlgorithmController.h Source/Controllers/AlgorithmController.cpp

@@ -6,6 +6,7 @@
 
 #include "AStar.h"
 #include "AlgorithmController.h"
+#include "AlgorithmError.h"
 #include "AlgorithmStep.h"
 #include "AlgorithmStepApplier.h"
 #include "BFS.h"
@@ -30,6 +31,7 @@ public:
 signals:
     void stepsReady(const std::vector<AlgorithmStep>&);
     void resultReady(const QString&);
+    void algorithmErrorOccurred(const AlgorithmError&);
 
 protected:
     void run() override;

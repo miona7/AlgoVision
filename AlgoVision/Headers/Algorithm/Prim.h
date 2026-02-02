@@ -14,8 +14,9 @@ class Prim : public Algorithm {
 public:
     explicit Prim(const std::shared_ptr<Graph>);
 
-    void    checkConditions() const;
-    void    execute(unsigned = 0, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions() const;
+    std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) override;
+
     QString resultString() const override;
 
 private:

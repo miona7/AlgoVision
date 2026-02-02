@@ -4,6 +4,7 @@
 #include <QObject>
 #include <vector>
 
+#include "AlgorithmError.h"
 #include "AlgorithmStep.h"
 #include "AlgorithmStepApplier.h"
 
@@ -24,6 +25,11 @@ public slots:
     void reset();
     bool isFinished() const;
     void setResultString(const QString&);
+
+    void onAlgorithmError(const AlgorithmError& error);
+
+signals:
+    void requestErrorDialog(const AlgorithmError& error, bool allowContinue);
 
 private:
     // kontroler ne poseduje applier, samo ga koristi

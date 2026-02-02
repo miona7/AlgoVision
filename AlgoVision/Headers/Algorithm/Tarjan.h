@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <optional>
 #include <stack>
 #include <stdexcept>
 #include <vector>
@@ -14,11 +15,10 @@ class Tarjan : public Algorithm {
 public:
     explicit Tarjan(const std::shared_ptr<Graph>);
 
-    void    checkConditions() const;
-    void    execute(unsigned = 0, unsigned = 0) override;
-    QString resultString() const override;
+    std::optional<AlgorithmError> checkConditions() const;
+    std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) override;
 
-    // int m_sccCount = 0;
+    QString resultString() const override;
 
 private:
     int                      m_arrivalTime = 0;   // vreme dolaska

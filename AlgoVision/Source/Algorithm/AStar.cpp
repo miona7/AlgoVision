@@ -3,33 +3,45 @@
 AStar::AStar(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void AStar::checkConditions(unsigned start, unsigned goal) const {
-    if(!m_graph || m_graph->getNodes().empty()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> AStar::checkConditions(unsigned start, unsigned goal) const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        throw std::runtime_error("Start node does not exist in graph!");
+        return AlgorithmError {AlgorithmErrorType::StartNodeMissing,
+                               "Start node does not exist in the graph."};
     }
+
     if(nodes.find(goal) == nodes.end()) {
-        throw std::runtime_error("Goal node does not exist in graph!");
+        return AlgorithmError {AlgorithmErrorType::GoalNodeMissing,
+                               "Goal node does not exist in the graph."};
     }
 
     auto edges = m_graph->getEdges();
     for(const auto& [id, edge]: edges) {
         if(edge.getWeight() < 0) {
-            throw std::runtime_error("Graph contains negative edge weights!");
+            return AlgorithmError {AlgorithmErrorType::NegativeEdgeWeights,
+                                   "A* cannot be applied to graphs with negative edge weights."};
         }
     }
+
+    return std::nullopt;
 }
 
-void AStar::execute(unsigned start, unsigned goal) {
-    checkConditions(start, goal);
+std::optional<AlgorithmError> AStar::execute(unsigned start, unsigned goal) {
+
+    if(auto err = checkConditions(start, goal)) {
+        return err;
+    }
 
     clearSteps();
 
-    aStar(start, goal);
+    if(auto err = aStar(start, goal)) {
+        return err;
+    }
 
     std::cout << "Path: ";
     for(int i = 0; i < m_path.size(); i++) {
@@ -39,9 +51,11 @@ void AStar::execute(unsigned start, unsigned goal) {
         }
     }
     std::cout << std::endl << "Total cost: " << m_totalCost << std::endl;
+
+    return std::nullopt;
 }
 
-void AStar::aStar(unsigned start, unsigned goal) {
+std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
     m_path.clear();
     std::map<unsigned, int> gScore; // stvarni trosak puta od startnog do trenutnog cvora
     std::map<unsigned, int> fScore; // procena ukupnog troska od startnog do ciljnog preko trenutnog
@@ -60,9 +74,8 @@ void AStar::aStar(unsigned start, unsigned goal) {
 
     {
         AlgorithmStep s;
-        s.m_type  = StepType::UpdateDistance;
-        s.m_node  = start;
-        s.m_value = fScore[start];
+        s.m_type = StepType::UpdateDistance;
+        s.m_node = start;
         addStep(s);
     }
 
@@ -130,7 +143,7 @@ void AStar::aStar(unsigned start, unsigned goal) {
             }
 
             std::reverse(m_path.begin(), m_path.end());
-            return;
+            return std::nullopt;
         }
 
         if(adjList.find(current) != adjList.end()) {
@@ -155,9 +168,8 @@ void AStar::aStar(unsigned start, unsigned goal) {
 
                         {
                             AlgorithmStep s;
-                            s.m_type  = StepType::UpdateDistance;
-                            s.m_node  = neighbour;
-                            s.m_value = fScore[neighbour];
+                            s.m_type = StepType::UpdateDistance;
+                            s.m_node = neighbour;
                             addStep(s);
                         }
 
@@ -168,7 +180,8 @@ void AStar::aStar(unsigned start, unsigned goal) {
         }
     }
 
-    throw std::runtime_error("No path found from start to goal!");
+    return AlgorithmError {AlgorithmErrorType::NoPathFound,
+                           "No path exists between start and goal nodes."};
 }
 
 int AStar::heuristic(unsigned node, unsigned goal) const {

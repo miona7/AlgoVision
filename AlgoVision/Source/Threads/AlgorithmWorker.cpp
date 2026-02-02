@@ -7,48 +7,103 @@ AlgorithmWorker::AlgorithmWorker(const QString& algorithm, const std::shared_ptr
 
 void AlgorithmWorker::run() {
     std::vector<AlgorithmStep> steps;
-    Algorithm*                 algo = nullptr;
-
     if(m_algorithm == "A* (Euclidean heuristic)") {
-        algo = new AStar(m_graph);
-        algo->execute(m_start, m_end);
-    } else if(m_algorithm == "BFS") {
-        algo = new BFS(m_graph);
-        algo->execute(m_start);
-    } else if(m_algorithm == "Bellman-Ford") {
-        algo = new BellmanFord(m_graph);
-        algo->execute(m_start);
-    } else if(m_algorithm == "DFS") {
-        algo = new DFS(m_graph);
-        algo->execute(m_start);
-    } else if(m_algorithm == "Dijkstra") {
-        algo = new Dijkstra(m_graph);
-        algo->execute(m_start);
-    } else if(m_algorithm == "Prim") {
-        algo = new Prim(m_graph);
-        algo->execute();
-    } else if(m_algorithm == "Floyd-Warshall") {
-        algo = new FloydWarshall(m_graph);
-        algo->execute(m_start);
-    } else if(m_algorithm == "Tarjan") {
-        algo = new Tarjan(m_graph);
-        algo->execute();
-    } else if(m_algorithm == "Kahn") {
-        algo = new Kahn(m_graph);
-        algo->execute();
+        AStar astar(m_graph);
+
+        if(auto err = astar.execute(m_start, m_end)) {
+            emit algorithmErrorOccurred(*err);
+            return; // nema stepsReady jer se javila greska - prekidamo run - dalje preuzima
+                    // kontroler
+        }
+
+        steps = astar.getSteps();
+    }
+    if(m_algorithm == "BFS") {
+        BFS bfs(m_graph);
+
+        if(auto err = bfs.execute(m_start)) {
+            emit algorithmErrorOccurred(*err);
+            return;
+        }
+
+        steps = bfs.getSteps();
+    }
+    if(m_algorithm == "Bellman-Ford") {
+        BellmanFord bf(m_graph);
+
+        if(auto err = bf.execute(m_start)) {
+            emit algorithmErrorOccurred(*err);
+            return;
+        }
+
+        steps = bf.getSteps();
+    }
+    if(m_algorithm == "DFS") {
+        DFS dfs(m_graph);
+
+        if(auto err = dfs.execute(m_start)) {
+            emit algorithmErrorOccurred(*err);
+            return;
+        }
+
+        steps = dfs.getSteps();
+    }
+    if(m_algorithm == "Dijkstra") {
+        Dijkstra dijkstra(m_graph);
+
+        if(auto err = dijkstra.execute(m_start)) {
+            emit algorithmErrorOccurred(*err);
+            return;
+        }
+
+        steps = dijkstra.getSteps();
+    }
+    if(m_algorithm == "Prim") {
+        Prim prim(m_graph);
+
+        if(auto err = prim.execute()) {
+            emit algorithmErrorOccurred(*err);
+            return;
+        }
+
+        steps = prim.getSteps();
+    }
+    if(m_algorithm == "Floyd-Warshall") {
+        FloydWarshall fw(m_graph);
+
+        if(auto err = fw.execute(m_start)) {
+            emit algorithmErrorOccurred(*err);
+            return;
+        }
+
+        steps = fw.getSteps();
+    }
+    if(m_algorithm == "Tarjan") {
+        Tarjan tarjan(m_graph);
+
+        if(auto err = tarjan.execute()) {
+            emit algorithmErrorOccurred(*err);
+            return;
+        }
+
+        steps = tarjan.getSteps();
+    }
+    if(m_algorithm == "Kahn") {
+        Kahn kahn(m_graph);
+
+        if(auto err = kahn.execute()) {
+            emit algorithmErrorOccurred(*err);
+            return;
+        }
+
+        steps = kahn.getSteps();
     }
 
-    if(algo != nullptr) {
-        steps = algo->getSteps();
-
-        QString result = algo->resultString();
+    QString result = algo.resultString();
 
         // qDebug() << "ALGO:" << m_algorithm;
         // qDebug() << "RESULT STRING:" << result;
 
-        emit stepsReady(steps);
-        emit resultReady(result);
-
-        delete algo;
-    }
+    emit stepsReady(steps);
+    emit resultReady(result);
 }

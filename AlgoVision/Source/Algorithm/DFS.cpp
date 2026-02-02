@@ -3,21 +3,25 @@
 DFS::DFS(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void DFS::checkConditions(unsigned start) const {
-    // graf postoji i ima bar 1 cvor
-
-    if(!m_graph || m_graph->getNodes().empty()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> DFS::checkConditions(unsigned start) const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        throw std::runtime_error("Start node does not exist in graph!");
+        return AlgorithmError {AlgorithmErrorType::StartNodeMissing,
+                               "Start node does not exist in the graph."};
     }
+
+    return std::nullopt;
 }
 
-void DFS::execute(unsigned idStartNode, unsigned) {
-    checkConditions(idStartNode);
+std::optional<AlgorithmError> DFS::execute(unsigned idStartNode, unsigned) {
+    if(auto err = checkConditions(idStartNode)) {
+        return err;
+    }
 
     clearSteps();
     m_visited.clear();
@@ -27,6 +31,8 @@ void DFS::execute(unsigned idStartNode, unsigned) {
     }
 
     dfs(idStartNode);
+
+    return std::nullopt;
 }
 
 void DFS::dfs(unsigned nodeId) {

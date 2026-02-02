@@ -1,5 +1,6 @@
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QShortcut>
 #include <QSplitter>
 #include <QTabWidget>
 #include <QUndoCommand>
@@ -11,6 +12,7 @@
 #include "AlgorithmTab.h"
 #include "GraphEditTab.h"
 #include "GraphEditor.h"
+#include "GraphView.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 
@@ -60,8 +62,12 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
     // splitter->addWidget(m_leftPlaceholder);
 
-    m_view = new QGraphicsView(splitter);
-    m_view->setScene(m_graphController->scene());
+    // stari pogled (QGraphicsView)
+    // m_view = new QGraphicsView(splitter);
+    // m_view->setScene(m_graphController->scene());
+    // splitter->addWidget(m_view);
+
+    m_view = new GraphView(m_graphController->scene(), this);
     splitter->addWidget(m_view);
 
     // m_graphController = new GraphController(m_scene, this);
@@ -85,6 +91,20 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(splitter);
 
+    // keyboard shortcuts
+
+    // pan: Ctrl + P
+    QShortcut* panShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_P), this);
+    connect(panShortcut, &QShortcut::activated, this, &GraphEditor::onPanRequestTrigger);
+
+    // zoom in: Ctrl + '+'
+    QShortcut* zoomInShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Plus), this);
+    connect(zoomInShortcut, &QShortcut::activated, this, &GraphEditor::onZoomInRequestTrigger);
+
+    // zoom out: Ctrl + '-'
+    QShortcut* zoomOutShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), this);
+    connect(zoomOutShortcut, &QShortcut::activated, this, &GraphEditor::onZoomOutRequestTrigger);
+
     connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
 
     connect(m_editTab, &GraphEditTab::redoRequested, m_undoStack, &QUndoStack::redo);
@@ -106,6 +126,13 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
 
         m_graphController->scene()->updateNodeScalling();
     });
+
+    connect(m_editTab, &GraphEditTab::panRequested, this, &GraphEditor::onPanRequestTrigger);
+
+    connect(m_editTab, &GraphEditTab::zoomInRequested, this, &GraphEditor::onZoomInRequestTrigger);
+
+    connect(m_editTab, &GraphEditTab::zoomOutRequested, this,
+            &GraphEditor::onZoomOutRequestTrigger);
 
     // Dummy test
     // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
@@ -130,15 +157,36 @@ GraphEditor::~GraphEditor() {
 }
 
 void GraphEditor::onAddRequestTrigger() {
+    m_view->resetState();
     m_graphController->setAddSceneState();
 }
 
 void GraphEditor::onRemoveRequestTrigger() {
+    m_view->resetState();
     m_graphController->setRemoveSceneState();
 }
 
 void GraphEditor::onClearRequestTrigger() {
+    m_view->resetState();
     m_graphController->clear();
+}
+
+void GraphEditor::onPanRequestTrigger() {
+    // resetuj stanje scene na podrazumevano
+    m_graphController->scene()->resetScene();
+    m_view->setState(GraphView::State::PAN_IDLE);
+}
+
+void GraphEditor::onZoomInRequestTrigger() {
+    // resetuj stanje scene na podrazumevano
+    m_graphController->scene()->resetScene();
+    m_view->zoomIn();
+}
+
+void GraphEditor::onZoomOutRequestTrigger() {
+    // resetuj stanje scene na podrazumevano
+    m_graphController->scene()->resetScene();
+    m_view->zoomOut();
 }
 
 std::shared_ptr<GraphController> GraphEditor::graphController() const {

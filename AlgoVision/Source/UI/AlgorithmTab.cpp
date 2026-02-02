@@ -41,6 +41,35 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     updateUiForAlgorithm(m_algorithmCombo->currentText());
     updateLegendForAlgorithm(m_algorithmCombo->currentText());
 
+    // Controller -> Tab (prikaz popup-a)
+    connect(&m_algorithmController, &AlgorithmController::requestErrorDialog, this,
+            &AlgorithmTab::showAlgorithmErrorDialog);
+
+    // Tab -> Controller (odluka korisnika)
+    connect(this, &AlgorithmTab::errorDialogCancelled, this, [this]() {
+        // greska znaci da run NIJE uspeo → vracamo se u Idle
+        m_state = RunState::Idle;
+
+        // ponistavamo current config da sledeci Play uvek krene iznova
+        m_currentConfig.reset();
+
+        // sigurnosno: ugasi worker ako postoji
+        if(m_worker != nullptr) {
+            m_worker->quit();
+            m_worker->wait();
+            delete m_worker;
+            m_worker = nullptr;
+        }
+    });
+
+    m_algorithmController.clear(); // za svaki slucaj, da se ne zbuni kontroler nakon cancel
+
+    connect(this, &AlgorithmTab::errorDialogContinue, this, [this]() {
+        // ZA SAD SAMO RESET (bice prosireno)
+        m_algorithmController.reset();
+        m_state = RunState::Idle;
+    });
+
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
             &AlgorithmTab::updateUiForAlgorithm);
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
@@ -90,6 +119,10 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
             m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph, newConfig.m_startNode,
                                            newConfig.m_endNode);
+
+            // Worker -> Controller (greske algoritma)
+            connect(m_worker, &AlgorithmWorker::algorithmErrorOccurred, &m_algorithmController,
+                    &AlgorithmController::onAlgorithmError);
 
             // pokreni iscrtavanje kad nit zavrsi
             connect(m_worker, &AlgorithmWorker::stepsReady, this, [this]() {
@@ -435,4 +468,26 @@ void AlgorithmTab::startTimerForPlay() {
     }
 
     m_timer->start(500); // 500ms po koraku
+}
+
+void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error, bool allowContinue) {
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setWindowTitle("Algorithm error");
+    msgBox.setText(QString::fromStdString(error.m_message));
+
+    QPushButton* cancelBtn = msgBox.addButton("Cancel", QMessageBox::RejectRole);
+
+    QPushButton* continueBtn = nullptr;
+    if(allowContinue) {
+        continueBtn = msgBox.addButton("Continue", QMessageBox::AcceptRole);
+    }
+
+    msgBox.exec();
+
+    if(msgBox.clickedButton() == continueBtn) {
+        emit errorDialogContinue();
+    } else {
+        emit errorDialogCancelled();
+    }
 }
