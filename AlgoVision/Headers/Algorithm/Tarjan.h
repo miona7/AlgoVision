@@ -4,10 +4,10 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <optional>
 #include <stack>
 #include <stdexcept>
 #include <vector>
-#include <optional>
 
 #include "Algorithm.h"
 

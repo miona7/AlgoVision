@@ -8,7 +8,8 @@ static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
     REQUIRE_FALSE(err.has_value());
 }
 
-static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType,
+                          const std::string& expectedMessage) {
     REQUIRE(err.has_value());
     REQUIRE(err->m_type == expectedType);
     REQUIRE(err->m_message == expectedMessage);
@@ -40,10 +41,10 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigne
                                                  StepType::AddToPath,  StepType::ExamineEdge,
                                                  StepType::SelectEdge, StepType::UpdateDistance};
 
-           // act
+    // act
     auto err = astar.execute(startNode, goalNode);
 
-           // assert
+    // assert
     REQUIRE_SUCCESS(err);
 
     const auto& steps = astar.getSteps();
@@ -153,7 +154,8 @@ TEST_CASE("A*: no path exists", "[AStar]") {
     auto err = astar.execute(1, 2);
 
     // assert
-    REQUIRE_ERROR(err, AlgorithmErrorType::NoPathFound, "No path exists between start and goal nodes.");
+    REQUIRE_ERROR(err, AlgorithmErrorType::NoPathFound,
+                  "No path exists between start and goal nodes.");
 }
 
 TEST_CASE("A*: negative edge weight", "[AStar]") {
@@ -170,7 +172,8 @@ TEST_CASE("A*: negative edge weight", "[AStar]") {
     auto err = astar.execute(1, 2);
 
     // assert
-    REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights, "A* cannot be applied to graphs with negative edge weights.");
+    REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights,
+                  "A* cannot be applied to graphs with negative edge weights.");
 }
 
 TEST_CASE("A*: steps test", "[AStar]") {

@@ -11,7 +11,8 @@ static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
     REQUIRE_FALSE(err.has_value());
 }
 
-static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType,
+                          const std::string& expectedMessage) {
     REQUIRE(err.has_value());
     REQUIRE(err->m_type == expectedType);
     REQUIRE(err->m_message == expectedMessage);
@@ -84,7 +85,7 @@ TEST_CASE("BFS on Unweighted Directed Graph", "[BFS]") {
     g->addEdge(0, 1);
     g->addEdge(1, 2);
 
-    BFS bfs(g);
+    BFS  bfs(g);
     auto err = bfs.execute(0);
 
     REQUIRE_SUCCESS(err);
@@ -101,7 +102,7 @@ TEST_CASE("BFS on Unweighted Undirected Graph", "[BFS]") {
     g->addEdge(0, 1);
     g->addEdge(1, 2);
 
-    BFS bfs(g);
+    BFS  bfs(g);
     auto err = bfs.execute(0);
 
     REQUIRE_SUCCESS(err);
@@ -118,7 +119,7 @@ TEST_CASE("BFS on Weighted Directed Graph", "[BFS]") {
     g->addEdge(0, 1, 5);
     g->addEdge(1, 2, 7);
 
-    BFS bfs(g);
+    BFS  bfs(g);
     auto err = bfs.execute(0);
 
     REQUIRE_SUCCESS(err);
@@ -135,7 +136,7 @@ TEST_CASE("BFS on Weighted Undirected Graph", "[BFS]") {
     g->addEdge(0, 1, 3);
     g->addEdge(1, 2, 4);
 
-    BFS bfs(g);
+    BFS  bfs(g);
     auto err = bfs.execute(0);
 
     REQUIRE_SUCCESS(err);
@@ -147,7 +148,8 @@ TEST_CASE("BFS throws for invalid start node", "[BFS]") {
     g->addNode(1);
     g->addNode(2);
 
-    BFS bfs(g);
+    BFS  bfs(g);
     auto err = bfs.execute(0);
-    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing, "Start node does not exist in the graph.");
+    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing,
+                  "Start node does not exist in the graph.");
 }

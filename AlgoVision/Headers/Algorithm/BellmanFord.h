@@ -5,9 +5,9 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <optional>
 #include <stdexcept>
 #include <vector>
-#include <optional>
 
 #include "Algorithm.h"
 

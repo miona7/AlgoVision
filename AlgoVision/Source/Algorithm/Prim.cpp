@@ -5,17 +5,12 @@ Prim::Prim(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> Prim::checkConditions() const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphNotInitialized,
-            "Graph is not initialized or empty."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
 
     if(m_graph->isDirected()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphTypeInvalid,
-            "Graph type is invalid."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     BFS      bfs(m_graph);
@@ -27,10 +22,7 @@ std::optional<AlgorithmError> Prim::checkConditions() const {
 
     for(const auto& [_, visited]: bfs.getVisited()) {
         if(!visited) {
-            return AlgorithmError{
-                AlgorithmErrorType::GraphNotConnected,
-                "Graph is not connected"
-            };
+            return AlgorithmError {AlgorithmErrorType::GraphNotConnected, "Graph is not connected"};
         }
     }
 

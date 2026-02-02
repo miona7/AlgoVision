@@ -5,25 +5,18 @@ BellmanFord::BellmanFord(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> BellmanFord::checkConditions(unsigned start) const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphNotInitialized,
-            "Graph is not initialized or empty."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
 
     if(!m_graph->isDirected() || !m_graph->isWeighted()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphTypeInvalid,
-            "Graph type is invalid."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        return AlgorithmError{
-            AlgorithmErrorType::StartNodeMissing,
-            "Start node does not exist in the graph."
-        };
+        return AlgorithmError {AlgorithmErrorType::StartNodeMissing,
+                               "Start node does not exist in the graph."};
     }
 
     return std::nullopt;

@@ -5,17 +5,12 @@ Tarjan::Tarjan(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> Tarjan::checkConditions() const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphNotInitialized,
-            "Graph is not initialized or empty."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
 
     if(!m_graph->isDirected()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphTypeInvalid,
-            "Graph type is invalid."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     return std::nullopt;

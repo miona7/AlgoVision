@@ -11,7 +11,8 @@ static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
     REQUIRE_FALSE(err.has_value());
 }
 
-static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType,
+                          const std::string& expectedMessage) {
     REQUIRE(err.has_value());
     REQUIRE(err->m_type == expectedType);
     REQUIRE(err->m_message == expectedMessage);
@@ -160,7 +161,8 @@ TEST_CASE("Dijkstra with invalid start node", "[DIJKSTRA]") {
 
     auto err = dijkstra.execute(0);
 
-    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing, "Start node does not exist in the graph.");
+    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing,
+                  "Start node does not exist in the graph.");
 }
 
 TEST_CASE("Dijkstra on graph with negative edges", "[DIJKSTRA]") {
@@ -176,7 +178,8 @@ TEST_CASE("Dijkstra on graph with negative edges", "[DIJKSTRA]") {
 
     auto err = dijkstra.execute(1);
 
-    REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights, "Graph contains edge with negative weight.");
+    REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights,
+                  "Graph contains edge with negative weight.");
 }
 
 TEST_CASE("Dijkstra steps test on all graph types", "[DIJKSTRA]") {

@@ -9,7 +9,8 @@ static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
     REQUIRE_FALSE(err.has_value());
 }
 
-static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType,
+                          const std::string& expectedMessage) {
     REQUIRE(err.has_value());
     REQUIRE(err->m_type == expectedType);
     REQUIRE(err->m_message == expectedMessage);
@@ -81,9 +82,10 @@ TEST_CASE("Bellman-Ford throws on invalid start node", "[BELLMAN_FORD]") {
     g->addEdge(1, 2, 5);
 
     BellmanFord bf(g);
-    auto err = bf.execute(0);
+    auto        err = bf.execute(0);
 
-    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing, "Start node does not exist in the graph.");
+    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing,
+                  "Start node does not exist in the graph.");
 }
 
 TEST_CASE("Bellman-Ford throws on unweighted graph", "[BELLMAN_FORD]") {
@@ -94,7 +96,7 @@ TEST_CASE("Bellman-Ford throws on unweighted graph", "[BELLMAN_FORD]") {
     g->addEdge(1, 2);
 
     BellmanFord bf(g);
-    auto err = bf.execute(1);
+    auto        err = bf.execute(1);
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
@@ -111,7 +113,7 @@ TEST_CASE("Bellman-Ford detects negative cycle", "[BELLMAN_FORD]") {
     g->addEdge(3, 1, -1);
 
     BellmanFord bf(g);
-    auto err = bf.execute(1);
+    auto        err = bf.execute(1);
 
     REQUIRE_SUCCESS(err);
     REQUIRE(bf.hasNegativeCycle());

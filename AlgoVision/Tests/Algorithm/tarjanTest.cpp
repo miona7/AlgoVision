@@ -9,7 +9,8 @@ static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
     REQUIRE_FALSE(err.has_value());
 }
 
-static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType,
+                          const std::string& expectedMessage) {
     REQUIRE(err.has_value());
     REQUIRE(err->m_type == expectedType);
     REQUIRE(err->m_message == expectedMessage);
@@ -115,5 +116,6 @@ TEST_CASE("Tarjan throws on empty graph", "[TARJAN]") {
 
     auto err = tarjan.execute();
 
-    REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized, "Graph is not initialized or empty.");
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized,
+                  "Graph is not initialized or empty.");
 }

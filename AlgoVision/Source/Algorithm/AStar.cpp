@@ -5,40 +5,31 @@ AStar::AStar(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> AStar::checkConditions(unsigned start, unsigned goal) const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphNotInitialized,
-            "Graph is not initialized or empty."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        return AlgorithmError{
-            AlgorithmErrorType::StartNodeMissing,
-            "Start node does not exist in the graph."
-        };
+        return AlgorithmError {AlgorithmErrorType::StartNodeMissing,
+                               "Start node does not exist in the graph."};
     }
 
     if(nodes.find(goal) == nodes.end()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GoalNodeMissing,
-            "Goal node does not exist in the graph."
-        };
+        return AlgorithmError {AlgorithmErrorType::GoalNodeMissing,
+                               "Goal node does not exist in the graph."};
     }
 
     auto edges = m_graph->getEdges();
     for(const auto& [id, edge]: edges) {
         if(edge.getWeight() < 0) {
-            return AlgorithmError{
-                AlgorithmErrorType::NegativeEdgeWeights,
-                "A* cannot be applied to graphs with negative edge weights."
-            };
+            return AlgorithmError {AlgorithmErrorType::NegativeEdgeWeights,
+                                   "A* cannot be applied to graphs with negative edge weights."};
         }
     }
 
     return std::nullopt;
 }
-
 
 std::optional<AlgorithmError> AStar::execute(unsigned start, unsigned goal) {
 
@@ -191,11 +182,8 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
         }
     }
 
-    return AlgorithmError{
-        AlgorithmErrorType::NoPathFound,
-        "No path exists between start and goal nodes."
-    };
-
+    return AlgorithmError {AlgorithmErrorType::NoPathFound,
+                           "No path exists between start and goal nodes."};
 }
 
 int AStar::heuristic(unsigned node, unsigned goal) const {
