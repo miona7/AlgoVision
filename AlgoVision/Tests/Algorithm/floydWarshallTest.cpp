@@ -5,6 +5,16 @@
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 
+static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
+    REQUIRE_FALSE(err.has_value());
+}
+
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+    REQUIRE(err.has_value());
+    REQUIRE(err->m_type == expectedType);
+    REQUIRE(err->m_message == expectedMessage);
+}
+
 static const char* stepTypeToString(StepType t) {
     switch(t) {
     case StepType::VisitNode:
@@ -28,7 +38,9 @@ void runFloydWarshallLoggingTest(const std::shared_ptr<Graph>& g) {
                                                  StepType::ExamineEdge, StepType::SelectEdge,
                                                  StepType::UpdateDistance};
 
-    REQUIRE_NOTHROW(fw.execute());
+    auto err = fw.execute();
+
+    REQUIRE_SUCCESS(err);
 
     const auto& steps = fw.getSteps();
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
@@ -74,7 +86,7 @@ TEST_CASE("Floyd-Warshall works on directed weighted graph", "[FLOYD_WARSHALL]")
     g->addEdge(1, 3, 10);
     g->addEdge(3, 4, 2);
 
-    REQUIRE_NOTHROW(runFloydWarshallLoggingTest(g));
+    runFloydWarshallLoggingTest(g);
 }
 
 TEST_CASE("Floyd-Warshall throws on undirected graph", "[FLOYD_WARSHALL]") {
@@ -85,14 +97,20 @@ TEST_CASE("Floyd-Warshall throws on undirected graph", "[FLOYD_WARSHALL]") {
     g->addEdge(1, 2, 5);
 
     FloydWarshall fw(g);
-    REQUIRE_THROWS_AS(fw.execute(), std::runtime_error);
+
+    auto err = fw.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
 
 TEST_CASE("Floyd-Warshall throws on empty graph", "[FLOYD_WARSHALL]") {
     auto g = std::make_shared<WeightedDirectedGraph>();
 
     FloydWarshall fw(g);
-    REQUIRE_THROWS_AS(fw.execute(), std::runtime_error);
+
+    auto err = fw.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized, "Graph is not initialized or empty.");
 }
 
 TEST_CASE("Floyd-Warshall detects negative cycle", "[FLOYD_WARSHALL]") {
@@ -107,5 +125,8 @@ TEST_CASE("Floyd-Warshall detects negative cycle", "[FLOYD_WARSHALL]") {
     g->addEdge(3, 1, -2);
 
     FloydWarshall fw(g);
-    REQUIRE_THROWS_AS(fw.execute(), std::runtime_error);
+
+    auto err = fw.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphHasNegativeCycle, "Graph contains a negative cycle.");
 }
