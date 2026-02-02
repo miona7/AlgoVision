@@ -7,7 +7,7 @@ variables:
 
 build:
   stage: build
-  image: qt:6.6.2-base
+  image: qt6:6.6.2
   script:
     - mkdir -p $BUILD_DIR
     - cd $BUILD_DIR
@@ -21,7 +21,7 @@ build:
 
 run_tests:
   stage: test
-  image: qt:6.6.2-base
+  image: qt6:6.6.2
   script:
     - cd $BUILD_DIR
     - ctest --output-on-failure
