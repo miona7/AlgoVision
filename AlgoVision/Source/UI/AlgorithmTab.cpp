@@ -59,6 +59,9 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
         // parametri trenutnog algoritma
         AlgorithmTab::AlgorithmConfig newConfig = selectedConfig();
 
+        m_startNodeEdit->clear();
+        m_endNodeEdit->clear();
+
         // ako algoritam ili parametri nisu isti → NOVI START
         bool needNewRun = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
 
