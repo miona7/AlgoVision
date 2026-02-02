@@ -34,6 +34,9 @@ private:
     // pan state (u koordinatama scene)
     QPoint m_lastMousePos;
     qreal m_zoomFactor {1.15};
+
+    // koristi se za ispravan izlazak iz fast pan-a (desni klik drag)
+    GraphView::State m_oldState;
 };
 
 #endif // GRAPH_VIEW

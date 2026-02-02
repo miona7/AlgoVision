@@ -19,16 +19,27 @@ GraphView::State GraphView::state() const{
 
 void GraphView::setState(GraphView::State newState){
     m_state = newState;
+    switch (m_state) {
+        case GraphView::State::PAN_IDLE: {
+            setCursor(Qt::OpenHandCursor);
+            break;
+        }
 
-    // ako je kliknuto pan dugme
-    if(m_state == GraphView::State::PAN_IDLE) {
-        setCursor(Qt::OpenHandCursor);
+        case GraphView::State::PAN_ACTIVE: {
+            setCursor(Qt::ClosedHandCursor);
+            break;
+        }
+
+        case GraphView::State::IDLE:
+        default: {
+            setCursor(Qt::ArrowCursor);
+            break;
+        }
     }
 }
 
 void GraphView::resetState() {
-    m_state = GraphView::State::IDLE;
-    setCursor(Qt::ArrowCursor);
+    setState(GraphView::State::IDLE);
 }
 
 void GraphView::zoomIn() {
@@ -46,11 +57,13 @@ void GraphView::zoomOut() {
 
 void GraphView::mousePressEvent(QMouseEvent* event) {
     // desni klik je podrazumevana precica za pan, koji se odmah izvrsava drzanjem desnog klika
+    // potrebno je da upamtimo staro stanje da bi znali na sta treba da se vratimo: IDLE ili PAN_IDLE
     if (m_state == GraphView::State::PAN_IDLE || event->button() == Qt::RightButton) {
+        // ako je kliknut desni klik da se odradi ispravan reset cursora
+        m_oldState = m_state;
         // pan init
-        m_state = GraphView::State::PAN_ACTIVE;
+        setState(GraphView::State::PAN_ACTIVE);
         m_lastMousePos = event->pos();
-        setCursor(Qt::ClosedHandCursor);
 
         event->accept();
         return;
@@ -88,11 +101,9 @@ void GraphView::mouseReleaseEvent(QMouseEvent* event) {
     if (m_state == GraphView::State::PAN_ACTIVE) {
         // kada se ispusti desni klik ne ostaje se u pan modu, to je samo precica za brzi pan
         if (event->button() == Qt::RightButton) {
-            m_state = GraphView::State::IDLE;
-            setCursor(Qt::ArrowCursor);
+            setState(m_oldState);
         } else {
-            m_state = GraphView::State::PAN_IDLE;
-            setCursor(Qt::OpenHandCursor);
+            setState(GraphView::State::PAN_IDLE);
         }
 
         event->accept();
