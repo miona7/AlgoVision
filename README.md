@@ -1,7 +1,7 @@
 # 🧠 AlgoVision
 
 AlgoVision je desktop aplikacija za **vizualizaciju grafovskih algoritama**, namenjena učenju, demonstraciji i analizi rada algoritama nad grafovima.
-Aplikacija omogućava interaktivno praćenje izvršavanja algoritama korak po korak, uz jasan vizuelni prikaz promena stanja čvorova i grana.
+Aplikacija omogućava interaktivno praćenje izvršavanja algoritama korak po korak, uz jasan vizualni prikaz promena stanja čvorova i grana.
 Cilj projekta je da apstraktne koncepte iz teorije grafova učini **intuitivnijim i pristupačnijim** kroz animacije,
 kontrolu toka izvršavanja i prilagodljiv korisnički interfejs.
 
