@@ -51,6 +51,9 @@ Da bi rad sa aplikacijom bio brži i efikasniji, podržane su sledeće prečice 
 | Pomoć                | Ctrl + H       |
 | Undo                 | Ctrl + Z       |
 | Redo                 | Ctrl + Y       |
+| Pan                  | Ctrl + P       |
+| Zoom in              | Ctrl + +       |
+| Zoom out             | Ctrl + -       |
 
 ---
 
