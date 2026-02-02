@@ -104,6 +104,14 @@ void GraphView::mouseDoubleClickEvent(QMouseEvent* event) {
     QGraphicsView::mouseDoubleClickEvent(event);
 }
 
+void GraphView::wheelEvent(QWheelEvent* event) {
+    if(event->angleDelta().y() > 0) {
+        zoomIn();
+    } else {
+        zoomOut();
+    }
+}
+
 void GraphView::init() {
     setRenderHint(QPainter::Antialiasing);
     setAlignment(Qt::AlignCenter);
