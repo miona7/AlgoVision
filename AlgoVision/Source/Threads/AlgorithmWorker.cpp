@@ -43,8 +43,8 @@ void AlgorithmWorker::run() {
 
         QString result = algo->resultString();
 
-        qDebug() << "ALGO:" << m_algorithm;
-        qDebug() << "RESULT STRING:" << result;
+        // qDebug() << "ALGO:" << m_algorithm;
+        // qDebug() << "RESULT STRING:" << result;
 
         emit stepsReady(steps);
         emit resultReady(result);

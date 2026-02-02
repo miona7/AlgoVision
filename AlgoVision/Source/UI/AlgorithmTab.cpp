@@ -32,10 +32,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     m_legendScroll = new QScrollArea(this);
     m_legendScroll->setWidget(m_legendContainer);
     m_legendScroll->setWidgetResizable(true);
-    m_legendScroll->setMinimumHeight(200);
-
-    m_legendScroll->setWidgetResizable(true);
-    m_legendScroll->setMinimumHeight(200);
+    m_legendScroll->setMinimumHeight(AppConstants::legendMinHeight);
 
     initLayout();
     initIcons();
@@ -276,6 +273,7 @@ void AlgorithmTab::initLayout() {
     mainLayout->addWidget(m_legendScroll);
     mainLayout->addStretch();
 }
+
 QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) {
     QWidget* row    = new QWidget(this);
     auto*    layout = new QHBoxLayout(row);
@@ -318,7 +316,7 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     }
 
     if(name == "Kahn") {
-        m_legendLayout->addWidget(makeLegendItem(QColor(184, 134, 11), "Added to topological order"));
+        m_legendLayout->addWidget(makeLegendItem(Qt::darkYellow, "Added to topological order"));
     }
 
     if(name == "Tarjan") {
@@ -343,21 +341,9 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
         m_legendLayout->addWidget(makeLegendItem(Qt::red, "In minimum spanning tree"));
     }
 
-    //m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
-/*
-    if(name == "Tarjan") {
-        m_legendLayout->addWidget(new QLabel("Strongly connected components."));
-    }
-*/
-    if(name == "Kahn") {
-        m_legendLayout->addWidget(new QLabel("Topological ordering."));
-    }
+    // m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
 
-    if(name == "BFS" || name == "DFS") {
-        m_legendLayout->addWidget(new QLabel("Traversal order."));
-    }
-
-    m_legendLayout->addStretch();
+    // m_legendLayout->addStretch();
 }
 
 void AlgorithmTab::initIcons() {
