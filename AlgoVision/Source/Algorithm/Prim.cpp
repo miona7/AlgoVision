@@ -65,7 +65,6 @@ void Prim::prim() {
         AlgorithmStep s;
         s.m_type  = StepType::UpdateDistance;
         s.m_node  = start;
-        s.m_value = 0;
         addStep(s);
     }
 
@@ -97,7 +96,6 @@ void Prim::prim() {
                 s.m_type  = StepType::SelectEdge;
                 s.m_from  = parent[currentNode];
                 s.m_to    = currentNode;
-                s.m_value = minDistance[currentNode]; // težina ivice
                 addStep(s);
             }
 
@@ -121,7 +119,6 @@ void Prim::prim() {
                                 AlgorithmStep s;
                                 s.m_type  = StepType::UpdateDistance;
                                 s.m_node  = neighbourId;
-                                s.m_value = weight;
                                 addStep(s);
                             }
                         }

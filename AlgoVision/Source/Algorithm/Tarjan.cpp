@@ -56,8 +56,6 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
         AlgorithmStep s;
         s.m_type    = StepType::VisitNode;
         s.m_node    = nodeId;
-        s.m_value   = m_incomingNumbering[nodeId]; // index
-        s.m_message = std::string("index assigned");
         addStep(s);
     }
     {
@@ -70,8 +68,6 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
         AlgorithmStep s;
         s.m_type    = StepType::UpdateDistance; // koristimo kao "lowlink update"
         s.m_node    = nodeId;
-        s.m_value   = m_lowLink[nodeId];
-        s.m_message = std::string("lowlink init");
         addStep(s);
     }
     m_tourOrder.push(nodeId);
@@ -95,8 +91,6 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                     AlgorithmStep s;
                     s.m_type    = StepType::UpdateDistance; // lowlink update
                     s.m_node    = nodeId;
-                    s.m_value   = m_lowLink[nodeId];
-                    s.m_message = std::string("lowlink <- min(lowlink, child lowlink)");
                     addStep(s);
                 }
             } else if(m_onStack[neighbourId]) {
@@ -106,8 +100,6 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                     AlgorithmStep s;
                     s.m_type    = StepType::UpdateDistance; // lowlink update
                     s.m_node    = nodeId;
-                    s.m_value   = m_lowLink[nodeId];
-                    s.m_message = std::string("lowlink <- min(lowlink, back-edge index)");
                     addStep(s);
                 }
             }
@@ -123,7 +115,6 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 AlgorithmStep s;
                 s.m_type  = StepType::AssignComponent;
                 s.m_node  = componentNodeId;
-                s.m_value = component;
                 addStep(s);
             }
 

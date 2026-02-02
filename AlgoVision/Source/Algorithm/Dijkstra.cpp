@@ -58,7 +58,6 @@ void Dijkstra::dijkstra(unsigned start) {
         AlgorithmStep s;
         s.m_type  = StepType::UpdateDistance;
         s.m_node  = start;
-        s.m_value = 0;
         addStep(s);
     }
 
@@ -95,7 +94,6 @@ void Dijkstra::dijkstra(unsigned start) {
                         s.m_type  = StepType::ExamineEdge;
                         s.m_from  = currentNode;
                         s.m_to    = neighbourId;
-                        s.m_value = weight;
                         addStep(s);
                     }
 
@@ -106,7 +104,6 @@ void Dijkstra::dijkstra(unsigned start) {
                             AlgorithmStep s;
                             s.m_type  = StepType::UpdateDistance;
                             s.m_node  = neighbourId;
-                            s.m_value = minDistance[neighbourId];
                             addStep(s);
                         }
 

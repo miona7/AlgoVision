@@ -59,12 +59,6 @@ void runDijkstraLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) 
         if(s.m_from && s.m_to) {
             std::cout << " | edge = " << *s.m_from << " -> " << *s.m_to;
         }
-        if(s.m_value) {
-            std::cout << " | value = " << *s.m_value;
-        }
-        if(s.m_message) {
-            std::cout << " | msg = \"" << *s.m_message << "\"";
-        }
         std::cout << std::endl;
     }
 

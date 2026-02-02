@@ -65,7 +65,6 @@ void BellmanFord::bellmanFord(unsigned start) {
         AlgorithmStep s;
         s.m_type  = StepType::UpdateDistance;
         s.m_node  = start;
-        s.m_value = 0;
         addStep(s);
     }
 
@@ -88,8 +87,6 @@ void BellmanFord::bellmanFord(unsigned start) {
                 AlgorithmStep s;
                 s.m_type    = StepType::ProcessNode; // koristimo kao "pass k"
                 s.m_node    = u;
-                s.m_value   = k;
-                s.m_message = std::string("relaxation pass");
                 addStep(s);
             }
             {
@@ -97,7 +94,6 @@ void BellmanFord::bellmanFord(unsigned start) {
                 s.m_type  = StepType::ExamineEdge;
                 s.m_from  = u;
                 s.m_to    = v;
-                s.m_value = w; // opcionalno: težina ivice
                 addStep(s);
             }
             if(m_minDistance[u] != std::numeric_limits<int>::max() &&
@@ -109,14 +105,12 @@ void BellmanFord::bellmanFord(unsigned start) {
                     s.m_type  = StepType::RelaxEdge;
                     s.m_from  = u;
                     s.m_to    = v;
-                    s.m_value = w;
                     addStep(s);
                 }
                 {
                     AlgorithmStep s;
                     s.m_type  = StepType::UpdateDistance;
                     s.m_node  = v;
-                    s.m_value = m_minDistance[v]; // nova distanca
                     addStep(s);
                 }
             }

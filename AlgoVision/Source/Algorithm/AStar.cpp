@@ -76,7 +76,6 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
         AlgorithmStep s;
         s.m_type  = StepType::UpdateDistance;
         s.m_node  = start;
-        s.m_value = fScore[start];
         addStep(s);
     }
 
@@ -171,7 +170,6 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
                             AlgorithmStep s;
                             s.m_type  = StepType::UpdateDistance;
                             s.m_node  = neighbour;
-                            s.m_value = fScore[neighbour];
                             addStep(s);
                         }
 
