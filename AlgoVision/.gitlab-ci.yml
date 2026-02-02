@@ -16,7 +16,7 @@ build:
     paths:
       - $BUILD_DIR
   rules:
-    - if: '$CI_COMMIT_BRANCH' 
+    - if: '$CI_PIPELINE_SOURCE == "push"' 
 
 run_tests:
   stage: test
@@ -26,4 +26,4 @@ run_tests:
   dependencies:
     - build
   rules:
-    - if: '$CI_COMMIT_BRANCH' 
+    - if: '$CI_PIPELINE_SOURCE == "push"'  
