@@ -7,9 +7,7 @@ variables:
 
 build:
   stage: build
-  image: ubuntu:22.04
-  before_script:
-    - apt-get update && apt-get install -y cmake build-essential git
+  image: qt:6.6.2-base
   script:
     - mkdir -p $BUILD_DIR
     - cd $BUILD_DIR
@@ -23,8 +21,7 @@ build:
 
 run_tests:
   stage: test
-  before_script:
-    - apt-get update && apt-get install -y cmake build-essential
+  image: qt:6.6.2-base
   script:
     - cd $BUILD_DIR
     - ctest --output-on-failure
