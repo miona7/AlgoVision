@@ -6,7 +6,7 @@
 
 class GraphView : public QGraphicsView {
 public:
-    enum class State {IDLE, PAN_IDLE, PAN_ACTIVE, ZOOM_IN, ZOOM_OUT};
+    enum class State {IDLE, PAN_IDLE, PAN_ACTIVE};
 
     explicit GraphView(QWidget* = nullptr);
     explicit GraphView(QGraphicsScene*, QWidget* = nullptr);
