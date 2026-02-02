@@ -32,11 +32,15 @@ void GraphView::resetState() {
 }
 
 void GraphView::zoomIn() {
-    scale(m_zoomFactor, m_zoomFactor);
+    if (transform().m11() < 3.0) {
+        scale(m_zoomFactor, m_zoomFactor);
+    }
 }
 
 void GraphView::zoomOut() {
-    scale(1.0 / m_zoomFactor, 1.0 / m_zoomFactor);
+    if (transform().m11() > 0.3) {
+        scale(1.0 / m_zoomFactor, 1.0 / m_zoomFactor);
+    }
 }
 
 
