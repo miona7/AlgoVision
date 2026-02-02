@@ -45,7 +45,8 @@ void GraphView::zoomOut() {
 
 
 void GraphView::mousePressEvent(QMouseEvent* event) {
-    if (m_state == GraphView::State::PAN_IDLE) {
+    // desni klik je podrazumevana precica za pan, koji se odmah izvrsava drzanjem desnog klika
+    if (m_state == GraphView::State::PAN_IDLE || event->button() == Qt::RightButton) {
         // pan init
         m_state = GraphView::State::PAN_ACTIVE;
         m_lastMousePos = event->pos();
@@ -83,10 +84,17 @@ void GraphView::mouseMoveEvent(QMouseEvent* event) {
     QGraphicsView::mouseMoveEvent(event);
 }
 
-void GraphView::mouseReleaseEvent(QMouseEvent* event) {
+void GraphView::mouseReleaseEvent(QMouseEvent* event) {    
     if (m_state == GraphView::State::PAN_ACTIVE) {
-        m_state = GraphView::State::PAN_IDLE;
-        setCursor(Qt::OpenHandCursor);
+        // kada se ispusti desni klik ne ostaje se u pan modu, to je samo precica za brzi pan
+        if (event->button() == Qt::RightButton) {
+            m_state = GraphView::State::IDLE;
+            setCursor(Qt::ArrowCursor);
+        } else {
+            m_state = GraphView::State::PAN_IDLE;
+            setCursor(Qt::OpenHandCursor);
+        }
+
         event->accept();
         return;
     }
