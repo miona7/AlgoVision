@@ -19,10 +19,16 @@ GraphView::State GraphView::state() const{
 
 void GraphView::setState(GraphView::State newState){
     m_state = newState;
+
+    // ako je kliknuto pan dugme
+    if(m_state == GraphView::State::PAN_IDLE) {
+        setCursor(Qt::OpenHandCursor);
+    }
 }
 
 void GraphView::resetState() {
     m_state = GraphView::State::IDLE;
+    setCursor(Qt::ArrowCursor);
 }
 
 void GraphView::zoomIn() {
@@ -76,7 +82,7 @@ void GraphView::mouseMoveEvent(QMouseEvent* event) {
 void GraphView::mouseReleaseEvent(QMouseEvent* event) {
     if (m_state == GraphView::State::PAN_ACTIVE) {
         m_state = GraphView::State::PAN_IDLE;
-        setCursor(Qt::ArrowCursor);
+        setCursor(Qt::OpenHandCursor);
         event->accept();
         return;
     }
