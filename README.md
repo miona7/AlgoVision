@@ -1,6 +1,6 @@
 # 🧠 AlgoVision
 
-AlgoVision je desktop aplikacija za **vizuelizaciju grafovskih algoritama**, namenjena učenju, demonstraciji i analizi rada algoritama nad grafovima.
+AlgoVision je desktop aplikacija za **vizualizaciju grafovskih algoritama**, namenjena učenju, demonstraciji i analizi rada algoritama nad grafovima.
 Aplikacija omogućava interaktivno praćenje izvršavanja algoritama korak po korak, uz jasan vizuelni prikaz promena stanja čvorova i grana.
 Cilj projekta je da apstraktne koncepte iz teorije grafova učini **intuitivnijim i pristupačnijim** kroz animacije,
 kontrolu toka izvršavanja i prilagodljiv korisnički interfejs.
@@ -57,15 +57,15 @@ Da bi rad sa aplikacijom bio brži i efikasniji, podržane su sledeće prečice 
 
 ---
 
-## 🎨 Vizuelne i interaktivne mogućnosti
+## 🎨 Vizualne i interaktivne mogućnosti
 
 Korisnik može da prilagodi izgled i ponašanje aplikacije:
 
 - ✏️ Interaktivno dodavanje i brisanje čvorova i grana
 - 🔘 Podešavanje veličine čvorova
-- 🎨 Vizuelno razlikovanje stanja čvorova i grana (posećen, aktivan, deo puta, relaksiran, itd.)
+- 🎨 Vizualno razlikovanje stanja čvorova i grana (posećen, aktivan, deo puta, relaksirana, itd.)
 - 🌗 Promena izgleda i teme aplikacije
-- 👁️ Jasna i pregledna vizuelna reprezentacija algoritamskih stanja
+- 👁️ Jasna i pregledna vizualna reprezentacija algoritamskih stanja
 
 ---
 
@@ -114,7 +114,7 @@ git clone git@gitlab.com:matf-bg-ac-rs/course-rs/projects-2025-2026/AlgoVision.g
 cd /putanja/do/projekta
 
 # 2️⃣ Kreiranje build direktorijuma
-cmake -B build -DCMAKE_BUILD_TYPE=Release 
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release 
 
 # 3️⃣ Kompajliranje
 cmake --build build
@@ -134,7 +134,7 @@ git clone git@gitlab.com:matf-bg-ac-rs/course-rs/projects-2025-2026/AlgoVision.g
 cd C:\putanja\do\projekta
 
 # 2️⃣ Kreiranje build direktorijuma
-cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
 # 3️⃣ Kompajliranje
 cmake --build build
