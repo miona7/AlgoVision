@@ -69,7 +69,7 @@ bool AlgorithmController::isFinished() const {
 void AlgorithmController::onAlgorithmError(const AlgorithmError& error) {
     bool allowContinue = false;
 
-    switch (error.m_type) {
+    switch(error.m_type) {
     case AlgorithmErrorType::GraphTypeInvalid:
     case AlgorithmErrorType::NegativeEdgeWeights:
     case AlgorithmErrorType::NoPathFound:
@@ -90,4 +90,3 @@ void AlgorithmController::onAlgorithmError(const AlgorithmError& error) {
 
     emit requestErrorDialog(error, allowContinue);
 }
-

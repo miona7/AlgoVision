@@ -5,17 +5,12 @@ Tarjan::Tarjan(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> Tarjan::checkConditions() const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphNotInitialized,
-            "Graph is not initialized or empty."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
 
     if(!m_graph->isDirected()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphTypeInvalid,
-            "Graph type is invalid."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     return std::nullopt;
@@ -59,10 +54,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
     m_incomingNumbering[nodeId] = m_lowLink[nodeId] = m_arrivalTime++;
     {
         AlgorithmStep s;
-        s.m_type    = StepType::VisitNode;
-        s.m_node    = nodeId;
-        s.m_value   = m_incomingNumbering[nodeId]; // index
-        s.m_message = std::string("index assigned");
+        s.m_type = StepType::VisitNode;
+        s.m_node = nodeId;
         addStep(s);
     }
     {
@@ -73,10 +66,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
     }
     {
         AlgorithmStep s;
-        s.m_type    = StepType::UpdateDistance; // koristimo kao "lowlink update"
-        s.m_node    = nodeId;
-        s.m_value   = m_lowLink[nodeId];
-        s.m_message = std::string("lowlink init");
+        s.m_type = StepType::UpdateDistance; // koristimo kao "lowlink update"
+        s.m_node = nodeId;
         addStep(s);
     }
     m_tourOrder.push(nodeId);
@@ -98,10 +89,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_lowLink[neighbourId]);
                 if(m_lowLink[nodeId] != oldLow) {
                     AlgorithmStep s;
-                    s.m_type    = StepType::UpdateDistance; // lowlink update
-                    s.m_node    = nodeId;
-                    s.m_value   = m_lowLink[nodeId];
-                    s.m_message = std::string("lowlink <- min(lowlink, child lowlink)");
+                    s.m_type = StepType::UpdateDistance; // lowlink update
+                    s.m_node = nodeId;
                     addStep(s);
                 }
             } else if(m_onStack[neighbourId]) {
@@ -109,10 +98,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_incomingNumbering[neighbourId]);
                 if(m_lowLink[nodeId] != oldLow) {
                     AlgorithmStep s;
-                    s.m_type    = StepType::UpdateDistance; // lowlink update
-                    s.m_node    = nodeId;
-                    s.m_value   = m_lowLink[nodeId];
-                    s.m_message = std::string("lowlink <- min(lowlink, back-edge index)");
+                    s.m_type = StepType::UpdateDistance; // lowlink update
+                    s.m_node = nodeId;
                     addStep(s);
                 }
             }
@@ -126,9 +113,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
             m_tourOrder.pop();
             {
                 AlgorithmStep s;
-                s.m_type  = StepType::AssignComponent;
-                s.m_node  = componentNodeId;
-                s.m_value = component;
+                s.m_type = StepType::AssignComponent;
+                s.m_node = componentNodeId;
                 addStep(s);
             }
 

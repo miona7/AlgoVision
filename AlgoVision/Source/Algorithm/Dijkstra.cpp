@@ -5,27 +5,21 @@ Dijkstra::Dijkstra(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphNotInitialized,
-            "Graph is not initialized or empty."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        return AlgorithmError{
-            AlgorithmErrorType::StartNodeMissing,
-            "Start node does not exist in the graph."
-        };
+        return AlgorithmError {AlgorithmErrorType::StartNodeMissing,
+                               "Start node does not exist in the graph."};
     }
 
     auto edges = m_graph->getEdges();
     for(const auto& [_, edge]: edges) {
         if(edge.getWeight() < 0) {
-            return AlgorithmError{
-                AlgorithmErrorType::NegativeEdgeWeights,
-                "Graph contains edge with negative weight."
-            };
+            return AlgorithmError {AlgorithmErrorType::NegativeEdgeWeights,
+                                   "Graph contains edge with negative weight."};
         }
     }
 
@@ -62,9 +56,8 @@ void Dijkstra::dijkstra(unsigned start) {
 
     {
         AlgorithmStep s;
-        s.m_type  = StepType::UpdateDistance;
-        s.m_node  = start;
-        s.m_value = 0;
+        s.m_type = StepType::UpdateDistance;
+        s.m_node = start;
         addStep(s);
     }
 
@@ -98,10 +91,9 @@ void Dijkstra::dijkstra(unsigned start) {
 
                     {
                         AlgorithmStep s;
-                        s.m_type  = StepType::ExamineEdge;
-                        s.m_from  = currentNode;
-                        s.m_to    = neighbourId;
-                        s.m_value = weight;
+                        s.m_type = StepType::ExamineEdge;
+                        s.m_from = currentNode;
+                        s.m_to   = neighbourId;
                         addStep(s);
                     }
 
@@ -110,9 +102,8 @@ void Dijkstra::dijkstra(unsigned start) {
 
                         {
                             AlgorithmStep s;
-                            s.m_type  = StepType::UpdateDistance;
-                            s.m_node  = neighbourId;
-                            s.m_value = minDistance[neighbourId];
+                            s.m_type = StepType::UpdateDistance;
+                            s.m_node = neighbourId;
                             addStep(s);
                         }
 

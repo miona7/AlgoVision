@@ -5,9 +5,9 @@
 
 #include <vector>
 
+#include "AlgorithmError.h"
 #include "AlgorithmStep.h"
 #include "AlgorithmStepApplier.h"
-#include "AlgorithmError.h"
 
 class AlgorithmController : public QObject {
     Q_OBJECT

@@ -2,12 +2,12 @@
 #define ALGORITHM_H
 
 #include <memory>
-#include <vector>
 #include <optional>
+#include <vector>
 
+#include "AlgorithmError.h"
 #include "AlgorithmStep.h"
 #include "Graph.h"
-#include "AlgorithmError.h"
 
 class Algorithm {
 public:

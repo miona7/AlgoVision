@@ -10,9 +10,10 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "A*") {
         AStar astar(m_graph);
 
-        if (auto err = astar.execute(m_start, m_end)) {
+        if(auto err = astar.execute(m_start, m_end)) {
             emit algorithmErrorOccurred(*err);
-            return; // nema stepsReady jer se javila greska - prekidamo run - dalje preuzima kontroler
+            return; // nema stepsReady jer se javila greska - prekidamo run - dalje preuzima
+                    // kontroler
         }
 
         steps = astar.getSteps();
@@ -20,7 +21,7 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "BFS") {
         BFS bfs(m_graph);
 
-        if (auto err = bfs.execute(m_start)) {
+        if(auto err = bfs.execute(m_start)) {
             emit algorithmErrorOccurred(*err);
             return;
         }
@@ -30,7 +31,7 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "Bellman-Ford") {
         BellmanFord bf(m_graph);
 
-        if (auto err = bf.execute(m_start)) {
+        if(auto err = bf.execute(m_start)) {
             emit algorithmErrorOccurred(*err);
             return;
         }
@@ -40,7 +41,7 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "DFS") {
         DFS dfs(m_graph);
 
-        if (auto err = dfs.execute(m_start)) {
+        if(auto err = dfs.execute(m_start)) {
             emit algorithmErrorOccurred(*err);
             return;
         }
@@ -50,7 +51,7 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "Dijkstra") {
         Dijkstra dijkstra(m_graph);
 
-        if (auto err = dijkstra.execute(m_start)) {
+        if(auto err = dijkstra.execute(m_start)) {
             emit algorithmErrorOccurred(*err);
             return;
         }
@@ -60,7 +61,7 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "Prim") {
         Prim prim(m_graph);
 
-        if (auto err =  prim.execute()) {
+        if(auto err = prim.execute()) {
             emit algorithmErrorOccurred(*err);
             return;
         }
@@ -70,7 +71,7 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "Floyd-Warshall") {
         FloydWarshall fw(m_graph);
 
-        if (auto err =  fw.execute(m_start)) {
+        if(auto err = fw.execute(m_start)) {
             emit algorithmErrorOccurred(*err);
             return;
         }
@@ -80,7 +81,7 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "Tarjan") {
         Tarjan tarjan(m_graph);
 
-        if (auto err =  tarjan.execute()) {
+        if(auto err = tarjan.execute()) {
             emit algorithmErrorOccurred(*err);
             return;
         }
@@ -90,7 +91,7 @@ void AlgorithmWorker::run() {
     if(m_algorithm == "Kahn") {
         Kahn kahn(m_graph);
 
-        if (auto err =  kahn.execute()) {
+        if(auto err = kahn.execute()) {
             emit algorithmErrorOccurred(*err);
             return;
         }
