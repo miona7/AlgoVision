@@ -7,77 +7,14 @@
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 
-TEST_CASE("DFS on Unweighted Directed Graph", "[DFS]") {
-    auto graph = std::make_shared<UnweightedDirectedGraph>();
-
-    for(unsigned i = 1; i <= 5; ++i) {
-        graph->addNode(i);
-    }
-
-    graph->addEdge(1, 2);
-    graph->addEdge(1, 3);
-    graph->addEdge(2, 4);
-    graph->addEdge(3, 5);
-
-    DFS dfs(graph);
-    REQUIRE_NOTHROW(dfs.execute(1));
+static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
+    REQUIRE_FALSE(err.has_value());
 }
 
-TEST_CASE("DFS on Unweighted Undirected Graph", "[DFS]") {
-    auto graph = std::make_shared<UnweightedUndirectedGraph>();
-
-    for(unsigned i = 1; i <= 5; ++i) {
-        graph->addNode(i);
-    }
-
-    graph->addEdge(1, 2);
-    graph->addEdge(1, 3);
-    graph->addEdge(2, 4);
-    graph->addEdge(3, 5);
-
-    DFS dfs(graph);
-    REQUIRE_NOTHROW(dfs.execute(1));
-}
-
-TEST_CASE("DFS on Weighted Directed Graph", "[DFS]") {
-    auto graph = std::make_shared<WeightedDirectedGraph>();
-
-    for(unsigned i = 1; i <= 4; ++i) {
-        graph->addNode(i);
-    }
-
-    graph->addEdge(1, 2, 10);
-    graph->addEdge(1, 3, 5);
-    graph->addEdge(2, 4, 1);
-    graph->addEdge(3, 4, 2);
-
-    DFS dfs(graph);
-    REQUIRE_NOTHROW(dfs.execute(1));
-}
-
-TEST_CASE("DFS on Weighted Undirected Graph", "[DFS]") {
-    auto graph = std::make_shared<WeightedUndirectedGraph>();
-
-    for(unsigned i = 1; i <= 4; ++i) {
-        graph->addNode(i);
-    }
-
-    graph->addEdge(1, 2, 3);
-    graph->addEdge(1, 3, 7);
-    graph->addEdge(2, 4, 1);
-    graph->addEdge(3, 4, 2);
-
-    DFS dfs(graph);
-    REQUIRE_NOTHROW(dfs.execute(1));
-}
-
-TEST_CASE("DFS throws for invalid start node", "[DFS]") {
-    auto graph = std::make_shared<UnweightedDirectedGraph>();
-    graph->addNode(1);
-    graph->addNode(2);
-
-    DFS dfs(graph);
-    REQUIRE_THROWS_AS(dfs.execute(0), std::runtime_error);
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+    REQUIRE(err.has_value());
+    REQUIRE(err->m_type == expectedType);
+    REQUIRE(err->m_message == expectedMessage);
 }
 
 static const char* stepTypeToString(StepType t) {
@@ -99,13 +36,15 @@ void runDFSLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) {
                                                  StepType::ExamineEdge};
 
     // act
-    dfs.execute(startNode);
+    auto err = dfs.execute(startNode);
+
+    // assert
+    REQUIRE_SUCCESS(err);
 
     const auto& steps   = dfs.getSteps();
     const auto& visited = dfs.getVisited();
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
 
-    // assert
     REQUIRE_FALSE(steps.empty());
 
     for(std::size_t i = 0; i < steps.size(); ++i) {
@@ -133,6 +72,96 @@ void runDFSLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) {
                                  [&](const auto& s) { return s.m_type == expected; });
         REQUIRE(found);
     }
+
+    REQUIRE(visited.at(startNode));
+}
+
+TEST_CASE("DFS on Unweighted Directed Graph", "[DFS]") {
+    auto graph = std::make_shared<UnweightedDirectedGraph>();
+
+    for(unsigned i = 1; i <= 5; ++i) {
+        graph->addNode(i);
+    }
+
+    graph->addEdge(1, 2);
+    graph->addEdge(1, 3);
+    graph->addEdge(2, 4);
+    graph->addEdge(3, 5);
+
+    DFS dfs(graph);
+
+    auto err = dfs.execute(1);
+
+    REQUIRE_SUCCESS(err);
+}
+
+TEST_CASE("DFS on Unweighted Undirected Graph", "[DFS]") {
+    auto graph = std::make_shared<UnweightedUndirectedGraph>();
+
+    for(unsigned i = 1; i <= 5; ++i) {
+        graph->addNode(i);
+    }
+
+    graph->addEdge(1, 2);
+    graph->addEdge(1, 3);
+    graph->addEdge(2, 4);
+    graph->addEdge(3, 5);
+
+    DFS dfs(graph);
+
+    auto err = dfs.execute(1);
+
+    REQUIRE_SUCCESS(err);
+}
+
+TEST_CASE("DFS on Weighted Directed Graph", "[DFS]") {
+    auto graph = std::make_shared<WeightedDirectedGraph>();
+
+    for(unsigned i = 1; i <= 4; ++i) {
+        graph->addNode(i);
+    }
+
+    graph->addEdge(1, 2, 10);
+    graph->addEdge(1, 3, 5);
+    graph->addEdge(2, 4, 1);
+    graph->addEdge(3, 4, 2);
+
+    DFS dfs(graph);
+
+    auto err = dfs.execute(1);
+
+    REQUIRE_SUCCESS(err);
+}
+
+TEST_CASE("DFS on Weighted Undirected Graph", "[DFS]") {
+    auto graph = std::make_shared<WeightedUndirectedGraph>();
+
+    for(unsigned i = 1; i <= 4; ++i) {
+        graph->addNode(i);
+    }
+
+    graph->addEdge(1, 2, 3);
+    graph->addEdge(1, 3, 7);
+    graph->addEdge(2, 4, 1);
+    graph->addEdge(3, 4, 2);
+
+    DFS dfs(graph);
+
+    auto err = dfs.execute(1);
+
+    REQUIRE_SUCCESS(err);
+}
+
+TEST_CASE("DFS throws for invalid start node", "[DFS]") {
+    auto graph = std::make_shared<UnweightedDirectedGraph>();
+    graph->addNode(1);
+    graph->addNode(2);
+
+    DFS dfs(graph);
+
+    auto err = dfs.execute(0);
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing, "Start node does not exist in the graph.");
 }
 
 TEST_CASE("UDG", "[DFS]") {
