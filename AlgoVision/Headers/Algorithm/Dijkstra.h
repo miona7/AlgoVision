@@ -12,9 +12,9 @@ class Dijkstra : public Algorithm {
 public:
     explicit Dijkstra(const std::shared_ptr<Graph>);
 
-    void                       checkConditions(unsigned) const;
-    void                       execute(unsigned, unsigned = 0) override;
-    QString                    resultString() const override;
+    void    checkConditions(unsigned) const;
+    void    execute(unsigned, unsigned = 0) override;
+    QString resultString() const override;
 
 private:
     void    dijkstra(unsigned);

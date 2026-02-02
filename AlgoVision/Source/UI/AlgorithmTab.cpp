@@ -1,5 +1,6 @@
 #include "AlgorithmTab.h"
 
+#include <QAbstractItemView>
 #include <QComboBox>
 #include <QFrame>
 #include <QGroupBox>
@@ -8,12 +9,11 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QStandardItem>
+#include <QStandardItemModel>
 #include <QStyle>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QStandardItem>
-#include <QStandardItemModel>
-#include <QAbstractItemView>
 
 AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWidget* parent)
     : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startRow(new QWidget(this)),
@@ -22,8 +22,9 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
       m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
       m_helpBtn(new QPushButton("help", this)), m_prevBtn(new QToolButton(this)),
       m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),
-      m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)), m_graphController(graphController),
-      m_applier(m_graphController->graph()), m_algorithmController(m_applier) {
+      m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)),
+      m_graphController(graphController), m_applier(m_graphController->graph()),
+      m_algorithmController(m_applier) {
 
     m_legendContainer = new QWidget;
     m_legendLayout    = new QVBoxLayout(m_legendContainer);
@@ -52,13 +53,13 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
                                  "Choose algorithm, set parameters and use controls to run.");
     });
 
-           // povezivanje dugmica
-           // moraju da se hvataju exepctioni -> iskacuci prozori?
+    // povezivanje dugmica
+    // moraju da se hvataju exepctioni -> iskacuci prozori?
     connect(m_playBtn, &QToolButton::clicked, this, [this]() {
         // parametri trenutnog algoritma
         AlgorithmTab::AlgorithmConfig newConfig = selectedConfig();
 
-               // ako algoritam ili parametri nisu isti → NOVI START
+        // ako algoritam ili parametri nisu isti → NOVI START
         bool needNewRun = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
 
         if(needNewRun || m_state == RunState::Idle || m_state == RunState::Finished) {
@@ -84,16 +85,16 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             // m_algorithmController.reset(); // vrati graf u pocetno stanje
             m_currentConfig = newConfig;
 
-            m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph,
-                                           newConfig.m_startNode, newConfig.m_endNode);
+            m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph, newConfig.m_startNode,
+                                           newConfig.m_endNode);
 
-                   // pokreni iscrtavanje kad nit zavrsi
+            // pokreni iscrtavanje kad nit zavrsi
             connect(m_worker, &AlgorithmWorker::stepsReady, this, [this]() {
                 m_state = RunState::Playing;
                 startTimerForPlay();
             });
 
-                   // ucitaj korake algoritma
+            // ucitaj korake algoritma
             connect(m_worker, &AlgorithmWorker::stepsReady, &m_algorithmController,
                     &AlgorithmController::loadSteps);
 
@@ -107,7 +108,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             return;
         }
 
-               //  RESUME –> isti algoritam, bio je pauziran
+        //  RESUME –> isti algoritam, bio je pauziran
         if(m_state == RunState::Paused) {
             m_state = RunState::Playing;
             startTimerForPlay();
@@ -139,7 +140,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 void AlgorithmTab::initLayout() {
     auto* mainLayout = new QVBoxLayout(this);
 
-           // algorithm choice
+    // algorithm choice
     auto* chooseAlgoBox    = new QGroupBox("choose algorithm", this);
     auto* chooseAlgoLayout = new QVBoxLayout(chooseAlgoBox);
 
@@ -150,10 +151,10 @@ void AlgorithmTab::initLayout() {
         auto* item = model->item(model->rowCount() - 1);
         item->setFlags(Qt::NoItemFlags); // disabled / not selectable
 
-               // make it look like a section header
+        // make it look like a section header
         QFont f = item->font();
         f.setBold(true);
-        //f.setUnderline(true);
+        // f.setUnderline(true);
         item->setFont(f);
 
         item->setTextAlignment(Qt::AlignCenter);
@@ -178,17 +179,17 @@ void AlgorithmTab::initLayout() {
     addHeader("Spanning tree");
     m_algorithmCombo->addItem("Prim");
 
-           // try to show the whole dropdown without scrolling
+    // try to show the whole dropdown without scrolling
     m_algorithmCombo->setMaxVisibleItems(m_algorithmCombo->count());
 
-           // try to reduce hover/selection visual effects on the popup list
+    // try to reduce hover/selection visual effects on the popup list
     m_algorithmCombo->view()->setMouseTracking(false);
     m_algorithmCombo->view()->setStyleSheet("QListView::item:hover { background: transparent; }");
 
     chooseAlgoLayout->addWidget(m_algorithmCombo);
     mainLayout->addWidget(chooseAlgoBox);
 
-           // set initial selection to the first enabled item (so headers never become initial selection)
+    // set initial selection to the first enabled item (so headers never become initial selection)
     int firstValid = -1;
     if(model) {
         for(int i = 0; i < model->rowCount(); i++) {
@@ -203,25 +204,25 @@ void AlgorithmTab::initLayout() {
         m_algorithmCombo->setCurrentIndex(firstValid);
     }
 
-           // algorithm attributes
+    // algorithm attributes
     auto* attributesBox    = new QGroupBox("algorithm attributes", this);
     auto* attributesLayout = new QVBoxLayout(attributesBox);
 
-           // start row (label + edit) as one widget
+    // start row (label + edit) as one widget
     auto* startRowLayout = new QHBoxLayout(m_startRow);
     startRowLayout->addWidget(m_startLabel);
     startRowLayout->addWidget(m_startNodeEdit);
     m_startNodeEdit->setPlaceholderText("e.g. 0");
     attributesLayout->addWidget(m_startRow);
 
-           // end row (label + edit) as one widget
+    // end row (label + edit) as one widget
     auto* endRowLayout = new QHBoxLayout(m_endRow);
     endRowLayout->addWidget(m_endLabel);
     endRowLayout->addWidget(m_endNodeEdit);
     m_endNodeEdit->setPlaceholderText("e.g. 5");
     attributesLayout->addWidget(m_endRow);
 
-           // message when no input needed
+    // message when no input needed
     m_noInputLabel->setText("No additional input needed.");
     m_noInputLabel->setWordWrap(true);
     m_noInputLabel->hide();
@@ -229,13 +230,13 @@ void AlgorithmTab::initLayout() {
 
     mainLayout->addWidget(attributesBox);
 
-           // separator 1
+    // separator 1
     auto* separator1 = new QFrame(this);
     separator1->setFrameShape(QFrame::HLine);
     separator1->setFrameShadow(QFrame::Sunken);
     mainLayout->addWidget(separator1);
 
-           // run algorithm
+    // run algorithm
     auto* runBox    = new QGroupBox("run algorithm", this);
     auto* runLayout = new QHBoxLayout(runBox);
     runLayout->setSpacing(6);
@@ -260,13 +261,13 @@ void AlgorithmTab::initLayout() {
 
     mainLayout->addWidget(runBox);
 
-           // separator 2
+    // separator 2
     auto* separator2 = new QFrame(this);
     separator2->setFrameShape(QFrame::HLine);
     separator2->setFrameShadow(QFrame::Sunken);
     mainLayout->addWidget(separator2);
 
-           // help
+    // help
     m_helpBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     mainLayout->addWidget(m_helpBtn);
 
@@ -306,8 +307,8 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
     m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
 
-    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" || name == "Floyd-Warshall" ||
-       name == "Prim" || name == "Tarjan") {
+    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" ||
+       name == "Floyd-Warshall" || name == "Prim" || name == "Tarjan") {
         m_legendLayout->addWidget(makeLegendItem(Qt::darkMagenta, "Distance updated"));
     }
 
@@ -332,7 +333,7 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
         m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Relaxed"));
     }
 
-           // A* ima crvenu granu = u konačnoj putanji
+    // A* ima crvenu granu = u konačnoj putanji
     if(name == "A* (Euclidean heuristic)") {
         m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
     }
@@ -361,7 +362,7 @@ void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
 
     const bool needsEnd = algorithmName == "A* (Euclidean heuristic)";
 
-           // show/hide whole rows
+    // show/hide whole rows
     if(!needsStart && !needsEnd) {
         m_startNodeEdit->clear();
         m_endNodeEdit->clear();
@@ -420,7 +421,7 @@ void AlgorithmTab::startTimerForPlay() {
                 }
 
                 m_algorithmController.clear();
-                
+
                 return;
             }
             if(m_state != RunState::Playing) {

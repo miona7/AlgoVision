@@ -89,14 +89,13 @@ void AlgorithmStepApplier::resetGraphState() {
         return;
     }
 
-    for(auto* node : m_graph->getNodesMutable()) {
+    for(auto* node: m_graph->getNodesMutable()) {
         node->setState(NodeState::Default);
     }
-    for(auto* edge : m_graph->getEdgesMutable()) {
+    for(auto* edge: m_graph->getEdgesMutable()) {
         edge->setState(EdgeState::Default);
     }
 }
-
 
 NodeState AlgorithmStepApplier::stepToNodeState(const StepType t) const {
     switch(t) {

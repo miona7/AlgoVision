@@ -26,8 +26,8 @@ private:
     std::map<unsigned, int>  m_lowLink;           // lowlink vrednost
     std::stack<unsigned>     m_tourOrder;         // redosled u obilasku
     std::map<unsigned, bool> m_onStack;
-    std::map<unsigned, int>  m_components; // id cvora -> komponenta kojoj pripada
-    int m_numComponents = 0; // broj komponenti povezanosti
+    std::map<unsigned, int>  m_components;        // id cvora -> komponenta kojoj pripada
+    int                      m_numComponents = 0; // broj komponenti povezanosti
 
     void tarjan(unsigned);
     void init();

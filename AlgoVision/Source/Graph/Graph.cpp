@@ -184,7 +184,7 @@ const Node* Graph::getNode(unsigned id) const {
 
 std::vector<Node*> Graph::getNodesMutable() {
     std::vector<Node*> nodes;
-    for(auto& [_, node] : m_nodes) {
+    for(auto& [_, node]: m_nodes) {
         nodes.push_back(&node);
     }
     return nodes;
@@ -226,7 +226,7 @@ const Edge* Graph::getEdge(unsigned from, unsigned to) const {
 
 std::vector<Edge*> Graph::getEdgesMutable() {
     std::vector<Edge*> edges;
-    for(auto& [_, edge] : m_edges) {
+    for(auto& [_, edge]: m_edges) {
         edges.push_back(&edge);
     }
     return edges;

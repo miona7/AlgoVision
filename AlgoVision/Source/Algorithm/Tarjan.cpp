@@ -19,7 +19,7 @@ void Tarjan::execute(unsigned, unsigned) {
 
     // int  component = 0;
     // m_numComponents = 0;
-    auto nodes     = m_graph->getNodes();
+    auto nodes = m_graph->getNodes();
     for(const auto& [id, node]: nodes) {
         if(m_components[id] == -1) {
             // m_sccCount++;
@@ -28,7 +28,7 @@ void Tarjan::execute(unsigned, unsigned) {
         }
     }
 
-    //std::cout << "Strongly connected components:" << std::endl;
+    // std::cout << "Strongly connected components:" << std::endl;
     std::map<int, std::vector<unsigned>> comps;
     for(const auto& [nodeId, compId]: m_components) {
         comps[compId].emplace_back(nodeId);
@@ -141,7 +141,7 @@ void Tarjan::tarjan(unsigned nodeId) {
 }
 
 void Tarjan::init() {
-    m_arrivalTime = 0;
+    m_arrivalTime   = 0;
     m_numComponents = 0;
 
     m_incomingNumbering.clear();

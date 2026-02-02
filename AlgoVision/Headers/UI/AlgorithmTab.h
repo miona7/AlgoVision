@@ -69,12 +69,12 @@ private:
 
     // std::shared_ptr<Graph>         m_prevGraph;
     std::shared_ptr<GraphController> m_graphController;
-    AlgorithmStepApplier           m_applier;
-    AlgorithmController            m_algorithmController;
-    AlgorithmWorker*               m_worker = nullptr;
-    QTimer*                        m_timer  = nullptr;
-    RunState                       m_state  = RunState::Idle;
-    std::optional<AlgorithmConfig> m_currentConfig;
+    AlgorithmStepApplier             m_applier;
+    AlgorithmController              m_algorithmController;
+    AlgorithmWorker*                 m_worker = nullptr;
+    QTimer*                          m_timer  = nullptr;
+    RunState                         m_state  = RunState::Idle;
+    std::optional<AlgorithmConfig>   m_currentConfig;
 
     void     initLayout();
     void     initIcons();

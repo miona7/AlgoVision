@@ -64,7 +64,7 @@ void GraphController::buildScene() const {
         m_scene->addNode(nodeModel);
     }
 
-           // onda dodajemo sve grane
+    // onda dodajemo sve grane
     for(auto& [id, _]: m_graph->getEdges()) {
         Edge* edgeModel = m_graph->getEdge(id);
         m_scene->addEdge(edgeModel, m_graph->isDirected(), m_graph->isWeighted());
@@ -101,7 +101,7 @@ void GraphController::addEdge(NodeItem* source, NodeItem* dest) {
     unsigned sourceId = source->modelNode()->getId();
     unsigned destId   = dest->modelNode()->getId();
 
-           // sprecavamo da dodamo vec postojecu granu, da dodamo istu granu vise puta
+    // sprecavamo da dodamo vec postojecu granu, da dodamo istu granu vise puta
     if(m_graph->getEdge(sourceId, destId) != nullptr) {
         // mozda je stanje scene naruseno, cvor je selektovan i promenjena mu je boja, a operacija
         // je nevalidna
