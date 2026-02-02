@@ -17,7 +17,11 @@ public:
     std::optional<AlgorithmError> checkConditions() const;
     std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) override;
 
+    QString resultString() const override;
+
 private:
+    int m_totalWeight = 0;
+
     void prim();
 };
 

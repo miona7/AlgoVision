@@ -15,12 +15,14 @@ public:
     std::optional<AlgorithmError> checkConditions(unsigned) const;
     std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
+    QString resultString() const override;
+
     const std::map<unsigned, bool>& getVisited() const;
 
 private:
     std::map<unsigned, bool> m_visited;
-
-    void bfs(unsigned);
+    std::vector<int>         m_order;
+    void                     bfs(unsigned);
 };
 
 #endif // BFS_H

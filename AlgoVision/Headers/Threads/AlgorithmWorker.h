@@ -30,6 +30,7 @@ public:
 
 signals:
     void stepsReady(const std::vector<AlgorithmStep>&);
+    void resultReady(const QString&);
     void algorithmErrorOccurred(const AlgorithmError&);
 
 protected:

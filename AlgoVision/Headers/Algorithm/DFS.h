@@ -15,11 +15,12 @@ public:
     std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
     const std::map<unsigned, bool>& getVisited() const;
+    QString                         resultString() const override;
 
 private:
     std::map<unsigned, bool> m_visited;
-
-    void dfs(unsigned);
+    std::vector<int>         m_order;
+    void                     dfs(unsigned);
 };
 
 #endif // DFS_H

@@ -114,13 +114,16 @@ void Dijkstra::dijkstra(unsigned start) {
         }
     }
 
-    std::cout << "Shortest distances from node " << start << ":" << std::endl;
+    m_resultString = "Shortest distances from node " + QString::number(start) + ":\n";
+
     for(const auto& [id, dist]: minDistance) {
-        std::cout << "Node " << id << ": ";
         if(dist == std::numeric_limits<int>::max()) {
-            std::cout << "unreachable" << std::endl;
+            m_resultString += QString("Node %1: unreachable\n").arg(id);
         } else {
-            std::cout << dist << std::endl;
+            m_resultString += QString("Node %1: %2\n").arg(id).arg(dist);
         }
     }
+}
+QString Dijkstra::resultString() const {
+    return m_resultString;
 }

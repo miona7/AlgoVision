@@ -142,3 +142,18 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
 
     return std::nullopt;
 }
+
+QString FloydWarshall::resultString() const {
+    QString res = "All-pairs shortest paths:\n";
+
+    for(const auto& [i, row]: m_distances) {
+        for(const auto& [j, dist]: row) {
+            if(dist == std::numeric_limits<int>::max()) {
+                res += QString("(%1 -> %2): unreachable\n").arg(i).arg(j);
+            } else {
+                res += QString("(%1 -> %2): %3\n").arg(i).arg(j).arg(dist);
+            }
+        }
+    }
+    return res;
+}

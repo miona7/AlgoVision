@@ -46,6 +46,8 @@ void BFS::bfs(unsigned start) {
 
     while(!q.empty()) {
         unsigned current = q.front();
+        m_order.push_back(current);
+
         q.pop();
 
         {
@@ -83,4 +85,11 @@ void BFS::bfs(unsigned start) {
 
 const std::map<unsigned, bool>& BFS::getVisited() const {
     return m_visited;
+}
+
+QString BFS::resultString() const {
+    QString res = "BFS order: ";
+    for(unsigned v: m_order)
+        res += QString::number(v) + " ";
+    return res;
 }

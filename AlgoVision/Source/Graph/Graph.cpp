@@ -182,6 +182,14 @@ const Node* Graph::getNode(unsigned id) const {
     return (it != m_nodes.end()) ? &it->second : nullptr;
 }
 
+std::vector<Node*> Graph::getNodesMutable() {
+    std::vector<Node*> nodes;
+    for(auto& [_, node]: m_nodes) {
+        nodes.push_back(&node);
+    }
+    return nodes;
+}
+
 Edge* Graph::getEdge(unsigned id) {
     auto it = m_edges.find(id);
     return (it != m_edges.end()) ? &it->second : nullptr;
@@ -214,4 +222,12 @@ const Edge* Graph::getEdge(unsigned from, unsigned to) const {
         }
     }
     return nullptr;
+}
+
+std::vector<Edge*> Graph::getEdgesMutable() {
+    std::vector<Edge*> edges;
+    for(auto& [_, edge]: m_edges) {
+        edges.push_back(&edge);
+    }
+    return edges;
 }

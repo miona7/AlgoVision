@@ -6,6 +6,7 @@
 #include <QUndoCommand>
 #include <QUndoStack>
 
+#include <QSlider>
 #include <functional>
 
 #include "AlgorithmTab.h"
@@ -78,7 +79,7 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     m_editTab = new GraphEditTab(rightTabs);
 
     rightTabs->addTab(m_editTab, "graph");
-    rightTabs->addTab(new AlgorithmTab(m_graphController->graph(), rightTabs), "algorithm");
+    rightTabs->addTab(new AlgorithmTab(m_graphController, rightTabs), "algorithm");
 
     splitter->addWidget(rightTabs);
 
@@ -118,12 +119,21 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
 
     connect(m_editTab, &GraphEditTab::clearRequested, this, &GraphEditor::onClearRequestTrigger);
 
+    connect(m_editTab->getNodeSizeSlider(), &QSlider::valueChanged, this, [&](int v) {
+        double t                = v / 100.0;
+        AppConstants::NodeScale = AppConstants::MinNodeScale +
+                                  t * (AppConstants::MaxNodeScale - AppConstants::MinNodeScale);
+
+        m_graphController->scene()->updateNodeScalling();
+    });
+
     connect(m_editTab, &GraphEditTab::panRequested, this, &GraphEditor::onPanRequestTrigger);
 
     connect(m_editTab, &GraphEditTab::zoomInRequested, this, &GraphEditor::onZoomInRequestTrigger);
 
     connect(m_editTab, &GraphEditTab::zoomOutRequested, this,
             &GraphEditor::onZoomOutRequestTrigger);
+
     // Dummy test
     // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
     //     const int before = m_dummyState;

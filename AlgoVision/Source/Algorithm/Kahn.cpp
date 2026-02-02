@@ -98,3 +98,16 @@ std::optional<AlgorithmError> Kahn::kahn() {
 const std::vector<unsigned>& Kahn::getSorted() const {
     return m_sorted;
 }
+
+QString Kahn::resultString() const {
+    QString result = "Topological order:\n";
+
+    for(size_t i = 0; i < m_sorted.size(); ++i) {
+        result += QString::number(m_sorted[i]);
+        if(i + 1 < m_sorted.size()) {
+            result += " -> ";
+        }
+    }
+
+    return result;
+}

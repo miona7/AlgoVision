@@ -6,6 +6,11 @@ AlgorithmController::AlgorithmController(AlgorithmStepApplier& applier, QObject*
 
 void AlgorithmController::clear() {
     m_steps.clear();
+    m_resultString.clear();
+}
+
+QString AlgorithmController::resultString() const {
+    return m_resultString;
 }
 
 void AlgorithmController::loadSteps(const std::vector<AlgorithmStep>& steps) {
@@ -37,6 +42,24 @@ void AlgorithmController::prevStep() {
     m_currentIndex--;
 }
 
+void AlgorithmController::reset() {
+    while(!m_undoStack.empty()) {
+        AlgorithmStep& step = m_undoStack.back();
+        m_applier.undo(step);
+        m_undoStack.pop_back();
+    }
+    m_redoStack.clear();
+    m_currentIndex = -1;
+}
+
+bool AlgorithmController::isFinished() const {
+    return m_currentIndex + 1 >= m_steps.size();
+}
+
+void AlgorithmController::setResultString(const QString& s) {
+    m_resultString = s;
+}
+
 void AlgorithmController::undo() {
     prevStep();
 }
@@ -50,20 +73,6 @@ void AlgorithmController::redo() {
     m_redoStack.pop_back();
     m_undoStack.push_back(step);
     m_currentIndex++;
-}
-
-void AlgorithmController::reset() {
-    while(!m_undoStack.empty()) {
-        AlgorithmStep& step = m_undoStack.back();
-        m_applier.undo(step);
-        m_undoStack.pop_back();
-    }
-    m_redoStack.clear();
-    m_currentIndex = -1;
-}
-
-bool AlgorithmController::isFinished() const {
-    return m_currentIndex + 1 >= m_steps.size();
 }
 
 void AlgorithmController::onAlgorithmError(const AlgorithmError& error) {

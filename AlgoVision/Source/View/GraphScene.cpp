@@ -137,6 +137,7 @@ void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
 
     edgeItem->adjust();
     addItem(edgeItem);
+    edgeItem->updateSize();
     connect(edgeItem, &EdgeItem::edgeSelected, this, &GraphScene::onEdgeSelectTrigger);
     connect(edgeItem, &EdgeItem::editEdgeWeightRequest, this, &GraphScene::editEdgeWeightRequest);
 
@@ -190,4 +191,33 @@ void GraphScene::selectNode(NodeItem* node) {
 
     // other node is selected
     emit addEdgeRequest(m_firstNodeSelect, node); // zahtevamo dodavanje grane od kontrolera
+}
+
+void GraphScene::updateNodeScalling() {
+    for(auto* item: items()) {
+        if(auto* n = dynamic_cast<NodeItem*>(item))
+            n->updateSize();
+
+        if(auto* e = dynamic_cast<EdgeItem*>(item))
+            e->updateSize();
+    }
+    update();
+}
+
+void GraphScene::applyTheme(ThemeManager::Theme theme) {
+    switch(theme) {
+    case ThemeManager::Theme::LIGHT:
+        setBackgroundBrush(QColor(245, 245, 245)); // skoro bela
+        break;
+
+    case ThemeManager::Theme::DARK:
+        setBackgroundBrush(QColor(60, 60, 60)); // svetlija tamna
+        break;
+
+    case ThemeManager::Theme::PURPLE:
+        setBackgroundBrush(QColor(90, 70, 120)); // svetla ljubičasta
+        break;
+    }
+
+    update();
 }

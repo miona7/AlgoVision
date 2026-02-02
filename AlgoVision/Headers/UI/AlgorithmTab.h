@@ -5,10 +5,15 @@
 #include <QTimer>
 #include <QWidget>
 
+#include <QScrollArea>
 #include <optional>
+
+#include <QColor>
+#include <QVBoxLayout>
 
 #include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
+#include "GraphController.h"
 
 class QComboBox;
 class QLabel;
@@ -20,7 +25,7 @@ class AlgorithmTab : public QWidget {
     Q_OBJECT
 
 public:
-    explicit AlgorithmTab(std::shared_ptr<Graph>, QWidget* = nullptr);
+    explicit AlgorithmTab(std::shared_ptr<GraphController>, QWidget* = nullptr);
     ~AlgorithmTab() override = default;
 
 public slots:
@@ -56,6 +61,11 @@ private:
 
     QLabel* m_noInputLabel;
 
+    QScrollArea* m_legendScroll;
+
+    QVBoxLayout* m_legendLayout;
+    QWidget*     m_legendContainer;
+
     QPushButton* m_helpBtn;
 
     QToolButton* m_prevBtn;
@@ -64,17 +74,20 @@ private:
     QToolButton* m_nextBtn;
     QToolButton* m_restartBtn;
 
-    std::shared_ptr<Graph>         m_graph;
-    AlgorithmStepApplier           m_applier;
-    AlgorithmController            m_algorithmController;
-    AlgorithmWorker*               m_worker = nullptr;
-    QTimer*                        m_timer  = nullptr;
-    RunState                       m_state  = RunState::Idle;
-    std::optional<AlgorithmConfig> m_currentConfig;
+    // std::shared_ptr<Graph>         m_prevGraph;
+    std::shared_ptr<GraphController> m_graphController;
+    AlgorithmStepApplier             m_applier;
+    AlgorithmController              m_algorithmController;
+    AlgorithmWorker*                 m_worker = nullptr;
+    QTimer*                          m_timer  = nullptr;
+    RunState                         m_state  = RunState::Idle;
+    std::optional<AlgorithmConfig>   m_currentConfig;
 
-    void initLayout();
-    void initIcons();
-    void updateUiForAlgorithm(const QString&);
+    void     initLayout();
+    void     initIcons();
+    void     updateUiForAlgorithm(const QString&);
+    void     updateLegendForAlgorithm(const QString&);
+    QWidget* makeLegendItem(const QColor&, const QString&);
 
     void startTimerForPlay();
 };

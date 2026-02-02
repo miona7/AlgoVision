@@ -15,19 +15,31 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
+AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWidget* parent)
     : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startRow(new QWidget(this)),
       m_startLabel(new QLabel("start node:", this)), m_startNodeEdit(new QLineEdit(this)),
       m_endRow(new QWidget(this)), m_endLabel(new QLabel("end node:", this)),
       m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
       m_helpBtn(new QPushButton("help", this)), m_prevBtn(new QToolButton(this)),
       m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),
-      m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)), m_graph(graph),
-      m_applier(m_graph), m_algorithmController(m_applier) {
+      m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)),
+      m_graphController(graphController), m_applier(m_graphController->graph()),
+      m_algorithmController(m_applier) {
+
+    m_legendContainer = new QWidget;
+    m_legendLayout    = new QVBoxLayout(m_legendContainer);
+    m_legendLayout->setAlignment(Qt::AlignTop);
+
+    m_legendScroll = new QScrollArea(this);
+    m_legendScroll->setWidget(m_legendContainer);
+    m_legendScroll->setWidgetResizable(true);
+    m_legendScroll->setMinimumHeight(AppConstants::legendMinHeight);
+
     initLayout();
     initIcons();
 
     updateUiForAlgorithm(m_algorithmCombo->currentText());
+    updateLegendForAlgorithm(m_algorithmCombo->currentText());
 
     // Controller -> Tab (prikaz popup-a)
     connect(&m_algorithmController, &AlgorithmController::requestErrorDialog, this,
@@ -60,29 +72,14 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
 
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
             &AlgorithmTab::updateUiForAlgorithm);
+    connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
+            &AlgorithmTab::updateLegendForAlgorithm);
 
+    // ===== HELP =====
     connect(m_helpBtn, &QPushButton::clicked, this, [this]() {
-        const QString helpText =
-            "Algorithm Tab — Help\n\n"
-            "Use this tab to select an algorithm and control its execution on the graph displayed "
-            "in the main area.\n\n"
-            "1. Choose algorithm\n"
-            "Select an algorithm from the drop-down list.\n\n"
-            "2. Algorithm attributes\n"
-            "If the selected algorithm requires extra input, enter the requested values (e.g., "
-            "start node / end node).\n"
-            "If no parameters are needed, you will see: \"No additional input needed.\".\n\n"
-            "3. Help\n"
-            "Press Help at any time to review these instructions.\n\n"
-            "4. Run algorithm\n"
-            "Use the control buttons to navigate through the algorithm:\n"
-            "- Previous step: go one step back\n"
-            "- Play: run continuously\n"
-            "- Pause: pause execution\n"
-            "- Next step: advance one step\n"
-            "- Restart: reset execution to the beginning\n\n";
-
-        QMessageBox::information(this, "Algorithm Tab Help", helpText);
+        QMessageBox::information(this, "Algorithm Tab Help",
+                                 "Algorithm Tab — Help\n\n"
+                                 "Choose algorithm, set parameters and use controls to run.");
     });
 
     // povezivanje dugmica
@@ -91,10 +88,20 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
         // parametri trenutnog algoritma
         AlgorithmTab::AlgorithmConfig newConfig = selectedConfig();
 
+        m_startNodeEdit->clear();
+        m_endNodeEdit->clear();
+
         // ako algoritam ili parametri nisu isti → NOVI START
         bool needNewRun = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
 
         if(needNewRun || m_state == RunState::Idle || m_state == RunState::Finished) {
+
+            m_applier.resetGraphState();
+            m_algorithmController.clear();
+
+            // reset legend (da ne bude duplo)
+            updateLegendForAlgorithm(newConfig.m_algorithmName);
+
             // ugasi i obrisi staru nit
             if(m_worker != nullptr) {
                 m_worker->quit();
@@ -103,10 +110,16 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
                 m_worker = nullptr;
             }
 
-            m_algorithmController.reset(); // vrati graf u pocetno stanje
+            auto graph = m_graphController->graph();
+            m_applier.setGraph(graph);
+
+            // m_algorithmController.clear();
+            // m_algorithmController.reset(); // vrati graf u pocetno stanje
             m_currentConfig = newConfig;
-            m_worker        = new AlgorithmWorker(newConfig.m_algorithmName, m_graph,
-                                                  newConfig.m_startNode, newConfig.m_endNode);
+
+            m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph, newConfig.m_startNode,
+                                           newConfig.m_endNode);
+
             // Worker -> Controller (greske algoritma)
             connect(m_worker, &AlgorithmWorker::algorithmErrorOccurred, &m_algorithmController,
                     &AlgorithmController::onAlgorithmError);
@@ -121,8 +134,13 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
             connect(m_worker, &AlgorithmWorker::stepsReady, &m_algorithmController,
                     &AlgorithmController::loadSteps);
 
+            // ucitaj rezultat algoritma
+            connect(m_worker, &AlgorithmWorker::resultReady, &m_algorithmController,
+                    &AlgorithmController::setResultString);
+
+            m_state = RunState::Idle;
             m_worker->start();
-            m_state = RunState::Playing;
+            // m_state = RunState::Playing;
             return;
         }
 
@@ -133,20 +151,25 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<Graph> graph, QWidget* parent)
         }
     });
 
+    // ===== PAUSE =====
     connect(m_pauseBtn, &QToolButton::clicked, this, [this]() {
         if(m_timer != nullptr) {
             m_timer->stop();
         }
         m_state = RunState::Paused;
     });
+
     connect(m_nextBtn, &QToolButton::clicked, [this]() { m_algorithmController.nextStep(); });
+
     connect(m_prevBtn, &QToolButton::clicked, [this]() { m_algorithmController.prevStep(); });
-    connect(m_restartBtn, &QToolButton::clicked, [this]() {
+
+    connect(m_restartBtn, &QToolButton::clicked, this, [this]() {
         m_algorithmController.reset();
         if(m_timer != nullptr) {
             m_timer->stop();
         }
         m_state = RunState::Idle;
+        updateLegendForAlgorithm(m_algorithmCombo->currentText());
     });
 }
 
@@ -284,7 +307,80 @@ void AlgorithmTab::initLayout() {
     m_helpBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     mainLayout->addWidget(m_helpBtn);
 
+    mainLayout->addWidget(m_legendScroll);
     mainLayout->addStretch();
+}
+
+QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) {
+    QWidget* row    = new QWidget(this);
+    auto*    layout = new QHBoxLayout(row);
+    layout->setContentsMargins(2, 2, 2, 2);
+
+    QLabel* box = new QLabel;
+    box->setFixedSize(14, 14);
+    box->setStyleSheet(QString("background-color: %1; border: 1px solid black;").arg(color.name()));
+
+    QLabel* label = new QLabel(text);
+
+    layout->addWidget(box);
+    layout->addWidget(label);
+    layout->addStretch();
+
+    return row;
+}
+
+void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
+    QLayoutItem* child;
+    while((child = m_legendLayout->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
+
+    QLabel* title = new QLabel("<b>Legend</b>");
+    m_legendLayout->addWidget(title);
+
+    m_legendLayout->addWidget(new QLabel("<b>Nodes</b>"));
+    m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
+    m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
+
+    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" ||
+       name == "Floyd-Warshall" || name == "Prim" || name == "Tarjan") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::darkMagenta, "Distance updated"));
+    }
+
+    if(name == "A* (Euclidean heuristic)") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::green, "In final path"));
+    }
+
+    if(name == "Kahn") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::darkYellow, "Added to topological order"));
+    }
+
+    if(name == "Tarjan") {
+        m_legendLayout->addWidget(new QLabel("Each component is colored differently."));
+    }
+
+    if(name != "Kahn") {
+        m_legendLayout->addWidget(new QLabel("<b>Edges</b>"));
+        m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Examined"));
+    }
+
+    if(name == "Bellman-Ford") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Relaxed"));
+    }
+
+    // A* ima crvenu granu = u konačnoj putanji
+    if(name == "A* (Euclidean heuristic)") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
+    }
+
+    if(name == "Prim") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::red, "In minimum spanning tree"));
+    }
+
+    // m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
+
+    // m_legendLayout->addStretch();
 }
 
 void AlgorithmTab::initIcons() {
@@ -298,9 +394,9 @@ void AlgorithmTab::initIcons() {
 void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
     const bool needsStart = algorithmName == "BFS" || algorithmName == "DFS" ||
                             algorithmName == "Dijkstra" || algorithmName == "Bellman-Ford" ||
-                            algorithmName == "A*";
+                            algorithmName == "A* (Euclidean heuristic)";
 
-    const bool needsEnd = algorithmName == "A*";
+    const bool needsEnd = algorithmName == "A* (Euclidean heuristic)";
 
     // show/hide whole rows
     if(!needsStart && !needsEnd) {
@@ -353,7 +449,15 @@ void AlgorithmTab::startTimerForPlay() {
             if(m_algorithmController.isFinished()) {
                 m_timer->stop();
                 m_state = RunState::Finished;
+
+                QString result = m_algorithmController.resultString();
+                if(!result.isEmpty()) {
+                    m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
+                    m_legendLayout->addWidget(new QLabel(result));
+                }
+
                 m_algorithmController.clear();
+
                 return;
             }
             if(m_state != RunState::Playing) {
@@ -362,6 +466,7 @@ void AlgorithmTab::startTimerForPlay() {
             m_algorithmController.nextStep();
         });
     }
+
     m_timer->start(500); // 500ms po koraku
 }
 

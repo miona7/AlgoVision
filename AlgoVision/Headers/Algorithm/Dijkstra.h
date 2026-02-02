@@ -15,8 +15,11 @@ public:
     std::optional<AlgorithmError> checkConditions(unsigned) const;
     std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
+    QString resultString() const override;
+
 private:
-    void dijkstra(unsigned);
+    void    dijkstra(unsigned);
+    QString m_resultString;
 };
 
 #endif // DIJKSTRA_H
