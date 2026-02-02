@@ -14,6 +14,69 @@ static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErr
     REQUIRE(err->m_message == expectedMessage);
 }
 
+static const char* stepTypeToString(StepType t) {
+    switch(t) {
+    case StepType::VisitNode:
+        return "VisitNode";
+    case StepType::ProcessNode:
+        return "ProcessNode";
+    case StepType::ExamineEdge:
+        return "ExamineEdge";
+    case StepType::SelectEdge:
+        return "SelectEdge";
+    case StepType::UpdateDistance:
+        return "UpdateDistance";
+    case StepType::AddToPath:
+        return "AddToPath";
+    }
+    return nullptr;
+}
+
+void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigned startNode,
+                         unsigned goalNode) {
+    // arrange
+    AStar                       astar(g);
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode,  StepType::ProcessNode,
+                                                 StepType::AddToPath,  StepType::ExamineEdge,
+                                                 StepType::SelectEdge, StepType::UpdateDistance};
+
+           // act
+    auto err = astar.execute(startNode, goalNode);
+
+           // assert
+    REQUIRE_SUCCESS(err);
+
+    const auto& steps = astar.getSteps();
+    std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
+
+    REQUIRE_FALSE(steps.empty());
+
+    for(size_t i = 0; i < steps.size(); ++i) {
+        const auto& s = steps[i];
+        std::cout << "[" << i << "] " << stepTypeToString(s.m_type);
+
+        if(s.m_node) {
+            std::cout << " | node = " << *s.m_node;
+        }
+        if(s.m_from && s.m_to) {
+            std::cout << " | edge = " << *s.m_from << " -> " << *s.m_to;
+        }
+        if(s.m_value) {
+            std::cout << " | value = " << *s.m_value;
+        }
+        if(s.m_message) {
+            std::cout << " | msg = \"" << *s.m_message << "\"";
+        }
+        std::cout << std::endl;
+    }
+
+    for(auto expected: expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
+        REQUIRE(found);
+    }
+}
+
 TEST_CASE("A*: simple path exists", "[AStar]") {
     // arrange
     auto g = std::make_shared<WeightedDirectedGraph>();
@@ -108,69 +171,6 @@ TEST_CASE("A*: negative edge weight", "[AStar]") {
 
     // assert
     REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights, "A* cannot be applied to graphs with negative edge weights.");
-}
-
-static const char* stepTypeToString(StepType t) {
-    switch(t) {
-    case StepType::VisitNode:
-        return "VisitNode";
-    case StepType::ProcessNode:
-        return "ProcessNode";
-    case StepType::ExamineEdge:
-        return "ExamineEdge";
-    case StepType::SelectEdge:
-        return "SelectEdge";
-    case StepType::UpdateDistance:
-        return "UpdateDistance";
-    case StepType::AddToPath:
-        return "AddToPath";
-    }
-    return nullptr;
-}
-
-void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigned startNode,
-                         unsigned goalNode) {
-    // arrange
-    AStar                       astar(g);
-    const std::vector<StepType> expectedSteps = {StepType::VisitNode,  StepType::ProcessNode,
-                                                 StepType::AddToPath,  StepType::ExamineEdge,
-                                                 StepType::SelectEdge, StepType::UpdateDistance};
-
-    // act
-    auto err = astar.execute(startNode, goalNode);
-
-    // assert
-    REQUIRE_SUCCESS(err);
-
-    const auto& steps = astar.getSteps();
-    std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
-
-    REQUIRE_FALSE(steps.empty());
-
-    for(size_t i = 0; i < steps.size(); ++i) {
-        const auto& s = steps[i];
-        std::cout << "[" << i << "] " << stepTypeToString(s.m_type);
-
-        if(s.m_node) {
-            std::cout << " | node = " << *s.m_node;
-        }
-        if(s.m_from && s.m_to) {
-            std::cout << " | edge = " << *s.m_from << " -> " << *s.m_to;
-        }
-        if(s.m_value) {
-            std::cout << " | value = " << *s.m_value;
-        }
-        if(s.m_message) {
-            std::cout << " | msg = \"" << *s.m_message << "\"";
-        }
-        std::cout << std::endl;
-    }
-
-    for(auto expected: expectedSteps) {
-        bool found = std::any_of(steps.begin(), steps.end(),
-                                 [&](const auto& s) { return s.m_type == expected; });
-        REQUIRE(found);
-    }
 }
 
 TEST_CASE("A*: steps test", "[AStar]") {
