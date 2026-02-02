@@ -15,9 +15,6 @@ public:
     void setState(GraphView::State);
     void resetState();
 
-    QPointF center() const;
-    void setCenter(QPointF newCenter);
-
 protected:
     void mousePressEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
@@ -32,7 +29,6 @@ private:
 
     // pan state (u koordinatama scene)
     QPoint m_lastMousePos;
-    QPointF m_center;
 };
 
 #endif // GRAPH_VIEW

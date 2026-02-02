@@ -1,6 +1,7 @@
 #include "GraphView.h"
 
 #include <qevent.h>
+#include <QScrollBar>
 
 
 
@@ -47,9 +48,9 @@ void GraphView::mousePressEvent(QMouseEvent* event) {
 void GraphView::mouseMoveEvent(QMouseEvent* event) {
     if (m_state == GraphView::State::PAN_ACTIVE) {
         // pan update logic (u koordinatama scene, da ne zavise proracuni od zoom-a)
-
         QPoint delta = event->pos() - m_lastMousePos;
-        translate(-delta.x(), -delta.y());
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
         m_lastMousePos = event->pos();
 
         event->accept();
@@ -92,15 +93,6 @@ void GraphView::mouseDoubleClickEvent(QMouseEvent* event) {
 void GraphView::init() {
     setRenderHint(QPainter::Antialiasing);
     setAlignment(Qt::AlignCenter);
-    setTransformationAnchor(QGraphicsView::NoAnchor);
-    setResizeAnchor(QGraphicsView::NoAnchor);
-}
-
-QPointF GraphView::center() const {
-    return m_center;
-}
-
-void GraphView::setCenter(QPointF newCenter) {
-    m_center = newCenter;
-    centerOn(m_center);
+    setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+    setResizeAnchor(QGraphicsView::AnchorViewCenter);
 }
