@@ -4,6 +4,16 @@
 #include "AStar.h"
 #include "WeightedDirectedGraph.h"
 
+static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
+    REQUIRE_FALSE(err.has_value());
+}
+
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+    REQUIRE(err.has_value());
+    REQUIRE(err->m_type == expectedType);
+    REQUIRE(err->m_message == expectedMessage);
+}
+
 TEST_CASE("A*: simple path exists", "[AStar]") {
     // arrange
     auto g = std::make_shared<WeightedDirectedGraph>();
@@ -22,9 +32,11 @@ TEST_CASE("A*: simple path exists", "[AStar]") {
     int                   expectedCost = 6;
 
     // act
-    REQUIRE_NOTHROW(astar.execute(1, 4));
+    auto err = astar.execute(1, 4);
 
     // assert
+    REQUIRE_SUCCESS(err);
+
     std::vector<unsigned> path = astar.getPath();
     int                   cost = astar.getTotalCost();
 
@@ -52,9 +64,11 @@ TEST_CASE("A*: finds shortest path in simple graph", "[AStar]") {
     int                   expectedCost  = 3;
 
     // act
-    REQUIRE_NOTHROW(astar.execute(1, 4));
+    auto err = astar.execute(1, 4);
 
     // assert
+    REQUIRE_SUCCESS(err);
+
     std::vector<unsigned> path      = astar.getPath();
     int                   cost      = astar.getTotalCost();
     bool                  validPath = path == expectedPath1 || path == expectedPath2;
@@ -72,8 +86,11 @@ TEST_CASE("A*: no path exists", "[AStar]") {
 
     AStar astar(g);
 
-    // act + assert
-    REQUIRE_THROWS_WITH(astar.execute(1, 2), "No path found from start to goal!");
+    // act
+    auto err = astar.execute(1, 2);
+
+    // assert
+    REQUIRE_ERROR(err, AlgorithmErrorType::NoPathFound, "No path exists between start and goal nodes.");
 }
 
 TEST_CASE("A*: negative edge weight", "[AStar]") {
@@ -86,8 +103,11 @@ TEST_CASE("A*: negative edge weight", "[AStar]") {
 
     AStar astar(g);
 
-    // act + assert
-    REQUIRE_THROWS_WITH(astar.execute(1, 2), "Graph contains negative edge weights!");
+    // act
+    auto err = astar.execute(1, 2);
+
+    // assert
+    REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights, "A* cannot be applied to graphs with negative edge weights.");
 }
 
 static const char* stepTypeToString(StepType t) {
@@ -117,12 +137,14 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigne
                                                  StepType::SelectEdge, StepType::UpdateDistance};
 
     // act
-    REQUIRE_NOTHROW(astar.execute(startNode, goalNode));
+    auto err = astar.execute(startNode, goalNode);
+
+    // assert
+    REQUIRE_SUCCESS(err);
 
     const auto& steps = astar.getSteps();
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
 
-    // assert
     REQUIRE_FALSE(steps.empty());
 
     for(size_t i = 0; i < steps.size(); ++i) {
