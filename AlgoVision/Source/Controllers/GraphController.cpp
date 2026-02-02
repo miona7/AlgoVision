@@ -8,9 +8,9 @@
 #include <QUndoCommand>
 
 struct EdgeSnapshot {
-    unsigned from;
-    unsigned to;
-    int      weight;
+    unsigned m_from;
+    unsigned m_to;
+    int      m_weight;
 };
 
 class AddNodeCommand : public QUndoCommand {
@@ -96,7 +96,7 @@ public:
 
         //vrati sve grane
         for(const EdgeSnapshot& es: m_edges) {
-            m_c->addEdgeNoHistory(es.from, es.to, es.weight);
+            m_c->addEdgeNoHistory(es.m_from, es.m_to, es.m_weight);
         }
     }
 
@@ -121,14 +121,22 @@ public:
         if(m_c == nullptr) {
             return;
         }
-        m_c->addEdgeNoHistory(m_from, m_to, m_weight);
+        if(!m_hasId) {
+            m_c->addEdgeNoHistory(m_from, m_to, m_weight);
+            if(Edge* e = m_c->graph()->getEdge(m_from, m_to)) {
+                m_edgeId = e->getId();
+                m_hasId  = true;
+            }
+        } else {
+            m_c->restoreEdgeNoHistory(m_edgeId, m_from, m_to, m_weight);
+        }
     }
 
     void undo() override {
-        if(m_c == nullptr) {
+        if(m_c == nullptr || !m_hasId) {
             return;
         }
-        m_c->removeEdgeNoHistory(m_from, m_to);
+        m_c->removeEdgeNoHistoryById(m_edgeId);
     }
 
 private:
@@ -136,42 +144,56 @@ private:
     unsigned         m_from;
     unsigned         m_to;
     int              m_weight;
+    unsigned         m_edgeId = 0;
+    bool             m_hasId  = false;
 };
 
 class RemoveEdgeCommand : public QUndoCommand {
 public:
-    RemoveEdgeCommand(GraphController* c, unsigned from, unsigned to, int weight)
-        : m_c(c), m_from(from), m_to(to), m_weight(weight) {
-        setText("Remove edge");
+    RemoveEdgeCommand(GraphController* c, EdgeItem* edgeItem)
+        : m_c(c) {
+
+        Edge* e = edgeItem->modelEdge();
+        m_edgeId = e->getId();
+        m_from   = e->startNode();
+        m_to     = e->endNode();
+        m_weight = e->getWeight();
     }
 
     void redo() override {
-        if(m_c == nullptr) {
-            return;
+        if(m_c != nullptr) {
+            m_c->removeEdgeNoHistoryById(m_edgeId);
         }
-        m_c->removeEdgeNoHistory(m_from, m_to);
     }
 
     void undo() override {
-        if(m_c == nullptr) {
-            return;
+        if(m_c != nullptr) {
+            m_c->restoreEdgeNoHistory(m_edgeId, m_from, m_to, m_weight);
         }
-        m_c->addEdgeNoHistory(m_from, m_to, m_weight);
     }
 
 private:
-    GraphController* m_c;
-    unsigned         m_from;
-    unsigned         m_to;
-    int              m_weight;
+    GraphController* m_c = nullptr;
+    unsigned m_edgeId = 0;
+    unsigned m_from   = 0;
+    unsigned m_to     = 0;
+    int      m_weight = 1;
 };
 
 class EditEdgeWeightCommand : public QUndoCommand {
 public:
-    EditEdgeWeightCommand(GraphController* c, unsigned from, unsigned to, int beforeW,
-                          QString beforeText, int afterW, QString afterText)
-        : m_c(c), m_from(from), m_to(to), m_beforeW(beforeW), m_beforeText(std::move(beforeText)),
-          m_afterW(afterW), m_afterText(std::move(afterText)) {
+    EditEdgeWeightCommand(GraphController* c,
+                          unsigned edgeId,
+                          int beforeW,
+                          QString beforeText,
+                          int afterW,
+                          QString afterText)
+        : m_c(c),
+          m_edgeId(edgeId),
+          m_beforeW(beforeW),
+          m_afterW(afterW),
+          m_beforeText(std::move(beforeText)),
+          m_afterText(std::move(afterText)) {
         setText("Edit edge weight");
     }
 
@@ -179,21 +201,26 @@ public:
         if(m_c == nullptr) {
             return;
         }
-        m_c->setEdgeWeightNoHistory(m_from, m_to, m_afterW, m_afterText);
+        m_c->setEdgeWeightNoHistoryById(m_edgeId, m_afterW, m_afterText);
     }
 
     void undo() override {
         if(m_c == nullptr) {
             return;
         }
-        m_c->setEdgeWeightNoHistory(m_from, m_to, m_beforeW, m_beforeText);
+        m_c->setEdgeWeightNoHistoryById(m_edgeId, m_beforeW, m_beforeText);
     }
 
 private:
-    GraphController* m_c;
-    unsigned         m_from, m_to;
-    int              m_beforeW, m_afterW;
-    QString          m_beforeText, m_afterText;
+    GraphController* m_c = nullptr;
+
+    unsigned m_edgeId = 0;
+
+    int      m_beforeW = 0;
+    int      m_afterW  = 0;
+
+    QString  m_beforeText;
+    QString  m_afterText;
 };
 
 class EditNodeNameCommand : public QUndoCommand {
@@ -281,7 +308,7 @@ std::shared_ptr<Graph> GraphController::graph() const {
 }
 
 void GraphController::setGraph(const std::shared_ptr<Graph>& newGraph) {
-    if(m_undoStack) {
+    if(m_undoStack != nullptr) {
         m_undoStack->clear();
     }
     m_graph = newGraph;
@@ -318,9 +345,9 @@ void GraphController::createGraph(bool isDirected, bool isWeighted) {
 }
 
 void GraphController::clear() {
-    if(!m_undoStack)
+    if(m_undoStack == nullptr) {
         return;
-
+    }
     m_undoStack->clear();
     clearNoHistory();
 }
@@ -427,18 +454,11 @@ void GraphController::removeNode(NodeItem* nodeItem) {
 }
 
 void GraphController::removeEdge(EdgeItem* edgeItem) {
-    if(m_graph == nullptr || m_undoStack == nullptr) {
-        return;
-    }
-    if(edgeItem == nullptr || edgeItem->modelEdge() == nullptr) {
+    if(m_graph == nullptr || m_undoStack == nullptr || edgeItem == nullptr || edgeItem->modelEdge() == nullptr) {
         return;
     }
 
-    const unsigned from   = edgeItem->modelEdge()->startNode();
-    const unsigned to     = edgeItem->modelEdge()->endNode();
-    const int      weight = edgeItem->modelEdge()->getWeight();
-
-    m_undoStack->push(new RemoveEdgeCommand(this, from, to, weight));
+    m_undoStack->push(new RemoveEdgeCommand(this, edgeItem));
 }
 
 void GraphController::editNodeName(const NodeItem* nodeItem, const QString& name) {
@@ -485,6 +505,7 @@ void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& we
     }
     const unsigned from = edgeItem->modelEdge()->startNode();
     const unsigned to   = edgeItem->modelEdge()->endNode();
+    const unsigned edgeId = edgeItem->modelEdge()->getId();
 
     Edge* e = m_graph->getEdge(from, to);
     if(e == nullptr) {
@@ -503,7 +524,7 @@ void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& we
     }
 
     m_undoStack->push(
-        new EditEdgeWeightCommand(this, from, to, beforeW, beforeText, afterW, afterText));
+        new EditEdgeWeightCommand(this, edgeId, beforeW, beforeText, afterW, afterText));
 }
 
 void GraphController::moveNode(const NodeItem* nodeItem, const QPointF& oldPos, const QPointF& newPos) {
@@ -646,12 +667,81 @@ void GraphController::setNodeNameNoHistory(unsigned nodeId, const QString& name)
     emit sceneModified();
 }
 
+void GraphController::removeEdgeNoHistoryById(unsigned edgeId) {
+    if(m_graph == nullptr) {
+        return;
+    }
+
+    m_scene->clearSelection();
+    m_scene->clearFocus();
+    m_scene->setFocusItem(nullptr);
+
+    if(EdgeItem* ei = m_scene->findEdgeItemById(edgeId)) {
+        m_scene->removeEdge(ei);
+    }
+
+    m_graph->removeEdge(edgeId);
+    emit sceneModified();
+}
+
+void GraphController::addEdgeNoHistoryById(unsigned edgeId) {
+    if(m_graph == nullptr) {
+        return;
+    }
+    Edge* e = m_graph->getEdge(edgeId);
+    if(e == nullptr) {
+        return;
+    }
+    m_scene->addEdge(e, m_graph->isDirected(), m_graph->isWeighted());
+    emit sceneModified();
+}
+
+void GraphController::restoreEdgeNoHistory(unsigned edgeId,
+                                           unsigned from,
+                                           unsigned to,
+                                           int weight) {
+    if(m_graph == nullptr) {
+        return;
+    }
+
+    m_graph->addEdgeSerialized(edgeId, from, to, weight);
+
+    if(Edge* e = m_graph->getEdge(edgeId)) {
+        m_scene->addEdge(e, m_graph->isDirected(), m_graph->isWeighted());
+    }
+
+    emit sceneModified();
+}
+
+void GraphController::setEdgeWeightNoHistoryById(unsigned edgeId,
+                                                 int weight,
+                                                 const QString& text) {
+    if(m_graph == nullptr) {
+        return;
+    }
+
+    if(Edge* e = m_graph->getEdge(edgeId)) {
+        e->setWeight(weight);
+    }
+
+    if(EdgeItem* ei = m_scene->findEdgeItemById(edgeId)) {
+        if(auto* w = ei->weight()) {
+            w->setPlainText(text);
+            w->setOldText(text);
+            w->centerText();
+        }
+        ei->adjustWeightGeometry();
+    }
+
+    emit sceneModified();
+}
+
 void GraphController::clearNoHistory() {
     m_scene->clearSelection();
     m_scene->clearFocus();
     m_scene->setFocusItem(nullptr);
     m_scene->clear();
-    if(m_graph) {
+    if(m_graph != nullptr) {
         m_graph->clear();
     }
     emit sceneModified();

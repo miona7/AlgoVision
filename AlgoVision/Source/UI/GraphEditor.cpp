@@ -12,8 +12,6 @@
 #include "AlgorithmTab.h"
 #include "GraphEditTab.h"
 #include "GraphEditor.h"
-#include "UnweightedDirectedGraph.h"
-#include "UnweightedUndirectedGraph.h"
 
 namespace {
     class LambdaCommand : public QUndoCommand {
@@ -44,8 +42,6 @@ namespace {
 GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController, QWidget* parent)
     : m_graphController(graphController), QWidget(parent) {
 
-    // m_graph = new UnweightedDirectedGraph();
-
     m_undoStack = m_graphController->undoStack();
 
     // Ctrl+Z
@@ -62,8 +58,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     m_view = new QGraphicsView(splitter);
     m_view->setScene(m_graphController->scene());
     splitter->addWidget(m_view);
-
-    // m_graphController = new GraphController(m_scene, this);
 
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
@@ -101,11 +95,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     connect(m_editTab, &GraphEditTab::removeRequested, this, &GraphEditor::onRemoveRequestTrigger);
 
     connect(m_editTab, &GraphEditTab::clearRequested, this, &GraphEditor::onClearRequestTrigger);
-}
-
-GraphEditor::~GraphEditor() {
-    // m_graphController->clear();
-    m_graphController->clearNoHistory();
 }
 
 void GraphEditor::onAddRequestTrigger() {

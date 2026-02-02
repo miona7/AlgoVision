@@ -181,6 +181,19 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     delete edge;
 }
 
+EdgeItem* GraphScene::findEdgeItemById(unsigned edgeId) const {
+    const QList<QGraphicsItem*> all = items();
+    for(QGraphicsItem* it : all) {
+        auto* edgeItem = dynamic_cast<EdgeItem*>(it);
+        if(!edgeItem || !edgeItem->modelEdge())
+            continue;
+
+        if(edgeItem->modelEdge()->getId() == edgeId)
+            return edgeItem;
+    }
+    return nullptr;
+}
+
 NodeItem* GraphScene::findNodeItemById(const unsigned id) const {
     auto it = m_nodeItems.find(id);
     return (it != m_nodeItems.end()) ? it->second : nullptr;

@@ -34,6 +34,7 @@ public:
 
     NodeItem* findNodeItemById(const unsigned) const;
     EdgeItem* findEdgeItemByNodes(unsigned, unsigned) const;
+    EdgeItem* findEdgeItemById(unsigned) const;
 
 signals:
     void addNodeRequest(const QPointF&);
