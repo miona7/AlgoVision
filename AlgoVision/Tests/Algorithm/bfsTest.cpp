@@ -7,6 +7,16 @@
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 
+static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
+    REQUIRE_FALSE(err.has_value());
+}
+
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+    REQUIRE(err.has_value());
+    REQUIRE(err->m_type == expectedType);
+    REQUIRE(err->m_message == expectedMessage);
+}
+
 static const char* stepTypeToString(StepType t) {
     switch(t) {
     case StepType::VisitNode:
@@ -25,7 +35,9 @@ void runBFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
                                                  StepType::ExamineEdge};
 
-    bfs.execute(startNode);
+    auto err = bfs.execute(startNode);
+
+    REQUIRE_SUCCESS(err);
 
     const auto& steps   = bfs.getSteps();
     const auto& visited = bfs.getVisited();
@@ -72,7 +84,11 @@ TEST_CASE("BFS on Unweighted Directed Graph", "[BFS]") {
     g->addEdge(0, 1);
     g->addEdge(1, 2);
 
-    REQUIRE_NOTHROW(runBFSLoggingTest(g, 0));
+    BFS bfs(g);
+    auto err = bfs.execute(0);
+
+    REQUIRE_SUCCESS(err);
+    runBFSLoggingTest(g, 0);
 }
 
 TEST_CASE("BFS on Unweighted Undirected Graph", "[BFS]") {
@@ -85,7 +101,11 @@ TEST_CASE("BFS on Unweighted Undirected Graph", "[BFS]") {
     g->addEdge(0, 1);
     g->addEdge(1, 2);
 
-    REQUIRE_NOTHROW(runBFSLoggingTest(g, 0));
+    BFS bfs(g);
+    auto err = bfs.execute(0);
+
+    REQUIRE_SUCCESS(err);
+    runBFSLoggingTest(g, 0);
 }
 
 TEST_CASE("BFS on Weighted Directed Graph", "[BFS]") {
@@ -98,7 +118,11 @@ TEST_CASE("BFS on Weighted Directed Graph", "[BFS]") {
     g->addEdge(0, 1, 5);
     g->addEdge(1, 2, 7);
 
-    REQUIRE_NOTHROW(runBFSLoggingTest(g, 0));
+    BFS bfs(g);
+    auto err = bfs.execute(0);
+
+    REQUIRE_SUCCESS(err);
+    runBFSLoggingTest(g, 0);
 }
 
 TEST_CASE("BFS on Weighted Undirected Graph", "[BFS]") {
@@ -111,7 +135,11 @@ TEST_CASE("BFS on Weighted Undirected Graph", "[BFS]") {
     g->addEdge(0, 1, 3);
     g->addEdge(1, 2, 4);
 
-    REQUIRE_NOTHROW(runBFSLoggingTest(g, 0));
+    BFS bfs(g);
+    auto err = bfs.execute(0);
+
+    REQUIRE_SUCCESS(err);
+    runBFSLoggingTest(g, 0);
 }
 
 TEST_CASE("BFS throws for invalid start node", "[BFS]") {
@@ -120,5 +148,6 @@ TEST_CASE("BFS throws for invalid start node", "[BFS]") {
     g->addNode(2);
 
     BFS bfs(g);
-    REQUIRE_THROWS_AS(bfs.execute(0), std::runtime_error);
+    auto err = bfs.execute(0);
+    REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing, "Start node does not exist in the graph.");
 }
