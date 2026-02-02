@@ -13,7 +13,7 @@ build:
   script:
     - mkdir -p $BUILD_DIR
     - cd $BUILD_DIR
-    - cmake -S .. -B . -DCMAKE_BUILD_TYPE=Release
+    - cmake -S ../AlgoVision -B . -DCMAKE_BUILD_TYPE=Release
     - cmake --build .
   artifacts:
     paths:
