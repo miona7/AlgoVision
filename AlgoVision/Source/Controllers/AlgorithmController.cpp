@@ -75,20 +75,6 @@ void AlgorithmController::redo() {
     m_currentIndex++;
 }
 
-void AlgorithmController::reset() {
-    while(!m_undoStack.empty()) {
-        AlgorithmStep& step = m_undoStack.back();
-        m_applier.undo(step);
-        m_undoStack.pop_back();
-    }
-    m_redoStack.clear();
-    m_currentIndex = -1;
-}
-
-bool AlgorithmController::isFinished() const {
-    return m_currentIndex + 1 >= m_steps.size();
-}
-
 void AlgorithmController::onAlgorithmError(const AlgorithmError& error) {
     bool allowContinue = false;
 
