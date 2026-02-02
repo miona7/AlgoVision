@@ -5,6 +5,16 @@
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 
+static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
+    REQUIRE_FALSE(err.has_value());
+}
+
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType, const std::string& expectedMessage) {
+    REQUIRE(err.has_value());
+    REQUIRE(err->m_type == expectedType);
+    REQUIRE(err->m_message == expectedMessage);
+}
+
 static const char* stepTypeToString(StepType t) {
     switch(t) {
     case StepType::VisitNode:
@@ -28,7 +38,9 @@ void runPrimLoggingTest(const std::shared_ptr<Graph>& g) {
                                                  StepType::ExamineEdge, StepType::UpdateDistance,
                                                  StepType::SelectEdge};
 
-    REQUIRE_NOTHROW(prim.execute());
+    auto err = prim.execute();
+
+    REQUIRE_SUCCESS(err);
 
     const auto& steps = prim.getSteps();
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
@@ -75,7 +87,7 @@ TEST_CASE("Prim works on connected undirected weighted graph", "[PRIM]") {
     g->addEdge(3, 4, 3);
     g->addEdge(1, 4, 10);
 
-    REQUIRE_NOTHROW(runPrimLoggingTest(g));
+    runPrimLoggingTest(g);
 }
 
 TEST_CASE("Prim throws on disconnected graph", "[PRIM]") {
@@ -88,7 +100,10 @@ TEST_CASE("Prim throws on disconnected graph", "[PRIM]") {
     g->addEdge(1, 2, 1); // node 3 isolated
 
     Prim prim(g);
-    REQUIRE_THROWS_AS(prim.execute(), std::runtime_error);
+
+    auto err = prim.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotConnected, "Graph is not connected");
 }
 
 TEST_CASE("Prim throws on directed graph", "[PRIM]") {
@@ -100,12 +115,18 @@ TEST_CASE("Prim throws on directed graph", "[PRIM]") {
     g->addEdge(1, 2, 5);
 
     Prim prim(g);
-    REQUIRE_THROWS_AS(prim.execute(), std::runtime_error);
+
+    auto err = prim.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
 
 TEST_CASE("Prim throws on empty graph", "[PRIM]") {
     auto g = std::make_shared<WeightedUndirectedGraph>();
 
     Prim prim(g);
-    REQUIRE_THROWS_AS(prim.execute(), std::runtime_error);
+
+    auto err = prim.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized, "Graph is not initialized or empty.");
 }
