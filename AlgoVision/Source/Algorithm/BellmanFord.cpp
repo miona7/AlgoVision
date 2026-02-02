@@ -63,8 +63,8 @@ void BellmanFord::bellmanFord(unsigned start) {
 
     {
         AlgorithmStep s;
-        s.m_type  = StepType::UpdateDistance;
-        s.m_node  = start;
+        s.m_type = StepType::UpdateDistance;
+        s.m_node = start;
         addStep(s);
     }
 
@@ -85,15 +85,15 @@ void BellmanFord::bellmanFord(unsigned start) {
             }
             {
                 AlgorithmStep s;
-                s.m_type    = StepType::ProcessNode; // koristimo kao "pass k"
-                s.m_node    = u;
+                s.m_type = StepType::ProcessNode; // koristimo kao "pass k"
+                s.m_node = u;
                 addStep(s);
             }
             {
                 AlgorithmStep s;
-                s.m_type  = StepType::ExamineEdge;
-                s.m_from  = u;
-                s.m_to    = v;
+                s.m_type = StepType::ExamineEdge;
+                s.m_from = u;
+                s.m_to   = v;
                 addStep(s);
             }
             if(m_minDistance[u] != std::numeric_limits<int>::max() &&
@@ -102,15 +102,15 @@ void BellmanFord::bellmanFord(unsigned start) {
                 wasRelaxed       = true;
                 {
                     AlgorithmStep s;
-                    s.m_type  = StepType::RelaxEdge;
-                    s.m_from  = u;
-                    s.m_to    = v;
+                    s.m_type = StepType::RelaxEdge;
+                    s.m_from = u;
+                    s.m_to   = v;
                     addStep(s);
                 }
                 {
                     AlgorithmStep s;
-                    s.m_type  = StepType::UpdateDistance;
-                    s.m_node  = v;
+                    s.m_type = StepType::UpdateDistance;
+                    s.m_node = v;
                     addStep(s);
                 }
             }

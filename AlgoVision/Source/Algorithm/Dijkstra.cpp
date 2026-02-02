@@ -56,8 +56,8 @@ void Dijkstra::dijkstra(unsigned start) {
 
     {
         AlgorithmStep s;
-        s.m_type  = StepType::UpdateDistance;
-        s.m_node  = start;
+        s.m_type = StepType::UpdateDistance;
+        s.m_node = start;
         addStep(s);
     }
 
@@ -91,9 +91,9 @@ void Dijkstra::dijkstra(unsigned start) {
 
                     {
                         AlgorithmStep s;
-                        s.m_type  = StepType::ExamineEdge;
-                        s.m_from  = currentNode;
-                        s.m_to    = neighbourId;
+                        s.m_type = StepType::ExamineEdge;
+                        s.m_from = currentNode;
+                        s.m_to   = neighbourId;
                         addStep(s);
                     }
 
@@ -102,8 +102,8 @@ void Dijkstra::dijkstra(unsigned start) {
 
                         {
                             AlgorithmStep s;
-                            s.m_type  = StepType::UpdateDistance;
-                            s.m_node  = neighbourId;
+                            s.m_type = StepType::UpdateDistance;
+                            s.m_node = neighbourId;
                             addStep(s);
                         }
 

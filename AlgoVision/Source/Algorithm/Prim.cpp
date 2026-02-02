@@ -63,8 +63,8 @@ void Prim::prim() {
 
     {
         AlgorithmStep s;
-        s.m_type  = StepType::UpdateDistance;
-        s.m_node  = start;
+        s.m_type = StepType::UpdateDistance;
+        s.m_node = start;
         addStep(s);
     }
 
@@ -93,9 +93,9 @@ void Prim::prim() {
 
             if(parent[currentNode]) {
                 AlgorithmStep s;
-                s.m_type  = StepType::SelectEdge;
-                s.m_from  = parent[currentNode];
-                s.m_to    = currentNode;
+                s.m_type = StepType::SelectEdge;
+                s.m_from = parent[currentNode];
+                s.m_to   = currentNode;
                 addStep(s);
             }
 
@@ -117,8 +117,8 @@ void Prim::prim() {
                             pq.emplace(minDistance[neighbourId], neighbourId);
                             {
                                 AlgorithmStep s;
-                                s.m_type  = StepType::UpdateDistance;
-                                s.m_node  = neighbourId;
+                                s.m_type = StepType::UpdateDistance;
+                                s.m_node = neighbourId;
                                 addStep(s);
                             }
                         }

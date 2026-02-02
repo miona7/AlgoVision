@@ -54,8 +54,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
     m_incomingNumbering[nodeId] = m_lowLink[nodeId] = m_arrivalTime++;
     {
         AlgorithmStep s;
-        s.m_type    = StepType::VisitNode;
-        s.m_node    = nodeId;
+        s.m_type = StepType::VisitNode;
+        s.m_node = nodeId;
         addStep(s);
     }
     {
@@ -66,8 +66,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
     }
     {
         AlgorithmStep s;
-        s.m_type    = StepType::UpdateDistance; // koristimo kao "lowlink update"
-        s.m_node    = nodeId;
+        s.m_type = StepType::UpdateDistance; // koristimo kao "lowlink update"
+        s.m_node = nodeId;
         addStep(s);
     }
     m_tourOrder.push(nodeId);
@@ -89,8 +89,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_lowLink[neighbourId]);
                 if(m_lowLink[nodeId] != oldLow) {
                     AlgorithmStep s;
-                    s.m_type    = StepType::UpdateDistance; // lowlink update
-                    s.m_node    = nodeId;
+                    s.m_type = StepType::UpdateDistance; // lowlink update
+                    s.m_node = nodeId;
                     addStep(s);
                 }
             } else if(m_onStack[neighbourId]) {
@@ -98,8 +98,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_incomingNumbering[neighbourId]);
                 if(m_lowLink[nodeId] != oldLow) {
                     AlgorithmStep s;
-                    s.m_type    = StepType::UpdateDistance; // lowlink update
-                    s.m_node    = nodeId;
+                    s.m_type = StepType::UpdateDistance; // lowlink update
+                    s.m_node = nodeId;
                     addStep(s);
                 }
             }
@@ -113,8 +113,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
             m_tourOrder.pop();
             {
                 AlgorithmStep s;
-                s.m_type  = StepType::AssignComponent;
-                s.m_node  = componentNodeId;
+                s.m_type = StepType::AssignComponent;
+                s.m_node = componentNodeId;
                 addStep(s);
             }
 
