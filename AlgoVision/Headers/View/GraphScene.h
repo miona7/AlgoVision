@@ -5,6 +5,7 @@
 #include <map>
 
 #include "Edge.h"
+#include "EdgeItem.h"
 #include "NodeItem.h"
 #include "ThemeManager.h"
 
@@ -28,17 +29,24 @@ public:
 
     void addNode(Node*);
     void addEdge(Edge*, bool, bool);
+    // dodajemo objedinjenu naredbu kako bi mogao undo/redo da uradi dodavanje cvora i grane kao jednu operaciju
+    // sta pri vec selektovanom cvoru kao uslovu i jeste
+    void addNodeAndEdge(Node*, Edge*, bool, bool);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
     void applyTheme(ThemeManager::Theme theme);
 
     NodeItem* findNodeItemById(const unsigned) const;
+    EdgeItem* findEdgeItemByNodes(unsigned, unsigned) const;
+    EdgeItem* findEdgeItemById(unsigned) const;
 
 signals:
     void addNodeRequest(const QPointF&);
+    void addNodeAndEdgeRequest(const QPointF&, NodeItem*);
     void addEdgeRequest(NodeItem*, NodeItem*);
     void removeNodeRequest(NodeItem*);
     void removeEdgeRequest(EdgeItem*);
+    void moveNodeRequest(const NodeItem*, const QPointF&, const QPointF&);
     void editNodeNameRequest(const NodeItem*, const QString&) const;
     void editEdgeWeightRequest(const EdgeItem*, const QString&) const;
 

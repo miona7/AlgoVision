@@ -1,4 +1,5 @@
 #include <QHBoxLayout>
+#include <QKeySequence>
 #include <QLabel>
 #include <QShortcut>
 #include <QSplitter>
@@ -13,8 +14,6 @@
 #include "GraphEditTab.h"
 #include "GraphEditor.h"
 #include "GraphView.h"
-#include "UnweightedDirectedGraph.h"
-#include "UnweightedUndirectedGraph.h"
 
 namespace {
     class LambdaCommand : public QUndoCommand {
@@ -45,32 +44,23 @@ namespace {
 GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController, QWidget* parent)
     : m_graphController(graphController), QWidget(parent) {
 
-    // m_graph = new UnweightedDirectedGraph();
+    m_undoStack = m_graphController->undoStack();
 
-    m_undoStack = new QUndoStack(this);
+    // Ctrl+Z
+    auto* undoSc = new QShortcut(QKeySequence::Undo, this);
+    connect(undoSc, &QShortcut::activated, m_undoStack, &QUndoStack::undo);
+
+    // Ctrl+Y
+    auto* redoCtrlY = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Y), this);
+    connect(redoCtrlY, &QShortcut::activated, m_undoStack, &QUndoStack::redo);
 
     // main splitter for the left and right page sides
     QSplitter* splitter = new QSplitter(Qt::Horizontal, this);
 
-    // left side (placeholder)
-    // QLabel* leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
-    // leftPlaceholder->setAlignment(Qt::AlignCenter);
-    // leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
-
-    // m_leftPlaceholder = new QLabel("GRAPH / SCENE AREA", splitter);
-    // m_leftPlaceholder->setAlignment(Qt::AlignCenter);
-    // m_leftPlaceholder->setStyleSheet("background-color: #2b2b2b; color: white;");
-    // splitter->addWidget(m_leftPlaceholder);
-
-    // stari pogled (QGraphicsView)
-    // m_view = new QGraphicsView(splitter);
-    // m_view->setScene(m_graphController->scene());
-    // splitter->addWidget(m_view);
-
     m_view = new GraphView(m_graphController->scene(), this);
-    splitter->addWidget(m_view);
+    //m_view->setScene(m_graphController->scene());
 
-    // m_graphController = new GraphController(m_scene, this);
+    splitter->addWidget(m_view);
 
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
@@ -90,7 +80,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // layout for the whole GraphEditor
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(splitter);
-
     // keyboard shortcuts
 
     // pan: Ctrl + P
@@ -105,9 +94,15 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     QShortcut* zoomOutShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), this);
     connect(zoomOutShortcut, &QShortcut::activated, this, &GraphEditor::onZoomOutRequestTrigger);
 
-    connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
+    //connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
 
-    connect(m_editTab, &GraphEditTab::redoRequested, m_undoStack, &QUndoStack::redo);
+    connect(m_editTab, &GraphEditTab::undoRequested, this, &GraphEditor::onUndoRequestTrigger);
+
+    connect(m_editTab, &GraphEditTab::redoRequested, this, &GraphEditor::onRedoRequestTrigger);
+
+    connect(this, &GraphEditor::undoRequested, m_undoStack, &QUndoStack::undo);
+
+    connect(this, &GraphEditor::redoRequested, m_undoStack, &QUndoStack::redo);
 
     connect(m_undoStack, &QUndoStack::canUndoChanged, m_editTab, &GraphEditTab::setUndoEnabled);
 
@@ -134,26 +129,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     connect(m_editTab, &GraphEditTab::zoomOutRequested, this,
             &GraphEditor::onZoomOutRequestTrigger);
 
-    // Dummy test
-    // connect(m_editTab, &GraphEditTab::addRequested, this, [this]() {
-    //     const int before = m_dummyState;
-    //     const int after  = before + 1;
-
-    //     m_undoStack->push(new LambdaCommand(
-    //         [this, after]() {
-    //             m_dummyState = after;
-    //             m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
-    //         },
-    //         [this, before]() {
-    //             m_dummyState = before;
-    //             m_leftPlaceholder->setText(QString("dummy state: %1").arg(m_dummyState));
-    //         },
-    //         "Add dummy"));
-    // });
-}
-
-GraphEditor::~GraphEditor() {
-    m_graphController->clear();
 }
 
 void GraphEditor::onAddRequestTrigger() {
@@ -169,6 +144,16 @@ void GraphEditor::onRemoveRequestTrigger() {
 void GraphEditor::onClearRequestTrigger() {
     m_view->resetState();
     m_graphController->clear();
+}
+
+void GraphEditor::onUndoRequestTrigger() {
+    m_graphController->scene()->resetScene();
+    emit undoRequested();
+}
+
+void GraphEditor::onRedoRequestTrigger() {
+    m_graphController->scene()->resetScene();
+    emit redoRequested();
 }
 
 void GraphEditor::onPanRequestTrigger() {

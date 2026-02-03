@@ -48,7 +48,13 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     QGraphicsItem* item     = itemAt(clickPos, QTransform());
 
     if(!item && m_state == State::ADD) {
-        emit addNodeRequest(clickPos); // zahtevamo dodavanje cvora od kontrolera
+        // razdvajamo dodavanje cvora od dodavanja cvora i grane
+        if(m_firstNodeSelect != nullptr) {
+            emit addNodeAndEdgeRequest(clickPos, m_firstNodeSelect); // zahtevamo od kontrolera dodavanje cvora i grane
+        } else {
+            emit addNodeRequest(clickPos); // zahtevamo dodavanje cvora od kontrolera
+        }
+
         event->accept();
         return;
     }
@@ -97,16 +103,16 @@ void GraphScene::addNode(Node* nodeModel) {
     }
 
     NodeItem* nodeItem = new NodeItem(nodeModel);
+    // ovo se svakako desava pri konstrukciji NodeItem-a
+    // auto      pos      = nodeModel->getPosition();
+    // nodeItem->setPos(pos.first, pos.second);
     addItem(nodeItem);
     m_nodeItems[nodeModel->getId()] = nodeItem;
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
     connect(nodeItem, &NodeItem::editNodeNameRequest, this, &GraphScene::editNodeNameRequest);
     connect(nodeItem->label(), &EditableTextItem::setEditGraphSceneState, this,
             &GraphScene::setEditGraphSceneTrigger);
-
-    if(m_firstNodeSelect) {
-        emit addEdgeRequest(m_firstNodeSelect, nodeItem); // zahtevamo dodavanje grane od kontrolera
-    }
+    connect(nodeItem, &NodeItem::moveNodeRequest, this, &GraphScene::moveNodeRequest);
 }
 
 void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
@@ -146,6 +152,11 @@ void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
     m_firstNodeSelect = nullptr;
 }
 
+void GraphScene::addNodeAndEdge(Node* nodeModel, Edge* edgeModel, bool isDirected, bool isWeighted) {
+    addNode(nodeModel);
+    addEdge(edgeModel, isDirected, isWeighted);
+}
+
 void GraphScene::removeNode(NodeItem* node) {
     if(node == nullptr) {
         return;
@@ -171,11 +182,40 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     delete edge;
 }
 
+EdgeItem* GraphScene::findEdgeItemById(unsigned edgeId) const {
+    const QList<QGraphicsItem*> all = items();
+    for(QGraphicsItem* it : all) {
+        auto* edgeItem = dynamic_cast<EdgeItem*>(it);
+        if(!edgeItem || !edgeItem->modelEdge())
+            continue;
+
+        if(edgeItem->modelEdge()->getId() == edgeId)
+            return edgeItem;
+    }
+    return nullptr;
+}
+
 NodeItem* GraphScene::findNodeItemById(const unsigned id) const {
     auto it = m_nodeItems.find(id);
     return (it != m_nodeItems.end()) ? it->second : nullptr;
 }
 
+EdgeItem* GraphScene::findEdgeItemByNodes(unsigned from, unsigned to) const {
+    const QList<QGraphicsItem*> all = items();
+    for(QGraphicsItem* it: all) {
+        auto* edgeItem = dynamic_cast<EdgeItem*>(it);
+        if(edgeItem == nullptr || !edgeItem->modelEdge())
+            continue;
+
+        const unsigned a = edgeItem->modelEdge()->startNode();
+        const unsigned b = edgeItem->modelEdge()->endNode();
+
+        if((a == from && b == to) || (a == to && b == from)) {
+            return edgeItem;
+        }
+    }
+    return nullptr;
+}
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
     if(m_firstNodeSelect == nullptr) {

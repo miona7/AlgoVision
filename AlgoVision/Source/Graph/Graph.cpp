@@ -13,6 +13,9 @@ void Graph::addNode(unsigned id, double x, double y) {
     ++m_numOfNodes;
     m_adjacencyList[id] = {};
     m_nodes.emplace(id, Node(id, x, y));
+    if(id >= m_nodeId) {
+        m_nodeId = id + 1;
+    }
 }
 
 void Graph::removeNode(unsigned id) {

@@ -32,8 +32,8 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
     m_legendScroll = new QScrollArea(this);
     m_legendScroll->setWidget(m_legendContainer);
-    m_legendScroll->setWidgetResizable(true);
     m_legendScroll->setMinimumHeight(AppConstants::legendMinHeight);
+    m_legendScroll->setWidgetResizable(true);
 
     initLayout();
     initIcons();

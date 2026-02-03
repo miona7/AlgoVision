@@ -44,6 +44,7 @@ public:
     const Edge* getEdge(unsigned, unsigned) const;
 
     std::vector<Edge*> getEdgesMutable();
+    void addEdgeSerialized(unsigned, unsigned, unsigned, int);
 
     QVariant toVariant() const override;
     void     fromVariant(const QVariant&) override;
@@ -59,8 +60,6 @@ protected:
 
     std::map<unsigned, Node> m_nodes;
     std::map<unsigned, Edge> m_edges;
-
-    void addEdgeSerialized(unsigned, unsigned, unsigned, int);
 };
 
 #endif // GRAPH_H

@@ -12,7 +12,7 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
     setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
-    setPos(modelNode->getPosition().first, modelNode->getPosition().second);
+    updateNodePosition();
 
     // node name
     m_label = new EditableTextItem(this);
@@ -76,12 +76,18 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 
 QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) {
     switch(change) {
-    case QGraphicsItem::ItemPositionHasChanged:
+    case QGraphicsItem::ItemPositionHasChanged:{
+        // azuriraj pozicije modela pri pomeranju cvora
+        auto p = value.toPointF();
+        m_modelNode->setPosition(p.x(), p.y());
+
+        // azuriraj pozicije grana
         for(auto* edge: m_edges) {
             edge->adjust();
         }
 
         break;
+    }
     default:
         break;
     }
@@ -92,6 +98,7 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) 
 // test: right click on node delete itself
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     m_hasChangePosition = false;
+    m_oldCenter = pos();
     QGraphicsItem::mousePressEvent(event);
 }
 
@@ -109,6 +116,11 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
     if(m_ignoreNextMouseRealese) {
         m_ignoreNextMouseRealese = false;
+    }
+
+    if(m_hasChangePosition) {
+        auto newCenter = pos();
+        emit moveNodeRequest(this, m_oldCenter, newCenter);
     }
 
     QGraphicsItem::mouseReleaseEvent(event);
@@ -191,6 +203,11 @@ void NodeItem::addEdge(EdgeItem* edgeItem) {
 
 void NodeItem::removeEdge(EdgeItem* edgeItem) {
     m_edges.remove(edgeItem);
+}
+
+void NodeItem::updateNodePosition() {
+    m_oldCenter = QPointF(m_modelNode->getPosition().first, m_modelNode->getPosition().second);
+    setPos(m_oldCenter);
 }
 
 qreal NodeItem::radius() const {

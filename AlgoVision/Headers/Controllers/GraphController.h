@@ -2,10 +2,11 @@
 #define GRAPH_CONTROLLER_H
 
 #include <QObject>
-#include <memory.h>
+#include <memory>
 
 #include "Graph.h"
 #include "GraphScene.h"
+#include <QUndoStack>
 
 class GraphController : public QObject {
     Q_OBJECT
@@ -19,7 +20,12 @@ public:
     void setAddSceneState() const;
     void setRemoveSceneState() const;
 
+    QUndoStack* undoStack() const;
+
     GraphScene* scene() const;
+
+    // metoda za eksplicitno postavljanje pozicije cvora
+    void updateNodePosition(NodeItem* nodeItem, const QPointF& point);
 
 signals:
 
@@ -29,25 +35,42 @@ signals:
 public slots:
     void createGraph(bool, bool);
     void addNode(const QPointF&);
+    void addNodeAndEdge(const QPointF&, NodeItem*);
     void addEdge(NodeItem*, NodeItem*);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
     void editNodeName(const NodeItem*, const QString&);
     void editEdgeWeight(const EdgeItem*, const QString&);
+    void moveNode(const NodeItem*, const QPointF&, const QPointF&);
 
     // ova metoda brise sadrzaj modela grafa(grane i cvorove) i
     // pogleda grafa(cvor/grana ajteme), ali se nikad ne brisu m_graph i m_scene
     // oni postoje dok postoji i kontroler
-    void clear() const;
+    void clear();
     void clearScene() const;
 
     // pravi scenu od vec ucitanog grafa
     void buildScene() const;
 
+    void addNodeNoHistory(const QPointF&, unsigned&);
+    void addNodeWithIdNoHistory(unsigned, const QPointF&);
+    void removeNodeNoHistory(unsigned);
+    void addEdgeNoHistory(unsigned, unsigned, int);
+    void removeEdgeNoHistory(unsigned, unsigned);
+    void setEdgeWeightNoHistory(unsigned, unsigned, int, const QString&);
+    void setNodeNameNoHistory(unsigned, const QString&);
+    void removeEdgeNoHistoryById(unsigned);
+    void addEdgeNoHistoryById(unsigned);
+    void restoreEdgeNoHistory(unsigned, unsigned, unsigned, int);
+    void setEdgeWeightNoHistoryById(unsigned, int, const QString&);
+    void moveNodeNoHistory(unsigned, const QPointF&);
+    void clearNoHistory();
+
     // kontroler je vlasnik i upravlja nad modelom i pogledom grafa
 private:
     std::shared_ptr<Graph>      m_graph;
-    std::unique_ptr<GraphScene> m_scene = std::make_unique<GraphScene>();
+    std::unique_ptr<GraphScene> m_scene     = std::make_unique<GraphScene>();
+    QUndoStack*                 m_undoStack = nullptr;
 
     void connectScene() const;
 };
