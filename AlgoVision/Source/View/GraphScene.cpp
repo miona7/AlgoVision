@@ -50,7 +50,8 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     if(!item && m_state == State::ADD) {
         // razdvajamo dodavanje cvora od dodavanja cvora i grane
         if(m_firstNodeSelect != nullptr) {
-            emit addNodeAndEdgeRequest(clickPos, m_firstNodeSelect); // zahtevamo od kontrolera dodavanje cvora i grane
+            emit addNodeAndEdgeRequest(
+                clickPos, m_firstNodeSelect); // zahtevamo od kontrolera dodavanje cvora i grane
         } else {
             emit addNodeRequest(clickPos); // zahtevamo dodavanje cvora od kontrolera
         }
@@ -152,7 +153,8 @@ void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
     m_firstNodeSelect = nullptr;
 }
 
-void GraphScene::addNodeAndEdge(Node* nodeModel, Edge* edgeModel, bool isDirected, bool isWeighted) {
+void GraphScene::addNodeAndEdge(Node* nodeModel, Edge* edgeModel, bool isDirected,
+                                bool isWeighted) {
     addNode(nodeModel);
     addEdge(edgeModel, isDirected, isWeighted);
 }
@@ -184,7 +186,7 @@ void GraphScene::removeEdge(EdgeItem* edge) {
 
 EdgeItem* GraphScene::findEdgeItemById(unsigned edgeId) const {
     const QList<QGraphicsItem*> all = items();
-    for(QGraphicsItem* it : all) {
+    for(QGraphicsItem* it: all) {
         auto* edgeItem = dynamic_cast<EdgeItem*>(it);
         if(!edgeItem || !edgeItem->modelEdge())
             continue;

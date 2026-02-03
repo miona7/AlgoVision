@@ -479,10 +479,10 @@ void AlgorithmTab::startTimerForPlay() {
     m_timer->start(500); // 500ms po koraku
 }
 
-
 void AlgorithmTab::updateControls() {
     // play je dostupan samo ako nismo vec u pokretu
-    m_playBtn->setEnabled(m_state == RunState::Idle || m_state == RunState::Paused || m_state == RunState::Finished);
+    m_playBtn->setEnabled(m_state == RunState::Idle || m_state == RunState::Paused ||
+                          m_state == RunState::Finished);
 
     // pause samo dok animacija traje
     m_pauseBtn->setEnabled(m_state == RunState::Playing);

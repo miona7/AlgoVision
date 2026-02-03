@@ -76,7 +76,7 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 
 QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) {
     switch(change) {
-    case QGraphicsItem::ItemPositionHasChanged:{
+    case QGraphicsItem::ItemPositionHasChanged: {
         // azuriraj pozicije modela pri pomeranju cvora
         auto p = value.toPointF();
         m_modelNode->setPosition(p.x(), p.y());
@@ -98,7 +98,7 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) 
 // test: right click on node delete itself
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     m_hasChangePosition = false;
-    m_oldCenter = pos();
+    m_oldCenter         = pos();
     QGraphicsItem::mousePressEvent(event);
 }
 

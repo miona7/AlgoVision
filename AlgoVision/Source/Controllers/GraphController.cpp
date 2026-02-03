@@ -92,10 +92,10 @@ public:
         if(m_c == nullptr) {
             return;
         }
-        //vrati cvor
+        // vrati cvor
         m_c->addNodeWithIdNoHistory(m_nodeId, QPointF(m_x, m_y));
 
-        //vrati sve grane
+        // vrati sve grane
         for(const EdgeSnapshot& es: m_edges) {
             m_c->restoreEdgeNoHistory(es.m_id, es.m_from, es.m_to, es.m_weight);
         }
@@ -151,10 +151,9 @@ private:
 
 class RemoveEdgeCommand : public QUndoCommand {
 public:
-    RemoveEdgeCommand(GraphController* c, EdgeItem* edgeItem)
-        : m_c(c) {
+    RemoveEdgeCommand(GraphController* c, EdgeItem* edgeItem) : m_c(c) {
 
-        Edge* e = edgeItem->modelEdge();
+        Edge* e  = edgeItem->modelEdge();
         m_edgeId = e->getId();
         m_from   = e->startNode();
         m_to     = e->endNode();
@@ -174,27 +173,19 @@ public:
     }
 
 private:
-    GraphController* m_c = nullptr;
-    unsigned m_edgeId = 0;
-    unsigned m_from   = 0;
-    unsigned m_to     = 0;
-    int      m_weight = 1;
+    GraphController* m_c      = nullptr;
+    unsigned         m_edgeId = 0;
+    unsigned         m_from   = 0;
+    unsigned         m_to     = 0;
+    int              m_weight = 1;
 };
 
 class EditEdgeWeightCommand : public QUndoCommand {
 public:
-    EditEdgeWeightCommand(GraphController* c,
-                          unsigned edgeId,
-                          int beforeW,
-                          QString beforeText,
-                          int afterW,
-                          QString afterText)
-        : m_c(c),
-          m_edgeId(edgeId),
-          m_beforeW(beforeW),
-          m_afterW(afterW),
-          m_beforeText(std::move(beforeText)),
-          m_afterText(std::move(afterText)) {
+    EditEdgeWeightCommand(GraphController* c, unsigned edgeId, int beforeW, QString beforeText,
+                          int afterW, QString afterText)
+        : m_c(c), m_edgeId(edgeId), m_beforeW(beforeW), m_afterW(afterW),
+          m_beforeText(std::move(beforeText)), m_afterText(std::move(afterText)) {
         setText("Edit edge weight");
     }
 
@@ -217,19 +208,17 @@ private:
 
     unsigned m_edgeId = 0;
 
-    int      m_beforeW = 0;
-    int      m_afterW  = 0;
+    int m_beforeW = 0;
+    int m_afterW  = 0;
 
-    QString  m_beforeText;
-    QString  m_afterText;
+    QString m_beforeText;
+    QString m_afterText;
 };
 
 class EditNodeNameCommand : public QUndoCommand {
 public:
     EditNodeNameCommand(GraphController* c, unsigned nodeId, QString beforeName, QString afterName)
-        : m_c(c),
-          m_nodeId(nodeId),
-          m_beforeName(std::move(beforeName)),
+        : m_c(c), m_nodeId(nodeId), m_beforeName(std::move(beforeName)),
           m_afterName(std::move(afterName)) {
         setText("Edit node name");
     }
@@ -291,20 +280,15 @@ private:
     unsigned         m_fromId;
     QPointF          m_pos;
 
-    unsigned m_newId  = 0;
-    bool     m_hasId  = false;
+    unsigned m_newId = 0;
+    bool     m_hasId = false;
 };
 
 class MoveNodeCommand : public QUndoCommand {
 public:
-    MoveNodeCommand(GraphController* c,
-                    unsigned nodeId,
-                    const QPointF& oldPos,
+    MoveNodeCommand(GraphController* c, unsigned nodeId, const QPointF& oldPos,
                     const QPointF& newPos)
-        : m_c(c),
-          m_nodeId(nodeId),
-          m_oldPos(oldPos),
-          m_newPos(newPos) {
+        : m_c(c), m_nodeId(nodeId), m_oldPos(oldPos), m_newPos(newPos) {
         setText("Move node");
     }
 
@@ -323,7 +307,7 @@ public:
     }
 
 private:
-    GraphController* m_c = nullptr;
+    GraphController* m_c      = nullptr;
     unsigned         m_nodeId = 0;
     QPointF          m_oldPos;
     QPointF          m_newPos;
@@ -410,7 +394,7 @@ GraphScene* GraphController::scene() const {
     return m_scene.get();
 }
 
-void GraphController::updateNodePosition(NodeItem* nodeItem, const QPointF &point) {
+void GraphController::updateNodePosition(NodeItem* nodeItem, const QPointF& point) {
     nodeItem->modelNode()->setPosition(point.x(), point.y());
     nodeItem->updateNodePosition();
 }
@@ -425,7 +409,8 @@ void GraphController::connectScene() const {
     connect(m_scene.get(), &GraphScene::editEdgeWeightRequest, this,
             &GraphController::editEdgeWeight);
     connect(m_scene.get(), &GraphScene::moveNodeRequest, this, &GraphController::moveNode);
-    connect(m_scene.get(), &GraphScene::addNodeAndEdgeRequest, this, &GraphController::addNodeAndEdge);
+    connect(m_scene.get(), &GraphScene::addNodeAndEdgeRequest, this,
+            &GraphController::addNodeAndEdge);
 }
 
 void GraphController::addNode(const QPointF& position) {
@@ -489,7 +474,8 @@ void GraphController::removeNode(NodeItem* nodeItem) {
 }
 
 void GraphController::removeEdge(EdgeItem* edgeItem) {
-    if(m_graph == nullptr || m_undoStack == nullptr || edgeItem == nullptr || edgeItem->modelEdge() == nullptr) {
+    if(m_graph == nullptr || m_undoStack == nullptr || edgeItem == nullptr ||
+       edgeItem->modelEdge() == nullptr) {
         return;
     }
 
@@ -538,8 +524,8 @@ void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& we
         }
         return;
     }
-    const unsigned from = edgeItem->modelEdge()->startNode();
-    const unsigned to   = edgeItem->modelEdge()->endNode();
+    const unsigned from   = edgeItem->modelEdge()->startNode();
+    const unsigned to     = edgeItem->modelEdge()->endNode();
     const unsigned edgeId = edgeItem->modelEdge()->getId();
 
     Edge* e = m_graph->getEdge(from, to);
@@ -562,20 +548,20 @@ void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& we
         new EditEdgeWeightCommand(this, edgeId, beforeW, beforeText, afterW, afterText));
 }
 
-void GraphController::moveNode(const NodeItem* nodeItem, const QPointF& oldPos, const QPointF& newPos) {
-    if(m_graph == nullptr || m_undoStack == nullptr || nodeItem == nullptr || nodeItem->modelNode() == nullptr){
+void GraphController::moveNode(const NodeItem* nodeItem, const QPointF& oldPos,
+                               const QPointF& newPos) {
+    if(m_graph == nullptr || m_undoStack == nullptr || nodeItem == nullptr ||
+       nodeItem->modelNode() == nullptr) {
         return;
     }
 
-    if(oldPos == newPos){
+    if(oldPos == newPos) {
         return;
     }
 
     const unsigned nodeId = nodeItem->modelNode()->getId();
 
-    m_undoStack->push(
-        new MoveNodeCommand(this, nodeId, oldPos, newPos)
-        );
+    m_undoStack->push(new MoveNodeCommand(this, nodeId, oldPos, newPos));
 }
 
 void GraphController::addNodeNoHistory(const QPointF& pos, unsigned& outId) {
@@ -743,9 +729,7 @@ void GraphController::addEdgeNoHistoryById(unsigned edgeId) {
     emit sceneModified();
 }
 
-void GraphController::restoreEdgeNoHistory(unsigned edgeId,
-                                           unsigned from,
-                                           unsigned to,
+void GraphController::restoreEdgeNoHistory(unsigned edgeId, unsigned from, unsigned to,
                                            int weight) {
     if(m_graph == nullptr) {
         return;
@@ -760,9 +744,7 @@ void GraphController::restoreEdgeNoHistory(unsigned edgeId,
     emit sceneModified();
 }
 
-void GraphController::setEdgeWeightNoHistoryById(unsigned edgeId,
-                                                 int weight,
-                                                 const QString& text) {
+void GraphController::setEdgeWeightNoHistoryById(unsigned edgeId, int weight, const QString& text) {
     if(m_graph == nullptr) {
         return;
     }

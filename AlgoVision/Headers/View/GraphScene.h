@@ -29,8 +29,8 @@ public:
 
     void addNode(Node*);
     void addEdge(Edge*, bool, bool);
-    // dodajemo objedinjenu naredbu kako bi mogao undo/redo da uradi dodavanje cvora i grane kao jednu operaciju
-    // sta pri vec selektovanom cvoru kao uslovu i jeste
+    // dodajemo objedinjenu naredbu kako bi mogao undo/redo da uradi dodavanje cvora i grane kao
+    // jednu operaciju sta pri vec selektovanom cvoru kao uslovu i jeste
     void addNodeAndEdge(Node*, Edge*, bool, bool);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);

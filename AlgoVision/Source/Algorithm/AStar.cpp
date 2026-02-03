@@ -10,10 +10,7 @@ std::optional<AlgorithmError> AStar::checkConditions(unsigned start, unsigned go
     }
 
     if(!m_graph->isWeighted()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphTypeInvalid,
-            "Graph type is invalid."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     auto nodes = m_graph->getNodes();

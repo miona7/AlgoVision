@@ -84,8 +84,7 @@ TEST_CASE("Dijkstra on Unweighted Directed Graph", "[DIJKSTRA]") {
 
     auto err = dijkstra.execute(1);
 
-    REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid,
-                  "Graph type is invalid.");
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
 
 TEST_CASE("Dijkstra on Weighted Directed Graph", "[DIJKSTRA]") {

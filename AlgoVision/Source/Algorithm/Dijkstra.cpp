@@ -10,10 +10,7 @@ std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
     }
 
     if(!m_graph->isWeighted()) {
-        return AlgorithmError{
-            AlgorithmErrorType::GraphTypeInvalid,
-            "Graph type is invalid."
-        };
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     auto nodes = m_graph->getNodes();
@@ -25,8 +22,9 @@ std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
     auto edges = m_graph->getEdges();
     for(const auto& [_, edge]: edges) {
         if(edge.getWeight() < 0) {
-            return AlgorithmError {AlgorithmErrorType::NegativeEdgeWeights,
-                                   "Dijkstra cannot be applied to graphs with negative edge weights."};
+            return AlgorithmError {
+                AlgorithmErrorType::NegativeEdgeWeights,
+                "Dijkstra cannot be applied to graphs with negative edge weights."};
         }
     }
 

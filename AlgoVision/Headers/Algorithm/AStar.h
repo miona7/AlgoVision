@@ -19,7 +19,7 @@ public:
 
     std::optional<AlgorithmError> checkConditions(unsigned, unsigned) const;
     std::optional<AlgorithmError> execute(unsigned, unsigned) override;
-    
+
     QString resultString() const override;
 
     const std::vector<unsigned>& getPath() const;
