@@ -11,15 +11,16 @@ class DFS : public Algorithm {
 public:
     explicit DFS(const std::shared_ptr<Graph>);
 
-    void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions(unsigned) const;
+    std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
     const std::map<unsigned, bool>& getVisited() const;
+    QString                         resultString() const override;
 
 private:
     std::map<unsigned, bool> m_visited;
-
-    void dfs(unsigned);
+    std::vector<int>         m_order;
+    void                     dfs(unsigned);
 };
 
 #endif // DFS_H

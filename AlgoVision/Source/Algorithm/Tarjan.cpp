@@ -3,29 +3,40 @@
 Tarjan::Tarjan(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void Tarjan::checkConditions() const {
-    // usmereni graf postoji i ima bar 1 cvor
-    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> Tarjan::checkConditions() const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
+
+    if(!m_graph->isDirected()) {
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
+    }
+
+    return std::nullopt;
 }
 
-void Tarjan::execute(unsigned, unsigned) {
-    checkConditions();
+std::optional<AlgorithmError> Tarjan::execute(unsigned, unsigned) {
+    if(auto err = checkConditions()) {
+        return err;
+    }
 
     clearSteps();
 
     init();
 
-    int  component = 0;
-    auto nodes     = m_graph->getNodes();
+    // int  component = 0;
+    // m_numComponents = 0;
+    auto nodes = m_graph->getNodes();
     for(const auto& [id, node]: nodes) {
         if(m_components[id] == -1) {
-            tarjan(id, component);
+            // m_sccCount++;
+            // tarjan(id, component);
+            tarjan(id);
         }
     }
 
-    std::cout << "Strongly connected components:" << std::endl;
+    // std::cout << "Strongly connected components:" << std::endl;
     std::map<int, std::vector<unsigned>> comps;
     for(const auto& [nodeId, compId]: m_components) {
         comps[compId].emplace_back(nodeId);
@@ -38,16 +49,16 @@ void Tarjan::execute(unsigned, unsigned) {
         }
         std::cout << std::endl;
     }
+
+    return std::nullopt;
 }
 
-void Tarjan::tarjan(unsigned nodeId, int& component) {
+void Tarjan::tarjan(unsigned nodeId) {
     m_incomingNumbering[nodeId] = m_lowLink[nodeId] = m_arrivalTime++;
     {
         AlgorithmStep s;
-        s.m_type    = StepType::VisitNode;
-        s.m_node    = nodeId;
-        s.m_value   = m_incomingNumbering[nodeId]; // index
-        s.m_message = std::string("index assigned");
+        s.m_type = StepType::VisitNode;
+        s.m_node = nodeId;
         addStep(s);
     }
     {
@@ -58,10 +69,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
     }
     {
         AlgorithmStep s;
-        s.m_type    = StepType::UpdateDistance; // koristimo kao "lowlink update"
-        s.m_node    = nodeId;
-        s.m_value   = m_lowLink[nodeId];
-        s.m_message = std::string("lowlink init");
+        s.m_type = StepType::UpdateDistance; // koristimo kao "lowlink update"
+        s.m_node = nodeId;
         addStep(s);
     }
     m_tourOrder.push(nodeId);
@@ -78,15 +87,14 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 addStep(s);
             }
             if(m_incomingNumbering[neighbourId] == -1) {
-                tarjan(neighbourId, component);
+                // tarjan(neighbourId, component);
+                tarjan(neighbourId);
                 int oldLow        = m_lowLink[nodeId];
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_lowLink[neighbourId]);
                 if(m_lowLink[nodeId] != oldLow) {
                     AlgorithmStep s;
-                    s.m_type    = StepType::UpdateDistance; // lowlink update
-                    s.m_node    = nodeId;
-                    s.m_value   = m_lowLink[nodeId];
-                    s.m_message = std::string("lowlink <- min(lowlink, child lowlink)");
+                    s.m_type = StepType::UpdateDistance; // lowlink update
+                    s.m_node = nodeId;
                     addStep(s);
                 }
             } else if(m_onStack[neighbourId]) {
@@ -94,10 +102,8 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_incomingNumbering[neighbourId]);
                 if(m_lowLink[nodeId] != oldLow) {
                     AlgorithmStep s;
-                    s.m_type    = StepType::UpdateDistance; // lowlink update
-                    s.m_node    = nodeId;
-                    s.m_value   = m_lowLink[nodeId];
-                    s.m_message = std::string("lowlink <- min(lowlink, back-edge index)");
+                    s.m_type = StepType::UpdateDistance; // lowlink update
+                    s.m_node = nodeId;
                     addStep(s);
                 }
             }
@@ -111,30 +117,33 @@ void Tarjan::tarjan(unsigned nodeId, int& component) {
             m_tourOrder.pop();
             {
                 AlgorithmStep s;
-                s.m_type  = StepType::AssignComponent;
-                s.m_node  = componentNodeId;
-                s.m_value = component;
+                s.m_type = StepType::AssignComponent;
+                s.m_node = componentNodeId;
                 addStep(s);
             }
 
-            m_components[componentNodeId] = component;
+            // m_components[componentNodeId] = component;
+            m_components[componentNodeId] = m_numComponents;
             m_onStack[componentNodeId]    = false;
 
             Node* node = m_graph->getNode(componentNodeId);
             if(node != nullptr) {
-                node->setComponentColor(component);
+                // node->setComponentColor(component);
+                node->setComponentColor(m_numComponents);
             }
 
             if(componentNodeId == nodeId) {
                 break;
             }
         }
-        component++;
+        // component++;
+        m_numComponents++;
     }
 }
 
 void Tarjan::init() {
-    m_arrivalTime = 0;
+    m_arrivalTime   = 0;
+    m_numComponents = 0;
 
     m_incomingNumbering.clear();
     m_lowLink.clear();
@@ -152,4 +161,9 @@ void Tarjan::init() {
         m_onStack[id]           = false;
         m_components[id]        = -1; // komponenta nije dodeljena
     }
+}
+
+QString Tarjan::resultString() const {
+    // return QString("Number of SCC: %1").arg(m_sccCount);
+    return QString("Number of SCC: %1").arg(m_numComponents);
 }

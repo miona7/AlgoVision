@@ -12,6 +12,7 @@ class GraphEditTab : public QWidget {
 public:
     explicit GraphEditTab(QWidget* = nullptr);
     ~GraphEditTab() override = default;
+    QSlider* getNodeSizeSlider() const;
 
 signals:
     void undoRequested();
@@ -19,6 +20,10 @@ signals:
     void addRequested();
     void removeRequested();
     void clearRequested();
+
+    void panRequested();
+    void zoomInRequested();
+    void zoomOutRequested();
 
 public slots:
     void setUndoEnabled(bool);

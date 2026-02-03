@@ -7,6 +7,7 @@
 #include "Edge.h"
 #include "EdgeItem.h"
 #include "NodeItem.h"
+#include "ThemeManager.h"
 
 class GraphScene : public QGraphicsScene {
     Q_OBJECT
@@ -17,6 +18,8 @@ public:
     enum class State { ADD, REMOVE, EDIT };
 
     void setState(GraphScene::State);
+
+    void updateNodeScalling();
 
     // vraca scenu na pocetno stanje (koje je ADD) sa resetovanim pomocnim privatnim clanicama
     void resetScene();
@@ -31,6 +34,7 @@ public:
     void addNodeAndEdge(Node*, Edge*, bool, bool);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
+    void applyTheme(ThemeManager::Theme theme);
 
     NodeItem* findNodeItemById(const unsigned) const;
     EdgeItem* findEdgeItemByNodes(unsigned, unsigned) const;

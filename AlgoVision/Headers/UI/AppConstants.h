@@ -21,9 +21,25 @@ namespace AppConstants {
     constexpr auto graphPageDefaultTitle = "Untilted";
 
     // node view
-    constexpr double defaultRadius      = 30;
-    constexpr double defaultBorderWidth = 3;
+    constexpr double defaultRadius      = 30.0;
+    constexpr double defaultBorderWidth = 3.0;
 
+    inline double NodeScale = 1.0;
+
+    constexpr double MinNodeScale = 0.4;
+    constexpr double MaxNodeScale = 3.0;
+
+    constexpr double EdgePadding   = 6.0;
+    constexpr double BaseEdgeWidth = 2.0;
+
+    static constexpr double BaseFontSize = 10.0;
+
+    // dialogs
+    constexpr int createGraphDialogMinWidth  = 400;
+    constexpr int createGraphDialogMinHeight = 250;
+
+    // legend
+    constexpr int legendMinHeight = 300;
 } // namespace AppConstants
 
 #endif // APPCONSTANT

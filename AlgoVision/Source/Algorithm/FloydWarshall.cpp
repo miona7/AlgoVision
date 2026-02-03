@@ -3,18 +3,29 @@
 FloydWarshall::FloydWarshall(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void FloydWarshall::checkConditions() const {
-    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> FloydWarshall::checkConditions() const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
+
+    if(!m_graph->isDirected()) {
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
+    }
+
+    return std::nullopt;
 }
 
-void FloydWarshall::execute(unsigned, unsigned) {
-    checkConditions();
+std::optional<AlgorithmError> FloydWarshall::execute(unsigned, unsigned) {
+    if(auto err = checkConditions()) {
+        return err;
+    }
 
     clearSteps();
 
-    floydWarshall();
+    if(auto err = floydWarshall()) {
+        return err;
+    }
 
     std::cout << "All-pairs shortest distances:" << std::endl;
     for(const auto& [u, row]: m_distances) {
@@ -27,9 +38,11 @@ void FloydWarshall::execute(unsigned, unsigned) {
             }
         }
     }
+
+    return std::nullopt;
 }
 
-void FloydWarshall::floydWarshall() {
+std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
     auto nodes = m_graph->getNodes();
     auto edges = m_graph->getEdges();
 
@@ -58,9 +71,8 @@ void FloydWarshall::floydWarshall() {
         }
         {
             AlgorithmStep s;
-            s.m_type    = StepType::ProcessNode;
-            s.m_node    = k; // trenutno posrednik
-            s.m_message = std::string("using intermediate k");
+            s.m_type = StepType::ProcessNode;
+            s.m_node = k; // trenutno posrednik
             addStep(s);
         }
         for(const auto& [i, _]: nodes) {
@@ -123,7 +135,25 @@ void FloydWarshall::floydWarshall() {
 
     for(const auto& [i, _]: nodes) {
         if(m_distances[i][i] < 0) {
-            throw std::runtime_error("Graph contains a negative cycle!");
+            return AlgorithmError {AlgorithmErrorType::GraphHasNegativeCycle,
+                                   "Graph contains a negative cycle."};
         }
     }
+
+    return std::nullopt;
+}
+
+QString FloydWarshall::resultString() const {
+    QString res = "All-pairs shortest paths:\n";
+
+    for(const auto& [i, row]: m_distances) {
+        for(const auto& [j, dist]: row) {
+            if(dist == std::numeric_limits<int>::max()) {
+                res += QString("(%1 -> %2): unreachable\n").arg(i).arg(j);
+            } else {
+                res += QString("(%1 -> %2): %3\n").arg(i).arg(j).arg(dist);
+            }
+        }
+    }
+    return res;
 }

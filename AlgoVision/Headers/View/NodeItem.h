@@ -4,6 +4,7 @@
 #include <AppConstants.h>
 #include <Node.h>
 #include <QGraphicsObject>
+#include <QSet>
 
 class EdgeItem;
 class EditableTextItem;
@@ -18,8 +19,9 @@ public:
     Node* modelNode() const;
     void  setModelNode(Node*);
     qreal radius() const;
-    void  setRadius(qreal);
-    void  setNodeSelected(bool);
+
+    void setNodeSelected(bool);
+    void updateSize();
 
     void addEdge(EdgeItem*);
     void removeEdge(EdgeItem*);

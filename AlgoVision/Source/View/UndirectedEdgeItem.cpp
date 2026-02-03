@@ -1,6 +1,7 @@
 #include <QPainter>
 #include <QPen>
 
+#include "AppConstants.h"
 #include "UndirectedEdgeItem.h"
 
 UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
@@ -16,14 +17,13 @@ QPainterPath UndirectedEdgeItem::edgePath() const {
 }
 
 QRectF UndirectedEdgeItem::boundingRect() const {
-    qreal offset = m_penWidth;
+    qreal offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale;
     return edgePath().boundingRect().adjusted(-offset, -offset, offset, offset);
 }
 
 QPainterPath UndirectedEdgeItem::shape() const {
     QPainterPathStroker stroker;
-    qreal               offset =
-        m_penWidth + m_shapeStroke; // bigger offset, so the click would be easier, more UX friendly
+    qreal offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale + m_shapeStroke;
     stroker.setWidth(offset);
     return stroker.createStroke(edgePath());
 }
@@ -32,7 +32,8 @@ void UndirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem
                                QWidget* widget) {
     // QPen pen(Qt::black, m_penWidth);
     auto color = calculateColor();
-    QPen pen(color, m_penWidth);
+    QPen pen(color);
+    pen.setWidthF(AppConstants::BaseEdgeWidth * AppConstants::NodeScale);
     painter->setPen(pen);
     painter->drawPath(edgePath());
 }

@@ -149,7 +149,10 @@ void MainWindow::onCreateGraphTriggered() {
     QDialog dialog(this);
     dialog.setWindowTitle("Create Graph Options");
     dialog.setModal(true);
-    dialog.setFixedSize(300, 200);
+    dialog.setMinimumSize(AppConstants::createGraphDialogMinWidth, AppConstants::createGraphDialogMinHeight);
+    dialog.setSizeGripEnabled(true);
+    dialog.setWindowFlags(dialog.windowFlags() | Qt::WindowMinMaxButtonsHint);
+
 
     QVBoxLayout* mainLayout = new QVBoxLayout(&dialog);
 
@@ -179,6 +182,24 @@ void MainWindow::onCreateGraphTriggered() {
 
     bool directed = false;
     bool weighted = false;
+
+    dialog.setStyleSheet(R"(
+        QGroupBox {
+            font-weight: bold;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        QGroupBox::title {
+            subcontrol-origin: margin;
+            left: 10px;
+            padding: 0 5px;
+        }
+        QRadioButton {
+            padding: 4px;
+        }
+)");
+
 
     if(dialog.exec() == QDialog::Accepted) {
         directed = directedBtn->isChecked();
@@ -330,6 +351,11 @@ void MainWindow::onChangeThemeTriggered() {
     }
 
     this->setStyleSheet(m_themeManager->styleSheet());
+
+    if(m_graphEditor) {
+        auto* scene = m_graphEditor->graphController()->scene();
+        scene->applyTheme(m_themeManager->currentTheme());
+    }
 }
 
 void MainWindow::initMenuToolBar() {

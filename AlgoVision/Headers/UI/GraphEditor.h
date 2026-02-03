@@ -9,6 +9,7 @@
 #include "GraphController.h"
 #include "GraphScene.h"
 
+class GraphView;
 class QUndoStack;
 class GraphEditTab;
 class QLabel;
@@ -34,12 +35,15 @@ private slots:
     void onClearRequestTrigger();
     void onUndoRequestTrigger();
     void onRedoRequestTrigger();
+    void onPanRequestTrigger();
+    void onZoomInRequestTrigger();
+    void onZoomOutRequestTrigger();
 
 private:
     QUndoStack*                      m_undoStack       = nullptr;
     GraphEditTab*                    m_editTab         = nullptr;
     QLabel*                          m_leftPlaceholder = nullptr;
-    QGraphicsView*                   m_view            = nullptr;
+    GraphView*                       m_view            = nullptr;
     std::shared_ptr<GraphController> m_graphController;
 };
 

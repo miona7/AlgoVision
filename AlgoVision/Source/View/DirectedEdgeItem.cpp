@@ -1,7 +1,10 @@
 #include <QPainter>
 #include <QPen>
+#include <cmath>
 
+#include "AppConstants.h"
 #include "DirectedEdgeItem.h"
+#include "EdgeItem.h"
 
 DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
                                    bool hasWeight)
@@ -9,7 +12,7 @@ DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeIt
 }
 
 QRectF DirectedEdgeItem::boundingRect() const {
-    qreal        offset = m_penWidth;
+    qreal        offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale;
     QPainterPath edge   = edgePath();
     edge.addPath(arrowPath(edge));
     return edge.boundingRect().adjusted(-offset, -offset, offset, offset);
@@ -17,8 +20,8 @@ QRectF DirectedEdgeItem::boundingRect() const {
 
 QPainterPath DirectedEdgeItem::shape() const {
     QPainterPathStroker stroker;
-    qreal               offset =
-        m_penWidth + m_shapeStroke; // bigger offset, so the click would be easier, more UX friendly
+    qreal offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale + m_shapeStroke;
+
     stroker.setWidth(offset);
 
     QPainterPath edge  = edgePath();
@@ -29,8 +32,7 @@ QPainterPath DirectedEdgeItem::shape() const {
     return shape;
 }
 
-void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
-                             QWidget* widget) {
+void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
     QLineF line(m_sourcePoint, m_destPoint);
     if(qFuzzyCompare(line.length(), 0.0)) {
         return;
@@ -39,7 +41,8 @@ void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     QPainterPath edge = edgePath();
     // QPen         pen(Qt::black, m_penWidth);
     auto color = calculateColor();
-    QPen pen(color, m_penWidth);
+    QPen pen(color);
+    pen.setWidthF(AppConstants::BaseEdgeWidth * AppConstants::NodeScale);
     painter->setPen(pen);
     painter->drawPath(edge);
 
@@ -50,11 +53,11 @@ void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 QPainterPath DirectedEdgeItem::edgePath() const {
     QPainterPath path;
-    QPointF      normal = calculateNormal();
+    QPointF      normalVec = calculateNormal();
 
-    if(!(qFuzzyCompare(normal.x(), 0.0) && qFuzzyCompare(normal.y(), 0.0))) {
+    if(!(qFuzzyCompare(normalVec.x(), 0.0) && qFuzzyCompare(normalVec.y(), 0.0))) {
         path.moveTo(m_sourcePoint);
-        QPointF middle = (m_sourcePoint + m_destPoint) / 2.0 - normal * m_skewness;
+        QPointF middle = (m_sourcePoint + m_destPoint) / 2.0 - normalVec * m_skewness;
         path.quadTo(middle, m_destPoint);
     }
 
@@ -65,11 +68,13 @@ QPainterPath DirectedEdgeItem::arrowPath(const QPainterPath& edgePath) const {
     QPointF t     = edgePath.pointAtPercent(1.0) - edgePath.pointAtPercent(0.95);
     qreal   angle = std::atan2(t.y(), t.x());
 
-    QPointF p1 = m_destPoint - QPointF(m_arrowSize * std::cos(angle - m_arrowAngle),
-                                       m_arrowSize * std::sin(angle - m_arrowAngle));
+    qreal arrowSize = m_arrowSize * AppConstants::NodeScale;
 
-    QPointF p2 = m_destPoint - QPointF(m_arrowSize * std::cos(angle + m_arrowAngle),
-                                       m_arrowSize * std::sin(angle + m_arrowAngle));
+    QPointF p1 = m_destPoint - QPointF(arrowSize * std::cos(angle - m_arrowAngle),
+                                       arrowSize * std::sin(angle - m_arrowAngle));
+
+    QPointF p2 = m_destPoint - QPointF(arrowSize * std::cos(angle + m_arrowAngle),
+                                       arrowSize * std::sin(angle + m_arrowAngle));
 
     QPainterPath arrowPath;
     arrowPath.moveTo(m_destPoint);
@@ -78,3 +83,15 @@ QPainterPath DirectedEdgeItem::arrowPath(const QPainterPath& edgePath) const {
     arrowPath.closeSubpath();
     return arrowPath;
 }
+
+/*QPointF DirectedEdgeItem::calculateNormal() const {
+    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
+    QPoint  normal(-line.y(), line.x());
+    qreal   length = std::hypot(normal.x(), normal.y());
+
+    if(qFuzzyCompare(length, 0.0))
+        return QPointF(0, 0);
+
+    return normal / length;
+}
+*/

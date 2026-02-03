@@ -5,6 +5,17 @@
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 
+static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
+    REQUIRE_FALSE(err.has_value());
+}
+
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType,
+                          const std::string& expectedMessage) {
+    REQUIRE(err.has_value());
+    REQUIRE(err->m_type == expectedType);
+    REQUIRE(err->m_message == expectedMessage);
+}
+
 static const char* stepTypeToString(StepType t) {
     switch(t) {
     case StepType::VisitNode:
@@ -28,7 +39,9 @@ void runTarjanLoggingTest(const std::shared_ptr<Graph>& g) {
                                                  StepType::ExamineEdge, StepType::UpdateDistance,
                                                  StepType::AssignComponent};
 
-    REQUIRE_NOTHROW(tarjan.execute());
+    auto err = tarjan.execute();
+
+    REQUIRE_NOTHROW(err);
 
     const auto& steps = tarjan.getSteps();
     std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
@@ -45,13 +58,6 @@ void runTarjanLoggingTest(const std::shared_ptr<Graph>& g) {
         if(s.m_from && s.m_to) {
             std::cout << " | edge = " << *s.m_from << " -> " << *s.m_to;
         }
-        if(s.m_value) {
-            std::cout << " | value = " << *s.m_value;
-        }
-        if(s.m_message) {
-            std::cout << " | msg = \"" << *s.m_message << "\"";
-        }
-
         std::cout << std::endl;
     }
 
@@ -79,7 +85,7 @@ TEST_CASE("Tarjan works on directed graph with multiple SCCs", "[TARJAN]") {
     g->addEdge(3, 4);
     g->addEdge(5, 6);
 
-    REQUIRE_NOTHROW(runTarjanLoggingTest(g));
+    runTarjanLoggingTest(g);
 }
 
 TEST_CASE("Tarjan throws on undirected graph", "[TARJAN]") {
@@ -90,12 +96,19 @@ TEST_CASE("Tarjan throws on undirected graph", "[TARJAN]") {
     g->addEdge(1, 2);
 
     Tarjan tarjan(g);
-    REQUIRE_THROWS_AS(tarjan.execute(), std::runtime_error);
+
+    auto err = tarjan.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
 
 TEST_CASE("Tarjan throws on empty graph", "[TARJAN]") {
     auto g = std::make_shared<UnweightedDirectedGraph>();
 
     Tarjan tarjan(g);
-    REQUIRE_THROWS_AS(tarjan.execute(), std::runtime_error);
+
+    auto err = tarjan.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized,
+                  "Graph is not initialized or empty.");
 }

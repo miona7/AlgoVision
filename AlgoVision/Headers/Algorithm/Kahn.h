@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <optional>
 #include <queue>
 #include <vector>
 
@@ -13,15 +14,16 @@ class Kahn : public Algorithm {
 public:
     explicit Kahn(const std::shared_ptr<Graph>);
 
-    void checkConditions() const;
-    void execute(unsigned = 0, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions() const;
+    std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) override;
 
     const std::vector<unsigned>& getSorted() const;
+    QString                      resultString() const override;
 
 private:
     std::vector<unsigned> m_sorted;
 
-    void kahn();
+    std::optional<AlgorithmError> kahn();
 };
 
 #endif // KAHN_H

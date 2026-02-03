@@ -23,6 +23,9 @@ GraphEditTab::GraphEditTab(QWidget* parent)
     connect(m_addBtn, &QPushButton::clicked, this, &GraphEditTab::addRequested);
     connect(m_removeBtn, &QPushButton::clicked, this, &GraphEditTab::removeRequested);
     connect(m_clearBtn, &QPushButton::clicked, this, &GraphEditTab::clearRequested);
+    connect(m_panBtn, &QPushButton::clicked, this, &GraphEditTab::panRequested);
+    connect(m_zoomInBtn, &QPushButton::clicked, this, &GraphEditTab::zoomInRequested);
+    connect(m_zoomOutBtn, &QPushButton::clicked, this, &GraphEditTab::zoomOutRequested);
 
     // default stanje
     m_undoBtn->setEnabled(false);
@@ -93,4 +96,8 @@ void GraphEditTab::initLayout() {
     mainLayout->addWidget(nodeBox);
 
     mainLayout->addStretch();
+}
+
+QSlider* GraphEditTab::getNodeSizeSlider() const {
+    return m_nodeSizeSlider;
 }

@@ -80,6 +80,23 @@ void AlgorithmStepApplier::check(const AlgorithmStep& step) const {
     }
 }
 
+void AlgorithmStepApplier::setGraph(std::shared_ptr<Graph> graph) {
+    m_graph = graph;
+}
+
+void AlgorithmStepApplier::resetGraphState() {
+    if(m_graph == nullptr) {
+        return;
+    }
+
+    for(auto* node: m_graph->getNodesMutable()) {
+        node->setState(NodeState::Default);
+    }
+    for(auto* edge: m_graph->getEdgesMutable()) {
+        edge->setState(EdgeState::Default);
+    }
+}
+
 NodeState AlgorithmStepApplier::stepToNodeState(const StepType t) const {
     switch(t) {
     case StepType::VisitNode:

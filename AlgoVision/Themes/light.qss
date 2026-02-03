@@ -1,23 +1,48 @@
 QWidget {
-    background-color: #ffffff;
+    background-color: #DFF5EA;
     color: #000000;
     font-size: 14px;
 }
 
+QMainWindow {
+    background-color: #DFF5EA;
+}
+
+QToolBar {
+    background-color: #DFF5EA;
+}
+
+QMenuBar {
+    background-color: #DFF5EA;
+}
+
+QMenuBar::item:selected {
+    background-color: #BFEAD9;
+}
+
 QToolButton, QPushButton {
-    background-color: #dddddd;
+    background-color: #BFEAD9;
     color: #000000;
     border: 2px solid #aaaaaa;
     border-radius: 6px;
     padding: 4px 8px;
 }
 
-QToolButton:hover, QPushButton:hover {
-    background-color: #cccccc;
-    border: 2px solid #888888;
+QPushButton:hover, QToolButton:hover {
+    background-color: #A6E0C8;
 }
 
-QToolButton:pressed, QPushButton:pressed {
-    background-color: #bbbbbb;
-    border: 2px solid #666666;
+/* Tab widget (desni panel) */
+QTabWidget::pane {
+    background-color: #DFF5EA;
+}
+
+QTabBar::tab {
+    background-color: #BFEAD9;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+QTabBar::tab:selected {
+    background-color: #A6E0C8;
 }
