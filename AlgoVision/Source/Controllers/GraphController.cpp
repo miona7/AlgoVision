@@ -294,6 +294,40 @@ private:
     bool     m_hasId  = false;
 };
 
+class MoveNodeCommand : public QUndoCommand {
+public:
+    MoveNodeCommand(GraphController* c,
+                    unsigned nodeId,
+                    const QPointF& oldPos,
+                    const QPointF& newPos)
+        : m_c(c),
+          m_nodeId(nodeId),
+          m_oldPos(oldPos),
+          m_newPos(newPos) {
+        setText("Move node");
+    }
+
+    void redo() override {
+        if(m_c == nullptr) {
+            return;
+        }
+        m_c->moveNodeNoHistory(m_nodeId, m_newPos);
+    }
+
+    void undo() override {
+        if(m_c == nullptr) {
+            return;
+        }
+        m_c->moveNodeNoHistory(m_nodeId, m_oldPos);
+    }
+
+private:
+    GraphController* m_c = nullptr;
+    unsigned         m_nodeId = 0;
+    QPointF          m_oldPos;
+    QPointF          m_newPos;
+};
+
 GraphController::GraphController(QObject* parent) : QObject(parent) {
     m_undoStack = new QUndoStack(this);
     connectScene();
@@ -528,7 +562,19 @@ void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& we
 }
 
 void GraphController::moveNode(const NodeItem* nodeItem, const QPointF& oldPos, const QPointF& newPos) {
-    //move command logic
+    if(m_graph == nullptr || m_undoStack == nullptr || nodeItem == nullptr || nodeItem->modelNode() == nullptr){
+        return;
+    }
+
+    if(oldPos == newPos){
+        return;
+    }
+
+    const unsigned nodeId = nodeItem->modelNode()->getId();
+
+    m_undoStack->push(
+        new MoveNodeCommand(this, nodeId, oldPos, newPos)
+        );
 }
 
 void GraphController::addNodeNoHistory(const QPointF& pos, unsigned& outId) {
@@ -731,6 +777,22 @@ void GraphController::setEdgeWeightNoHistoryById(unsigned edgeId,
             w->centerText();
         }
         ei->adjustWeightGeometry();
+    }
+
+    emit sceneModified();
+}
+
+void GraphController::moveNodeNoHistory(unsigned nodeId, const QPointF& pos) {
+    if(m_graph == nullptr) {
+        return;
+    }
+    if(Node* n = m_graph->getNode(nodeId)) {
+        n->setPosition(pos.x(), pos.y());
+    }
+
+    if(NodeItem* ni = m_scene->findNodeItemById(nodeId)) {
+        ni->setPos(pos);
+        ni->updateNodePosition();
     }
 
     emit sceneModified();
