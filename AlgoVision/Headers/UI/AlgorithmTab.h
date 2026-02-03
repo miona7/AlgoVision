@@ -74,7 +74,6 @@ private:
     QToolButton* m_nextBtn;
     QToolButton* m_restartBtn;
 
-    // std::shared_ptr<Graph>         m_prevGraph;
     std::shared_ptr<GraphController> m_graphController;
     AlgorithmStepApplier             m_applier;
     AlgorithmController              m_algorithmController;
@@ -90,6 +89,7 @@ private:
     QWidget* makeLegendItem(const QColor&, const QString&);
 
     void startTimerForPlay();
+    void updateControls();
 };
 
 #endif // ALGORITHMTAB_H

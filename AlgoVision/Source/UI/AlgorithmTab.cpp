@@ -37,6 +37,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
     initLayout();
     initIcons();
+    updateControls();
 
     updateUiForAlgorithm(m_algorithmCombo->currentText());
     updateLegendForAlgorithm(m_algorithmCombo->currentText());
@@ -49,6 +50,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     connect(this, &AlgorithmTab::errorDialogCancelled, this, [this]() {
         // greska znaci da run NIJE uspeo → vracamo se u Idle
         m_state = RunState::Idle;
+        updateControls();
 
         // ponistavamo current config da sledeci Play uvek krene iznova
         m_currentConfig.reset();
@@ -68,6 +70,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
         // ZA SAD SAMO RESET (bice prosireno)
         m_algorithmController.reset();
         m_state = RunState::Idle;
+        updateControls();
     });
 
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
@@ -83,8 +86,9 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     });
 
     // povezivanje dugmica
-    // moraju da se hvataju exepctioni -> iskacuci prozori?
     connect(m_playBtn, &QToolButton::clicked, this, [this]() {
+        m_playBtn->setEnabled(false);
+
         // parametri trenutnog algoritma
         AlgorithmTab::AlgorithmConfig newConfig = selectedConfig();
 
@@ -128,6 +132,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             connect(m_worker, &AlgorithmWorker::stepsReady, this, [this]() {
                 m_state = RunState::Playing;
                 startTimerForPlay();
+                updateControls();
             });
 
             // ucitaj korake algoritma
@@ -138,7 +143,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             connect(m_worker, &AlgorithmWorker::resultReady, &m_algorithmController,
                     &AlgorithmController::setResultString);
 
-            m_state = RunState::Idle;
+            // m_state = RunState::Idle;
             m_worker->start();
             // m_state = RunState::Playing;
             return;
@@ -148,6 +153,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
         if(m_state == RunState::Paused) {
             m_state = RunState::Playing;
             startTimerForPlay();
+            updateControls();
         }
     });
 
@@ -157,6 +163,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             m_timer->stop();
         }
         m_state = RunState::Paused;
+        updateControls();
     });
 
     connect(m_nextBtn, &QToolButton::clicked, [this]() { m_algorithmController.nextStep(); });
@@ -169,6 +176,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             m_timer->stop();
         }
         m_state = RunState::Idle;
+        updateControls();
         updateLegendForAlgorithm(m_algorithmCombo->currentText());
     });
 }
@@ -413,7 +421,7 @@ void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
 
     if(needsStart) {
         m_startRow->show();
-        m_startNodeEdit->setPlaceholderText("e.g. 0");
+        m_startNodeEdit->setPlaceholderText("default 0");
     } else {
         m_startNodeEdit->clear();
         m_startRow->hide();
@@ -421,7 +429,7 @@ void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
 
     if(needsEnd) {
         m_endRow->show();
-        m_endNodeEdit->setPlaceholderText("e.g. 5");
+        m_endNodeEdit->setPlaceholderText("default 0");
     } else {
         m_endNodeEdit->clear();
         m_endRow->hide();
@@ -449,6 +457,7 @@ void AlgorithmTab::startTimerForPlay() {
             if(m_algorithmController.isFinished()) {
                 m_timer->stop();
                 m_state = RunState::Finished;
+                updateControls();
 
                 QString result = m_algorithmController.resultString();
                 if(!result.isEmpty()) {
@@ -468,6 +477,28 @@ void AlgorithmTab::startTimerForPlay() {
     }
 
     m_timer->start(500); // 500ms po koraku
+}
+
+
+void AlgorithmTab::updateControls() {
+    // play je dostupan samo ako nismo vec u pokretu
+    m_playBtn->setEnabled(m_state == RunState::Idle || m_state == RunState::Paused || m_state == RunState::Finished);
+
+    // pause samo dok animacija traje
+    m_pauseBtn->setEnabled(m_state == RunState::Playing);
+
+    // stop (restart) je dostupan uvek osim kad smo na samom pocetku
+    m_restartBtn->setEnabled(m_state != RunState::Idle);
+
+    // next/prev samo kad je pauzirano
+    m_nextBtn->setEnabled(m_state == RunState::Paused);
+    m_prevBtn->setEnabled(m_state == RunState::Paused);
+
+    // zakljucaj unos parametara dok algoritam radi da korisnik ne menja cvorove usred posla
+    bool inputsLocked = (m_state == RunState::Playing || m_state == RunState::Paused);
+    m_algorithmCombo->setEnabled(!inputsLocked);
+    m_startNodeEdit->setEnabled(!inputsLocked);
+    m_endNodeEdit->setEnabled(!inputsLocked);
 }
 
 void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error, bool allowContinue) {
