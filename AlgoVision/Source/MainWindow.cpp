@@ -218,6 +218,7 @@ void MainWindow::onCreateGraphTriggered() {
 
     auto* editor = new GraphEditor(controller);
     controller->buildScene();
+    editor->graphController()->scene()->applyTheme(m_themeManager->currentTheme());
     connectGraphModifiedSignal(editor);
 
     TabInfo info;
@@ -336,7 +337,6 @@ void MainWindow::onSaveImageTriggered() {
     }
 }
 
-
 void MainWindow::onChangeThemeTriggered() {
     switch(m_themeManager->currentTheme()) {
     case ThemeManager::Theme::DARK:
@@ -352,8 +352,8 @@ void MainWindow::onChangeThemeTriggered() {
 
     this->setStyleSheet(m_themeManager->styleSheet());
 
-    if(m_graphEditor) {
-        auto* scene = m_graphEditor->graphController()->scene();
+    for(auto it = m_tabs.begin(); it != m_tabs.end(); ++it) {
+        auto* scene = it.value().m_editor->graphController()->scene();
         scene->applyTheme(m_themeManager->currentTheme());
     }
 }
@@ -403,6 +403,7 @@ void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool d
            // napravi novi GraphEditor i povezi sa kontrolerom
     auto* editor = new GraphEditor(controller);
     controller->buildScene();
+    editor->graphController()->scene()->applyTheme(m_themeManager->currentTheme());
     connectGraphModifiedSignal(editor);
 
            // kreiraj TabInfo
