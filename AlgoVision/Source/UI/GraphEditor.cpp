@@ -57,8 +57,8 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // main splitter for the left and right page sides
     QSplitter* splitter = new QSplitter(Qt::Horizontal, this);
 
-    m_view = new QGraphicsView(splitter);
-    m_view->setScene(m_graphController->scene());
+    m_view = new GraphView(m_graphController->scene(), this);
+    //m_view->setScene(m_graphController->scene());
 
     splitter->addWidget(m_view);
 
@@ -80,8 +80,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // layout for the whole GraphEditor
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(splitter);
-
-    connect(m_editTab, &GraphEditTab::undoRequested, this, &GraphEditor::onUndoRequestTrigger);
     // keyboard shortcuts
 
     // pan: Ctrl + P
@@ -96,7 +94,9 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     QShortcut* zoomOutShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), this);
     connect(zoomOutShortcut, &QShortcut::activated, this, &GraphEditor::onZoomOutRequestTrigger);
 
-    connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
+    //connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
+
+    connect(m_editTab, &GraphEditTab::undoRequested, this, &GraphEditor::onUndoRequestTrigger);
 
     connect(m_editTab, &GraphEditTab::redoRequested, this, &GraphEditor::onRedoRequestTrigger);
 

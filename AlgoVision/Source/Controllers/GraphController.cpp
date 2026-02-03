@@ -8,6 +8,7 @@
 #include <QUndoCommand>
 
 struct EdgeSnapshot {
+    unsigned m_id;
     unsigned m_from;
     unsigned m_to;
     int      m_weight;
@@ -73,9 +74,9 @@ public:
         }
 
         // zapamti sve incident grane
-        for(const auto& [_, e]: g->getEdges()) {
+        for(const auto& [id, e]: g->getEdges()) {
             if(e.startNode() == m_nodeId || e.endNode() == m_nodeId) {
-                m_edges.push_back({e.startNode(), e.endNode(), e.getWeight()});
+                m_edges.push_back({e.getId(), e.startNode(), e.endNode(), e.getWeight()});
             }
         }
     }
@@ -96,7 +97,7 @@ public:
 
         //vrati sve grane
         for(const EdgeSnapshot& es: m_edges) {
-            m_c->addEdgeNoHistory(es.m_from, es.m_to, es.m_weight);
+            m_c->restoreEdgeNoHistory(es.m_id, es.m_from, es.m_to, es.m_weight);
         }
     }
 
