@@ -143,7 +143,7 @@ selectNode() metode je takva da se sa ponovnim izvrsavanjem sa istim argumentima
 
  ignoreNextMouseRelease flag omogucuje da se ignorise drugi mouseReleaseEvent koji se desava
 nakon mouseDoubleClickEvent-a
-*/
+
 void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     event->accept();
     m_label->startEditing();
@@ -153,6 +153,7 @@ void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     update();
     emit nodeSelected(this);
 }
+*/
 
 void NodeItem::onNameChanged(const QString& name) const {
     emit editNodeNameRequest(this, name);
