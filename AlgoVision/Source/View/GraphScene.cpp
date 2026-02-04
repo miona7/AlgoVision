@@ -27,8 +27,15 @@ void GraphScene::resetScene() {
         m_editLabel->finishEditing(false);
         m_editLabel = nullptr;
     }
+}
 
-    m_state = State::ADD;
+void GraphScene::disableScene() {
+    m_previousState = m_state;
+    m_state = State::IDLE;
+}
+
+void GraphScene::enableScene() {
+    m_state = m_previousState;
 }
 
 void GraphScene::clear() {
@@ -38,6 +45,11 @@ void GraphScene::clear() {
 }
 
 void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    if(m_state == State::IDLE) {
+        event->accept();
+        return;
+    }
+
     if(m_state == State::EDIT) {
         m_editLabel->finishEditing(true);
         event->accept();
@@ -63,7 +75,7 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
-    if(m_state == State::REMOVE || m_state == State::EDIT) {
+    if(m_state == State::REMOVE || m_state == State::EDIT || m_state == State::IDLE) {
         event->accept();
         return;
     }

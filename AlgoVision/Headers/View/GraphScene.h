@@ -15,14 +15,19 @@ class GraphScene : public QGraphicsScene {
 public:
     explicit GraphScene(QObject* = nullptr);
 
-    enum class State { ADD, REMOVE, EDIT };
-
-    void setState(GraphScene::State);
+    enum class State { ADD, REMOVE, EDIT, IDLE };
 
     void updateNodeScalling();
 
+    void setState(GraphScene::State);
     // vraca scenu na pocetno stanje (koje je ADD) sa resetovanim pomocnim privatnim clanicama
     void resetScene();
+
+    // iskljucuje interakcije scene (dodavanje, uklanjanje, azuriranje elemenata)
+    void disableScene();
+    // vraca scenu na stanje pre iskljucivanja
+    void enableScene();
+
 
     // pored ciscenja scene, dodatno brise mapu nodeItem-a, i vraca scenu na pocetno stanje
     void clear();
@@ -65,6 +70,7 @@ private:
     NodeItem*         m_firstNodeSelect {nullptr};
     EditableTextItem* m_editLabel {nullptr};
     State             m_state {State::ADD};
+    State m_previousState;
 
     // cuva NodeItem-e, kako bi mogli da se koriste prilikom pravljenja pogleda grafa od vec
     // ucitanog modela sluzi kao veza modela cvora sa odgovarajucim pogledom ne poseduje NodeItem-e,
