@@ -145,7 +145,7 @@ cmake --build build
 ```
 ---
 
-## Demo snimak 🎥
+## 🎥 Demo snimak
 
 [!demo]()
 
