@@ -15,7 +15,6 @@ class GraphScene : public QGraphicsScene {
 public:
     explicit GraphScene(QObject* = nullptr);
 
-
     /*
         ADD -> adding nodes and edges
         REMOVE -> removing nodes and edges
@@ -25,7 +24,6 @@ public:
     enum class State { ADD, REMOVE, EDIT, IDLE };
 
     void updateNodeScalling();
-
 
     void setState(GraphScene::State);
     // returns the scene in initial state (clears all selections and ends all edits)
@@ -39,7 +37,8 @@ public:
 
     void addNode(Node*);
     void addEdge(Edge*, bool, bool);
-    // additional command that encapsulates adding node and edge into one command that is revertable via undo/redo
+    // additional command that encapsulates adding node and edge into one command that is revertable
+    // via undo/redo
     void addNodeAndEdge(Node*, Edge*, bool, bool);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
@@ -74,7 +73,7 @@ private:
     NodeItem*         m_firstNodeSelect {nullptr};
     EditableTextItem* m_editLabel {nullptr};
     State             m_state {GraphScene::State::ADD};
-    State m_previousState;
+    State             m_previousState;
 
     // structure only used as helper for operations, not owning elements
     std::map<unsigned, NodeItem*> m_nodeItems;

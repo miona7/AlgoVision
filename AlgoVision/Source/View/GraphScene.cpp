@@ -31,7 +31,7 @@ void GraphScene::resetScene() {
 
 void GraphScene::disableScene() {
     m_previousState = m_state;
-    m_state = GraphScene::State::IDLE;
+    m_state         = GraphScene::State::IDLE;
 }
 
 void GraphScene::enableScene() {
@@ -74,8 +74,8 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
-    if(m_state == GraphScene::State::REMOVE || m_state == GraphScene::State::EDIT
-        || GraphScene::m_state == State::IDLE) {
+    if(m_state == GraphScene::State::REMOVE || m_state == GraphScene::State::EDIT ||
+       GraphScene::m_state == State::IDLE) {
         event->accept();
         return;
     }
@@ -161,7 +161,8 @@ void GraphScene::addEdge(Edge* edgeModel, bool isDirected, bool isWeighted) {
     m_firstNodeSelect = nullptr;
 }
 
-void GraphScene::addNodeAndEdge(Node* nodeModel, Edge* edgeModel, bool isDirected, bool isWeighted) {
+void GraphScene::addNodeAndEdge(Node* nodeModel, Edge* edgeModel, bool isDirected,
+                                bool isWeighted) {
     addNode(nodeModel);
     addEdge(edgeModel, isDirected, isWeighted);
 }
@@ -193,7 +194,7 @@ void GraphScene::removeEdge(EdgeItem* edge) {
 
 EdgeItem* GraphScene::findEdgeItemById(unsigned edgeId) const {
     const QList<QGraphicsItem*> all = items();
-    for(QGraphicsItem* it : all) {
+    for(QGraphicsItem* it: all) {
         auto* edgeItem = dynamic_cast<EdgeItem*>(it);
         if(!edgeItem || !edgeItem->modelEdge())
             continue;
