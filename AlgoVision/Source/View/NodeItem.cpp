@@ -76,12 +76,12 @@ void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
 
 QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) {
     switch(change) {
-    case QGraphicsItem::ItemPositionHasChanged:{
-        // azuriraj pozicije modela pri pomeranju cvora
+    case QGraphicsItem::ItemPositionHasChanged: {
+        // update node position (center)
         auto p = value.toPointF();
         m_modelNode->setPosition(p.x(), p.y());
 
-        // azuriraj pozicije grana
+        // update edges position
         for(auto* edge: m_edges) {
             edge->adjust();
         }
@@ -95,10 +95,9 @@ QVariant NodeItem::itemChange(GraphicsItemChange change, const QVariant& value) 
     return QGraphicsItem::itemChange(change, value);
 }
 
-// test: right click on node delete itself
 void NodeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     m_hasChangePosition = false;
-    m_oldCenter = pos();
+    m_oldCenter         = pos();
     QGraphicsItem::mousePressEvent(event);
 }
 
@@ -127,23 +126,16 @@ void NodeItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 /*
-    mouseDoubleClickEvent se sastoji iz naredna 4 dogadjaja ovim redom:
+    mouseDoubleClickEvent contains 4 mouse events in this order:
         1. mousePressEvent
         2. mouseRealeseEvent
         3. mouseDoubleClickEvent
         4. mouseReleaseEvent
 
- Problem je sto mouseReleaseEvent ima select logiku koja se koristi i pri dodavanju grana,
- a to ne zelimo da se desava kada hocemo da izvrsimo rename logiku sa duplim klikom.
+    So if we want to change node name by double click, we can detect that with
+mouseDoubleClickEvent, but we need to disable next mouse release event, and also to negate previous
+mouseReleaseEvent
 
- Ne postoji nacin kako da se prvi mouseRealeseEvent spreci jer se ne zna da li ce se izvrsiti
- mouseDoubleClickEvent ili ne, pa ga izvrsavamo, ali ako se desi mouseDoubleClickEvent ponavo
- izvrsavamo logiku mouseReleaseEvent-a, jer sva logika i u nodeItem i u GrahiScene u okviru
-selectNode() metode je takva da se sa ponovnim izvrsavanjem sa istim argumentima ponistava.
-
- ignoreNextMouseRelease flag omogucuje da se ignorise drugi mouseReleaseEvent koji se desava
-nakon mouseDoubleClickEvent-a
-*/
 void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     event->accept();
     m_label->startEditing();
@@ -153,6 +145,7 @@ void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
     update();
     emit nodeSelected(this);
 }
+*/
 
 void NodeItem::onNameChanged(const QString& name) const {
     emit editNodeNameRequest(this, name);
@@ -245,7 +238,6 @@ const QColor NodeItem::calculateColor() const {
         return Qt::darkYellow;
     default:
         return Qt::lightGray;
-        // return Qt::green;
     }
 }
 

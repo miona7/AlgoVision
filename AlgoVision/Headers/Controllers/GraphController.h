@@ -43,14 +43,17 @@ public slots:
     void editEdgeWeight(const EdgeItem*, const QString&);
     void moveNode(const NodeItem*, const QPointF&, const QPointF&);
 
-    // ova metoda brise sadrzaj modela grafa(grane i cvorove) i
-    // pogleda grafa(cvor/grana ajteme), ali se nikad ne brisu m_graph i m_scene
-    // oni postoje dok postoji i kontroler
+    // clears nodes and edges in both model and view
     void clear();
+    // clears nodes and edges only in view
     void clearScene() const;
-
-    // pravi scenu od vec ucitanog grafa
+    // builds scene from already loaded graph
     void buildScene() const;
+
+    // handle methods for GraphScene methods
+    void disableScene() const;
+    void enableScene() const;
+    void resetScene() const;
 
     void addNodeNoHistory(const QPointF&, unsigned&);
     void addNodeWithIdNoHistory(unsigned, const QPointF&);
@@ -66,7 +69,6 @@ public slots:
     void moveNodeNoHistory(unsigned, const QPointF&);
     void clearNoHistory();
 
-    // kontroler je vlasnik i upravlja nad modelom i pogledom grafa
 private:
     std::shared_ptr<Graph>      m_graph;
     std::unique_ptr<GraphScene> m_scene     = std::make_unique<GraphScene>();

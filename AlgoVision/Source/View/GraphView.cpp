@@ -53,13 +53,9 @@ void GraphView::zoomOut() {
 }
 
 void GraphView::mousePressEvent(QMouseEvent* event) {
-    // desni klik je podrazumevana precica za pan, koji se odmah izvrsava drzanjem desnog klika
-    // potrebno je da upamtimo staro stanje da bi znali na sta treba da se vratimo: IDLE ili
-    // PAN_IDLE
+    // right click drag is used for fast pan (we don't stay in pan mode afterwards)
     if(m_state == GraphView::State::PAN_IDLE || event->button() == Qt::RightButton) {
-        // ako je kliknut desni klik da se odradi ispravan reset cursora
         m_oldState = m_state;
-        // pan init
         setState(GraphView::State::PAN_ACTIVE);
         m_lastMousePos = event->pos();
 
@@ -77,7 +73,7 @@ void GraphView::mousePressEvent(QMouseEvent* event) {
 
 void GraphView::mouseMoveEvent(QMouseEvent* event) {
     if(m_state == GraphView::State::PAN_ACTIVE) {
-        // pan update logic (u koordinatama scene, da ne zavise proracuni od zoom-a)
+        // pan update logic (in scene coordinates)
         QPoint delta = event->pos() - m_lastMousePos;
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - delta.x());
         verticalScrollBar()->setValue(verticalScrollBar()->value() - delta.y());
@@ -97,7 +93,6 @@ void GraphView::mouseMoveEvent(QMouseEvent* event) {
 
 void GraphView::mouseReleaseEvent(QMouseEvent* event) {
     if(m_state == GraphView::State::PAN_ACTIVE) {
-        // kada se ispusti desni klik ne ostaje se u pan modu, to je samo precica za brzi pan
         if(event->button() == Qt::RightButton) {
             setState(m_oldState);
         } else {
