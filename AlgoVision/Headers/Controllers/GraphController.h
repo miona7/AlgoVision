@@ -2,11 +2,19 @@
 #define GRAPH_CONTROLLER_H
 
 #include <QObject>
+#include <QUndoStack>
+#include <QUndoCommand>
+
 #include <memory>
 
 #include "Graph.h"
 #include "GraphScene.h"
-#include <QUndoStack>
+#include "EdgeItem.h"
+#include "EditableTextItem.h"
+#include "UnweightedDirectedGraph.h"
+#include "UnweightedUndirectedGraph.h"
+#include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
 
 class GraphController : public QObject {
     Q_OBJECT
@@ -24,14 +32,12 @@ public:
 
     GraphScene* scene() const;
 
-    // metoda za eksplicitno postavljanje pozicije cvora
     void updateNodePosition(NodeItem* nodeItem, const QPointF& point);
 
 signals:
 
     void sceneModified();
 
-    // obrisani const zbog emitovanja signala za promenu grafa i cuvanja u fajl
 public slots:
     void createGraph(bool, bool);
     void addNode(const QPointF&);

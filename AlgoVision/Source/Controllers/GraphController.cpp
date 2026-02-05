@@ -1,11 +1,4 @@
 #include "GraphController.h"
-#include "EdgeItem.h"
-#include "EditableTextItem.h"
-#include "UnweightedDirectedGraph.h"
-#include "UnweightedUndirectedGraph.h"
-#include "WeightedDirectedGraph.h"
-#include "WeightedUndirectedGraph.h"
-#include <QUndoCommand>
 
 struct EdgeSnapshot {
     unsigned m_id;
@@ -51,7 +44,7 @@ public:
         setText("Remove node");
     }
 
-    // pozovi PRE push-a
+    // call BEFORE push
     void capture() {
         if(m_c == nullptr) {
             return;
@@ -66,14 +59,15 @@ public:
         if(n == nullptr) {
             return;
         }
-        // zapamti poziciju
+
+        // remember position
         if(NodeItem* ni = m_c->scene()->findNodeItemById(m_nodeId)) {
             QPointF p = ni->pos();
             m_x       = p.x();
             m_y       = p.y();
         }
 
-        // zapamti sve incident grane
+        // remember all incident edges
         for(const auto& [id, e]: g->getEdges()) {
             if(e.startNode() == m_nodeId || e.endNode() == m_nodeId) {
                 m_edges.push_back({e.getId(), e.startNode(), e.endNode(), e.getWeight()});
@@ -92,10 +86,11 @@ public:
         if(m_c == nullptr) {
             return;
         }
-        // vrati cvor
+
+        // return the node
         m_c->addNodeWithIdNoHistory(m_nodeId, QPointF(m_x, m_y));
 
-        // vrati sve grane
+        // return all edges
         for(const EdgeSnapshot& es: m_edges) {
             m_c->restoreEdgeNoHistory(es.m_id, es.m_from, es.m_to, es.m_weight);
         }
@@ -122,6 +117,7 @@ public:
         if(m_c == nullptr) {
             return;
         }
+
         if(!m_hasId) {
             m_c->addEdgeNoHistory(m_from, m_to, m_weight);
             if(Edge* e = m_c->graph()->getEdge(m_from, m_to)) {
@@ -331,7 +327,7 @@ void GraphController::setGraph(const std::shared_ptr<Graph>& newGraph) {
         m_undoStack->clear();
     }
     m_graph = newGraph;
-    clearNoHistory(); // ciscenje istorije bez dodavanja komande u undo
+    clearNoHistory(); // clear history without adding command in undo
 }
 
 void GraphController::setAddSceneState() const {
@@ -475,8 +471,8 @@ void GraphController::removeNode(NodeItem* nodeItem) {
     const unsigned nodeId = nodeItem->modelNode()->getId();
 
     auto* cmd = new RemoveNodeCommand(this, nodeId);
-    cmd->capture();         // snimi stanje PRE brisanja
-    m_undoStack->push(cmd); // Qt ce pozvati redo()
+    cmd->capture();         // capture state BEFORE delete
+    m_undoStack->push(cmd); // Qt will call redo()
 }
 
 void GraphController::removeEdge(EdgeItem* edgeItem) {
