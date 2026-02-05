@@ -541,6 +541,19 @@ void AlgorithmTab::updateControls() {
     m_algorithmCombo->setEnabled(!inputsLocked);
     m_startNodeEdit->setEnabled(!inputsLocked);
     m_endNodeEdit->setEnabled(!inputsLocked);
+
+    const bool allowGraphEdit = (m_state == RunState::Idle);
+
+    if(allowGraphEdit) {
+        m_graphController->enableScene();
+    } else {
+        m_graphController->disableScene();
+    }
+
+    if(allowGraphEdit != m_graphEditAllowed) {
+        m_graphEditAllowed = allowGraphEdit;
+        emit graphEditAllowedChanged(m_graphEditAllowed);
+    }
 }
 
 void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {

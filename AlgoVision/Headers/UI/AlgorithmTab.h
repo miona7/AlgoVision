@@ -31,6 +31,9 @@ public:
 public slots:
     void showAlgorithmErrorDialog(const AlgorithmError&);
 
+signals:
+    void graphEditAllowedChanged(bool allowed);
+
 private:
     struct AlgorithmConfig {
         QString m_algorithmName;
@@ -77,6 +80,7 @@ private:
     QTimer*                          m_timer  = nullptr;
     RunState                         m_state  = RunState::Idle;
     std::optional<AlgorithmConfig>   m_currentConfig;
+    bool                             m_graphEditAllowed = true;
 
     void     initLayout();
     void     initIcons();

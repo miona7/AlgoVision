@@ -67,7 +67,11 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     m_editTab = new GraphEditTab(rightTabs);
 
     rightTabs->addTab(m_editTab, "graph");
-    rightTabs->addTab(new AlgorithmTab(m_graphController, rightTabs), "algorithm");
+    auto* algorithmTab = new AlgorithmTab(m_graphController, rightTabs);
+    rightTabs->addTab(algorithmTab, "algorithm");
+
+    connect(algorithmTab, &AlgorithmTab::graphEditAllowedChanged,
+            m_editTab, &GraphEditTab::setGraphEditsAllowed);
 
     splitter->addWidget(rightTabs);
 
@@ -101,6 +105,12 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     connect(this, &GraphEditor::undoRequested, m_undoStack, &QUndoStack::undo);
 
     connect(this, &GraphEditor::redoRequested, m_undoStack, &QUndoStack::redo);
+
+    connect(algorithmTab, &AlgorithmTab::graphEditAllowedChanged,
+            undoSc, &QShortcut::setEnabled);
+
+    connect(algorithmTab, &AlgorithmTab::graphEditAllowedChanged,
+            redoCtrlY, &QShortcut::setEnabled);
 
     connect(m_undoStack, &QUndoStack::canUndoChanged, m_editTab, &GraphEditTab::setUndoEnabled);
 

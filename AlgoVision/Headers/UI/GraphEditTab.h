@@ -28,6 +28,7 @@ signals:
 public slots:
     void setUndoEnabled(bool);
     void setRedoEnabled(bool);
+    void setGraphEditsAllowed(bool);
 
 private:
     QPushButton* m_addBtn;
@@ -38,6 +39,12 @@ private:
     QPushButton* m_zoomOutBtn;
     QPushButton* m_panBtn;
     QPushButton* m_clearBtn;
+
+    bool m_graphEditsAllowed = true;
+    bool m_canUndo = false;
+    bool m_canRedo = false;
+
+    void applyEditButtonsState();
 
     QSlider* m_nodeSizeSlider;
 
