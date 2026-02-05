@@ -42,10 +42,9 @@ std::optional<AlgorithmError> Prim::execute(unsigned, unsigned) {
 }
 
 void Prim::prim() {
-    std::map<unsigned, bool> inTree;      // da li je cvor vec u drvetu
-    std::map<unsigned, int>  minDistance; // minimalno rastojanje cvora do drveta
-    std::map<unsigned, std::optional<unsigned>>
-        parent; // za svaki cvor pamtimo iz kog cvora smo dosli do njega
+    std::map<unsigned, bool> inTree;
+    std::map<unsigned, int>  minDistance;
+    std::map<unsigned, std::optional<unsigned>> parent; // from which node we came
 
     auto nodes = m_graph->getNodes();
     for(const auto& [nodeId, _]: nodes) {
@@ -135,8 +134,6 @@ void Prim::prim() {
             m_totalWeight += minDistance[u];
         }
     }
-
-    std::cout << "Total weight of MST is " << m_totalWeight << std::endl;
 }
 QString Prim::resultString() const {
     return QString("Total MST weight: %1").arg(m_totalWeight);
