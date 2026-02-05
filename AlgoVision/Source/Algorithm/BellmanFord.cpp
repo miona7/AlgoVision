@@ -118,6 +118,20 @@ void BellmanFord::bellmanFord(unsigned start) {
             break;
         }
     }
+
+    m_resultString = "Shortest distances from node " + QString::number(start) + ":\n";
+
+    for(const auto& [node, dist]: m_minDistance) {
+        if(dist != std::numeric_limits<int>::max()) {
+            m_resultString += QString("Node %1 : %2\n").arg(node).arg(dist);
+        } else {
+            m_resultString += QString("Node %1 : unreachable\n").arg(node);
+        }
+    }
+
+    if(m_hasNegativeCycle) {
+        m_resultString += "Graph contains a negative cycle!";
+    }
 }
 
 bool BellmanFord::hasNegativeCycle() const {
@@ -125,18 +139,5 @@ bool BellmanFord::hasNegativeCycle() const {
 }
 
 QString BellmanFord::resultString() const {
-    QString res = "Distances:\n";
-    for(const auto& [node, dist]: m_minDistance) {
-        if(dist != std::numeric_limits<int>::max()) {
-            res += QString("Node %1 : %2\n").arg(node).arg(dist);
-        } else {
-            res += QString("Node %1 : unreachable\n").arg(node);
-        }
-    }
-
-    if(m_hasNegativeCycle) {
-        res += "Graph contains a negative cycle!";
-    }
-
-    return res;
+    return m_resultString;
 }

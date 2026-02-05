@@ -25,6 +25,7 @@ public:
 private:
     bool                    m_hasNegativeCycle = false;
     std::map<unsigned, int> m_minDistance;
+    QString m_resultString;
 
     void bellmanFord(unsigned);
 };
