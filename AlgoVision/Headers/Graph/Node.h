@@ -35,10 +35,9 @@ public:
 private:
     unsigned                  m_id;
     QString                   m_name;
-    std::pair<double, double> m_position; // x, y koordinata cvora
-    NodeState                 m_state = NodeState::Default;
-
-    int m_componentColor = -1;
+    std::pair<double, double> m_position; // node coordinates
+    NodeState                 m_state          = NodeState::Default;
+    int                       m_componentColor = -1;
 };
 
 #endif // NODE_H

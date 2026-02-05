@@ -14,7 +14,7 @@ void UnweightedUndirectedGraph::addEdge(unsigned from, unsigned to, int w) {
 void UnweightedUndirectedGraph::removeEdge(unsigned edgeId) {
     auto it = m_edges.find(edgeId);
     if(it == m_edges.end()) {
-        return; // grana ne postoji
+        return;
     }
 
     unsigned from = it->second.startNode();

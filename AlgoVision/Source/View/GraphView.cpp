@@ -1,8 +1,5 @@
 #include "GraphView.h"
 
-#include <QScrollBar>
-#include <qevent.h>
-
 GraphView::GraphView(QWidget* parent) : QGraphicsView(parent) {
     init();
 }

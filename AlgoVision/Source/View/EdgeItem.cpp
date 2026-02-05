@@ -1,9 +1,4 @@
-#include <QFont>
-#include <QGraphicsSceneEvent>
-
 #include "EdgeItem.h"
-#include "EditableTextItem.h"
-#include "NodeItem.h"
 
 EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bool hasWeight)
     : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode),
@@ -22,7 +17,7 @@ EdgeItem::~EdgeItem() {
     if(m_modelEdge != nullptr && m_observerId != 0) {
         m_modelEdge->removeObserver(m_observerId);
         m_observerId = 0;
-        m_modelEdge  = nullptr; // sprecavamo ponovno pozivanje
+        m_modelEdge  = nullptr; // prevent re-calling
     }
 }
 
@@ -193,7 +188,7 @@ void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 const QColor EdgeItem::calculateColor() const {
     if(m_modelEdge == nullptr) {
-        return Qt::black; // fallback ako grana ne postoji
+        return Qt::black; // fallback if edge does not exist
     }
 
     switch(m_modelEdge->getState()) {
@@ -214,6 +209,7 @@ void EdgeItem::onEdgeUpdated() {
     }
     update();
 }
+
 void EdgeItem::updateSize() {
     if(!m_hasWeight || !m_weight)
         return;
@@ -222,5 +218,5 @@ void EdgeItem::updateSize() {
     f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
     m_weight->setFont(f);
 
-    adjustWeightGeometry(); // da se lepo repozicionira posle skaliranja
+    adjustWeightGeometry();
 }

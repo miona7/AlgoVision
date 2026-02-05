@@ -25,29 +25,16 @@ std::optional<AlgorithmError> Tarjan::execute(unsigned, unsigned) {
 
     init();
 
-    // int  component = 0;
-    // m_numComponents = 0;
     auto nodes = m_graph->getNodes();
     for(const auto& [id, node]: nodes) {
         if(m_components[id] == -1) {
-            // m_sccCount++;
-            // tarjan(id, component);
             tarjan(id);
         }
     }
 
-    // std::cout << "Strongly connected components:" << std::endl;
     std::map<int, std::vector<unsigned>> comps;
     for(const auto& [nodeId, compId]: m_components) {
         comps[compId].emplace_back(nodeId);
-    }
-
-    for(const auto& [compId, nodesVec]: comps) {
-        std::cout << "Component " << compId << ": ";
-        for(auto id: nodesVec) {
-            std::cout << id << " ";
-        }
-        std::cout << std::endl;
     }
 
     return std::nullopt;
@@ -69,7 +56,7 @@ void Tarjan::tarjan(unsigned nodeId) {
     }
     {
         AlgorithmStep s;
-        s.m_type = StepType::UpdateDistance; // koristimo kao "lowlink update"
+        s.m_type = StepType::UpdateDistance; // using as "lowlink update"
         s.m_node = nodeId;
         addStep(s);
     }
@@ -87,7 +74,6 @@ void Tarjan::tarjan(unsigned nodeId) {
                 addStep(s);
             }
             if(m_incomingNumbering[neighbourId] == -1) {
-                // tarjan(neighbourId, component);
                 tarjan(neighbourId);
                 int oldLow        = m_lowLink[nodeId];
                 m_lowLink[nodeId] = std::min(m_lowLink[nodeId], m_lowLink[neighbourId]);
@@ -110,7 +96,7 @@ void Tarjan::tarjan(unsigned nodeId) {
         }
     }
 
-    // ako je cvor koren komponente
+    // node is root of component
     if(m_incomingNumbering[nodeId] == m_lowLink[nodeId]) {
         while(true) {
             unsigned componentNodeId = m_tourOrder.top();
@@ -122,13 +108,11 @@ void Tarjan::tarjan(unsigned nodeId) {
                 addStep(s);
             }
 
-            // m_components[componentNodeId] = component;
             m_components[componentNodeId] = m_numComponents;
             m_onStack[componentNodeId]    = false;
 
             Node* node = m_graph->getNode(componentNodeId);
             if(node != nullptr) {
-                // node->setComponentColor(component);
                 node->setComponentColor(m_numComponents);
             }
 
@@ -136,7 +120,6 @@ void Tarjan::tarjan(unsigned nodeId) {
                 break;
             }
         }
-        // component++;
         m_numComponents++;
     }
 }
@@ -156,14 +139,13 @@ void Tarjan::init() {
 
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
-        m_incomingNumbering[id] = -1; // jos nije posecen
-        m_lowLink[id]           = -1; // lowlink vrednost nepoznata
+        m_incomingNumbering[id] = -1; // still not visited
+        m_lowLink[id]           = -1; // lowlink unknown
         m_onStack[id]           = false;
-        m_components[id]        = -1; // komponenta nije dodeljena
+        m_components[id]        = -1; // component not assigned
     }
 }
 
 QString Tarjan::resultString() const {
-    // return QString("Number of SCC: %1").arg(m_sccCount);
     return QString("Number of SCC: %1").arg(m_numComponents);
 }

@@ -2,6 +2,8 @@
 #define GRAPH_VIEW_H
 
 #include <QGraphicsView>
+#include <QScrollBar>
+#include <qevent.h>
 
 class GraphView : public QGraphicsView {
 public:
@@ -27,8 +29,6 @@ protected:
 private:
     GraphView::State m_state {GraphView::State::IDLE};
 
-    void init();
-
     // pan state (in scene coordinates)
     QPoint m_lastMousePos;
 
@@ -36,6 +36,8 @@ private:
 
     // used for returning to previous state after fast pan (right click drag)
     GraphView::State m_oldState;
+
+    void init();
 };
 
 #endif // GRAPH_VIEW

@@ -1,12 +1,15 @@
 #ifndef EDGEITEM_H
 #define EDGEITEM_H
 
+#include <QFont>
 #include <QGraphicsObject>
+#include <QGraphicsSceneEvent>
 
 #include "Edge.h"
+#include "EditableTextItem.h"
+#include "NodeItem.h"
 
 class NodeItem;
-class EditableTextItem;
 
 class EdgeItem : public QGraphicsObject {
     Q_OBJECT

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <optional>
 #include <queue>
 
 #include "Algorithm.h"
@@ -18,8 +19,9 @@ public:
     QString resultString() const override;
 
 private:
-    void    dijkstra(unsigned);
     QString m_resultString;
+
+    void dijkstra(unsigned);
 };
 
 #endif // DIJKSTRA_H

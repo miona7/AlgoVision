@@ -27,12 +27,6 @@ std::optional<AlgorithmError> Kahn::execute(unsigned, unsigned) {
         return err;
     }
 
-    std::cout << "Topological order:" << std::endl;
-    for(unsigned node: m_sorted) {
-        std::cout << node << " ";
-    }
-    std::cout << std::endl;
-
     return std::nullopt;
 }
 
@@ -40,7 +34,7 @@ std::optional<AlgorithmError> Kahn::kahn() {
     m_sorted.clear();
 
     auto                         nodes = m_graph->getNodes();
-    std::map<unsigned, unsigned> inDegree; // ulazni stepen svakog cvora
+    std::map<unsigned, unsigned> inDegree;
     for(const auto& [id, _]: nodes) {
         inDegree[id] = 0;
     }

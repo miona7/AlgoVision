@@ -37,14 +37,15 @@ std::optional<AlgorithmError> Dijkstra::execute(unsigned idStartNode, unsigned) 
     }
 
     clearSteps();
+
     dijkstra(idStartNode);
 
     return std::nullopt;
 }
 
 void Dijkstra::dijkstra(unsigned start) {
-    std::map<unsigned, bool> finished;    // da li smo nasli rastojanje do cvora
-    std::map<unsigned, int>  minDistance; // minimalna rastojanja za svaki cvor
+    std::map<unsigned, bool> finished;
+    std::map<unsigned, int>  minDistance;
 
     auto nodes = m_graph->getNodes();
     for(const auto& [nodeId, _]: nodes) {
@@ -52,7 +53,7 @@ void Dijkstra::dijkstra(unsigned start) {
         minDistance[nodeId] = std::numeric_limits<int>::max();
     }
 
-    // min-hip: pair<rastojanje, cvor>
+    // min-hip: pair<distance, node>
     std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
                         std::greater<>>
         pq;

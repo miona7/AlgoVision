@@ -8,7 +8,7 @@ Node* Graph::addNode(double x, double y) {
 
 void Graph::addNode(unsigned id, double x, double y) {
     if(m_nodes.find(id) != m_nodes.end()) {
-        return; // cvor vec postoji
+        return; // node does not exist
     }
     ++m_numOfNodes;
     m_adjacencyList[id] = {};
@@ -20,20 +20,20 @@ void Graph::addNode(unsigned id, double x, double y) {
 
 void Graph::removeNode(unsigned id) {
     if(m_nodes.find(id) == m_nodes.end()) {
-        return; // cvor ne postoji
+        return; // node does not exist
     }
 
-    // sve grane povezane sa cvorom
+    // all edges connected to node
     std::set<unsigned> edgesToRemove;
 
-    // izlazne grane
+    // outgoing edges
     if(m_adjacencyList.find(id) != m_adjacencyList.end()) {
         for(const auto& [edgeId, _]: m_adjacencyList[id]) {
             edgesToRemove.insert(edgeId);
         }
     }
 
-    // ulazne grane
+    // incoming edges
     for(const auto& [_, neighbors]: m_adjacencyList) {
         for(const auto& [edgeId, to]: neighbors) {
             if(to == id) {
@@ -42,12 +42,12 @@ void Graph::removeNode(unsigned id) {
         }
     }
 
-    // obrisi sve grane
+    // delete all edges
     for(unsigned edgeId: edgesToRemove) {
         removeEdge(edgeId);
     }
 
-    // obrisi cvor
+    // delete node
     m_adjacencyList.erase(id);
     m_nodes.erase(id);
     --m_numOfNodes;
@@ -63,7 +63,6 @@ void Graph::clear() {
     m_edges.clear();
 }
 
-// razlikuje se od obicnog dodavanja grane
 void Graph::addEdgeSerialized(unsigned edgeId, unsigned from, unsigned to, int w) {
     if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
         return;

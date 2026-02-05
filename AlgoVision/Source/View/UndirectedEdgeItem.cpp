@@ -1,7 +1,3 @@
-#include <QPainter>
-#include <QPen>
-
-#include "AppConstants.h"
 #include "UndirectedEdgeItem.h"
 
 UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
@@ -30,7 +26,6 @@ QPainterPath UndirectedEdgeItem::shape() const {
 
 void UndirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
                                QWidget* widget) {
-    // QPen pen(Qt::black, m_penWidth);
     auto color = calculateColor();
     QPen pen(color);
     pen.setWidthF(AppConstants::BaseEdgeWidth * AppConstants::NodeScale);

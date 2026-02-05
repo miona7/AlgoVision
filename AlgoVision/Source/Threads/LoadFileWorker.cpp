@@ -28,12 +28,12 @@ void LoadFileWorker::run() {
     bool weighted = root.value("isWeighted").toBool();
     bool directed = root.value("isDirected").toBool();
 
-    // izvuci samo "graph"
+    // get only "graph"
     QVariant graphData = root.value("graph");
     if(!graphData.isValid()) {
         emit failed("No graph data in file");
         return;
     }
 
-    emit loaded(graphData, weighted, directed, m_filePath); // samo salje QVariant, ne dira graf
+    emit loaded(graphData, weighted, directed, m_filePath); // send only QVariant
 }

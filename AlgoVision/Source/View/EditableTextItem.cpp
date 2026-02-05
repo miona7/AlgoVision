@@ -1,6 +1,4 @@
-#include <EditableTextItem.h>
-#include <QKeyEvent>
-#include <QTextCursor>
+#include "EditableTextItem.h"
 
 EditableTextItem::EditableTextItem(QGraphicsItem* parent) : QGraphicsTextItem(parent) {
     QTextOption opt;

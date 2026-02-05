@@ -9,7 +9,7 @@ std::optional<AlgorithmError> FloydWarshall::checkConditions() const {
                                "Graph is not initialized or empty."};
     }
 
-    if(!m_graph->isDirected()) {
+    if(!m_graph->isDirected() || !m_graph->isWeighted()) {
         return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
@@ -25,18 +25,6 @@ std::optional<AlgorithmError> FloydWarshall::execute(unsigned, unsigned) {
 
     if(auto err = floydWarshall()) {
         return err;
-    }
-
-    std::cout << "All-pairs shortest distances:" << std::endl;
-    for(const auto& [u, row]: m_distances) {
-        for(const auto& [v, dist]: row) {
-            std::cout << "From " << u << " to " << v << ": ";
-            if(dist == std::numeric_limits<int>::max()) {
-                std::cout << "unreachable" << std::endl;
-            } else {
-                std::cout << dist << std::endl;
-            }
-        }
     }
 
     return std::nullopt;
@@ -66,7 +54,7 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
         {
             AlgorithmStep s;
             s.m_type = StepType::VisitNode;
-            s.m_node = k; // trenutno posrednik
+            s.m_node = k;
             addStep(s);
         }
         {
@@ -144,7 +132,7 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
 }
 
 QString FloydWarshall::resultString() const {
-    QString res = "All-pairs shortest paths:\n";
+    QString res = "All-pairs shortest distances:\n";
 
     for(const auto& [i, row]: m_distances) {
         for(const auto& [j, dist]: row) {

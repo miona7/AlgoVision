@@ -1,25 +1,31 @@
 #ifndef ALGORITHMTAB_H
 #define ALGORITHMTAB_H
 
+#include <QAbstractItemView>
+#include <QColor>
+#include <QComboBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QStandardItem>
+#include <QStandardItemModel>
 #include <QString>
+#include <QStyle>
 #include <QTimer>
+#include <QToolButton>
+#include <QVBoxLayout>
 #include <QWidget>
 
-#include <QScrollArea>
 #include <optional>
-
-#include <QColor>
-#include <QVBoxLayout>
 
 #include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
 #include "GraphController.h"
-
-class QComboBox;
-class QLabel;
-class QLineEdit;
-class QPushButton;
-class QToolButton;
 
 class AlgorithmTab : public QWidget {
     Q_OBJECT

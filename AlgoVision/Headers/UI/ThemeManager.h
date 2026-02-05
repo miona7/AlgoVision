@@ -12,13 +12,13 @@ public:
     explicit ThemeManager();
 
     Theme   currentTheme() const;
-    QString styleSheet() const; // vraca QString sa CSS-om za trenutnu temu
+    QString styleSheet() const;
 
     void setTheme(Theme);
 
 private:
     Theme     m_currentTheme {Theme::DARK};
-    QSettings m_settings; // naredno pokretanje -> sacuvana tema
+    QSettings m_settings;
 
     void loadTheme();
     void saveTheme();

@@ -3,16 +3,37 @@
 
 #include <QMainWindow>
 #include <QHash>
+#include <QFile>
+#include <QFileDialog>
+#include <QJsonDocument>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QString>
+#include <QVBoxLayout>
+#include <QVariantMap>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QTabWidget>
+#include <QCloseEvent>
+
 #include <memory>
+#include <iostream>
 
 #include "AppConstants.h"
 #include "MenuToolBar.h"
 #include "ThemeManager.h"
 #include "GraphController.h"
-
-class Graph;
-class Serializer;
-class GraphEditor;
+#include "Graph.h"
+#include "GraphEditor.h"
+#include "Serializer.h"
+#include "UnweightedDirectedGraph.h"
+#include "UnweightedUndirectedGraph.h"
+#include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
+#include "LoadFileWorker.h"
+#include "SaveFileWorker.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,10 +47,10 @@ class MainWindow : public QMainWindow {
 public:
     struct TabInfo {
         GraphEditor* m_editor;
-        QString m_filePath;   // prazan ako je novi / untitled
+        QString m_filePath;
         bool m_isModified;
-        QString m_imagePath;  // fajl slike (ako se eksportuje)
-        bool m_isImageModified; // za sliku (zvezdica)
+        QString m_imagePath;
+        bool m_isImageModified;
     };
 
     explicit MainWindow(QWidget* = nullptr);

@@ -5,7 +5,7 @@
 #include <limits>
 #include <map>
 #include <memory>
-#include <stdexcept>
+#include <optional>
 
 #include "Algorithm.h"
 #include "BellmanFord.h"

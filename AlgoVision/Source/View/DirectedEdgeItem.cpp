@@ -1,10 +1,4 @@
-#include <QPainter>
-#include <QPen>
-#include <cmath>
-
-#include "AppConstants.h"
 #include "DirectedEdgeItem.h"
-#include "EdgeItem.h"
 
 DirectedEdgeItem::DirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,
                                    bool hasWeight)
@@ -38,10 +32,9 @@ void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*,
         return;
     }
 
-    QPainterPath edge = edgePath();
-    // QPen         pen(Qt::black, m_penWidth);
-    auto color = calculateColor();
-    QPen pen(color);
+    QPainterPath edge  = edgePath();
+    auto         color = calculateColor();
+    QPen         pen(color);
     pen.setWidthF(AppConstants::BaseEdgeWidth * AppConstants::NodeScale);
     painter->setPen(pen);
     painter->drawPath(edge);
@@ -83,15 +76,3 @@ QPainterPath DirectedEdgeItem::arrowPath(const QPainterPath& edgePath) const {
     arrowPath.closeSubpath();
     return arrowPath;
 }
-
-/*QPointF DirectedEdgeItem::calculateNormal() const {
-    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
-    QPoint  normal(-line.y(), line.x());
-    qreal   length = std::hypot(normal.x(), normal.y());
-
-    if(qFuzzyCompare(length, 0.0))
-        return QPointF(0, 0);
-
-    return normal / length;
-}
-*/

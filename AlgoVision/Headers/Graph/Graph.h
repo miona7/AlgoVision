@@ -33,18 +33,18 @@ public:
     std::map<unsigned, Node>                         getNodes() const;
     std::map<unsigned, Edge>                         getEdges() const;
 
+    std::vector<Node*> getNodesMutable();
+    std::vector<Edge*> getEdgesMutable();
+
     Node*       getNode(unsigned);
     const Node* getNode(unsigned) const;
-
-    std::vector<Node*> getNodesMutable();
 
     Edge*       getEdge(unsigned);
     const Edge* getEdge(unsigned) const;
     Edge*       getEdge(unsigned, unsigned);
     const Edge* getEdge(unsigned, unsigned) const;
 
-    std::vector<Edge*> getEdgesMutable();
-    void               addEdgeSerialized(unsigned, unsigned, unsigned, int);
+    void addEdgeSerialized(unsigned, unsigned, unsigned, int);
 
     QVariant toVariant() const override;
     void     fromVariant(const QVariant&) override;
@@ -57,9 +57,8 @@ protected:
     unsigned                                         m_numOfNodes = 0;
     unsigned                                         m_numOfEdges = 0;
     std::map<unsigned, std::map<unsigned, unsigned>> m_adjacencyList;
-
-    std::map<unsigned, Node> m_nodes;
-    std::map<unsigned, Edge> m_edges;
+    std::map<unsigned, Node>                         m_nodes;
+    std::map<unsigned, Edge>                         m_edges;
 };
 
 #endif // GRAPH_H

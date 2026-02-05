@@ -1,10 +1,14 @@
 #ifndef GRAPHEDITTAB_H
 #define GRAPHEDITTAB_H
 
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSlider>
+#include <QVBoxLayout>
 #include <QWidget>
-
-class QPushButton;
-class QSlider;
 
 class GraphEditTab : public QWidget {
     Q_OBJECT

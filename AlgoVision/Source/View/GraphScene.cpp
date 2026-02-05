@@ -1,13 +1,4 @@
-#include <QGraphicsSceneMouseEvent>
-
-#include "DirectedEdgeItem.h"
-#include "Edge.h"
-#include "EdgeItem.h"
-#include "EditableTextItem.h"
 #include "GraphScene.h"
-#include "Node.h"
-#include "NodeItem.h"
-#include "UndirectedEdgeItem.h"
 
 GraphScene::GraphScene(QObject* parent) : QGraphicsScene(parent) {
     setSceneRect(0, 0, 3000, 3000);

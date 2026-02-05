@@ -1,24 +1,9 @@
 #include "AlgorithmTab.h"
 
-#include <QAbstractItemView>
-#include <QComboBox>
-#include <QFrame>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QStandardItem>
-#include <QStandardItemModel>
-#include <QStyle>
-#include <QToolButton>
-#include <QVBoxLayout>
-
 AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWidget* parent)
     : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startRow(new QWidget(this)),
       m_startLabel(new QLabel("start node:", this)), m_startNodeEdit(new QLineEdit(this)),
-      m_endRow(new QWidget(this)), m_endLabel(new QLabel("end node:", this)),
+      m_endRow(new QWidget(this)), m_endLabel(new QLabel("goal node:", this)),
       m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
       m_helpBtn(new QPushButton("graph type help", this)), m_prevBtn(new QToolButton(this)),
       m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),
@@ -42,7 +27,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     updateUiForAlgorithm(m_algorithmCombo->currentText());
     updateLegendForAlgorithm(m_algorithmCombo->currentText());
 
-    // Controller -> Tab (prikaz popup-a)
+    // controller -> tab (popup)
     connect(&m_algorithmController, &AlgorithmController::requestErrorDialog, this,
             &AlgorithmTab::showAlgorithmErrorDialog);
 
@@ -64,8 +49,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
             "<ul>"
             "<li><b>BFS / DFS</b><br>"
-            "Directed or undirected graphs.<br>"
-            "Must be: unweighted.<br></li>"
+            "Works on every graph.<br></li>"
 
             "<li><b>Dijkstra</b><br>"
             "Directed or undirected graphs.<br>"
@@ -73,13 +57,16 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
             "<li><b>Bellman–Ford</b><br>"
             "Negative edge weights allowed.<br>"
-            "Must be: directed, weighted, with no negative cycles.<br></li>"
+            "Must be: directed, weighted.<br>"
+            "Note: detects negative cycles; shortest paths valid only if none are reachable from "
+            "the source.<br></li>"
 
             "<li><b>Floyd–Warshall</b><br>"
             "Negative edge weights allowed.<br>"
-            "Must be: directed, weighted, with no negative cycles.<br></li>"
+            "Must be: directed, weighted.<br>"
+            "Note: shortest paths are valid only if the graph contains no negative cycles.<br></li>"
 
-            "<li><b>A*</b><br>"
+            "<li><b>A* (Euclidean heuristic)</b><br>"
             "Directed or undirected graphs.<br>"
             "Must be: weighted, with non-negative edge weights.<br></li>"
 
@@ -87,12 +74,11 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             "Must be: undirected, weighted, connected graph.<br></li>"
 
             "<li><b>Kahn</b><br>"
-            "Must be: directed, acyclic graph(DAG).<br></li>"
+            "Must be: directed, acyclic graph (DAG).<br></li>"
 
             "<li><b>Tarjan</b><br>"
-            "Must be: directed graph.<<br></li>"
-            "</ul>"
-            );
+            "Must be: directed graph.<br></li>"
+            "</ul>");
 
         msgBox.setTextFormat(Qt::RichText);
         msgBox.setStandardButtons(QMessageBox::Ok);
@@ -100,17 +86,17 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
         msgBox.exec();
     });
 
-    // povezivanje dugmica
+    // connecting buttons
     connect(m_playBtn, &QToolButton::clicked, this, [this]() {
         m_playBtn->setEnabled(false);
 
-        // parametri trenutnog algoritma
+        // params of current algorithm
         AlgorithmTab::AlgorithmConfig newConfig = selectedConfig();
 
         m_startNodeEdit->clear();
         m_endNodeEdit->clear();
 
-        // ako algoritam ili parametri nisu isti → NOVI START
+        // new start
         bool needNewRun = !m_currentConfig.has_value() || (newConfig != *m_currentConfig);
 
         if(needNewRun || m_state == RunState::Idle || m_state == RunState::Finished) {
@@ -118,10 +104,10 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             m_applier.resetGraphState();
             m_algorithmController.clear();
 
-            // reset legend (da ne bude duplo)
+            // reset legend
             updateLegendForAlgorithm(newConfig.m_algorithmName);
 
-            // ugasi i obrisi staru nit
+            // delete old thread
             if(m_worker != nullptr) {
                 m_worker->quit();
                 m_worker->wait();
@@ -134,30 +120,20 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
             m_currentConfig = newConfig;
 
-            // morala sam da dodam naredna dva upita
-            // jer je app odlazila na default cvorove
-            // u slucaju kada je uneto ime koje ne postoji u grafu
-            // moze umesto ovoga da se sredi u samim algoritmima,
-            // ali ovo je delovalo optimalnije za nasu trenutnu situaciju
             const auto& nodes = graph->getNodes();
-            // Ako je korisnik uneo start node
-            if (!m_startNodeEdit->text().isEmpty()) {
-                if (nodes.find(newConfig.m_startNode) == nodes.end()) {
-                    AlgorithmError err{
-                        AlgorithmErrorType::StartNodeMissing,
-                        "The specified start node does not exist in the graph."
-                    };
+            if(!m_startNodeEdit->text().isEmpty()) {
+                if(nodes.find(newConfig.m_startNode) == nodes.end()) {
+                    AlgorithmError err {AlgorithmErrorType::StartNodeMissing,
+                                        "The specified start node does not exist in the graph."};
                     showAlgorithmErrorDialog(err);
                     return;
                 }
             }
-            // Ako je korisnik uneo end node
-            if (!m_endNodeEdit->text().isEmpty()) {
-                if (nodes.find(newConfig.m_endNode) == nodes.end()) {
-                    AlgorithmError err{
-                        AlgorithmErrorType::GoalNodeMissing,
-                        "The specified end node does not exist in the graph."
-                    };
+
+            if(!m_endNodeEdit->text().isEmpty()) {
+                if(nodes.find(newConfig.m_endNode) == nodes.end()) {
+                    AlgorithmError err {AlgorithmErrorType::GoalNodeMissing,
+                                        "The specified end node does not exist in the graph."};
                     showAlgorithmErrorDialog(err);
                     return;
                 }
@@ -166,32 +142,30 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph, newConfig.m_startNode,
                                            newConfig.m_endNode);
 
-            // Worker -> Controller (greske algoritma)
+            // worker -> contoller (errors)
             connect(m_worker, &AlgorithmWorker::algorithmErrorOccurred, &m_algorithmController,
                     &AlgorithmController::onAlgorithmError);
 
-            // pokreni iscrtavanje kad nit zavrsi
+            // start visuelization when thread is done
             connect(m_worker, &AlgorithmWorker::stepsReady, this, [this]() {
                 m_state = RunState::Playing;
                 startTimerForPlay();
                 updateControls();
             });
 
-            // ucitaj korake algoritma
+            // load algortihm steps
             connect(m_worker, &AlgorithmWorker::stepsReady, &m_algorithmController,
                     &AlgorithmController::loadSteps);
 
-            // ucitaj rezultat algoritma
+            // load algorithm result
             connect(m_worker, &AlgorithmWorker::resultReady, &m_algorithmController,
                     &AlgorithmController::setResultString);
 
-            // m_state = RunState::Idle;
             m_worker->start();
-            // m_state = RunState::Playing;
             return;
         }
 
-        //  RESUME –> isti algoritam, bio je pauziran
+        // resume
         if(m_state == RunState::Paused) {
             m_state = RunState::Playing;
             startTimerForPlay();
@@ -199,7 +173,6 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
         }
     });
 
-    // ===== PAUSE =====
     connect(m_pauseBtn, &QToolButton::clicked, this, [this]() {
         if(m_timer != nullptr) {
             m_timer->stop();
@@ -240,7 +213,6 @@ void AlgorithmTab::initLayout() {
         // make it look like a section header
         QFont f = item->font();
         f.setBold(true);
-        // f.setUnderline(true);
         item->setFont(f);
 
         item->setTextAlignment(Qt::AlignCenter);
@@ -277,7 +249,7 @@ void AlgorithmTab::initLayout() {
 
     // set initial selection to the first enabled item (so headers never become initial selection)
     int firstValid = -1;
-    if(model) {
+    if(model != nullptr) {
         for(int i = 0; i < model->rowCount(); i++) {
             QStandardItem* item = model->item(i);
             if(item && (item->flags() & Qt::ItemIsEnabled)) {
@@ -419,7 +391,6 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
         m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Relaxed"));
     }
 
-    // A* ima crvenu granu = u konačnoj putanji
     if(name == "A* (Euclidean heuristic)") {
         m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
     }
@@ -427,10 +398,6 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     if(name == "Prim") {
         m_legendLayout->addWidget(makeLegendItem(Qt::red, "In minimum spanning tree"));
     }
-
-    // m_legendLayout->addWidget(new QLabel("<b>Result</b>"));
-
-    // m_legendLayout->addStretch();
 }
 
 void AlgorithmTab::initIcons() {
@@ -518,25 +485,25 @@ void AlgorithmTab::startTimerForPlay() {
         });
     }
 
-    m_timer->start(500); // 500ms po koraku
+    m_timer->start(500); // 500ms by step
 }
 
 void AlgorithmTab::updateControls() {
-    // play je dostupan samo ako nismo vec u pokretu
+    // play is available only if we are already in move
     m_playBtn->setEnabled(m_state == RunState::Idle || m_state == RunState::Paused ||
                           m_state == RunState::Finished);
 
-    // pause samo dok animacija traje
+    // pause is available only if animation is in move
     m_pauseBtn->setEnabled(m_state == RunState::Playing);
 
-    // stop (restart) je dostupan uvek osim kad smo na samom pocetku
+    // stop (restart) is available only if we are not at the begining
     m_restartBtn->setEnabled(m_state != RunState::Idle);
 
-    // next/prev samo kad je pauzirano
+    // next/prev is available only if state is paused
     m_nextBtn->setEnabled(m_state == RunState::Paused);
     m_prevBtn->setEnabled(m_state == RunState::Paused);
 
-    // zakljucaj unos parametara dok algoritam radi da korisnik ne menja cvorove usred posla
+    // lock input while algorithm is running
     bool inputsLocked = (m_state == RunState::Playing || m_state == RunState::Paused);
     m_algorithmCombo->setEnabled(!inputsLocked);
     m_startNodeEdit->setEnabled(!inputsLocked);
@@ -562,16 +529,17 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
 
     switch(error.m_type) {
     case AlgorithmErrorType::GraphNotInitialized:
-        userHint =
-            "Please create a graph, via 'graph' tab, before running an algorithm.";
+        userHint = "Please create a graph in the 'graph' tab before running an algorithm.";
         break;
 
     case AlgorithmErrorType::GraphTypeInvalid:
-        userHint =
-            "Please consult the 'graph type help' button to see which graph types are supported.\n\n"
-            "Then, choose one of the following:\n"
-            "1) Click the 'Create graph' button in the upper left corner to create a suitable graph.\n"
-            "2) Choose a compatible algorithm and run it on the existing graph.";
+        userHint = "Please consult the 'graph type help' button to see which graph types are "
+                   "supported.\n\n"
+                   "Then, choose one of the following:\n"
+                   "1) Click the 'create graph' button in the upper left corner to create a "
+                   "suitable graph, "
+                   "or clear the current graph from the scene in the 'graph' tab.\n"
+                   "2) Choose a compatible algorithm and run it on the existing graph.";
         break;
 
     case AlgorithmErrorType::StartNodeMissing:
@@ -581,28 +549,23 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
         break;
 
     case AlgorithmErrorType::NegativeEdgeWeights:
-        userHint =
-            "Please remove negative weights from the graph.";
+        userHint = "Please remove negative weights from the graph.";
         break;
 
     case AlgorithmErrorType::NoPathFound:
-        userHint =
-            "Please choose different nodes or modify the graph.";
+        userHint = "Please choose different nodes or modify the graph.";
         break;
 
     case AlgorithmErrorType::GraphHasNegativeCycle:
-        userHint =
-            "Please remove the cycle before running this algorithm.";
+        userHint = "Please remove the cycle before running this algorithm.";
         break;
 
     case AlgorithmErrorType::GraphHasCycle:
-        userHint =
-            "Please modify the graph so it becomes acyclic.";
+        userHint = "Please modify the graph so it becomes acyclic.";
         break;
 
     case AlgorithmErrorType::GraphNotConnected:
-        userHint =
-            "Please ensure all nodes are reachable.";
+        userHint = "Please ensure all nodes are reachable.";
         break;
     }
 
@@ -612,14 +575,14 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
 
     auto* layout = new QVBoxLayout(&dialog);
 
-    // Gornja poruka (algoritamska)
+    // algorithm message
     QLabel* mainText = new QLabel(QString::fromStdString(error.m_message));
-    QFont f = mainText->font();
+    QFont   f        = mainText->font();
     f.setBold(true);
     mainText->setFont(f);
     mainText->setWordWrap(true);
 
-    // Donja poruka (uputstvo za korisnika)
+    // user instructions
     QLabel* detailsText = new QLabel(userHint);
     detailsText->setWordWrap(true);
 
@@ -628,19 +591,17 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
     layout->addWidget(detailsText);
     layout->addStretch();
 
-    // OK dugme
     QPushButton* okBtn = new QPushButton("OK");
     connect(okBtn, &QPushButton::clicked, &dialog, &QDialog::accept);
 
     layout->addWidget(okBtn, 0, Qt::AlignRight);
 
-    // Velicina + resize
-    dialog.resize(420, dialog.sizeHint().height());
-    dialog.setMinimumSize(420, 220);
+    dialog.resize(AppConstants::graphTypeDialogErrorMinWidth, dialog.sizeHint().height());
+    dialog.setMinimumSize(AppConstants::graphTypeDialogErrorMinWidth,
+                          AppConstants::graphTypeDialogErrorMinHeight);
 
     dialog.exec();
 
-    // neophodno da bi nakon OK ponovo bilo dostupno play dugme
     m_state = RunState::Idle;
     updateControls();
 }
