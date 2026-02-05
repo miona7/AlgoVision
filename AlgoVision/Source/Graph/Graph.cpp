@@ -154,8 +154,7 @@ void Graph::fromVariant(const QVariant& variant) {
 
         addEdgeSerialized(edgeId, from, to, w);
 
-        maxEdgeId =
-            std::max(maxEdgeId, edgeId);
+        maxEdgeId = std::max(maxEdgeId, edgeId);
     }
 
     m_nodeId = nodes.isEmpty() ? 0 : maxNodeId + 1;

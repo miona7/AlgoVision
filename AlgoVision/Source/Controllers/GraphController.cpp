@@ -315,7 +315,6 @@ private:
     QPointF          m_newPos;
 };
 
-
 class ClearGraphCommand : public QUndoCommand {
 public:
     ClearGraphCommand(GraphController* c) : m_c(c) {
@@ -332,17 +331,16 @@ public:
             return;
         }
 
-        for(const auto& [id, _] : g->getNodes()) {
+        for(const auto& [id, _]: g->getNodes()) {
             if(NodeItem* ni = m_c->scene()->findNodeItemById(id)) {
                 QPointF p = ni->pos();
                 m_nodes.push_back({id, p.x(), p.y()});
             }
         }
 
-        for(const auto& [id, _] : g->getEdges()) {
+        for(const auto& [id, _]: g->getEdges()) {
             if(Edge* e = g->getEdge(id)) {
-                m_edges.push_back(
-                    {e->getId(), e->startNode(), e->endNode(), e->getWeight()});
+                m_edges.push_back({e->getId(), e->startNode(), e->endNode(), e->getWeight()});
             }
         }
     }
@@ -359,11 +357,11 @@ public:
             return;
         }
 
-        for(const NodeSnapshot& n : m_nodes) {
+        for(const NodeSnapshot& n: m_nodes) {
             m_c->addNodeWithIdNoHistory(n.m_id, QPointF(n.m_x, n.m_y));
         }
 
-        for(const EdgeSnapshot& e : m_edges) {
+        for(const EdgeSnapshot& e: m_edges) {
             m_c->restoreEdgeNoHistory(e.m_id, e.m_from, e.m_to, e.m_weight);
         }
     }

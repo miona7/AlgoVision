@@ -43,11 +43,11 @@ private:
     QPushButton* m_zoomOutBtn;
     QPushButton* m_panBtn;
     QPushButton* m_clearBtn;
-    QSlider* m_nodeSizeSlider;
+    QSlider*     m_nodeSizeSlider;
 
     bool m_graphEditsAllowed = true;
-    bool m_canUndo = false;
-    bool m_canRedo = false;
+    bool m_canUndo           = false;
+    bool m_canRedo           = false;
 
     void applyEditButtonsState();
     void initLayout();
