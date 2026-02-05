@@ -3,7 +3,7 @@
 AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWidget* parent)
     : QWidget(parent), m_algorithmCombo(new QComboBox(this)), m_startRow(new QWidget(this)),
       m_startLabel(new QLabel("start node:", this)), m_startNodeEdit(new QLineEdit(this)),
-      m_endRow(new QWidget(this)), m_endLabel(new QLabel("end node:", this)),
+      m_endRow(new QWidget(this)), m_endLabel(new QLabel("goal node:", this)),
       m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
       m_helpBtn(new QPushButton("graph type help", this)), m_prevBtn(new QToolButton(this)),
       m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),

@@ -174,11 +174,6 @@ void MainWindow::onCreateGraphTriggered() {
     if(dialog.exec() == QDialog::Accepted) {
         directed = directedBtn->isChecked();
         weighted = weightedBtn->isChecked();
-
-        std::cout << "Graph created with options: "
-                  << (directed ? "Directed" : "Undirected") << ", "
-                  << (weighted ? "Weighted" : "Unweighted") << std::endl;
-
     } else {
         return;
     }
