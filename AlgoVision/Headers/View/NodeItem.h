@@ -26,7 +26,6 @@ public:
     void addEdge(EdgeItem*);
     void removeEdge(EdgeItem*);
 
-    // sluzi za azuriranje pozicije cvora(centra) na osnovu modela
     void updateNodePosition();
 
     EditableTextItem* label() const;
@@ -47,7 +46,10 @@ protected:
     void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
     void         mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
     void         mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-    void         mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
+
+    // removed feature
+    // it will remain in code all connected, so the feature can easily be activated again, or used
+    // for other purposes void         mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
 
 private slots:
     void onNameChanged(const QString&) const;
@@ -56,7 +58,7 @@ private:
     Node*             m_modelNode;
     EditableTextItem* m_label;
     QSet<EdgeItem*>   m_edges;
-    // u koordinatama scene, sluzi za cuvanje centra pre move komande
+    // in scene coordinates, used to save old node position(center) before move command
     QPointF m_oldCenter;
 
     qreal m_radius {AppConstants::defaultRadius};

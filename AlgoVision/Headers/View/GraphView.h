@@ -27,14 +27,14 @@ protected:
 private:
     GraphView::State m_state {GraphView::State::IDLE};
 
-    // inicijalna podesavanja
     void init();
 
-    // pan state (u koordinatama scene)
+    // pan state (in scene coordinates)
     QPoint m_lastMousePos;
-    qreal  m_zoomFactor {1.15};
 
-    // koristi se za ispravan izlazak iz fast pan-a (desni klik drag)
+    qreal m_zoomFactor {1.15};
+
+    // used for returning to previous state after fast pan (right click drag)
     GraphView::State m_oldState;
 };
 

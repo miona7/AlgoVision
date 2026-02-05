@@ -27,8 +27,15 @@ void GraphScene::resetScene() {
         m_editLabel->finishEditing(false);
         m_editLabel = nullptr;
     }
+}
 
-    m_state = State::ADD;
+void GraphScene::disableScene() {
+    m_previousState = m_state;
+    m_state         = GraphScene::State::IDLE;
+}
+
+void GraphScene::enableScene() {
+    m_state = m_previousState;
 }
 
 void GraphScene::clear() {
@@ -38,7 +45,12 @@ void GraphScene::clear() {
 }
 
 void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    if(m_state == State::EDIT) {
+    if(m_state == GraphScene::State::IDLE) {
+        event->accept();
+        return;
+    }
+
+    if(m_state == GraphScene::State::EDIT) {
         m_editLabel->finishEditing(true);
         event->accept();
         return;
@@ -47,13 +59,11 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     const auto     clickPos = event->scenePos();
     QGraphicsItem* item     = itemAt(clickPos, QTransform());
 
-    if(!item && m_state == State::ADD) {
-        // razdvajamo dodavanje cvora od dodavanja cvora i grane
+    if(!item && m_state == GraphScene::State::ADD) {
         if(m_firstNodeSelect != nullptr) {
-            emit addNodeAndEdgeRequest(
-                clickPos, m_firstNodeSelect); // zahtevamo od kontrolera dodavanje cvora i grane
+            emit addNodeAndEdgeRequest(clickPos, m_firstNodeSelect);
         } else {
-            emit addNodeRequest(clickPos); // zahtevamo dodavanje cvora od kontrolera
+            emit addNodeRequest(clickPos);
         }
 
         event->accept();
@@ -64,7 +74,8 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
-    if(m_state == State::REMOVE || m_state == State::EDIT) {
+    if(m_state == GraphScene::State::REMOVE || m_state == GraphScene::State::EDIT ||
+       GraphScene::m_state == State::IDLE) {
         event->accept();
         return;
     }
@@ -73,27 +84,27 @@ void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void GraphScene::onNodeSelectTrigger(NodeItem* node) {
-    if(m_state == State::ADD || m_state == State::EDIT) {
+    if(m_state == GraphScene::State::ADD || m_state == GraphScene::State::EDIT) {
         selectNode(node);
     }
 
-    if(m_state == State::REMOVE) {
-        emit removeNodeRequest(node); // zahtevamo brisanje cvora od kontrolera
+    if(m_state == GraphScene::State::REMOVE) {
+        emit removeNodeRequest(node);
     }
 }
 
 void GraphScene::onEdgeSelectTrigger(EdgeItem* edge) {
-    if(m_state == State::REMOVE) {
-        emit removeEdgeRequest(edge); // zahtevamo brisanje grane od kontrolera
+    if(m_state == GraphScene::State::REMOVE) {
+        emit removeEdgeRequest(edge);
     }
 }
 
 void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
     if(edit) {
-        m_state     = State::EDIT;
+        m_state     = GraphScene::State::EDIT;
         m_editLabel = label;
     } else {
-        m_state     = State::ADD;
+        m_state     = GraphScene::State::ADD;
         m_editLabel = nullptr;
     }
 }
@@ -104,9 +115,6 @@ void GraphScene::addNode(Node* nodeModel) {
     }
 
     NodeItem* nodeItem = new NodeItem(nodeModel);
-    // ovo se svakako desava pri konstrukciji NodeItem-a
-    // auto      pos      = nodeModel->getPosition();
-    // nodeItem->setPos(pos.first, pos.second);
     addItem(nodeItem);
     m_nodeItems[nodeModel->getId()] = nodeItem;
     connect(nodeItem, &NodeItem::nodeSelected, this, &GraphScene::onNodeSelectTrigger);
@@ -232,7 +240,7 @@ void GraphScene::selectNode(NodeItem* node) {
     }
 
     // other node is selected
-    emit addEdgeRequest(m_firstNodeSelect, node); // zahtevamo dodavanje grane od kontrolera
+    emit addEdgeRequest(m_firstNodeSelect, node);
 }
 
 void GraphScene::updateNodeScalling() {

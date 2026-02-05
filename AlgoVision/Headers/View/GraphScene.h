@@ -15,22 +15,30 @@ class GraphScene : public QGraphicsScene {
 public:
     explicit GraphScene(QObject* = nullptr);
 
-    enum class State { ADD, REMOVE, EDIT };
-
-    void setState(GraphScene::State);
+    /*
+        ADD -> adding nodes and edges
+        REMOVE -> removing nodes and edges
+        EDIT -> changing edge weights, and changing node name, which is supported and can be activated
+        IDLE -> all scene interactions are disabled
+    */
+    enum class State { ADD, REMOVE, EDIT, IDLE };
 
     void updateNodeScalling();
 
-    // vraca scenu na pocetno stanje (koje je ADD) sa resetovanim pomocnim privatnim clanicama
+    void setState(GraphScene::State);
+    // returns the scene in initial state (clears all selections and ends all edits)
     void resetScene();
+    // disables scene interactions (adding, removing, updating and moving elements)
+    void disableScene();
+    // reenables scene, returns it in state before disable
+    void enableScene();
 
-    // pored ciscenja scene, dodatno brise mapu nodeItem-a, i vraca scenu na pocetno stanje
     void clear();
 
     void addNode(Node*);
     void addEdge(Edge*, bool, bool);
-    // dodajemo objedinjenu naredbu kako bi mogao undo/redo da uradi dodavanje cvora i grane kao
-    // jednu operaciju sta pri vec selektovanom cvoru kao uslovu i jeste
+    // additional command that encapsulates adding node and edge into one command that is revertable
+    // via undo/redo
     void addNodeAndEdge(Node*, Edge*, bool, bool);
     void removeNode(NodeItem*);
     void removeEdge(EdgeItem*);
@@ -64,11 +72,10 @@ private slots:
 private:
     NodeItem*         m_firstNodeSelect {nullptr};
     EditableTextItem* m_editLabel {nullptr};
-    State             m_state {State::ADD};
+    State             m_state {GraphScene::State::ADD};
+    State             m_previousState;
 
-    // cuva NodeItem-e, kako bi mogli da se koriste prilikom pravljenja pogleda grafa od vec
-    // ucitanog modela sluzi kao veza modela cvora sa odgovarajucim pogledom ne poseduje NodeItem-e,
-    // samo ih koristi
+    // structure only used as helper for operations, not owning elements
     std::map<unsigned, NodeItem*> m_nodeItems;
 
     void selectNode(NodeItem*);

@@ -58,8 +58,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     QSplitter* splitter = new QSplitter(Qt::Horizontal, this);
 
     m_view = new GraphView(m_graphController->scene(), this);
-    // m_view->setScene(m_graphController->scene());
-
     splitter->addWidget(m_view);
 
     // right side
@@ -146,30 +144,27 @@ void GraphEditor::onClearRequestTrigger() {
 }
 
 void GraphEditor::onUndoRequestTrigger() {
-    m_graphController->scene()->resetScene();
+    m_graphController->resetScene();
     emit undoRequested();
 }
 
 void GraphEditor::onRedoRequestTrigger() {
-    m_graphController->scene()->resetScene();
+    m_graphController->resetScene();
     emit redoRequested();
 }
 
 void GraphEditor::onPanRequestTrigger() {
-    // resetuj stanje scene na podrazumevano
-    m_graphController->scene()->resetScene();
+    m_graphController->resetScene();
     m_view->setState(GraphView::State::PAN_IDLE);
 }
 
 void GraphEditor::onZoomInRequestTrigger() {
-    // resetuj stanje scene na podrazumevano
-    m_graphController->scene()->resetScene();
+    m_graphController->resetScene();
     m_view->zoomIn();
 }
 
 void GraphEditor::onZoomOutRequestTrigger() {
-    // resetuj stanje scene na podrazumevano
-    m_graphController->scene()->resetScene();
+    m_graphController->resetScene();
     m_view->zoomOut();
 }
 
