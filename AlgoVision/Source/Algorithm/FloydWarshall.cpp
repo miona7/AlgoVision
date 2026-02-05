@@ -9,7 +9,7 @@ std::optional<AlgorithmError> FloydWarshall::checkConditions() const {
                                "Graph is not initialized or empty."};
     }
 
-    if(!m_graph->isDirected()) {
+    if(!m_graph->isDirected() || !m_graph->isWeighted()) {
         return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
