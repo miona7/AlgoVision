@@ -1,32 +1,5 @@
-#include <QFile>
-#include <QFileDialog>
-#include <QJsonDocument>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QString>
-#include <QVBoxLayout>
-#include <QVariantMap>
-#include <QGroupBox>
-#include <QRadioButton>
-#include <QDialog>
-#include <QDialogButtonBox>
-#include <QTabWidget>
-#include <QCloseEvent>
-
-#include <iostream>
-
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-
-#include "Graph.h"
-#include "GraphEditor.h"
-#include "Serializer.h"
-#include "UnweightedDirectedGraph.h"
-#include "UnweightedUndirectedGraph.h"
-#include "WeightedDirectedGraph.h"
-#include "WeightedUndirectedGraph.h"
-#include "LoadFileWorker.h"
-#include "SaveFileWorker.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()) {
@@ -34,7 +7,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     m_serializer = std::make_unique<Serializer>();
 
-           // dinamicki tab widget
+    // dynamic tab widget
     m_tabWidget = new QTabWidget(this);
     m_tabWidget->setTabsClosable(true);
     connect(m_tabWidget, &QTabWidget::tabCloseRequested, this, [this](int index) {
@@ -44,7 +17,6 @@ MainWindow::MainWindow(QWidget* parent)
         if(editor != nullptr) {
             TabInfo& tabInfo = m_tabs[editor];
 
-                   // provera da li je tab modifikovan
             if(tabInfo.m_isModified) {
                 QMessageBox::StandardButton reply = QMessageBox::question(
                     this,
@@ -55,11 +27,11 @@ MainWindow::MainWindow(QWidget* parent)
                     );
 
                 if(reply == QMessageBox::Cancel) {
-                    return; // korisnik je odustao, ne zatvaraj tab
+                    return; // do not close tab
                 } else if(reply == QMessageBox::Yes) {
-                    onSaveGraphTriggered(); // sacuvaj graf
+                    onSaveGraphTriggered(); // save graph
                 }
-                // ako je No, samo nastavljamo sa zatvaranjem
+                // no -> close
             }
 
             m_tabWidget->removeTab(index);
@@ -76,7 +48,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     this->setStyleSheet(m_themeManager->styleSheet());
 
-    showStartPage(); // prikazi start page
+    showStartPage();
 
     this->setMinimumWidth(AppConstants::windowMinWidth);
     this->setMinimumHeight(AppConstants::windowMinHeight);
@@ -102,17 +74,16 @@ MainWindow::MainWindow(QWidget* parent)
     connect(btnCreateGraph, &QPushButton::clicked, this, &MainWindow::onCreateGraphTriggered);
 }
 
-// metod za prikaz start page-a
 void MainWindow::showStartPage() {
     m_ui->stackedWidget->setCurrentWidget(m_ui->startPage);
     this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
 
     if(m_tabWidget != nullptr) {
-        m_tabWidget->hide(); // sakrij tab widget
+        m_tabWidget->hide();
     }
 
     if(m_menuToolBar != nullptr) {
-        m_menuToolBar->hide();  // sakrij toolbar
+        m_menuToolBar->hide();
     }
 }
 
@@ -200,7 +171,6 @@ void MainWindow::onCreateGraphTriggered() {
         }
 )");
 
-
     if(dialog.exec() == QDialog::Accepted) {
         directed = directedBtn->isChecked();
         weighted = weightedBtn->isChecked();
@@ -223,13 +193,12 @@ void MainWindow::onCreateGraphTriggered() {
 
     TabInfo info;
     info.m_editor = editor;
-    info.m_filePath = "";  // nema fajla
-    info.m_isModified = true; // graf je nesacuvan
-    info.m_imagePath = "";         // nema slike
-    info.m_isImageModified = true; // slika nesacuvana
+    info.m_filePath = "";  // no file
+    info.m_isModified = true; // graph is not saved
+    info.m_imagePath = "";
+    info.m_isImageModified = true; // image not saved
     m_tabs.insert(editor, info);
 
-           // naslov taba
     int index = m_tabWidget->addTab(editor, "untitled*");
     m_tabWidget->setCurrentIndex(index);
 
@@ -240,7 +209,7 @@ void MainWindow::onCreateGraphTriggered() {
     }
 
     if(m_menuToolBar != nullptr) {
-        m_menuToolBar->show();  // prikazi toolbar
+        m_menuToolBar->show();
     }
 
     m_ui->stackedWidget->setCurrentWidget(m_tabWidget);
@@ -323,11 +292,10 @@ void MainWindow::onSaveImageTriggered() {
         tabInfo.m_imagePath = filePath;
         tabInfo.m_isImageModified = false;
 
-               // osvezi ime taba na ime fajla grafa
         QString tabName = QFileInfo(filePath).fileName();
 
         if(tabInfo.m_isModified) {
-            tabName += "*"; // ako je graf modifikovan, dodaj zvezdicu
+            tabName += "*"; // graph modified, add *
         }
         m_tabWidget->setTabText(index, tabName);
 
@@ -394,38 +362,32 @@ void MainWindow::onHelpTriggered() {
 }
 
 void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool directed, const QString& filePath) {
-    // napravi novi kontroler
     auto controller = std::make_shared<GraphController>();
     controller->createGraph(directed, weighted);
 
     m_serializer->load(*controller->graph(), data);
 
-           // napravi novi GraphEditor i povezi sa kontrolerom
     auto* editor = new GraphEditor(controller);
     controller->buildScene();
     editor->graphController()->scene()->applyTheme(m_themeManager->currentTheme());
     connectGraphModifiedSignal(editor);
 
-           // kreiraj TabInfo
     TabInfo info;
     info.m_editor = editor;
-    info.m_filePath = filePath;  // sada imamo ime fajla
-    info.m_isModified = false;   // graf je učitan iz fajla, nije izmenjen
+    info.m_filePath = filePath;
+    info.m_isModified = false;
     info.m_imagePath = "";
     info.m_isImageModified = true;
     m_tabs.insert(editor, info);
 
-           // naziv taba: ime fajla
+    // tab name -> file name
     QString tabName = QFileInfo(filePath).fileName();
     int index = m_tabWidget->addTab(editor, tabName);
     m_tabWidget->setCurrentIndex(index);
 
-
-           // prikaz tab widgeta
     m_ui->stackedWidget->setCurrentWidget(m_tabWidget);
     this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
 
-           // prikazi toolbar ako vec postoji
     if(m_menuToolBar != nullptr) {
         m_menuToolBar->show();
     }
@@ -466,7 +428,7 @@ void MainWindow::connectGraphModifiedSignal(GraphEditor* editor) {
 void MainWindow::closeEvent(QCloseEvent* event) {
     QStringList unsavedTabs;
 
-           // proveri sve tabove
+    // check all tabs
     for(auto it = m_tabs.begin(); it != m_tabs.end(); ++it) {
         if(it.value().m_isModified) {
             QString name;
@@ -490,21 +452,21 @@ void MainWindow::closeEvent(QCloseEvent* event) {
             );
 
         if(reply == QMessageBox::Yes) {
-            // sacuvaj svaki nesacuvan tab
+            // save every unsaved tab
             for(auto it = m_tabs.begin(); it != m_tabs.end(); ++it) {
                 if (it.value().m_isModified) {
-                    m_tabWidget->setCurrentWidget(it.key()); // postavi tab
-                    onSaveGraphTriggered();                  // pozovi save
+                    m_tabWidget->setCurrentWidget(it.key());
+                    onSaveGraphTriggered();
                 }
             }
             event->accept();
         } else if(reply == QMessageBox::No) {
-            event->accept(); // izlazi bez cuvanja
+            event->accept();
         } else { // cancel
-            event->ignore(); // ne zatvaraj prozor
+            event->ignore();
         }
     } else {
-        event->accept(); // sve je sacuvano, zatvori prozor
+        event->accept();
     }
 }
 

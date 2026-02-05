@@ -1,7 +1,12 @@
 #ifndef DIRECTED_EDGEITEM_H
 #define DIRECTED_EDGEITEM_H
 
+#include <QPainter>
+#include <QPen>
+#include <cmath>
+
 #include "EdgeItem.h"
+#include "AppConstants.h"
 
 class DirectedEdgeItem : public EdgeItem {
 
@@ -13,7 +18,6 @@ public:
     void         paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 
     QPainterPath edgePath() const override;
-    // QPointF      calculateNormal() const;
 
 private:
     qreal m_skewness {70.0};

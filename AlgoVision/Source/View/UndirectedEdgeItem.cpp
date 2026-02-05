@@ -1,7 +1,3 @@
-#include <QPainter>
-#include <QPen>
-
-#include "AppConstants.h"
 #include "UndirectedEdgeItem.h"
 
 UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode,

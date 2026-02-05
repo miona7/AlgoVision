@@ -3,16 +3,37 @@
 
 #include <QMainWindow>
 #include <QHash>
+#include <QFile>
+#include <QFileDialog>
+#include <QJsonDocument>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QString>
+#include <QVBoxLayout>
+#include <QVariantMap>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QTabWidget>
+#include <QCloseEvent>
+
 #include <memory>
+#include <iostream>
 
 #include "AppConstants.h"
 #include "MenuToolBar.h"
 #include "ThemeManager.h"
 #include "GraphController.h"
-
-class Graph;
-class Serializer;
-class GraphEditor;
+#include "Graph.h"
+#include "GraphEditor.h"
+#include "Serializer.h"
+#include "UnweightedDirectedGraph.h"
+#include "UnweightedUndirectedGraph.h"
+#include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
+#include "LoadFileWorker.h"
+#include "SaveFileWorker.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

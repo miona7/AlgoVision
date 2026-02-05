@@ -1,13 +1,19 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
-#include <AppConstants.h>
-#include <Node.h>
 #include <QGraphicsObject>
 #include <QSet>
+#include <QGraphicsSceneEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QPainter>
+#include <QPen>
+
+#include "AppConstants.h"
+#include "Node.h"
+#include "EditableTextItem.h"
+#include "EdgeItem.h"
 
 class EdgeItem;
-class EditableTextItem;
 
 class NodeItem : public QGraphicsObject {
     Q_OBJECT

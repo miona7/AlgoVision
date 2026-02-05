@@ -1,11 +1,3 @@
-#include <EditableTextItem.h>
-#include <QGraphicsSceneEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QPainter>
-#include <QPen>
-
-#include "AppConstants.h"
-#include "EdgeItem.h"
 #include "NodeItem.h"
 
 NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
@@ -59,13 +51,6 @@ QPainterPath NodeItem::shape() const {
 
 void NodeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
     QPen pen(Qt::black, m_borderWidth);
-
-    /*
-    if(m_nodeSelected) {
-        pen.setColor(Qt::red);
-        pen.setWidth(m_borderWidth + 2);
-    }
-    */
 
     QBrush brush(calculateColor());
 
@@ -212,6 +197,7 @@ void NodeItem::setRadius(qreal newRadius) {
     m_radius = newRadius;
 }
 */
+
 const QColor NodeItem::calculateColor() const {
     if(m_nodeSelected) {
         return Qt::red;

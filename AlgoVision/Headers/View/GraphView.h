@@ -2,6 +2,8 @@
 #define GRAPH_VIEW_H
 
 #include <QGraphicsView>
+#include <QScrollBar>
+#include <qevent.h>
 
 class GraphView : public QGraphicsView {
 public:

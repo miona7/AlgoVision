@@ -2,11 +2,17 @@
 #define GRAPHSCENE_H
 
 #include <QGraphicsScene>
+#include <QGraphicsSceneMouseEvent>
+
 #include <map>
 
 #include "Edge.h"
 #include "EdgeItem.h"
+#include "Node.h"
 #include "NodeItem.h"
+#include "UndirectedEdgeItem.h"
+#include "DirectedEdgeItem.h"
+#include "EditableTextItem.h"
 #include "ThemeManager.h"
 
 class GraphScene : public QGraphicsScene {
