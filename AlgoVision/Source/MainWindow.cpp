@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget* parent)
 
     m_serializer = std::make_unique<Serializer>();
 
-    // dynamic tab widget
     m_tabWidget = new QTabWidget(this);
     m_tabWidget->setTabsClosable(true);
     connect(m_tabWidget, &QTabWidget::tabCloseRequested, this, [this](int index) {
@@ -27,11 +26,10 @@ MainWindow::MainWindow(QWidget* parent)
                     );
 
                 if(reply == QMessageBox::Cancel) {
-                    return; // do not close tab
+                    return;
                 } else if(reply == QMessageBox::Yes) {
-                    onSaveGraphTriggered(); // save graph
+                    onSaveGraphTriggered();
                 }
-                // no -> close
             }
 
             m_tabWidget->removeTab(index);
@@ -112,18 +110,15 @@ void MainWindow::onOpenGraphTriggered() {
     loadThread->start();
 
     initMenuToolBar();
-
 }
 
 void MainWindow::onCreateGraphTriggered() {
-
     QDialog dialog(this);
     dialog.setWindowTitle("Create Graph Options");
     dialog.setModal(true);
     dialog.setMinimumSize(AppConstants::createGraphDialogMinWidth, AppConstants::createGraphDialogMinHeight);
     dialog.setSizeGripEnabled(true);
     dialog.setWindowFlags(dialog.windowFlags() | Qt::WindowMinMaxButtonsHint);
-
 
     QVBoxLayout* mainLayout = new QVBoxLayout(&dialog);
 
@@ -290,7 +285,7 @@ void MainWindow::onSaveImageTriggered() {
         QString tabName = QFileInfo(filePath).fileName();
 
         if(tabInfo.m_isModified) {
-            tabName += "*"; // graph modified, add *
+            tabName += "*";
         }
         m_tabWidget->setTabText(index, tabName);
 
@@ -375,7 +370,6 @@ void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool d
     info.m_isImageModified = true;
     m_tabs.insert(editor, info);
 
-    // tab name -> file name
     QString tabName = QFileInfo(filePath).fileName();
     int index = m_tabWidget->addTab(editor, tabName);
     m_tabWidget->setCurrentIndex(index);

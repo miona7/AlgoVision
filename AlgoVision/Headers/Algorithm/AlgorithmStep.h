@@ -31,7 +31,6 @@ struct AlgorithmStep {
     std::optional<unsigned> m_from;
     std::optional<unsigned> m_to;
 
-    // za undo/redo
     std::optional<NodeState> m_prevNodeState;
     std::optional<EdgeState> m_prevEdgeState;
 };

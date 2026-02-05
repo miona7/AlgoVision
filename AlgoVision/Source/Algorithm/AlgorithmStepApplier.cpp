@@ -14,16 +14,16 @@ void AlgorithmStepApplier::apply(AlgorithmStep& step) {
     case StepType::AddToTopologicalOrder:
     case StepType::AssignComponent: {
         Node* node           = m_graph->getNode(step.m_node.value());
-        step.m_prevNodeState = node->getState();      // snimi staro stanje
-        node->setState(stepToNodeState(step.m_type)); // promeni stanje
+        step.m_prevNodeState = node->getState();
+        node->setState(stepToNodeState(step.m_type));
         break;
     }
     case StepType::ExamineEdge:
     case StepType::RelaxEdge:
     case StepType::SelectEdge: {
         Edge* edge           = m_graph->getEdge(step.m_from.value(), step.m_to.value());
-        step.m_prevEdgeState = edge->getState();      // snimi staro stanje
-        edge->setState(stepToEdgeState(step.m_type)); // promeni stanje
+        step.m_prevEdgeState = edge->getState();
+        edge->setState(stepToEdgeState(step.m_type));
         break;
     }
     default:
