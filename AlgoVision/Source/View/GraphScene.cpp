@@ -217,6 +217,7 @@ EdgeItem* GraphScene::findEdgeItemByNodes(unsigned from, unsigned to) const {
     }
     return nullptr;
 }
+
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
     if(m_firstNodeSelect == nullptr) {
@@ -236,11 +237,13 @@ void GraphScene::selectNode(NodeItem* node) {
 
 void GraphScene::updateNodeScalling() {
     for(auto* item: items()) {
-        if(auto* n = dynamic_cast<NodeItem*>(item))
+        if(auto* n = dynamic_cast<NodeItem*>(item)) {
             n->updateSize();
+        }
 
-        if(auto* e = dynamic_cast<EdgeItem*>(item))
+        if(auto* e = dynamic_cast<EdgeItem*>(item)) {
             e->updateSize();
+        }
     }
     update();
 }
@@ -248,17 +251,14 @@ void GraphScene::updateNodeScalling() {
 void GraphScene::applyTheme(ThemeManager::Theme theme) {
     switch(theme) {
     case ThemeManager::Theme::LIGHT:
-        setBackgroundBrush(QColor(245, 245, 245)); // skoro bela
+        setBackgroundBrush(QColor(245, 245, 245));
         break;
-
     case ThemeManager::Theme::DARK:
-        setBackgroundBrush(QColor(60, 60, 60)); // svetlija tamna
+        setBackgroundBrush(QColor(60, 60, 60));
         break;
-
     case ThemeManager::Theme::PURPLE:
-        setBackgroundBrush(QColor(90, 70, 120)); // svetla ljubičasta
+        setBackgroundBrush(QColor(90, 70, 120));
         break;
     }
-
     update();
 }

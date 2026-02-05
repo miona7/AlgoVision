@@ -86,7 +86,6 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
         msgBox.exec();
     });
 
-    // connecting buttons
     connect(m_playBtn, &QToolButton::clicked, this, [this]() {
         m_playBtn->setEnabled(false);
 
@@ -288,13 +287,11 @@ void AlgorithmTab::initLayout() {
 
     mainLayout->addWidget(attributesBox);
 
-    // separator 1
     auto* separator1 = new QFrame(this);
     separator1->setFrameShape(QFrame::HLine);
     separator1->setFrameShadow(QFrame::Sunken);
     mainLayout->addWidget(separator1);
 
-    // run algorithm
     auto* runBox    = new QGroupBox("run algorithm", this);
     auto* runLayout = new QHBoxLayout(runBox);
     runLayout->setSpacing(6);
@@ -319,13 +316,11 @@ void AlgorithmTab::initLayout() {
 
     mainLayout->addWidget(runBox);
 
-    // separator 2
     auto* separator2 = new QFrame(this);
     separator2->setFrameShape(QFrame::HLine);
     separator2->setFrameShadow(QFrame::Sunken);
     mainLayout->addWidget(separator2);
 
-    // help
     m_helpBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     mainLayout->addWidget(m_helpBtn);
 
@@ -531,7 +526,6 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
     case AlgorithmErrorType::GraphNotInitialized:
         userHint = "Please create a graph in the 'graph' tab before running an algorithm.";
         break;
-
     case AlgorithmErrorType::GraphTypeInvalid:
         userHint = "Please consult the 'graph type help' button to see which graph types are "
                    "supported.\n\n"
@@ -541,29 +535,23 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
                    "or clear the current graph from the scene in the 'graph' tab.\n"
                    "2) Choose a compatible algorithm and run it on the existing graph.";
         break;
-
     case AlgorithmErrorType::StartNodeMissing:
     case AlgorithmErrorType::GoalNodeMissing:
         userHint =
             "Please enter a valid node index or leave the field empty to use the default behavior.";
         break;
-
     case AlgorithmErrorType::NegativeEdgeWeights:
         userHint = "Please remove negative weights from the graph.";
         break;
-
     case AlgorithmErrorType::NoPathFound:
         userHint = "Please choose different nodes or modify the graph.";
         break;
-
     case AlgorithmErrorType::GraphHasNegativeCycle:
         userHint = "Please remove the cycle before running this algorithm.";
         break;
-
     case AlgorithmErrorType::GraphHasCycle:
         userHint = "Please modify the graph so it becomes acyclic.";
         break;
-
     case AlgorithmErrorType::GraphNotConnected:
         userHint = "Please ensure all nodes are reachable.";
         break;
