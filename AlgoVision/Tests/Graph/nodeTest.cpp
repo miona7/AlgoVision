@@ -15,10 +15,12 @@ TEST_CASE("Observer is called on state change", "[Node]") {
     });
 
     n.setState(NodeState::Active);
+
     REQUIRE(callCount == 1);
     REQUIRE(lastState == NodeState::Active);
 
     n.setState(NodeState::Visited);
+
     REQUIRE(callCount == 2);
     REQUIRE(lastState == NodeState::Visited);
 }
@@ -29,8 +31,9 @@ TEST_CASE("Observer is not called if state does not change", "[Node]") {
     int callCount = 0;
     n.addObserver([&](Node& node) { callCount++; });
 
-    n.setState(NodeState::Default); // isto kao inicijalno
-    REQUIRE(callCount == 0);        // ne bi trebao da se pozove
+    n.setState(NodeState::Default);
+
+    REQUIRE(callCount == 0);
 }
 
 TEST_CASE("Observer is not called after removal", "[Node]") {
@@ -41,5 +44,6 @@ TEST_CASE("Observer is not called after removal", "[Node]") {
 
     n.removeObserver(obsId);
     n.setState(NodeState::Active);
-    REQUIRE(callCount == 0); // observer je uklonjen
+
+    REQUIRE(callCount == 0);
 }
