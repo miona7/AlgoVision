@@ -42,7 +42,7 @@ namespace AppConstants {
     constexpr int graphTypeDialogErrorMinHeight = 250;
 
     // legend
-    constexpr int legendMinHeight = 250;
+    constexpr int legendMinHeight = 400;
 } // namespace AppConstants
 
 #endif // APPCONSTANT
