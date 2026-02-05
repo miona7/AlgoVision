@@ -161,8 +161,8 @@ void NodeItem::updateSize() {
 
     update();
 
-    for(auto edge: m_edges) {
-        if(edge) {
+    for(auto* edge: m_edges) {
+        if(edge != nullptr) {
             edge->adjust();
         }
     }

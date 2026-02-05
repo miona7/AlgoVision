@@ -7,6 +7,14 @@
 #include "AlgorithmStep.h"
 #include "Graph.h"
 
+/**
+ * @class AlgorithmStepApplier
+ * @brief Applies algorithm steps to the graph.
+ *
+ * This class takes individual algorithm steps and maps them to
+ * changes in the state of nodes and edges in the graph.
+ */
+
 class AlgorithmStepApplier {
 public:
     explicit AlgorithmStepApplier(const std::shared_ptr<Graph>);

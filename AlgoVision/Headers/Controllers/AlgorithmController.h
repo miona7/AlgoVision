@@ -9,6 +9,15 @@
 #include "AlgorithmStep.h"
 #include "AlgorithmStepApplier.h"
 
+/**
+ * @class AlgorithmExecutionController
+ * @brief Controller that connects algorithm execution with the UI.
+ *
+ * This class acts as a "bridge" between the algorithm and UI controls
+ * such as play, pause, next, previous, and reset.
+ * It receives algorithm steps and manages their execution.
+ */
+
 class AlgorithmController : public QObject {
     Q_OBJECT
 public:

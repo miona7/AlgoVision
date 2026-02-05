@@ -38,7 +38,7 @@ public slots:
     void showAlgorithmErrorDialog(const AlgorithmError&);
 
 signals:
-    void graphEditAllowedChanged(bool allowed);
+    void graphEditAllowedChanged(bool);
 
 private:
     struct AlgorithmConfig {

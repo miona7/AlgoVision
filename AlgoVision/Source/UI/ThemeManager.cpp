@@ -62,6 +62,5 @@ void ThemeManager::saveTheme() {
         t = "purple";
         break;
     }
-
     m_settings.setValue("theme", t);
 }

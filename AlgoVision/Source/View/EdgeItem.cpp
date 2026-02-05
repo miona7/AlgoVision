@@ -211,8 +211,9 @@ void EdgeItem::onEdgeUpdated() {
 }
 
 void EdgeItem::updateSize() {
-    if(!m_hasWeight || !m_weight)
+    if(!m_hasWeight || m_weight == nullptr) {
         return;
+    }
 
     QFont f = m_weight->font();
     f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);

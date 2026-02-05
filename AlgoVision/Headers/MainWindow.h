@@ -1,39 +1,39 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QHash>
-#include <QFile>
-#include <QFileDialog>
-#include <QJsonDocument>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QString>
-#include <QVBoxLayout>
-#include <QVariantMap>
-#include <QGroupBox>
-#include <QRadioButton>
+#include <QCloseEvent>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QFile>
+#include <QFileDialog>
+#include <QGroupBox>
+#include <QHash>
+#include <QJsonDocument>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QString>
 #include <QTabWidget>
-#include <QCloseEvent>
+#include <QVBoxLayout>
+#include <QVariantMap>
 
-#include <memory>
 #include <iostream>
+#include <memory>
 
 #include "AppConstants.h"
-#include "MenuToolBar.h"
-#include "ThemeManager.h"
-#include "GraphController.h"
 #include "Graph.h"
+#include "GraphController.h"
 #include "GraphEditor.h"
+#include "LoadFileWorker.h"
+#include "MenuToolBar.h"
+#include "SaveFileWorker.h"
 #include "Serializer.h"
+#include "ThemeManager.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
-#include "LoadFileWorker.h"
-#include "SaveFileWorker.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -47,10 +47,10 @@ class MainWindow : public QMainWindow {
 public:
     struct TabInfo {
         GraphEditor* m_editor;
-        QString m_filePath;
-        bool m_isModified;
-        QString m_imagePath;
-        bool m_isImageModified;
+        QString      m_filePath;
+        bool         m_isModified;
+        QString      m_imagePath;
+        bool         m_isImageModified;
     };
 
     explicit MainWindow(QWidget* = nullptr);
@@ -74,10 +74,10 @@ protected:
     void closeEvent(QCloseEvent*) override;
 
 private:
-    Ui::MainWindow* m_ui;
-    MenuToolBar*    m_menuToolBar = nullptr;
-    ThemeManager*   m_themeManager;
-    QTabWidget* m_tabWidget = nullptr;
+    Ui::MainWindow*              m_ui;
+    MenuToolBar*                 m_menuToolBar = nullptr;
+    ThemeManager*                m_themeManager;
+    QTabWidget*                  m_tabWidget = nullptr;
     QHash<GraphEditor*, TabInfo> m_tabs;
 
     std::unique_ptr<Serializer> m_serializer;

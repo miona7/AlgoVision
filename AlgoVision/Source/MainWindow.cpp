@@ -11,19 +11,17 @@ MainWindow::MainWindow(QWidget* parent)
     m_tabWidget->setTabsClosable(true);
     connect(m_tabWidget, &QTabWidget::tabCloseRequested, this, [this](int index) {
         QWidget* widget = m_tabWidget->widget(index);
-        auto* editor = qobject_cast<GraphEditor*>(widget);
+        auto*    editor = qobject_cast<GraphEditor*>(widget);
 
         if(editor != nullptr) {
             TabInfo& tabInfo = m_tabs[editor];
 
             if(tabInfo.m_isModified) {
                 QMessageBox::StandardButton reply = QMessageBox::question(
-                    this,
-                    "Unsaved Changes",
+                    this, "Unsaved Changes",
                     QString("The graph in tab '%1' has unsaved changes. Do you want to save it?")
                         .arg(m_tabWidget->tabText(index)),
-                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
-                    );
+                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
                 if(reply == QMessageBox::Cancel) {
                     return;
@@ -98,14 +96,11 @@ void MainWindow::onOpenGraphTriggered() {
 
     auto* loadThread = new LoadFileWorker(m_serializer.get(), filePath, this);
 
-    connect(loadThread, &LoadFileWorker::loaded,
-            this, &MainWindow::onGraphLoadedNewTab);
+    connect(loadThread, &LoadFileWorker::loaded, this, &MainWindow::onGraphLoadedNewTab);
 
-    connect(loadThread, &LoadFileWorker::failed,
-            this, &MainWindow::onGraphLoadFailed);
+    connect(loadThread, &LoadFileWorker::failed, this, &MainWindow::onGraphLoadFailed);
 
-    connect(loadThread, &QThread::finished,
-            loadThread, &QObject::deleteLater);
+    connect(loadThread, &QThread::finished, loadThread, &QObject::deleteLater);
 
     loadThread->start();
 
@@ -116,32 +111,33 @@ void MainWindow::onCreateGraphTriggered() {
     QDialog dialog(this);
     dialog.setWindowTitle("Create Graph Options");
     dialog.setModal(true);
-    dialog.setMinimumSize(AppConstants::createGraphDialogMinWidth, AppConstants::createGraphDialogMinHeight);
+    dialog.setMinimumSize(AppConstants::createGraphDialogMinWidth,
+                          AppConstants::createGraphDialogMinHeight);
     dialog.setSizeGripEnabled(true);
     dialog.setWindowFlags(dialog.windowFlags() | Qt::WindowMinMaxButtonsHint);
 
     QVBoxLayout* mainLayout = new QVBoxLayout(&dialog);
 
-    QGroupBox* typeGroup = new QGroupBox("Graph Type", &dialog);
-    QVBoxLayout* typeLayout = new QVBoxLayout(typeGroup);
-    QRadioButton* directedBtn = new QRadioButton("Directed", typeGroup);
+    QGroupBox*    typeGroup     = new QGroupBox("Graph Type", &dialog);
+    QVBoxLayout*  typeLayout    = new QVBoxLayout(typeGroup);
+    QRadioButton* directedBtn   = new QRadioButton("Directed", typeGroup);
     QRadioButton* undirectedBtn = new QRadioButton("Undirected", typeGroup);
     undirectedBtn->setChecked(true);
     typeLayout->addWidget(directedBtn);
     typeLayout->addWidget(undirectedBtn);
     mainLayout->addWidget(typeGroup);
 
-    QGroupBox* weightGroup = new QGroupBox("Weight", &dialog);
-    QVBoxLayout* weightLayout = new QVBoxLayout(weightGroup);
-    QRadioButton* weightedBtn = new QRadioButton("Weighted", weightGroup);
+    QGroupBox*    weightGroup   = new QGroupBox("Weight", &dialog);
+    QVBoxLayout*  weightLayout  = new QVBoxLayout(weightGroup);
+    QRadioButton* weightedBtn   = new QRadioButton("Weighted", weightGroup);
     QRadioButton* unweightedBtn = new QRadioButton("Unweighted", weightGroup);
     unweightedBtn->setChecked(true);
     weightLayout->addWidget(weightedBtn);
     weightLayout->addWidget(unweightedBtn);
     mainLayout->addWidget(weightGroup);
 
-    QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
-                                                     Qt::Horizontal, &dialog);
+    QDialogButtonBox* buttons = new QDialogButtonBox(
+        QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &dialog);
     mainLayout->addWidget(buttons);
     QObject::connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
     QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
@@ -182,10 +178,10 @@ void MainWindow::onCreateGraphTriggered() {
     connectGraphModifiedSignal(editor);
 
     TabInfo info;
-    info.m_editor = editor;
-    info.m_filePath = "";
-    info.m_isModified = true;
-    info.m_imagePath = "";
+    info.m_editor          = editor;
+    info.m_filePath        = "";
+    info.m_isModified      = true;
+    info.m_imagePath       = "";
     info.m_isImageModified = true;
     m_tabs.insert(editor, info);
 
@@ -215,7 +211,7 @@ void MainWindow::onSaveGraphTriggered() {
         return;
     }
 
-    int index = m_tabWidget->currentIndex();
+    int      index   = m_tabWidget->currentIndex();
     TabInfo& tabInfo = m_tabs[currentEditor];
 
     QString filePath = tabInfo.m_filePath;
@@ -235,15 +231,18 @@ void MainWindow::onSaveGraphTriggered() {
         return;
     }
 
-    auto* saveThread = new SaveFileWorker(m_serializer.get(), graph.get(), filePath, graph->isWeighted(), graph->isDirected(), this);
+    auto* saveThread = new SaveFileWorker(m_serializer.get(), graph.get(), filePath,
+                                          graph->isWeighted(), graph->isDirected(), this);
 
-    connect(saveThread, &SaveFileWorker::finished, this, [this, saveThread, &tabInfo, index, filePath]() {
-        tabInfo.m_filePath = filePath;
-        tabInfo.m_isModified = false;
-        m_tabWidget->setTabText(index, QFileInfo(filePath).fileName());
-        QMessageBox::information(this, "saved", "graph saved to: " + filePath);
-        saveThread->deleteLater();
-    });
+    connect(saveThread, &SaveFileWorker::finished, this,
+            [this, saveThread, &tabInfo, index, filePath]() {
+                tabInfo.m_filePath   = filePath;
+                tabInfo.m_isModified = false;
+                m_tabWidget->setTabText(index, QFileInfo(filePath).fileName());
+                m_tabWidget->setTabToolTip(index, filePath);
+                QMessageBox::information(this, "saved", "graph saved to: " + filePath);
+                saveThread->deleteLater();
+            });
 
     connect(saveThread, &SaveFileWorker::failed, this, [this, saveThread](const QString& error) {
         QMessageBox::warning(this, "error", "could not save file: " + error);
@@ -260,7 +259,7 @@ void MainWindow::onSaveImageTriggered() {
         return;
     }
 
-    int index = m_tabWidget->currentIndex();
+    int      index   = m_tabWidget->currentIndex();
     TabInfo& tabInfo = m_tabs[currentEditor];
 
     QString filePath = tabInfo.m_imagePath;
@@ -275,11 +274,11 @@ void MainWindow::onSaveImageTriggered() {
         }
     }
 
-    QGraphicsView* view = currentEditor->graphController()->scene()->views().first();
-    QPixmap pixmap = view->viewport()->grab();
+    QGraphicsView* view   = currentEditor->graphController()->scene()->views().first();
+    QPixmap        pixmap = view->viewport()->grab();
 
     if(pixmap.save(filePath, "PNG")) {
-        tabInfo.m_imagePath = filePath;
+        tabInfo.m_imagePath       = filePath;
         tabInfo.m_isImageModified = false;
 
         QString tabName = QFileInfo(filePath).fileName();
@@ -288,6 +287,8 @@ void MainWindow::onSaveImageTriggered() {
             tabName += "*";
         }
         m_tabWidget->setTabText(index, tabName);
+        m_tabWidget->setTabToolTip(index, tabInfo.m_imagePath.isEmpty() ? "unsaved image"
+                                                                        : tabInfo.m_imagePath);
 
         QMessageBox::information(this, "saved", "image saved to: " + filePath);
     } else {
@@ -340,18 +341,18 @@ void MainWindow::initMenuToolBar() {
 }
 
 void MainWindow::onHelpTriggered() {
-    QString helpText =
-        "Graph Editor Help:\n\n"
-        "- Use the right toolbar to add new elements.\n"
-        "- Double-click on a node to create a new node.\n"
-        "- To create a new edge, click on the two nodes you want to connect.\n"
-        "- You can save the graph or export it as an image using the top toolbar.\n"
-        "- For any visual styling, switch themes using the theme button.";
+    QString helpText = "Graph Editor Help:\n\n"
+                       "- Use the right toolbar to add new elements.\n"
+                       "- Double-click on a node to create a new node.\n"
+                       "- To create a new edge, click on the two nodes you want to connect.\n"
+                       "- You can save the graph or export it as an image using the top toolbar.\n"
+                       "- For any visual styling, switch themes using the theme button.";
 
     QMessageBox::information(this, "Help", helpText);
 }
 
-void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool directed, const QString& filePath) {
+void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool directed,
+                                     const QString& filePath) {
     auto controller = std::make_shared<GraphController>();
     controller->createGraph(directed, weighted);
 
@@ -363,16 +364,17 @@ void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool d
     connectGraphModifiedSignal(editor);
 
     TabInfo info;
-    info.m_editor = editor;
-    info.m_filePath = filePath;
-    info.m_isModified = false;
-    info.m_imagePath = "";
+    info.m_editor          = editor;
+    info.m_filePath        = filePath;
+    info.m_isModified      = false;
+    info.m_imagePath       = "";
     info.m_isImageModified = true;
     m_tabs.insert(editor, info);
 
     QString tabName = QFileInfo(filePath).fileName();
-    int index = m_tabWidget->addTab(editor, tabName);
+    int     index   = m_tabWidget->addTab(editor, tabName);
     m_tabWidget->setCurrentIndex(index);
+    m_tabWidget->setTabToolTip(index, filePath.isEmpty() ? "unsaved file" : filePath);
 
     m_ui->stackedWidget->setCurrentWidget(m_tabWidget);
     this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
@@ -387,31 +389,33 @@ void MainWindow::onGraphLoadFailed(const QString& error) {
 }
 
 void MainWindow::connectGraphModifiedSignal(GraphEditor* editor) {
-    connect(editor->graphController().get(), &GraphController::sceneModified, this, [this, editor]() {
-        if(!m_tabs.contains(editor)) {
-            return;
-        }
+    connect(editor->graphController().get(), &GraphController::sceneModified, this,
+            [this, editor]() {
+                if(!m_tabs.contains(editor)) {
+                    return;
+                }
 
-        TabInfo& tabInfo = m_tabs[editor];
-        tabInfo.m_isModified = true;
+                TabInfo& tabInfo     = m_tabs[editor];
+                tabInfo.m_isModified = true;
 
-        QString tabName;
-        if(tabInfo.m_filePath.isEmpty()) {
-            tabName = "untitled";
-        } else {
-            tabName = QFileInfo(tabInfo.m_filePath).fileName();
-        }
+                QString tabName;
+                if(tabInfo.m_filePath.isEmpty()) {
+                    tabName = "untitled";
+                } else {
+                    tabName = QFileInfo(tabInfo.m_filePath).fileName();
+                }
 
-        if(!tabName.endsWith("*")) {
-            tabName += "*";
-        }
+                if(!tabName.endsWith("*")) {
+                    tabName += "*";
+                }
 
-        int index = m_tabWidget->indexOf(editor);
-        if(index >= 0) {
-            m_tabWidget->setTabText(index, tabName);
-        }
-
-    });
+                int index = m_tabWidget->indexOf(editor);
+                if(index >= 0) {
+                    m_tabWidget->setTabText(index, tabName);
+                    m_tabWidget->setTabToolTip(
+                        index, tabInfo.m_filePath.isEmpty() ? "unsaved file" : tabInfo.m_filePath);
+                }
+            });
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
@@ -431,19 +435,17 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     }
 
     if(!unsavedTabs.isEmpty()) {
-        QString tabList = unsavedTabs.join("\n");
-        QMessageBox::StandardButton reply = QMessageBox::question(
-            this,
-            "Unsaved Changes",
-            "The following tabs have unsaved changes:\n" + tabList +
-                "\n\nDo you want to save them before exiting?",
-            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
-            );
+        QString                     tabList = unsavedTabs.join("\n");
+        QMessageBox::StandardButton reply =
+            QMessageBox::question(this, "Unsaved Changes",
+                                  "The following tabs have unsaved changes:\n" + tabList +
+                                      "\n\nDo you want to save them before exiting?",
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
         if(reply == QMessageBox::Yes) {
             // save every unsaved tab
             for(auto it = m_tabs.begin(); it != m_tabs.end(); ++it) {
-                if (it.value().m_isModified) {
+                if(it.value().m_isModified) {
                     m_tabWidget->setCurrentWidget(it.key());
                     onSaveGraphTriggered();
                 }
@@ -458,5 +460,3 @@ void MainWindow::closeEvent(QCloseEvent* event) {
         event->accept();
     }
 }
-
-

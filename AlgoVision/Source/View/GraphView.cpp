@@ -19,12 +19,10 @@ void GraphView::setState(GraphView::State newState) {
         setCursor(Qt::OpenHandCursor);
         break;
     }
-
     case GraphView::State::PAN_ACTIVE: {
         setCursor(Qt::ClosedHandCursor);
         break;
     }
-
     case GraphView::State::IDLE:
     default: {
         setCursor(Qt::ArrowCursor);
