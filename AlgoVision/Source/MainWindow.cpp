@@ -241,6 +241,7 @@ void MainWindow::onSaveGraphTriggered() {
         tabInfo.m_filePath = filePath;
         tabInfo.m_isModified = false;
         m_tabWidget->setTabText(index, QFileInfo(filePath).fileName());
+        m_tabWidget->setTabToolTip(index, filePath);
         QMessageBox::information(this, "saved", "graph saved to: " + filePath);
         saveThread->deleteLater();
     });
@@ -288,6 +289,7 @@ void MainWindow::onSaveImageTriggered() {
             tabName += "*";
         }
         m_tabWidget->setTabText(index, tabName);
+        m_tabWidget->setTabToolTip(index, tabInfo.m_imagePath.isEmpty() ? "unsaved image" : tabInfo.m_imagePath);
 
         QMessageBox::information(this, "saved", "image saved to: " + filePath);
     } else {
@@ -373,6 +375,8 @@ void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool d
     QString tabName = QFileInfo(filePath).fileName();
     int index = m_tabWidget->addTab(editor, tabName);
     m_tabWidget->setCurrentIndex(index);
+    m_tabWidget->setTabToolTip(index, filePath.isEmpty() ? "unsaved file" : filePath);
+
 
     m_ui->stackedWidget->setCurrentWidget(m_tabWidget);
     this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
@@ -409,6 +413,7 @@ void MainWindow::connectGraphModifiedSignal(GraphEditor* editor) {
         int index = m_tabWidget->indexOf(editor);
         if(index >= 0) {
             m_tabWidget->setTabText(index, tabName);
+            m_tabWidget->setTabToolTip(index, tabInfo.m_filePath.isEmpty() ? "unsaved file" : tabInfo.m_filePath);
         }
 
     });
