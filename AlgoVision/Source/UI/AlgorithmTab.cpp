@@ -20,7 +20,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
       m_startLabel(new QLabel("start node:", this)), m_startNodeEdit(new QLineEdit(this)),
       m_endRow(new QWidget(this)), m_endLabel(new QLabel("end node:", this)),
       m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
-      m_helpBtn(new QPushButton("help", this)), m_prevBtn(new QToolButton(this)),
+      m_helpBtn(new QPushButton("graph type help", this)), m_prevBtn(new QToolButton(this)),
       m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),
       m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)),
       m_graphController(graphController), m_applier(m_graphController->graph()),
@@ -46,43 +46,58 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     connect(&m_algorithmController, &AlgorithmController::requestErrorDialog, this,
             &AlgorithmTab::showAlgorithmErrorDialog);
 
-    // Tab -> Controller (odluka korisnika)
-    connect(this, &AlgorithmTab::errorDialogCancelled, this, [this]() {
-        // greska znaci da run NIJE uspeo → vracamo se u Idle
-        m_state = RunState::Idle;
-        updateControls();
-
-        // ponistavamo current config da sledeci Play uvek krene iznova
-        m_currentConfig.reset();
-
-        // sigurnosno: ugasi worker ako postoji
-        if(m_worker != nullptr) {
-            m_worker->quit();
-            m_worker->wait();
-            delete m_worker;
-            m_worker = nullptr;
-        }
-    });
-
-    m_algorithmController.clear(); // za svaki slucaj, da se ne zbuni kontroler nakon cancel
-
-    connect(this, &AlgorithmTab::errorDialogContinue, this, [this]() {
-        // ZA SAD SAMO RESET (bice prosireno)
-        m_algorithmController.reset();
-        m_state = RunState::Idle;
-        updateControls();
-    });
-
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
             &AlgorithmTab::updateUiForAlgorithm);
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
             &AlgorithmTab::updateLegendForAlgorithm);
 
-    // ===== HELP =====
+    // help
     connect(m_helpBtn, &QPushButton::clicked, this, [this]() {
-        QMessageBox::information(this, "Algorithm Tab Help",
-                                 "Algorithm Tab — Help\n\n"
-                                 "Choose algorithm, set parameters and use controls to run.");
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("Algorithm Tab Help");
+        msgBox.setIcon(QMessageBox::Information);
+
+        msgBox.setText(
+            "<h3>Algorithm Tab — Help</h3>"
+
+            "<p><b>Supported graph types by algorithm:</b></p>"
+
+            "<ul>"
+            "<li><b>BFS / DFS</b><br>"
+            "Directed or undirected graphs.<br>"
+            "Must be: unweighted.<br></li>"
+
+            "<li><b>Dijkstra</b><br>"
+            "Directed or undirected graphs.<br>"
+            "Must be: weighted, with non-negative edge weights.<br></li>"
+
+            "<li><b>Bellman–Ford</b><br>"
+            "Negative edge weights allowed.<br>"
+            "Must be: directed, weighted, with no negative cycles.<br></li>"
+
+            "<li><b>Floyd–Warshall</b><br>"
+            "Negative edge weights allowed.<br>"
+            "Must be: directed, weighted, with no negative cycles.<br></li>"
+
+            "<li><b>A*</b><br>"
+            "Directed or undirected graphs.<br>"
+            "Must be: weighted, with non-negative edge weights.<br></li>"
+
+            "<li><b>Prim</b><br>"
+            "Must be: undirected, weighted, connected graph.<br></li>"
+
+            "<li><b>Kahn</b><br>"
+            "Must be: directed, acyclic graph(DAG).<br></li>"
+
+            "<li><b>Tarjan</b><br>"
+            "Must be: directed graph.<<br></li>"
+            "</ul>"
+            );
+
+        msgBox.setTextFormat(Qt::RichText);
+        msgBox.setStandardButtons(QMessageBox::Ok);
+
+        msgBox.exec();
     });
 
     // povezivanje dugmica
@@ -117,9 +132,36 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             auto graph = m_graphController->graph();
             m_applier.setGraph(graph);
 
-            // m_algorithmController.clear();
-            // m_algorithmController.reset(); // vrati graf u pocetno stanje
             m_currentConfig = newConfig;
+
+            // morala sam da dodam naredna dva upita
+            // jer je app odlazila na default cvorove
+            // u slucaju kada je uneto ime koje ne postoji u grafu
+            // moze umesto ovoga da se sredi u samim algoritmima,
+            // ali ovo je delovalo optimalnije za nasu trenutnu situaciju
+            const auto& nodes = graph->getNodes();
+            // Ako je korisnik uneo start node
+            if (!m_startNodeEdit->text().isEmpty()) {
+                if (nodes.find(newConfig.m_startNode) == nodes.end()) {
+                    AlgorithmError err{
+                        AlgorithmErrorType::StartNodeMissing,
+                        "The specified start node does not exist in the graph."
+                    };
+                    showAlgorithmErrorDialog(err);
+                    return;
+                }
+            }
+            // Ako je korisnik uneo end node
+            if (!m_endNodeEdit->text().isEmpty()) {
+                if (nodes.find(newConfig.m_endNode) == nodes.end()) {
+                    AlgorithmError err{
+                        AlgorithmErrorType::GoalNodeMissing,
+                        "The specified end node does not exist in the graph."
+                    };
+                    showAlgorithmErrorDialog(err);
+                    return;
+                }
+            }
 
             m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph, newConfig.m_startNode,
                                            newConfig.m_endNode);
@@ -501,24 +543,91 @@ void AlgorithmTab::updateControls() {
     m_endNodeEdit->setEnabled(!inputsLocked);
 }
 
-void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error, bool allowContinue) {
-    QMessageBox msgBox(this);
-    msgBox.setIcon(QMessageBox::Warning);
-    msgBox.setWindowTitle("Algorithm error");
-    msgBox.setText(QString::fromStdString(error.m_message));
+void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
 
-    QPushButton* cancelBtn = msgBox.addButton("Cancel", QMessageBox::RejectRole);
+    QString userHint;
 
-    QPushButton* continueBtn = nullptr;
-    if(allowContinue) {
-        continueBtn = msgBox.addButton("Continue", QMessageBox::AcceptRole);
+    switch(error.m_type) {
+    case AlgorithmErrorType::GraphNotInitialized:
+        userHint =
+            "Please create a graph, via 'graph' tab, before running an algorithm.";
+        break;
+
+    case AlgorithmErrorType::GraphTypeInvalid:
+        userHint =
+            "Please consult the 'graph type help' button to see which graph types are supported.\n\n"
+            "Then, choose one of the following:\n"
+            "1) Click the 'Create graph' button in the upper left corner to create a suitable graph.\n"
+            "2) Choose a compatible algorithm and run it on the existing graph.";
+        break;
+
+    case AlgorithmErrorType::StartNodeMissing:
+    case AlgorithmErrorType::GoalNodeMissing:
+        userHint =
+            "Please enter a valid node index or leave the field empty to use the default behavior.";
+        break;
+
+    case AlgorithmErrorType::NegativeEdgeWeights:
+        userHint =
+            "Please remove negative weights from the graph.";
+        break;
+
+    case AlgorithmErrorType::NoPathFound:
+        userHint =
+            "Please choose different nodes or modify the graph.";
+        break;
+
+    case AlgorithmErrorType::GraphHasNegativeCycle:
+        userHint =
+            "Please remove the cycle before running this algorithm.";
+        break;
+
+    case AlgorithmErrorType::GraphHasCycle:
+        userHint =
+            "Please modify the graph so it becomes acyclic.";
+        break;
+
+    case AlgorithmErrorType::GraphNotConnected:
+        userHint =
+            "Please ensure all nodes are reachable.";
+        break;
     }
 
-    msgBox.exec();
+    QDialog dialog(this);
+    dialog.setWindowTitle("Algorithm cannot be executed");
+    dialog.setModal(true);
 
-    if(msgBox.clickedButton() == continueBtn) {
-        emit errorDialogContinue();
-    } else {
-        emit errorDialogCancelled();
-    }
+    auto* layout = new QVBoxLayout(&dialog);
+
+    // Gornja poruka (algoritamska)
+    QLabel* mainText = new QLabel(QString::fromStdString(error.m_message));
+    QFont f = mainText->font();
+    f.setBold(true);
+    mainText->setFont(f);
+    mainText->setWordWrap(true);
+
+    // Donja poruka (uputstvo za korisnika)
+    QLabel* detailsText = new QLabel(userHint);
+    detailsText->setWordWrap(true);
+
+    layout->addWidget(mainText);
+    layout->addSpacing(12);
+    layout->addWidget(detailsText);
+    layout->addStretch();
+
+    // OK dugme
+    QPushButton* okBtn = new QPushButton("OK");
+    connect(okBtn, &QPushButton::clicked, &dialog, &QDialog::accept);
+
+    layout->addWidget(okBtn, 0, Qt::AlignRight);
+
+    // Velicina + resize
+    dialog.resize(420, dialog.sizeHint().height());
+    dialog.setMinimumSize(420, 220);
+
+    dialog.exec();
+
+    // neophodno da bi nakon OK ponovo bilo dostupno play dugme
+    m_state = RunState::Idle;
+    updateControls();
 }
