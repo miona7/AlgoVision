@@ -32,20 +32,6 @@ std::optional<AlgorithmError> BellmanFord::execute(unsigned idStartNode, unsigne
 
     bellmanFord(idStartNode);
 
-    std::cout << "Shortest distances from node " << idStartNode << ":" << std::endl;
-    for(const auto& [node, dist]: m_minDistance) {
-        std::cout << "Node " << node << ": ";
-        if(dist == std::numeric_limits<int>::max()) {
-            std::cout << "unreachable" << std::endl;
-        } else {
-            std::cout << dist << std::endl;
-        }
-    }
-
-    if(m_hasNegativeCycle) {
-        std::cout << "Graph contains a negative cycle!" << std::endl;
-    }
-
     return std::nullopt;
 }
 
@@ -70,7 +56,7 @@ void BellmanFord::bellmanFord(unsigned start) {
 
     unsigned v = nodes.size();
 
-    // relaksiraj grane v-1 put
+    // relax all edges v-1 times
     for(int k = 0; k < v - 1; ++k) {
         bool wasRelaxed = false;
         for(const auto& [_, edge]: edges) {
@@ -85,7 +71,7 @@ void BellmanFord::bellmanFord(unsigned start) {
             }
             {
                 AlgorithmStep s;
-                s.m_type = StepType::ProcessNode; // koristimo kao "pass k"
+                s.m_type = StepType::ProcessNode; // using as "pass k"
                 s.m_node = u;
                 addStep(s);
             }
@@ -141,7 +127,16 @@ bool BellmanFord::hasNegativeCycle() const {
 QString BellmanFord::resultString() const {
     QString res = "Distances:\n";
     for(const auto& [node, dist]: m_minDistance) {
-        res += QString("Node %1 : %2\n").arg(node).arg(dist);
+        if(dist != std::numeric_limits<int>::max()) {
+            res += QString("Node %1 : %2\n").arg(node).arg(dist);
+        } else {
+            res += QString("Node %1 : unreachable\n").arg(node);
+        }
     }
+
+    if(m_hasNegativeCycle) {
+        res += "Graph contains a negative cycle!";
+    }
+
     return res;
 }
