@@ -29,11 +29,7 @@ public:
     ~AlgorithmTab() override = default;
 
 public slots:
-    void showAlgorithmErrorDialog(const AlgorithmError& error, bool allowContinue);
-
-signals:
-    void errorDialogContinue();
-    void errorDialogCancelled();
+    void showAlgorithmErrorDialog(const AlgorithmError&);
 
 private:
     struct AlgorithmConfig {
