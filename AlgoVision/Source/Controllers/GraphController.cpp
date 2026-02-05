@@ -14,6 +14,12 @@ struct EdgeSnapshot {
     int      m_weight;
 };
 
+struct NodeSnapshot {
+    unsigned m_id;
+    double   m_x;
+    double   m_y;
+};
+
 class AddNodeCommand : public QUndoCommand {
 public:
     AddNodeCommand(GraphController* c, const QPointF& pos) : m_c(c), m_pos(pos) {
@@ -313,6 +319,66 @@ private:
     QPointF          m_newPos;
 };
 
+
+class ClearGraphCommand : public QUndoCommand {
+public:
+    ClearGraphCommand(GraphController* c) : m_c(c) {
+        setText("Clear graph");
+    }
+
+    void capture() {
+        if(m_c == nullptr) {
+            return;
+        }
+
+        auto g = m_c->graph();
+        if(g == nullptr) {
+            return;
+        }
+
+        for(const auto& [id, _] : g->getNodes()) {
+            if(NodeItem* ni = m_c->scene()->findNodeItemById(id)) {
+                QPointF p = ni->pos();
+                m_nodes.push_back({id, p.x(), p.y()});
+            }
+        }
+
+        for(const auto& [id, _] : g->getEdges()) {
+            if(Edge* e = g->getEdge(id)) {
+                m_edges.push_back(
+                    {e->getId(), e->startNode(), e->endNode(), e->getWeight()});
+            }
+        }
+    }
+
+    void redo() override {
+        if(m_c == nullptr) {
+            return;
+        }
+        m_c->clearNoHistory();
+    }
+
+    void undo() override {
+        if(m_c == nullptr) {
+            return;
+        }
+
+        for(const NodeSnapshot& n : m_nodes) {
+            m_c->addNodeWithIdNoHistory(n.m_id, QPointF(n.m_x, n.m_y));
+        }
+
+        for(const EdgeSnapshot& e : m_edges) {
+            m_c->restoreEdgeNoHistory(e.m_id, e.m_from, e.m_to, e.m_weight);
+        }
+    }
+
+private:
+    GraphController* m_c;
+
+    std::vector<NodeSnapshot> m_nodes;
+    std::vector<EdgeSnapshot> m_edges;
+};
+
 GraphController::GraphController(QObject* parent) : QObject(parent) {
     m_undoStack = new QUndoStack(this);
     connectScene();
@@ -364,11 +430,17 @@ void GraphController::createGraph(bool isDirected, bool isWeighted) {
 }
 
 void GraphController::clear() {
-    if(m_undoStack == nullptr) {
+    if(m_graph == nullptr || m_undoStack == nullptr) {
         return;
     }
-    m_undoStack->clear();
-    clearNoHistory();
+
+    if(m_graph->getNodes().empty()) {
+        return;
+    }
+
+    auto* cmd = new ClearGraphCommand(this);
+    cmd->capture();
+    m_undoStack->push(cmd);
 }
 
 void GraphController::clearScene() const {
