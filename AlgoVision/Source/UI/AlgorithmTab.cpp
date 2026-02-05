@@ -251,7 +251,7 @@ void AlgorithmTab::initLayout() {
     if(model != nullptr) {
         for(int i = 0; i < model->rowCount(); i++) {
             QStandardItem* item = model->item(i);
-            if(item && (item->flags() & Qt::ItemIsEnabled)) {
+            if(item != nullptr && (item->flags() & Qt::ItemIsEnabled)) {
                 firstValid = i;
                 break;
             }
@@ -347,7 +347,7 @@ QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) 
 }
 
 void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
-    QLayoutItem* child;
+    QLayoutItem* child = nullptr;
     while((child = m_legendLayout->takeAt(0)) != nullptr) {
         delete child->widget();
         delete child;

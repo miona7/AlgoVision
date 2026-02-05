@@ -9,12 +9,12 @@ void GraphScene::setState(GraphScene::State state) {
 }
 
 void GraphScene::resetScene() {
-    if(m_firstNodeSelect) {
+    if(m_firstNodeSelect != nullptr) {
         m_firstNodeSelect->setNodeSelected(false);
         m_firstNodeSelect = nullptr;
     }
 
-    if(m_editLabel) {
+    if(m_editLabel != nullptr) {
         m_editLabel->finishEditing(false);
         m_editLabel = nullptr;
     }
@@ -50,7 +50,7 @@ void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     const auto     clickPos = event->scenePos();
     QGraphicsItem* item     = itemAt(clickPos, QTransform());
 
-    if(!item && m_state == GraphScene::State::ADD) {
+    if(item == nullptr && m_state == GraphScene::State::ADD) {
         if(m_firstNodeSelect != nullptr) {
             emit addNodeAndEdgeRequest(clickPos, m_firstNodeSelect);
         } else {
@@ -187,11 +187,13 @@ EdgeItem* GraphScene::findEdgeItemById(unsigned edgeId) const {
     const QList<QGraphicsItem*> all = items();
     for(QGraphicsItem* it: all) {
         auto* edgeItem = dynamic_cast<EdgeItem*>(it);
-        if(!edgeItem || !edgeItem->modelEdge())
+        if(edgeItem == nullptr || edgeItem->modelEdge() == nullptr) {
             continue;
+        }
 
-        if(edgeItem->modelEdge()->getId() == edgeId)
+        if(edgeItem->modelEdge()->getId() == edgeId) {
             return edgeItem;
+        }
     }
     return nullptr;
 }
@@ -205,8 +207,9 @@ EdgeItem* GraphScene::findEdgeItemByNodes(unsigned from, unsigned to) const {
     const QList<QGraphicsItem*> all = items();
     for(QGraphicsItem* it: all) {
         auto* edgeItem = dynamic_cast<EdgeItem*>(it);
-        if(edgeItem == nullptr || !edgeItem->modelEdge())
+        if(edgeItem == nullptr || edgeItem->modelEdge() == nullptr) {
             continue;
+        }
 
         const unsigned a = edgeItem->modelEdge()->startNode();
         const unsigned b = edgeItem->modelEdge()->endNode();

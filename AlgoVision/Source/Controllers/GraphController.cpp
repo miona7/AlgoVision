@@ -317,7 +317,7 @@ private:
 
 class ClearGraphCommand : public QUndoCommand {
 public:
-    ClearGraphCommand(GraphController* c) : m_c(c) {
+    explicit ClearGraphCommand(GraphController* c) : m_c(c) {
         setText("Clear graph");
     }
 
@@ -607,7 +607,7 @@ void GraphController::editEdgeWeight(const EdgeItem* edgeItem, const QString& we
 
     const int     beforeW = e->getWeight();
     const QString beforeText =
-        edgeItem->weight() ? edgeItem->weight()->oldText() : QString::number(beforeW);
+        (edgeItem->weight() != nullptr) ? edgeItem->weight()->oldText() : QString::number(beforeW);
 
     const int     afterW    = newW;
     const QString afterText = weight;
