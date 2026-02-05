@@ -21,13 +21,13 @@ public:
     QString resultString() const override;
 
 private:
-    int                      m_arrivalTime = 0;   // vreme dolaska
-    std::map<unsigned, int>  m_incomingNumbering; // dolazna numeracija
-    std::map<unsigned, int>  m_lowLink;           // lowlink vrednost
-    std::stack<unsigned>     m_tourOrder;         // redosled u obilasku
+    int                      m_arrivalTime = 0;
+    std::map<unsigned, int>  m_incomingNumbering;
+    std::map<unsigned, int>  m_lowLink;
+    std::stack<unsigned>     m_tourOrder;         // traversal order
     std::map<unsigned, bool> m_onStack;
-    std::map<unsigned, int>  m_components;        // id cvora -> komponenta kojoj pripada
-    int                      m_numComponents = 0; // broj komponenti povezanosti
+    std::map<unsigned, int>  m_components;        // node id -> component
+    int                      m_numComponents = 0; // num of SCC
 
     void tarjan(unsigned);
     void init();
