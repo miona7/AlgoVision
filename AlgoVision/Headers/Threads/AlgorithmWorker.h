@@ -23,6 +23,18 @@
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 
+/**
+ * @class AlgorithmWorker
+ * @brief Executes graph algorithms in a separate thread and generates visualization steps.
+ *
+ * This class inherits from QThread to run the algorithm asynchronously.
+ * During execution, it emits signals to communicate:
+ *  - when the steps are ready for visualization,
+ *  - when the algorithm result is ready,
+ *  - if an error occurs during execution.
+ *
+ */
+
 class AlgorithmWorker : public QThread {
     Q_OBJECT
 public:

@@ -3,6 +3,14 @@
 
 #include <string>
 
+/**
+ * @enum AlgorithmErrorType
+ * @brief Represents different types of errors that can occur during algorithm execution.
+ *
+ * These errors are used to indicate problems like missing nodes, invalid graph type,
+ * or algorithm-specific failures such as negative cycles or unreachable paths.
+ */
+
 enum class AlgorithmErrorType {
     GraphNotInitialized,
     GraphTypeInvalid,
@@ -14,6 +22,13 @@ enum class AlgorithmErrorType {
     GraphHasCycle,
     GraphNotConnected
 };
+
+/**
+ * @struct AlgorithmError
+ * @brief Represents an error that occurred during algorithm execution.
+ *
+ * Contains the error type and an optional descriptive message.
+ */
 
 struct AlgorithmError {
     AlgorithmErrorType m_type;
