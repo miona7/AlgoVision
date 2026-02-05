@@ -3,7 +3,6 @@
 
 #include "Dijkstra.h"
 #include "UnweightedDirectedGraph.h"
-#include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
 #include "WeightedUndirectedGraph.h"
 
@@ -85,26 +84,7 @@ TEST_CASE("Dijkstra on Unweighted Directed Graph", "[DIJKSTRA]") {
 
     auto err = dijkstra.execute(1);
 
-    REQUIRE_SUCCESS(err);
-}
-
-TEST_CASE("Dijkstra on Unweighted Undirected Graph", "[DIJKSTRA]") {
-    auto uug = std::make_shared<UnweightedUndirectedGraph>();
-    for(unsigned i = 1; i <= 5; ++i) {
-        uug->addNode(i);
-    }
-
-    uug->addEdge(1, 2);
-    uug->addEdge(1, 3);
-    uug->addEdge(2, 4);
-    uug->addEdge(3, 4);
-    uug->addEdge(4, 5);
-
-    Dijkstra dijkstra(uug);
-
-    auto err = dijkstra.execute(1);
-
-    REQUIRE_SUCCESS(err);
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
 
 TEST_CASE("Dijkstra on Weighted Directed Graph", "[DIJKSTRA]") {
@@ -147,7 +127,7 @@ TEST_CASE("Dijkstra on Weighted Undirected Graph", "[DIJKSTRA]") {
 }
 
 TEST_CASE("Dijkstra with invalid start node", "[DIJKSTRA]") {
-    auto udg = std::make_shared<UnweightedDirectedGraph>();
+    auto udg = std::make_shared<WeightedDirectedGraph>();
     udg->addNode(1);
     udg->addNode(2);
 
@@ -173,42 +153,10 @@ TEST_CASE("Dijkstra on graph with negative edges", "[DIJKSTRA]") {
     auto err = dijkstra.execute(1);
 
     REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights,
-                  "Graph contains edge with negative weight.");
+                  "Dijkstra cannot be applied to graphs with negative edge weights.");
 }
 
 TEST_CASE("Dijkstra steps test on all graph types", "[DIJKSTRA]") {
-
-    SECTION("Unweighted Directed Graph") {
-        auto udg = std::make_shared<UnweightedDirectedGraph>();
-
-        for(unsigned i = 1; i <= 5; ++i) {
-            udg->addNode(i);
-        }
-
-        udg->addEdge(1, 2);
-        udg->addEdge(1, 3);
-        udg->addEdge(2, 4);
-        udg->addEdge(3, 4);
-        udg->addEdge(4, 5);
-
-        runDijkstraLoggingTest(udg, 1);
-    }
-
-    SECTION("Unweighted Unirected Graph") {
-        auto uug = std::make_shared<UnweightedUndirectedGraph>();
-
-        for(unsigned i = 1; i <= 5; ++i) {
-            uug->addNode(i);
-        }
-
-        uug->addEdge(1, 2);
-        uug->addEdge(1, 3);
-        uug->addEdge(2, 4);
-        uug->addEdge(3, 4);
-        uug->addEdge(4, 5);
-
-        runDijkstraLoggingTest(uug, 1);
-    }
 
     SECTION("Weighted Directed Graph") {
         auto wdg = std::make_shared<WeightedDirectedGraph>();

@@ -44,7 +44,7 @@ public:
     const Edge* getEdge(unsigned, unsigned) const;
 
     std::vector<Edge*> getEdgesMutable();
-    void addEdgeSerialized(unsigned, unsigned, unsigned, int);
+    void               addEdgeSerialized(unsigned, unsigned, unsigned, int);
 
     QVariant toVariant() const override;
     void     fromVariant(const QVariant&) override;

@@ -92,7 +92,7 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     QShortcut* zoomOutShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), this);
     connect(zoomOutShortcut, &QShortcut::activated, this, &GraphEditor::onZoomOutRequestTrigger);
 
-    //connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
+    // connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
 
     connect(m_editTab, &GraphEditTab::undoRequested, this, &GraphEditor::onUndoRequestTrigger);
 
@@ -126,7 +126,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
 
     connect(m_editTab, &GraphEditTab::zoomOutRequested, this,
             &GraphEditor::onZoomOutRequestTrigger);
-
 }
 
 void GraphEditor::onAddRequestTrigger() {

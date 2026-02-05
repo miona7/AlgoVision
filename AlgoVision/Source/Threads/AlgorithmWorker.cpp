@@ -7,7 +7,7 @@ AlgorithmWorker::AlgorithmWorker(const QString& algorithm, const std::shared_ptr
 
 void AlgorithmWorker::run() {
     std::vector<AlgorithmStep> steps;
-    QString result = "";
+    QString                    result = "";
 
     if(m_algorithm == "A* (Euclidean heuristic)") {
         AStar astar(m_graph);
@@ -18,7 +18,7 @@ void AlgorithmWorker::run() {
                     // kontroler
         }
 
-        steps = astar.getSteps();
+        steps  = astar.getSteps();
         result = astar.resultString();
     }
     if(m_algorithm == "BFS") {
@@ -29,7 +29,7 @@ void AlgorithmWorker::run() {
             return;
         }
 
-        steps = bfs.getSteps();
+        steps  = bfs.getSteps();
         result = bfs.resultString();
     }
     if(m_algorithm == "Bellman-Ford") {
@@ -40,7 +40,7 @@ void AlgorithmWorker::run() {
             return;
         }
 
-        steps = bf.getSteps();
+        steps  = bf.getSteps();
         result = bf.resultString();
     }
     if(m_algorithm == "DFS") {
@@ -51,7 +51,7 @@ void AlgorithmWorker::run() {
             return;
         }
 
-        steps = dfs.getSteps();
+        steps  = dfs.getSteps();
         result = dfs.resultString();
     }
     if(m_algorithm == "Dijkstra") {
@@ -62,7 +62,7 @@ void AlgorithmWorker::run() {
             return;
         }
 
-        steps = dijkstra.getSteps();
+        steps  = dijkstra.getSteps();
         result = dijkstra.resultString();
     }
     if(m_algorithm == "Prim") {
@@ -73,7 +73,7 @@ void AlgorithmWorker::run() {
             return;
         }
 
-        steps = prim.getSteps();
+        steps  = prim.getSteps();
         result = prim.resultString();
     }
     if(m_algorithm == "Floyd-Warshall") {
@@ -84,7 +84,7 @@ void AlgorithmWorker::run() {
             return;
         }
 
-        steps = fw.getSteps();
+        steps  = fw.getSteps();
         result = fw.resultString();
     }
     if(m_algorithm == "Tarjan") {
@@ -95,7 +95,7 @@ void AlgorithmWorker::run() {
             return;
         }
 
-        steps = tarjan.getSteps();
+        steps  = tarjan.getSteps();
         result = tarjan.resultString();
     }
     if(m_algorithm == "Kahn") {
@@ -106,7 +106,7 @@ void AlgorithmWorker::run() {
             return;
         }
 
-        steps = kahn.getSteps();
+        steps  = kahn.getSteps();
         result = kahn.resultString();
     }
 

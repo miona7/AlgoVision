@@ -61,8 +61,6 @@ private:
 
     std::unique_ptr<Serializer> m_serializer;
 
-    GraphEditor*                m_graphEditor = nullptr;
-
     void initMenuToolBar();
 };
 

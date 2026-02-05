@@ -29,7 +29,7 @@ public slots:
     void onAlgorithmError(const AlgorithmError& error);
 
 signals:
-    void requestErrorDialog(const AlgorithmError& error, bool allowContinue);
+    void requestErrorDialog(const AlgorithmError&);
 
 private:
     // kontroler ne poseduje applier, samo ga koristi
