@@ -47,22 +47,13 @@ std::optional<AlgorithmError> AStar::execute(unsigned start, unsigned goal) {
         return err;
     }
 
-    std::cout << "Path: ";
-    for(int i = 0; i < m_path.size(); i++) {
-        std::cout << m_path[i];
-        if(i != m_path.size() - 1) {
-            std::cout << " -> ";
-        }
-    }
-    std::cout << std::endl << "Total cost: " << m_totalCost << std::endl;
-
     return std::nullopt;
 }
 
 std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
     m_path.clear();
-    std::map<unsigned, int> gScore; // stvarni trosak puta od startnog do trenutnog cvora
-    std::map<unsigned, int> fScore; // procena ukupnog troska od startnog do ciljnog preko trenutnog
+    std::map<unsigned, int> gScore; // real cost of path from start to current node
+    std::map<unsigned, int> fScore; // estimated cost from start to goal via current node
     std::map<unsigned, unsigned> parent;
     std::map<unsigned, bool>     visited;
 
@@ -114,7 +105,7 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
         }
 
         if(current == goal) {
-            // rekonstruisemo put
+            // path reconstruction
             m_totalCost = gScore[current];
             while(current != start) {
                 m_path.push_back(current);
@@ -200,7 +191,7 @@ int AStar::heuristic(unsigned node, unsigned goal) const {
         return static_cast<int>(std::sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
 
-    return 0; // fallback heuristika
+    return 0; // fallback heuristic
 }
 
 const std::vector<unsigned>& AStar::getPath() const {
