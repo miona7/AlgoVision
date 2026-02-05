@@ -2,6 +2,7 @@
 #define ALGORITHM_CONTROLLER_H
 
 #include <QObject>
+
 #include <vector>
 
 #include "AlgorithmError.h"
@@ -26,7 +27,7 @@ public slots:
     bool isFinished() const;
     void setResultString(const QString&);
 
-    void onAlgorithmError(const AlgorithmError& error);
+    void onAlgorithmError(const AlgorithmError&);
 
 signals:
     void requestErrorDialog(const AlgorithmError&);

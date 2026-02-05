@@ -13,7 +13,6 @@ public:
     virtual ~Serializer() = default;
 
     virtual void save(const Serializable&, const QString&, bool, bool);
-
     virtual void load(Serializable&, const QVariant&);
 };
 

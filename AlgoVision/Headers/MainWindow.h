@@ -47,10 +47,10 @@ class MainWindow : public QMainWindow {
 public:
     struct TabInfo {
         GraphEditor* m_editor;
-        QString m_filePath;   // prazan ako je novi / untitled
+        QString m_filePath;
         bool m_isModified;
-        QString m_imagePath;  // fajl slike (ako se eksportuje)
-        bool m_isImageModified; // za sliku (zvezdica)
+        QString m_imagePath;
+        bool m_isImageModified;
     };
 
     explicit MainWindow(QWidget* = nullptr);

@@ -19,8 +19,9 @@ public:
     QString resultString() const override;
 
 private:
-    void    dijkstra(unsigned);
     QString m_resultString;
+
+    void dijkstra(unsigned);
 };
 
 #endif // DIJKSTRA_H

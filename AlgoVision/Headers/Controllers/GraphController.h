@@ -32,10 +32,9 @@ public:
 
     GraphScene* scene() const;
 
-    void updateNodePosition(NodeItem* nodeItem, const QPointF& point);
+    void updateNodePosition(NodeItem*, const QPointF&);
 
 signals:
-
     void sceneModified();
 
 public slots:

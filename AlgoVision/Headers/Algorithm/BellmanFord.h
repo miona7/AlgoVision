@@ -17,9 +17,8 @@ public:
     std::optional<AlgorithmError> checkConditions(unsigned) const;
     std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
+    bool    hasNegativeCycle() const;
     QString resultString() const override;
-
-    bool hasNegativeCycle() const;
 
 private:
     bool                    m_hasNegativeCycle = false;
