@@ -4,22 +4,28 @@
 #include <QString>
 #include <QTimer>
 #include <QWidget>
-
 #include <QScrollArea>
-#include <optional>
-
 #include <QColor>
 #include <QVBoxLayout>
+#include <QAbstractItemView>
+#include <QComboBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QStandardItem>
+#include <QStandardItemModel>
+#include <QStyle>
+#include <QToolButton>
+
+#include <optional>
 
 #include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
 #include "GraphController.h"
-
-class QComboBox;
-class QLabel;
-class QLineEdit;
-class QPushButton;
-class QToolButton;
 
 class AlgorithmTab : public QWidget {
     Q_OBJECT
