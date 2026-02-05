@@ -2,9 +2,13 @@
 #define GRAPHEDITTAB_H
 
 #include <QWidget>
-
-class QPushButton;
-class QSlider;
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSlider>
+#include <QVBoxLayout>
 
 class GraphEditTab : public QWidget {
     Q_OBJECT

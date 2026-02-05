@@ -1,19 +1,4 @@
-#include <QHBoxLayout>
-#include <QKeySequence>
-#include <QLabel>
-#include <QShortcut>
-#include <QSplitter>
-#include <QTabWidget>
-#include <QUndoCommand>
-#include <QUndoStack>
-
-#include <QSlider>
-#include <functional>
-
-#include "AlgorithmTab.h"
-#include "GraphEditTab.h"
 #include "GraphEditor.h"
-#include "GraphView.h"
 
 namespace {
     class LambdaCommand : public QUndoCommand {
@@ -63,7 +48,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // right side
     QTabWidget* rightTabs = new QTabWidget(splitter);
 
-    // rightTabs->addTab(new GraphEditTab(rightTabs), "graph edit");
     m_editTab = new GraphEditTab(rightTabs);
 
     rightTabs->addTab(m_editTab, "graph");
@@ -91,8 +75,6 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     // zoom out: Ctrl + '-'
     QShortcut* zoomOutShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), this);
     connect(zoomOutShortcut, &QShortcut::activated, this, &GraphEditor::onZoomOutRequestTrigger);
-
-    // connect(m_editTab, &GraphEditTab::undoRequested, m_undoStack, &QUndoStack::undo);
 
     connect(m_editTab, &GraphEditTab::undoRequested, this, &GraphEditor::onUndoRequestTrigger);
 

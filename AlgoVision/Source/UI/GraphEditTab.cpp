@@ -1,11 +1,3 @@
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QSlider>
-#include <QVBoxLayout>
-
 #include "GraphEditTab.h"
 
 GraphEditTab::GraphEditTab(QWidget* parent)
@@ -17,7 +9,6 @@ GraphEditTab::GraphEditTab(QWidget* parent)
       m_nodeSizeSlider(new QSlider(Qt::Horizontal, this)) {
     initLayout();
 
-    // emitujemo signale (GraphEditor se onda pita)
     connect(m_undoBtn, &QPushButton::clicked, this, &GraphEditTab::undoRequested);
     connect(m_redoBtn, &QPushButton::clicked, this, &GraphEditTab::redoRequested);
     connect(m_addBtn, &QPushButton::clicked, this, &GraphEditTab::addRequested);
@@ -27,7 +18,7 @@ GraphEditTab::GraphEditTab(QWidget* parent)
     connect(m_zoomInBtn, &QPushButton::clicked, this, &GraphEditTab::zoomInRequested);
     connect(m_zoomOutBtn, &QPushButton::clicked, this, &GraphEditTab::zoomOutRequested);
 
-    // default stanje
+    // default states
     m_undoBtn->setEnabled(false);
     m_redoBtn->setEnabled(false);
 }

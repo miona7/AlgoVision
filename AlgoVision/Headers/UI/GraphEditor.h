@@ -1,25 +1,31 @@
 #ifndef GRAPHEDITOR_H
 #define GRAPHEDITOR_H
 
-#include <QGraphicsView>
 #include <QWidget>
+#include <QHBoxLayout>
+#include <QKeySequence>
+#include <QLabel>
+#include <QShortcut>
+#include <QSplitter>
+#include <QTabWidget>
+#include <QUndoCommand>
+#include <QUndoStack>
+#include <QSlider>
+
 #include <memory>
+#include <functional>
 
 #include "Graph.h"
 #include "GraphController.h"
 #include "GraphScene.h"
-
-class GraphView;
-class QUndoStack;
-class GraphEditTab;
-class QLabel;
+#include "AlgorithmTab.h"
+#include "GraphEditTab.h"
+#include "GraphView.h"
 
 class GraphEditor : public QWidget {
     Q_OBJECT
 
 public:
-    // kontroler mora da se postavi i da postoji pre graf editora, kako bi klase vezane za
-    // algoritme koristile ispravan graf (koji nije nullptr)
     explicit GraphEditor(const std::shared_ptr<GraphController>&, QWidget* = nullptr);
     ~GraphEditor() override = default;
 
