@@ -32,9 +32,9 @@ void DirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*,
         return;
     }
 
-    QPainterPath edge = edgePath();
-    auto color = calculateColor();
-    QPen pen(color);
+    QPainterPath edge  = edgePath();
+    auto         color = calculateColor();
+    QPen         pen(color);
     pen.setWidthF(AppConstants::BaseEdgeWidth * AppConstants::NodeScale);
     painter->setPen(pen);
     painter->drawPath(edge);
@@ -76,4 +76,3 @@ QPainterPath DirectedEdgeItem::arrowPath(const QPainterPath& edgePath) const {
     arrowPath.closeSubpath();
     return arrowPath;
 }
-

@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <map>
-#include <queue>
 #include <optional>
+#include <queue>
 
 #include "Algorithm.h"
 

@@ -2,15 +2,15 @@
 #define GRAPH_CONTROLLER_H
 
 #include <QObject>
-#include <QUndoStack>
 #include <QUndoCommand>
+#include <QUndoStack>
 
 #include <memory>
 
-#include "Graph.h"
-#include "GraphScene.h"
 #include "EdgeItem.h"
 #include "EditableTextItem.h"
+#include "Graph.h"
+#include "GraphScene.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"

@@ -5,8 +5,8 @@
 #include <QPen>
 #include <cmath>
 
-#include "EdgeItem.h"
 #include "AppConstants.h"
+#include "EdgeItem.h"
 
 class DirectedEdgeItem : public EdgeItem {
 

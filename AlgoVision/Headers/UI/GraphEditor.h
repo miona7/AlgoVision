@@ -1,25 +1,25 @@
 #ifndef GRAPHEDITOR_H
 #define GRAPHEDITOR_H
 
-#include <QWidget>
 #include <QHBoxLayout>
 #include <QKeySequence>
 #include <QLabel>
 #include <QShortcut>
+#include <QSlider>
 #include <QSplitter>
 #include <QTabWidget>
 #include <QUndoCommand>
 #include <QUndoStack>
-#include <QSlider>
+#include <QWidget>
 
-#include <memory>
 #include <functional>
+#include <memory>
 
+#include "AlgorithmTab.h"
 #include "Graph.h"
 #include "GraphController.h"
-#include "GraphScene.h"
-#include "AlgorithmTab.h"
 #include "GraphEditTab.h"
+#include "GraphScene.h"
 #include "GraphView.h"
 
 class GraphEditor : public QWidget {

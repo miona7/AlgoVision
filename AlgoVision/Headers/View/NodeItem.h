@@ -2,16 +2,16 @@
 #define NODEITEM_H
 
 #include <QGraphicsObject>
-#include <QSet>
 #include <QGraphicsSceneEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QPen>
+#include <QSet>
 
 #include "AppConstants.h"
-#include "Node.h"
-#include "EditableTextItem.h"
 #include "EdgeItem.h"
+#include "EditableTextItem.h"
+#include "Node.h"
 
 class EdgeItem;
 

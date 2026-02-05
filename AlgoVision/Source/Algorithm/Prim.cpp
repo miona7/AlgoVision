@@ -42,8 +42,8 @@ std::optional<AlgorithmError> Prim::execute(unsigned, unsigned) {
 }
 
 void Prim::prim() {
-    std::map<unsigned, bool> inTree;
-    std::map<unsigned, int>  minDistance;
+    std::map<unsigned, bool>                    inTree;
+    std::map<unsigned, int>                     minDistance;
     std::map<unsigned, std::optional<unsigned>> parent; // from which node we came
 
     auto nodes = m_graph->getNodes();

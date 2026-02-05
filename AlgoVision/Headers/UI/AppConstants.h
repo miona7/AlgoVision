@@ -38,7 +38,7 @@ namespace AppConstants {
     constexpr int createGraphDialogMinWidth  = 400;
     constexpr int createGraphDialogMinHeight = 250;
 
-    constexpr int graphTypeDialogErrorMinWidth = 500;
+    constexpr int graphTypeDialogErrorMinWidth  = 500;
     constexpr int graphTypeDialogErrorMinHeight = 250;
 
     // legend

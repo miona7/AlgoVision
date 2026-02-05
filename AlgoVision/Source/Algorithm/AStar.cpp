@@ -52,8 +52,8 @@ std::optional<AlgorithmError> AStar::execute(unsigned start, unsigned goal) {
 
 std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
     m_path.clear();
-    std::map<unsigned, int> gScore; // real cost of path from start to current node
-    std::map<unsigned, int> fScore; // estimated cost from start to goal via current node
+    std::map<unsigned, int>      gScore; // real cost of path from start to current node
+    std::map<unsigned, int>      fScore; // estimated cost from start to goal via current node
     std::map<unsigned, unsigned> parent;
     std::map<unsigned, bool>     visited;
 

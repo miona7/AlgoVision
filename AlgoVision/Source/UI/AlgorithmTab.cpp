@@ -58,7 +58,8 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             "<li><b>Bellman–Ford</b><br>"
             "Negative edge weights allowed.<br>"
             "Must be: directed, weighted.<br>"
-            "Note: detects negative cycles; shortest paths valid only if none are reachable from the source.<br></li>"
+            "Note: detects negative cycles; shortest paths valid only if none are reachable from "
+            "the source.<br></li>"
 
             "<li><b>Floyd–Warshall</b><br>"
             "Negative edge weights allowed.<br>"
@@ -77,8 +78,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
             "<li><b>Tarjan</b><br>"
             "Must be: directed graph.<br></li>"
-            "</ul>"
-            );
+            "</ul>");
 
         msgBox.setTextFormat(Qt::RichText);
         msgBox.setStandardButtons(QMessageBox::Ok);
@@ -123,10 +123,8 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             const auto& nodes = graph->getNodes();
             if(!m_startNodeEdit->text().isEmpty()) {
                 if(nodes.find(newConfig.m_startNode) == nodes.end()) {
-                    AlgorithmError err{
-                        AlgorithmErrorType::StartNodeMissing,
-                        "The specified start node does not exist in the graph."
-                    };
+                    AlgorithmError err {AlgorithmErrorType::StartNodeMissing,
+                                        "The specified start node does not exist in the graph."};
                     showAlgorithmErrorDialog(err);
                     return;
                 }
@@ -134,10 +132,8 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
             if(!m_endNodeEdit->text().isEmpty()) {
                 if(nodes.find(newConfig.m_endNode) == nodes.end()) {
-                    AlgorithmError err{
-                        AlgorithmErrorType::GoalNodeMissing,
-                        "The specified end node does not exist in the graph."
-                    };
+                    AlgorithmError err {AlgorithmErrorType::GoalNodeMissing,
+                                        "The specified end node does not exist in the graph."};
                     showAlgorithmErrorDialog(err);
                     return;
                 }
@@ -520,17 +516,17 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
 
     switch(error.m_type) {
     case AlgorithmErrorType::GraphNotInitialized:
-        userHint =
-            "Please create a graph in the 'graph' tab before running an algorithm.";
+        userHint = "Please create a graph in the 'graph' tab before running an algorithm.";
         break;
 
     case AlgorithmErrorType::GraphTypeInvalid:
-        userHint =
-            "Please consult the 'graph type help' button to see which graph types are supported.\n\n"
-            "Then, choose one of the following:\n"
-            "1) Click the 'create graph' button in the upper left corner to create a suitable graph, "
-            "or clear the current graph from the scene in the 'graph' tab.\n"
-            "2) Choose a compatible algorithm and run it on the existing graph.";
+        userHint = "Please consult the 'graph type help' button to see which graph types are "
+                   "supported.\n\n"
+                   "Then, choose one of the following:\n"
+                   "1) Click the 'create graph' button in the upper left corner to create a "
+                   "suitable graph, "
+                   "or clear the current graph from the scene in the 'graph' tab.\n"
+                   "2) Choose a compatible algorithm and run it on the existing graph.";
         break;
 
     case AlgorithmErrorType::StartNodeMissing:
@@ -540,28 +536,23 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
         break;
 
     case AlgorithmErrorType::NegativeEdgeWeights:
-        userHint =
-            "Please remove negative weights from the graph.";
+        userHint = "Please remove negative weights from the graph.";
         break;
 
     case AlgorithmErrorType::NoPathFound:
-        userHint =
-            "Please choose different nodes or modify the graph.";
+        userHint = "Please choose different nodes or modify the graph.";
         break;
 
     case AlgorithmErrorType::GraphHasNegativeCycle:
-        userHint =
-            "Please remove the cycle before running this algorithm.";
+        userHint = "Please remove the cycle before running this algorithm.";
         break;
 
     case AlgorithmErrorType::GraphHasCycle:
-        userHint =
-            "Please modify the graph so it becomes acyclic.";
+        userHint = "Please modify the graph so it becomes acyclic.";
         break;
 
     case AlgorithmErrorType::GraphNotConnected:
-        userHint =
-            "Please ensure all nodes are reachable.";
+        userHint = "Please ensure all nodes are reachable.";
         break;
     }
 
@@ -573,7 +564,7 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
 
     // algorithm message
     QLabel* mainText = new QLabel(QString::fromStdString(error.m_message));
-    QFont f = mainText->font();
+    QFont   f        = mainText->font();
     f.setBold(true);
     mainText->setFont(f);
     mainText->setWordWrap(true);
@@ -593,7 +584,8 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
     layout->addWidget(okBtn, 0, Qt::AlignRight);
 
     dialog.resize(AppConstants::graphTypeDialogErrorMinWidth, dialog.sizeHint().height());
-    dialog.setMinimumSize(AppConstants::graphTypeDialogErrorMinWidth, AppConstants::graphTypeDialogErrorMinHeight);
+    dialog.setMinimumSize(AppConstants::graphTypeDialogErrorMinWidth,
+                          AppConstants::graphTypeDialogErrorMinHeight);
 
     dialog.exec();
 

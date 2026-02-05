@@ -193,10 +193,10 @@ void MainWindow::onCreateGraphTriggered() {
 
     TabInfo info;
     info.m_editor = editor;
-    info.m_filePath = "";  // no file
-    info.m_isModified = true; // graph is not saved
+    info.m_filePath = "";
+    info.m_isModified = true;
     info.m_imagePath = "";
-    info.m_isImageModified = true; // image not saved
+    info.m_isImageModified = true;
     m_tabs.insert(editor, info);
 
     int index = m_tabWidget->addTab(editor, "untitled*");

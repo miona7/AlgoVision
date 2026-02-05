@@ -6,14 +6,14 @@
 
 #include <map>
 
+#include "DirectedEdgeItem.h"
 #include "Edge.h"
 #include "EdgeItem.h"
+#include "EditableTextItem.h"
 #include "Node.h"
 #include "NodeItem.h"
-#include "UndirectedEdgeItem.h"
-#include "DirectedEdgeItem.h"
-#include "EditableTextItem.h"
 #include "ThemeManager.h"
+#include "UndirectedEdgeItem.h"
 
 class GraphScene : public QGraphicsScene {
     Q_OBJECT
@@ -24,8 +24,8 @@ public:
     /*
         ADD -> adding nodes and edges
         REMOVE -> removing nodes and edges
-        EDIT -> changing edge weights, and changing node name, which is supported and can be activated
-        IDLE -> all scene interactions are disabled
+        EDIT -> changing edge weights, and changing node name, which is supported and can be
+       activated IDLE -> all scene interactions are disabled
     */
     enum class State { ADD, REMOVE, EDIT, IDLE };
 

@@ -1,8 +1,8 @@
 #ifndef EDGEITEM_H
 #define EDGEITEM_H
 
-#include <QGraphicsObject>
 #include <QFont>
+#include <QGraphicsObject>
 #include <QGraphicsSceneEvent>
 
 #include "Edge.h"

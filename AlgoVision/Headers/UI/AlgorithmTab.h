@@ -1,13 +1,8 @@
 #ifndef ALGORITHMTAB_H
 #define ALGORITHMTAB_H
 
-#include <QString>
-#include <QTimer>
-#include <QWidget>
-#include <QScrollArea>
-#include <QColor>
-#include <QVBoxLayout>
 #include <QAbstractItemView>
+#include <QColor>
 #include <QComboBox>
 #include <QFrame>
 #include <QGroupBox>
@@ -16,10 +11,15 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QScrollArea>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QString>
 #include <QStyle>
+#include <QTimer>
 #include <QToolButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #include <optional>
 
