@@ -14,8 +14,7 @@ void AlgorithmWorker::run() {
 
         if(auto err = astar.execute(m_start, m_end)) {
             emit algorithmErrorOccurred(*err);
-            return; // nema stepsReady jer se javila greska - prekidamo run - dalje preuzima
-                    // kontroler
+            return;
         }
 
         steps  = astar.getSteps();

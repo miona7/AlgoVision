@@ -27,7 +27,7 @@ void Serializer::save(const Serializable& s, const QString& filePath, bool isWei
 void Serializer::load(Serializable& serializable, const QVariant& data) {
     QVariantMap root = data.toMap();
     if(root.isEmpty()) {
-        return; // prazno ili nevalidno
+        return;
     }
 
     serializable.fromVariant(root);
