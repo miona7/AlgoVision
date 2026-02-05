@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <map>
-#include <stdexcept>
+#include <optional>
 
 #include "Algorithm.h"
 

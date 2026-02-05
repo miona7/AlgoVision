@@ -6,7 +6,6 @@
 #include <memory>
 #include <optional>
 #include <stack>
-#include <stdexcept>
 #include <vector>
 
 #include "Algorithm.h"

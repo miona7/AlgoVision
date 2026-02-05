@@ -4,7 +4,7 @@
 #include <iostream>
 #include <map>
 #include <queue>
-#include <stdexcept>
+#include <optional>
 
 #include "Algorithm.h"
 
