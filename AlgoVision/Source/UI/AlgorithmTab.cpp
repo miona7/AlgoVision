@@ -358,7 +358,10 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
 
     m_legendLayout->addWidget(new QLabel("<b>Nodes</b>"));
     m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
-    m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
+
+    if(name != "Kahn") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
+    }
 
     if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" ||
        name == "Floyd-Warshall" || name == "Prim" || name == "Tarjan") {
@@ -388,6 +391,10 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
 
     if(name == "A* (Euclidean heuristic)") {
         m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
+    }
+
+    if(name == "Floyd-Warshall") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::red, "Used to update distance between nodes"));
     }
 
     if(name == "Prim") {
