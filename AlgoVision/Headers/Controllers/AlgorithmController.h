@@ -10,7 +10,7 @@
 #include "AlgorithmStepApplier.h"
 
 /**
- * @class AlgorithmExecutionController
+ * @class AlgorithmController
  * @brief Controller that connects algorithm execution with the UI.
  *
  * This class acts as a "bridge" between the algorithm and UI controls
