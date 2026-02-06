@@ -341,12 +341,42 @@ void MainWindow::initMenuToolBar() {
 }
 
 void MainWindow::onHelpTriggered() {
-    QString helpText = "Graph Editor Help:\n\n"
-                       "- Use the right toolbar to add new elements.\n"
-                       "- Double-click on a node to create a new node.\n"
-                       "- To create a new edge, click on the two nodes you want to connect.\n"
-                       "- You can save the graph or export it as an image using the top toolbar.\n"
-                       "- For any visual styling, switch themes using the theme button.";
+    QString helpText =
+        "<h3>General info</h3>"
+
+        "<p>"
+        "This app is designed with the intention of being used as a learning tool and an interactive "
+        "<b>visualizer</b> while studying graph algorithms."
+        "</p>"
+
+        "<ul>"
+
+        "<li>"
+        "Use buttons from the toolbar to change the theme colors of the app (purple, black, mint), "
+        "to create a brand new graph, and even import one of yours as a <b>.json</b> file, "
+        "to save your graph (as <b>.json</b>), or save an image of the scene with the colors of the current "
+        "state of nodes and branches.<br>"
+        "</li>"
+
+        "<li>"
+        "There are two tabs in the right menu — <b>Graph</b> and <b>Algorithm</b>."
+        "<br><br>"
+        "Use the <b>Graph tab</b> if you want to interact with the graph — enter add or delete mode "
+        "(for nodes and branches), change the node size, "
+        "or if you want to interact with the scene — undo, redo, zoom in/out, pan, or clear."
+        "<br><br>"
+        "Use the <b>Algorithm tab</b> if you want to select an algorithm, enter its attributes "
+        "(start and/or end node), interact with the run algorithm buttons, use the "
+        "<i>Graph type help</i>, or consult the color and results legend.<br>"
+        "</li>"
+
+        "<li>"
+        "You have the scene on the left — that's where all the action is!<br>"
+        "</li>"
+
+        "</ul>"
+
+        "<p>We hope this app helps &lt;3 </p>";
 
     QMessageBox::information(this, "Help", helpText);
 }

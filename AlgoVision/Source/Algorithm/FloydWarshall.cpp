@@ -60,7 +60,7 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
         {
             AlgorithmStep s;
             s.m_type = StepType::ProcessNode;
-            s.m_node = k; // trenutno posrednik
+            s.m_node = k;
             addStep(s);
         }
         for(const auto& [i, _]: nodes) {
