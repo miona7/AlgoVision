@@ -7,7 +7,6 @@
 
 #include "Edge.h"
 #include "EditableTextItem.h"
-#include "NodeItem.h"
 
 class NodeItem;
 

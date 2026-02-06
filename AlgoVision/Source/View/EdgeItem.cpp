@@ -1,4 +1,5 @@
 #include "EdgeItem.h"
+#include "NodeItem.h"
 
 EdgeItem::EdgeItem(Edge* modelEdge, NodeItem* sourceNode, NodeItem* destNode, bool hasWeight)
     : m_modelEdge(modelEdge), m_sourceNode(sourceNode), m_destNode(destNode),
