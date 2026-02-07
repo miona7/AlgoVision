@@ -145,9 +145,9 @@ cmake --build build
 ```
 ---
 
-## 🎥 Demo snimak
+## 🎥 Demo snimak:
 
-[!demo]()
+- [AlgoVision - Digital Journey of Graph Algorithms - Student Project for Software Development (MATF)](https://youtu.be/EIN5wq5n6UM)
 
 ---
 
