@@ -1,7 +1,7 @@
 # 🧠 AlgoVision
 
-AlgoVision je desktop aplikacija za **vizuelizaciju grafovskih algoritama**, namenjena učenju, demonstraciji i analizi rada algoritama nad grafovima.
-Aplikacija omogućava interaktivno praćenje izvršavanja algoritama korak po korak, uz jasan vizuelni prikaz promena stanja čvorova i grana.
+AlgoVision je desktop aplikacija za **vizualizaciju grafovskih algoritama**, namenjena učenju, demonstraciji i analizi rada algoritama nad grafovima.
+Aplikacija omogućava interaktivno praćenje izvršavanja algoritama korak po korak, uz jasan vizualni prikaz promena stanja čvorova i grana.
 Cilj projekta je da apstraktne koncepte iz teorije grafova učini **intuitivnijim i pristupačnijim** kroz animacije,
 kontrolu toka izvršavanja i prilagodljiv korisnički interfejs.
 
@@ -17,8 +17,8 @@ AlgoVision trenutno podržava sledeće grafovske algoritme:
 - 📏 Dijkstra
 - 🔁 Bellman–Ford
 - 🔄 Floyd–Warshall
-- 🌲 Prim 
 - 🧩 Kahn (Topološko sortiranje)
+- 🌲 Prim (Minimalno razapinjuće stablo)
 - ⛓️ Tarjan za jake komponente povezanosti
 
 ---
@@ -37,32 +37,35 @@ Ovakav način rada omogućava detaljno razumevanje svakog algoritma i lak povrat
 
 ---
 
-## 🎹 Prečice (Shortcuts)
+## 🎹 Prečice
 
 Da bi rad sa aplikacijom bio brži i efikasniji, podržane su sledeće prečice na tastaturi:
 
-| Akcija               | Shortcut       |
-|----------------------|----------------|
-| Kreiraj graf         | Ctrl + N       |
-| Otvori graf          | Ctrl + O       |
-| Sačuvaj graf         | Ctrl + S       |
-| Sačuvaj sliku grafa  | Ctrl + I       |
-| Promeni temu         | Ctrl + T       |
-| Pomoć                | Ctrl + H       |
-| Undo                 | Ctrl + Z       |
-| Redo                 | Ctrl + Y       |
+| Akcija           | Prečica        |
+|------------------|----------------|
+| Create graph     | Ctrl + N       |
+| Open graph       | Ctrl + O       |
+| Save graph       | Ctrl + S       |
+| Save image       | Ctrl + I       |
+| Change theme     | Ctrl + T       |
+| Help             | Ctrl + H       |
+| Undo             | Ctrl + Z       |
+| Redo             | Ctrl + Y       |
+| Pan              | Ctrl + P       |
+| Zoom in          | Ctrl + +       |
+| Zoom out         | Ctrl + -       |
 
 ---
 
-## 🎨 Vizuelne i interaktivne mogućnosti
+## 🎨 Vizualne i interaktivne mogućnosti
 
 Korisnik može da prilagodi izgled i ponašanje aplikacije:
 
 - ✏️ Interaktivno dodavanje i brisanje čvorova i grana
 - 🔘 Podešavanje veličine čvorova
-- 🎨 Vizuelno razlikovanje stanja čvorova i grana (posećen, aktivan, deo puta, relaksiran, itd.)
+- 🎨 Vizualno razlikovanje stanja čvorova i grana (posećen, aktivan, deo puta, relaksirana, itd.)
 - 🌗 Promena izgleda i teme aplikacije
-- 👁️ Jasna i pregledna vizuelna reprezentacija algoritamskih stanja
+- 👁️ Jasna i pregledna vizualna reprezentacija algoritamskih stanja
 
 ---
 
@@ -111,7 +114,7 @@ git clone git@gitlab.com:matf-bg-ac-rs/course-rs/projects-2025-2026/AlgoVision.g
 cd /putanja/do/projekta
 
 # 2️⃣ Kreiranje build direktorijuma
-cmake -B build -DCMAKE_BUILD_TYPE=Release 
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release 
 
 # 3️⃣ Kompajliranje
 cmake --build build
@@ -131,7 +134,7 @@ git clone git@gitlab.com:matf-bg-ac-rs/course-rs/projects-2025-2026/AlgoVision.g
 cd C:\putanja\do\projekta
 
 # 2️⃣ Kreiranje build direktorijuma
-cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
 # 3️⃣ Kompajliranje
 cmake --build build
@@ -142,13 +145,13 @@ cmake --build build
 ```
 ---
 
-## Demo snimak 🎥
+## 🎥 Demo snimak:
 
-[!demo]()
+- [AlgoVision - Digital Journey of Graph Algorithms - Student Project for Software Development (MATF)](https://youtu.be/EIN5wq5n6UM)
 
 ---
 
-# 👩‍💻 Autori:
+# 👩‍💻👨‍💻 Autori:
  - <a href="https://gitlab.com/miona7">Miona Sretenović 133/2022</a>
  - <a href="https://gitlab.com/ostojic.nina99">Nina Ostojić 46/2022</a>
  - <a href="https://gitlab.com/sofijajan.official">Sofija Janevska 35/2022</a>
