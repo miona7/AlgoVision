@@ -1,33 +1,40 @@
 #include "Kahn.h"
 
-Kahn::Kahn(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+Kahn::Kahn(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void Kahn::checkConditions() const {
-    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> Kahn::checkConditions() const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
-}
 
-void Kahn::execute(unsigned, unsigned) {
-    checkConditions();
-
-    std::cout << "Starting Kahn's topological sort." << std::endl;
-    kahn();
-    std::cout << "Kahn finished." << std::endl;
-
-    std::cout << "Topological order:" << std::endl;
-    for(unsigned node: m_sorted) {
-        std::cout << node << " ";
+    if(!m_graph->isDirected()) {
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
-    std::cout << std::endl;
+
+    return std::nullopt;
 }
 
-void Kahn::kahn() {
+std::optional<AlgorithmError> Kahn::execute(unsigned, unsigned) {
+    if(auto err = checkConditions()) {
+        return err;
+    }
+
+    clearSteps();
+
+    if(auto err = kahn()) {
+        return err;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<AlgorithmError> Kahn::kahn() {
     m_sorted.clear();
 
     auto                         nodes = m_graph->getNodes();
-    std::map<unsigned, unsigned> inDegree; // ulazni stepen svakog cvora
+    std::map<unsigned, unsigned> inDegree;
     for(const auto& [id, _]: nodes) {
         inDegree[id] = 0;
     }
@@ -49,7 +56,21 @@ void Kahn::kahn() {
     while(!q.empty()) {
         unsigned node = q.front();
         q.pop();
+
         m_sorted.push_back(node);
+
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::ProcessNode;
+            s.m_node = node;
+            addStep(s);
+        }
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::AddToTopologicalOrder;
+            s.m_node = node;
+            addStep(s);
+        }
 
         if(adjList.find(node) != adjList.end()) {
             for(const auto& [edge, neighbour]: adjList[node]) {
@@ -62,10 +83,25 @@ void Kahn::kahn() {
     }
 
     if(m_sorted.size() != nodes.size()) {
-        throw std::runtime_error("Graph contains a cycle, topological sort not possible!");
+        return AlgorithmError {AlgorithmErrorType::GraphHasCycle, "Graph contains a cycle."};
     }
+
+    return std::nullopt;
 }
 
 const std::vector<unsigned>& Kahn::getSorted() const {
     return m_sorted;
+}
+
+QString Kahn::resultString() const {
+    QString result = "Topological order:\n";
+
+    for(size_t i = 0; i < m_sorted.size(); ++i) {
+        result += QString::number(m_sorted[i]);
+        if(i + 1 < m_sorted.size()) {
+            result += " -> ";
+        }
+    }
+
+    return result;
 }

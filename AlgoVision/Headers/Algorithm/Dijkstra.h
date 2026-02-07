@@ -4,18 +4,23 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <optional>
 #include <queue>
 
 #include "Algorithm.h"
 
 class Dijkstra : public Algorithm {
 public:
-    explicit Dijkstra(const std::shared_ptr<Graph>&);
+    explicit Dijkstra(const std::shared_ptr<Graph>);
 
-    void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions(unsigned) const;
+    std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
+
+    QString resultString() const override;
 
 private:
+    QString m_resultString;
+
     void dijkstra(unsigned);
 };
 

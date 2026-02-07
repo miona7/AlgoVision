@@ -4,7 +4,8 @@ void UnweightedUndirectedGraph::addEdge(unsigned from, unsigned to, int w) {
     if(m_nodes.find(from) == m_nodes.end() || m_nodes.find(to) == m_nodes.end()) {
         return;
     }
-    unsigned edgeId = ++m_numOfEdges;
+    unsigned edgeId = m_edgeId++;
+    ++m_numOfEdges;
     m_edges.emplace(edgeId, Edge(edgeId, from, to, w));
     m_adjacencyList[from][edgeId] = to;
     m_adjacencyList[to][edgeId]   = from;
@@ -13,7 +14,7 @@ void UnweightedUndirectedGraph::addEdge(unsigned from, unsigned to, int w) {
 void UnweightedUndirectedGraph::removeEdge(unsigned edgeId) {
     auto it = m_edges.find(edgeId);
     if(it == m_edges.end()) {
-        return; // grana ne postoji
+        return;
     }
 
     unsigned from = it->second.startNode();

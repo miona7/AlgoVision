@@ -3,27 +3,30 @@
 
 #include <iostream>
 
-class Edge {
+#include "Observable.h"
+
+enum class EdgeState { Default, Examined, Relaxed, Selected };
+
+class Edge : public Observable<Edge> {
 public:
     Edge(unsigned, unsigned, unsigned, int = 1);
     ~Edge() = default;
 
-    unsigned getId() const;
-    int      getWeight() const;
-    unsigned startNode() const;
-    unsigned endNode() const;
+    unsigned  getId() const;
+    int       getWeight() const;
+    EdgeState getState() const;
+    unsigned  startNode() const;
+    unsigned  endNode() const;
 
     void setWeight(int);
-
-    friend std::ostream& operator<<(std::ostream&, const Edge&);
+    void setState(EdgeState);
 
 private:
-    int      m_weight;
-    unsigned m_id;
-    unsigned m_idStartNode;
-    unsigned m_idEndNode;
+    int       m_weight;
+    unsigned  m_id;
+    unsigned  m_idStartNode;
+    unsigned  m_idEndNode;
+    EdgeState m_state = EdgeState::Default;
 };
-
-std::ostream& operator<<(std::ostream&, const Edge&);
 
 #endif // EDGE_H

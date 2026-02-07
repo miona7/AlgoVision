@@ -1,37 +1,51 @@
 #include "Dijkstra.h"
 
-Dijkstra::Dijkstra(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+Dijkstra::Dijkstra(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void Dijkstra::checkConditions(unsigned start) const {
-    if(!m_graph || m_graph->getNodes().empty()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
+    }
+
+    if(!m_graph->isWeighted()) {
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        throw std::runtime_error("Start node does not exist in graph!");
+        return AlgorithmError {AlgorithmErrorType::StartNodeMissing,
+                               "Start node does not exist in the graph."};
     }
 
     auto edges = m_graph->getEdges();
     for(const auto& [_, edge]: edges) {
         if(edge.getWeight() < 0) {
-            throw std::runtime_error("Graph contains edge with negative weight!");
+            return AlgorithmError {
+                AlgorithmErrorType::NegativeEdgeWeights,
+                "Dijkstra cannot be applied to graphs with negative edge weights."};
         }
     }
+
+    return std::nullopt;
 }
 
-void Dijkstra::execute(unsigned idStartNode, unsigned) {
-    checkConditions(idStartNode);
+std::optional<AlgorithmError> Dijkstra::execute(unsigned idStartNode, unsigned) {
+    if(auto err = checkConditions(idStartNode)) {
+        return err;
+    }
 
-    std::cout << "Starting Dijkstra." << std::endl;
+    clearSteps();
+
     dijkstra(idStartNode);
-    std::cout << "Dijkstra finished." << std::endl;
+
+    return std::nullopt;
 }
 
 void Dijkstra::dijkstra(unsigned start) {
-    std::map<unsigned, bool> finished;    // da li smo nasli rastojanje do cvora
-    std::map<unsigned, int>  minDistance; // minimalna rastojanja za svaki cvor
+    std::map<unsigned, bool> finished;
+    std::map<unsigned, int>  minDistance;
 
     auto nodes = m_graph->getNodes();
     for(const auto& [nodeId, _]: nodes) {
@@ -39,12 +53,19 @@ void Dijkstra::dijkstra(unsigned start) {
         minDistance[nodeId] = std::numeric_limits<int>::max();
     }
 
-    // min-hip: pair<rastojanje, cvor>
+    // min-hip: pair<distance, node>
     std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
                         std::greater<>>
         pq;
     pq.emplace(0, start);
     minDistance[start] = 0;
+
+    {
+        AlgorithmStep s;
+        s.m_type = StepType::UpdateDistance;
+        s.m_node = start;
+        addStep(s);
+    }
 
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
@@ -56,12 +77,42 @@ void Dijkstra::dijkstra(unsigned start) {
         if(!finished[currentNode]) {
             finished[currentNode] = true;
 
+            {
+                AlgorithmStep s;
+                s.m_type = StepType::VisitNode;
+                s.m_node = currentNode;
+                addStep(s);
+            }
+            {
+                AlgorithmStep s;
+                s.m_type = StepType::ProcessNode;
+                s.m_node = currentNode;
+                addStep(s);
+            }
+
             for(const auto& [edgeId, neighbourId]: adjList[currentNode]) {
                 auto it = edges.find(edgeId);
                 if(it != edges.end()) {
                     int weight = it->second.getWeight();
+
+                    {
+                        AlgorithmStep s;
+                        s.m_type = StepType::ExamineEdge;
+                        s.m_from = currentNode;
+                        s.m_to   = neighbourId;
+                        addStep(s);
+                    }
+
                     if(currentDistance + weight < minDistance[neighbourId]) {
                         minDistance[neighbourId] = currentDistance + weight;
+
+                        {
+                            AlgorithmStep s;
+                            s.m_type = StepType::UpdateDistance;
+                            s.m_node = neighbourId;
+                            addStep(s);
+                        }
+
                         pq.emplace(minDistance[neighbourId], neighbourId);
                     }
                 }
@@ -69,13 +120,16 @@ void Dijkstra::dijkstra(unsigned start) {
         }
     }
 
-    std::cout << "Shortest distances from node " << start << ":" << std::endl;
+    m_resultString = "Shortest distances from node " + QString::number(start) + ":\n";
+
     for(const auto& [id, dist]: minDistance) {
-        std::cout << "Node " << id << ": ";
         if(dist == std::numeric_limits<int>::max()) {
-            std::cout << "unreachable" << std::endl;
+            m_resultString += QString("Node %1: unreachable\n").arg(id);
         } else {
-            std::cout << dist << std::endl;
+            m_resultString += QString("Node %1: %2\n").arg(id).arg(dist);
         }
     }
+}
+QString Dijkstra::resultString() const {
+    return m_resultString;
 }

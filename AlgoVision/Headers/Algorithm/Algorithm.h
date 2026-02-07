@@ -2,23 +2,31 @@
 #define ALGORITHM_H
 
 #include <memory>
+#include <optional>
+#include <vector>
 
-#include "Edge.h"
+#include "AlgorithmError.h"
+#include "AlgorithmStep.h"
 #include "Graph.h"
-#include "Node.h"
 
 class Algorithm {
 public:
-    explicit Algorithm(const std::shared_ptr<Graph>&);
+    explicit Algorithm(const std::shared_ptr<Graph>);
     virtual ~Algorithm() = default;
 
-    virtual void execute(unsigned = 0, unsigned = 0) = 0;
+    virtual std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) = 0;
 
-    // getStates
+    virtual QString resultString() const = 0;
+
+    const std::vector<AlgorithmStep>& getSteps() const;
 
 protected:
-    std::shared_ptr<Graph> m_graph;
-    // states
+    std::shared_ptr<Graph>     m_graph;
+    std::vector<AlgorithmStep> m_steps;
+    QString                    m_resultString;
+
+    void addStep(const AlgorithmStep&);
+    void clearSteps();
 };
 
-#endif
+#endif // ALGORITHM_H

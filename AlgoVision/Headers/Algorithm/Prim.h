@@ -4,6 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <optional>
 #include <queue>
 
 #include "Algorithm.h"
@@ -11,12 +12,16 @@
 
 class Prim : public Algorithm {
 public:
-    explicit Prim(const std::shared_ptr<Graph>&);
+    explicit Prim(const std::shared_ptr<Graph>);
 
-    void checkConditions() const;
-    void execute(unsigned = 0, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions() const;
+    std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) override;
+
+    QString resultString() const override;
 
 private:
+    int m_totalWeight = 0;
+
     void prim();
 };
 

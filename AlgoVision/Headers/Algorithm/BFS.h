@@ -3,22 +3,24 @@
 
 #include <iostream>
 #include <map>
+#include <optional>
 #include <queue>
-#include <stdexcept>
 
 #include "Algorithm.h"
 
 class BFS : public Algorithm {
 public:
-    explicit BFS(const std::shared_ptr<Graph>&);
+    explicit BFS(const std::shared_ptr<Graph>);
 
-    void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions(unsigned) const;
+    std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
     const std::map<unsigned, bool>& getVisited() const;
+    QString                         resultString() const override;
 
 private:
     std::map<unsigned, bool> m_visited;
+    std::vector<int>         m_order;
 
     void bfs(unsigned);
 };

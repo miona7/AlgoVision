@@ -3,34 +3,126 @@
 
 #include "FloydWarshall.h"
 #include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
 
-TEST_CASE("Floyd-Warshall: graph without negative cycle", "[FW]") {
-    auto graph = std::make_shared<WeightedDirectedGraph>();
-    for(unsigned i = 1; i <= 4; ++i) {
-        graph->addNode(i);
-    }
-
-    graph->addEdge(1, 2, 3);
-    graph->addEdge(2, 3, 2);
-    graph->addEdge(3, 4, 4);
-    graph->addEdge(1, 4, 10);
-
-    FloydWarshall fw(graph);
-
-    REQUIRE_NOTHROW(fw.execute());
+static void REQUIRE_SUCCESS(const std::optional<AlgorithmError>& err) {
+    REQUIRE_FALSE(err.has_value());
 }
 
-TEST_CASE("Floyd-Warshall: graph with negative cycle", "[FW]") {
-    auto graph = std::make_shared<WeightedDirectedGraph>();
-    for(unsigned i = 1; i <= 3; ++i) {
-        graph->addNode(i);
+static void REQUIRE_ERROR(const std::optional<AlgorithmError>& err, AlgorithmErrorType expectedType,
+                          const std::string& expectedMessage) {
+    REQUIRE(err.has_value());
+    REQUIRE(err->m_type == expectedType);
+    REQUIRE(err->m_message == expectedMessage);
+}
+
+static const char* stepTypeToString(StepType t) {
+    switch(t) {
+    case StepType::VisitNode:
+        return "VisitNode";
+    case StepType::ProcessNode:
+        return "ProcessNode";
+    case StepType::ExamineEdge:
+        return "ExamineEdge";
+    case StepType::SelectEdge:
+        return "SelectEdge";
+    case StepType::UpdateDistance:
+        return "UpdateDistance";
+    default:
+        return nullptr;
+    }
+}
+
+void runFloydWarshallLoggingTest(const std::shared_ptr<Graph>& g) {
+    FloydWarshall               fw(g);
+    const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
+                                                 StepType::ExamineEdge, StepType::SelectEdge,
+                                                 StepType::UpdateDistance};
+
+    auto err = fw.execute();
+
+    REQUIRE_SUCCESS(err);
+
+    const auto& steps = fw.getSteps();
+    std::cout << std::endl << "Total steps produced: " << steps.size() << std::endl;
+
+    REQUIRE_FALSE(steps.empty());
+
+    for(size_t i = 0; i < steps.size(); ++i) {
+        const auto& s = steps[i];
+        std::cout << "[" << i << "] " << stepTypeToString(s.m_type);
+
+        if(s.m_node) {
+            std::cout << " | node = " << *s.m_node;
+        }
+        if(s.m_from && s.m_to) {
+            std::cout << " | edge = " << *s.m_from << " -> " << *s.m_to;
+        }
+        std::cout << std::endl;
     }
 
-    graph->addEdge(1, 2, 1);
-    graph->addEdge(2, 3, -2);
-    graph->addEdge(3, 1, -2);
+    for(auto expected: expectedSteps) {
+        bool found = std::any_of(steps.begin(), steps.end(),
+                                 [&](const auto& s) { return s.m_type == expected; });
+        REQUIRE(found);
+    }
+}
 
-    FloydWarshall fw(graph);
+TEST_CASE("Floyd-Warshall works on directed weighted graph", "[FLOYD_WARSHALL]") {
+    auto g = std::make_shared<WeightedDirectedGraph>();
 
-    REQUIRE_THROWS_AS(fw.execute(), std::runtime_error);
+    for(unsigned i = 1; i <= 4; ++i) {
+        g->addNode(i);
+    }
+
+    g->addEdge(1, 2, 3);
+    g->addEdge(2, 3, 4);
+    g->addEdge(1, 3, 10);
+    g->addEdge(3, 4, 2);
+
+    runFloydWarshallLoggingTest(g);
+}
+
+TEST_CASE("Floyd-Warshall throws on undirected graph", "[FLOYD_WARSHALL]") {
+    auto g = std::make_shared<WeightedUndirectedGraph>();
+
+    g->addNode(1);
+    g->addNode(2);
+    g->addEdge(1, 2, 5);
+
+    FloydWarshall fw(g);
+
+    auto err = fw.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
+}
+
+TEST_CASE("Floyd-Warshall throws on empty graph", "[FLOYD_WARSHALL]") {
+    auto g = std::make_shared<WeightedDirectedGraph>();
+
+    FloydWarshall fw(g);
+
+    auto err = fw.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized,
+                  "Graph is not initialized or empty.");
+}
+
+TEST_CASE("Floyd-Warshall detects negative cycle", "[FLOYD_WARSHALL]") {
+    auto g = std::make_shared<WeightedDirectedGraph>();
+
+    g->addNode(1);
+    g->addNode(2);
+    g->addNode(3);
+
+    g->addEdge(1, 2, 1);
+    g->addEdge(2, 3, -2);
+    g->addEdge(3, 1, -2);
+
+    FloydWarshall fw(g);
+
+    auto err = fw.execute();
+
+    REQUIRE_ERROR(err, AlgorithmErrorType::GraphHasNegativeCycle,
+                  "Graph contains a negative cycle.");
 }

@@ -1,6 +1,6 @@
 #include "ThemeManager.h"
 
-ThemeManager::ThemeManager() : m_settings("MyCompany", "MyApp") {
+ThemeManager::ThemeManager() : m_settings("MyProject", "AlgoVision") {
     loadTheme();
 }
 
@@ -62,6 +62,5 @@ void ThemeManager::saveTheme() {
         t = "purple";
         break;
     }
-
     m_settings.setValue("theme", t);
 }

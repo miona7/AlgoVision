@@ -1,11 +1,39 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QCloseEvent>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFile>
+#include <QFileDialog>
+#include <QGroupBox>
+#include <QHash>
+#include <QJsonDocument>
 #include <QMainWindow>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QString>
+#include <QTabWidget>
+#include <QVBoxLayout>
+#include <QVariantMap>
+
+#include <iostream>
+#include <memory>
 
 #include "AppConstants.h"
+#include "Graph.h"
+#include "GraphController.h"
+#include "GraphEditor.h"
+#include "LoadFileWorker.h"
 #include "MenuToolBar.h"
+#include "SaveFileWorker.h"
+#include "Serializer.h"
 #include "ThemeManager.h"
+#include "UnweightedDirectedGraph.h"
+#include "UnweightedUndirectedGraph.h"
+#include "WeightedDirectedGraph.h"
+#include "WeightedUndirectedGraph.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,21 +45,44 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
+    struct TabInfo {
+        GraphEditor* m_editor;
+        QString      m_filePath;
+        bool         m_isModified;
+        QString      m_imagePath;
+        bool         m_isImageModified;
+    };
+
+    explicit MainWindow(QWidget* = nullptr);
     ~MainWindow() override;
 
-private:
-    Ui::MainWindow* m_ui;
-    MenuToolBar*    m_menuToolBar = nullptr;
-    ThemeManager*   m_themeManager;
+    void showStartPage();
 
-    void initMenuToolBar();
-
-    // slotovi
+private slots:
     void onOpenGraphTriggered();
     void onCreateGraphTriggered();
     void onSaveGraphTriggered();
     void onSaveImageTriggered();
     void onChangeThemeTriggered();
+    void onHelpTriggered();
+
+    void onGraphLoadedNewTab(const QVariant&, bool, bool, const QString&);
+    void onGraphLoadFailed(const QString&);
+    void connectGraphModifiedSignal(GraphEditor*);
+
+protected:
+    void closeEvent(QCloseEvent*) override;
+
+private:
+    Ui::MainWindow*              m_ui;
+    MenuToolBar*                 m_menuToolBar = nullptr;
+    ThemeManager*                m_themeManager;
+    QTabWidget*                  m_tabWidget = nullptr;
+    QHash<GraphEditor*, TabInfo> m_tabs;
+
+    std::unique_ptr<Serializer> m_serializer;
+
+    void initMenuToolBar();
 };
+
 #endif // MAINWINDOW_H

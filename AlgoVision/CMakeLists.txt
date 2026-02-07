@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(AlgoVision VERSION 0.1 LANGUAGES CXX)
 
+option(BUILD_TESTS_ONLY "Build only the test targets, skip main application" OFF) # dodato
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -29,11 +31,15 @@ set(PROJECT_SOURCES
         Headers/Graph/Graph.h Source/Graph/Graph.cpp
         Headers/Graph/Node.h Source/Graph/Node.cpp
         Headers/Graph/Edge.h Source/Graph/Edge.cpp
+        Headers/Graph/Observable.h
         Headers/Graph/UnweightedUndirectedGraph.h Source/Graph/UnweightedUndirectedGraph.cpp
         Headers/Graph/UnweightedDirectedGraph.h Source/Graph/UnweightedDirectedGraph.cpp
         Headers/Graph/WeightedUndirectedGraph.h Source/Graph/WeightedUndirectedGraph.cpp
         Headers/Graph/WeightedDirectedGraph.h Source/Graph/WeightedDirectedGraph.cpp
 
+        Headers/Algorithm/AlgorithmStep.h
+        Headers/Algorithm/AlgorithmError.h
+        Headers/Algorithm/AlgorithmStepApplier.h Source/Algorithm/AlgorithmStepApplier.cpp
         Headers/Algorithm/Algorithm.h Source/Algorithm/Algorithm.cpp
         Headers/Algorithm/AStar.h Source/Algorithm/AStar.cpp
         Headers/Algorithm/DFS.h Source/Algorithm/DFS.cpp
@@ -45,9 +51,30 @@ set(PROJECT_SOURCES
         Headers/Algorithm/BellmanFord.h Source/Algorithm/BellmanFord.cpp
         Headers/Algorithm/FloydWarshall.h Source/Algorithm/FloydWarshall.cpp
 
+        Headers/Serialization/Serializable.h
+        Headers/Serialization/Serializer.h Source/Serialization/Serializer.cpp
+
         Headers/UI/AppConstants.h
         Headers/UI/MenuToolBar.h Source/UI/MenuToolBar.cpp
         Headers/UI/ThemeManager.h Source/UI/ThemeManager.cpp
+        Headers/UI/GraphEditor.h Source/UI/GraphEditor.cpp
+        Headers/UI/GraphEditTab.h Source/UI/GraphEditTab.cpp
+        Headers/UI/AlgorithmTab.h Source/UI/AlgorithmTab.cpp
+
+        Headers/View/NodeItem.h Source/View/NodeItem.cpp
+        Headers/View/EdgeItem.h Source/View/EdgeItem.cpp
+        Headers/View/UndirectedEdgeItem.h Source/View/UndirectedEdgeItem.cpp
+        Headers/View/DirectedEdgeItem.h Source/View/DirectedEdgeItem.cpp
+        Headers/View/GraphScene.h Source/View/GraphScene.cpp
+        Headers/View/EditableTextItem.h Source/View/EditableTextItem.cpp
+        Headers/View/GraphView.h Source/View/GraphView.cpp
+
+        Headers/Controllers/GraphController.h Source/Controllers/GraphController.cpp
+        Headers/Controllers/AlgorithmController.h Source/Controllers/AlgorithmController.cpp
+
+        Headers/Threads/AlgorithmWorker.h Source/Threads/AlgorithmWorker.cpp
+        Headers/Threads/SaveFileWorker.h Source/Threads/SaveFileWorker.cpp
+        Headers/Threads/LoadFileWorker.h Source/Threads/LoadFileWorker.cpp
 )
 
 qt_add_resources(RESOURCES
@@ -56,69 +83,76 @@ qt_add_resources(RESOURCES
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(AlgoVision
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        ${RESOURCES}
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET AlgoVision APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(AlgoVision SHARED
+if(NOT BUILD_TESTS_ONLY) # dodato
+    if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+        qt_add_executable(AlgoVision
+            MANUAL_FINALIZATION
             ${PROJECT_SOURCES}
             ${RESOURCES}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    # Define target properties for Android with Qt 6 as:
+    #    set_property(TARGET AlgoVision APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+    #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+    # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
     else()
-        add_executable(AlgoVision
-            ${PROJECT_SOURCES}
-            ${RESOURCES}
-        )
+        if(ANDROID)
+            add_library(AlgoVision SHARED
+                ${PROJECT_SOURCES}
+                ${RESOURCES}
+            )
+    # Define properties for Android with Qt 5 after find_package() calls as:
+    #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+        else()
+            add_executable(AlgoVision
+                ${PROJECT_SOURCES}
+                ${RESOURCES}
+            )
+        endif()
     endif()
-endif()
 
-set_target_properties(AlgoVision PROPERTIES
-    AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/Forms"
-)
+    set_target_properties(AlgoVision PROPERTIES
+        AUTOUIC_SEARCH_PATHS "${CMAKE_CURRENT_SOURCE_DIR}/Forms"
+    )
 
-target_link_libraries(AlgoVision PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+    target_link_libraries(AlgoVision PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-target_include_directories(AlgoVision PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Algorithm
-    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
-    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/UI
-)
+    target_include_directories(AlgoVision PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/Headers
+        ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Algorithm
+        ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
+        ${CMAKE_CURRENT_SOURCE_DIR}/Headers/UI
+        ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Serialization
+        ${CMAKE_CURRENT_SOURCE_DIR}/Headers/View
+        ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Threads
+        ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Controllers
+    )
 
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.AlgoVision)
-endif()
-set_target_properties(AlgoVision PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
-)
+    # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+    # If you are developing for iOS or macOS you should consider setting an
+    # explicit, fixed bundle identifier manually though.
+    if(${QT_VERSION} VERSION_LESS 6.1.0)
+    set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.AlgoVision)
+    endif()
+    set_target_properties(AlgoVision PROPERTIES
+        ${BUNDLE_ID_OPTION}
+        MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+        MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        MACOSX_BUNDLE TRUE
+        WIN32_EXECUTABLE TRUE
+    )
 
-include(GNUInstallDirs)
-install(TARGETS AlgoVision
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+    include(GNUInstallDirs)
+    install(TARGETS AlgoVision
+        BUNDLE DESTINATION .
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(AlgoVision)
-endif()
+    if(QT_VERSION_MAJOR EQUAL 6)
+        qt_finalize_executable(AlgoVision)
+    endif()
+
+endif() # dodato
 
 add_executable(AlgoVisionTests
     Source/Graph/Graph.cpp
@@ -129,6 +163,7 @@ add_executable(AlgoVisionTests
     Source/Graph/WeightedUndirectedGraph.cpp
     Source/Graph/WeightedDirectedGraph.cpp
 
+    Source/Algorithm/AlgorithmStepApplier.cpp
     Source/Algorithm/Algorithm.cpp
     Source/Algorithm/AStar.cpp
     Source/Algorithm/DFS.cpp
@@ -140,6 +175,12 @@ add_executable(AlgoVisionTests
     Source/Algorithm/BellmanFord.cpp
     Source/Algorithm/FloydWarshall.cpp
 
+
+    Tests/Graph/graphTest.cpp
+    Tests/Graph/nodeTest.cpp
+    Tests/Graph/edgeTest.cpp
+
+    Tests/Algorithm/applierTest.cpp
     Tests/Algorithm/astarTest.cpp
     Tests/Algorithm/dfsTest.cpp
     Tests/Algorithm/bfsTest.cpp
@@ -151,8 +192,8 @@ add_executable(AlgoVisionTests
     Tests/Algorithm/floydWarshallTest.cpp
 )
 
-target_link_libraries(AlgoVisionTests
-    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+target_link_libraries(AlgoVisionTests PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
     Catch2::Catch2WithMain
 )
 
@@ -160,4 +201,5 @@ target_include_directories(AlgoVisionTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Algorithm
     ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Graph
+    ${CMAKE_CURRENT_SOURCE_DIR}/Headers/Serialization
 )

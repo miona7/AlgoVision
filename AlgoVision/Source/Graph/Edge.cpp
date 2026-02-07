@@ -12,6 +12,10 @@ int Edge::getWeight() const {
     return m_weight;
 }
 
+EdgeState Edge::getState() const {
+    return m_state;
+}
+
 unsigned Edge::startNode() const {
     return m_idStartNode;
 }
@@ -24,7 +28,10 @@ void Edge::setWeight(int w) {
     m_weight = w;
 }
 
-std::ostream& operator<<(std::ostream& s, const Edge& e) {
-    return s << "Edge {id = " << e.m_id << ", from node " << e.m_idStartNode << " to node "
-             << e.m_idEndNode << ", with weight = " << e.m_weight << "}" << std::endl;
+void Edge::setState(EdgeState state) {
+    if(m_state == state) {
+        return;
+    }
+    m_state = state;
+    notifyObservers(*this);
 }

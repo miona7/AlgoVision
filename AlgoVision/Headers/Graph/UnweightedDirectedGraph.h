@@ -10,6 +10,7 @@ public:
 
     void addEdge(unsigned, unsigned, int = 1) override;
     void removeEdge(unsigned) override;
+
     bool isDirected() const override;
     bool isWeighted() const override;
 };

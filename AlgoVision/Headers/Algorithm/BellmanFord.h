@@ -5,23 +5,25 @@
 #include <limits>
 #include <map>
 #include <memory>
-#include <stdexcept>
+#include <optional>
 #include <vector>
 
 #include "Algorithm.h"
 
 class BellmanFord : public Algorithm {
 public:
-    explicit BellmanFord(const std::shared_ptr<Graph>&);
+    explicit BellmanFord(const std::shared_ptr<Graph>);
 
-    void checkConditions(unsigned) const;
-    void execute(unsigned, unsigned = 0) override;
+    std::optional<AlgorithmError> checkConditions(unsigned) const;
+    std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
 
-    bool hasNegativeCycle() const;
+    bool    hasNegativeCycle() const;
+    QString resultString() const override;
 
 private:
     bool                    m_hasNegativeCycle = false;
     std::map<unsigned, int> m_minDistance;
+    QString                 m_resultString;
 
     void bellmanFord(unsigned);
 };

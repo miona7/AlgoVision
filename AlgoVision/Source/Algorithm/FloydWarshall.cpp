@@ -1,37 +1,40 @@
 #include "FloydWarshall.h"
 
-FloydWarshall::FloydWarshall(const std::shared_ptr<Graph>& g) : Algorithm(g) {
+FloydWarshall::FloydWarshall(const std::shared_ptr<Graph> g) : Algorithm(g) {
 }
 
-void FloydWarshall::checkConditions() const {
-    if(!m_graph || m_graph->getNodes().empty() || !m_graph->isDirected()) {
-        throw std::runtime_error("Graph is not initialized or invalid!");
+std::optional<AlgorithmError> FloydWarshall::checkConditions() const {
+    if(m_graph == nullptr || m_graph->getNodes().empty()) {
+        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
+                               "Graph is not initialized or empty."};
     }
-}
 
-void FloydWarshall::execute(unsigned, unsigned) {
-    checkConditions();
-
-    std::cout << "Starting Floyd Warshall." << std::endl;
-    floydWarshall();
-    std::cout << "Floyd Warshall finished." << std::endl;
-
-    std::cout << "All-pairs shortest distances:" << std::endl;
-    for(const auto& [u, row]: m_distances) {
-        for(const auto& [v, dist]: row) {
-            std::cout << "From " << u << " to " << v << ": ";
-            if(dist == std::numeric_limits<int>::max()) {
-                std::cout << "unreachable" << std::endl;
-            } else {
-                std::cout << dist << std::endl;
-            }
-        }
+    if(!m_graph->isDirected() || !m_graph->isWeighted()) {
+        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
+
+    return std::nullopt;
 }
 
-void FloydWarshall::floydWarshall() {
+std::optional<AlgorithmError> FloydWarshall::execute(unsigned, unsigned) {
+    if(auto err = checkConditions()) {
+        return err;
+    }
+
+    clearSteps();
+
+    if(auto err = floydWarshall()) {
+        return err;
+    }
+
+    return std::nullopt;
+}
+
+std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
     auto nodes = m_graph->getNodes();
     auto edges = m_graph->getEdges();
+
+    m_distances.clear();
 
     for(const auto& [u, _]: nodes) {
         for(const auto& [v, _]: nodes) {
@@ -48,12 +51,70 @@ void FloydWarshall::floydWarshall() {
     }
 
     for(const auto& [k, _]: nodes) {
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::VisitNode;
+            s.m_node = k;
+            addStep(s);
+        }
+        {
+            AlgorithmStep s;
+            s.m_type = StepType::ProcessNode;
+            s.m_node = k;
+            addStep(s);
+        }
         for(const auto& [i, _]: nodes) {
             if(m_distances[i][k] != std::numeric_limits<int>::max()) {
+                auto* edge = m_graph->getEdge(i, k);
+                if(edge != nullptr) {
+                    AlgorithmStep s;
+                    s.m_type = StepType::ExamineEdge;
+                    s.m_from = i;
+                    s.m_to   = k;
+                    addStep(s);
+                }
                 for(const auto& [j, _]: nodes) {
                     if(m_distances[k][j] != std::numeric_limits<int>::max()) {
-                        m_distances[i][j] =
-                            std::min(m_distances[i][j], m_distances[i][k] + m_distances[k][j]);
+                        auto* edge = m_graph->getEdge(k, j);
+                        if(edge != nullptr) {
+                            AlgorithmStep s;
+                            s.m_type = StepType::ExamineEdge;
+                            s.m_from = k;
+                            s.m_to   = j;
+                            addStep(s);
+                        }
+                        int throughK = m_distances[i][k] + m_distances[k][j];
+                        if(throughK < m_distances[i][j]) {
+                            m_distances[i][j] = throughK;
+                            {
+                                AlgorithmStep s;
+                                s.m_type = StepType::UpdateDistance;
+                                s.m_node = i;
+                                addStep(s);
+                            }
+                            auto* edge = m_graph->getEdge(i, k);
+                            if(edge != nullptr) {
+                                AlgorithmStep s;
+                                s.m_type = StepType::SelectEdge;
+                                s.m_from = i;
+                                s.m_to   = k;
+                                addStep(s);
+                            }
+                            edge = m_graph->getEdge(k, j);
+                            if(edge != nullptr) {
+                                AlgorithmStep s;
+                                s.m_type = StepType::SelectEdge;
+                                s.m_from = k;
+                                s.m_to   = j;
+                                addStep(s);
+                            }
+                            {
+                                AlgorithmStep s;
+                                s.m_type = StepType::UpdateDistance;
+                                s.m_node = j;
+                                addStep(s);
+                            }
+                        }
                     }
                 }
             }
@@ -62,7 +123,25 @@ void FloydWarshall::floydWarshall() {
 
     for(const auto& [i, _]: nodes) {
         if(m_distances[i][i] < 0) {
-            throw std::runtime_error("Graph contains a negative cycle!");
+            return AlgorithmError {AlgorithmErrorType::GraphHasNegativeCycle,
+                                   "Graph contains a negative cycle."};
         }
     }
+
+    return std::nullopt;
+}
+
+QString FloydWarshall::resultString() const {
+    QString res = "All-pairs shortest distances:\n";
+
+    for(const auto& [i, row]: m_distances) {
+        for(const auto& [j, dist]: row) {
+            if(dist == std::numeric_limits<int>::max()) {
+                res += QString("(%1 -> %2): unreachable\n").arg(i).arg(j);
+            } else {
+                res += QString("(%1 -> %2): %3\n").arg(i).arg(j).arg(dist);
+            }
+        }
+    }
+    return res;
 }

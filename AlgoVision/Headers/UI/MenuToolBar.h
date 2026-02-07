@@ -11,7 +11,7 @@ class MenuToolBar : public QToolBar {
     Q_OBJECT
 
 public:
-    explicit MenuToolBar(QWidget* parent = nullptr);
+    explicit MenuToolBar(QWidget* = nullptr);
     ~MenuToolBar() override = default;
 
     QAction* createGraphAction() const;
