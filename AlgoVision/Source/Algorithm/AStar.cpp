@@ -67,13 +67,9 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
     gScore[start] = 0;
     fScore[start] = heuristic(start, goal);
 
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::UpdateDistance;
-        s.m_node = start;
-        addStep(s);
-    }
+    addStep(AlgorithmStep {StepType::UpdateDistance, start});
 
+    // min-heap -> pair<fscore, node>
     std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
                         std::greater<>>
         pq;
@@ -91,53 +87,29 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
 
         visited[current] = true;
 
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::VisitNode;
-            s.m_node = current;
-            addStep(s);
-        }
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::ProcessNode;
-            s.m_node = current;
-            addStep(s);
-        }
+        addStep(AlgorithmStep {StepType::VisitNode, current});
+        addStep(AlgorithmStep {StepType::ProcessNode, current});
 
         if(current == goal) {
-            // path reconstruction
             m_totalCost = gScore[current];
+
+            // path reconstruction
             while(current != start) {
                 m_path.push_back(current);
 
-                {
-                    AlgorithmStep s;
-                    s.m_type = StepType::AddToPath;
-                    s.m_node = current;
-                    addStep(s);
-                }
-
-                {
-                    AlgorithmStep s;
-                    s.m_type = StepType::SelectEdge;
-                    s.m_from = parent[current];
-                    s.m_to   = current;
-                    addStep(s);
-                }
+                addStep(AlgorithmStep {StepType::AddToPath, current});
+                addStep(
+                    AlgorithmStep {StepType::SelectEdge, std::nullopt, parent[current], current});
 
                 current = parent[current];
             }
 
             m_path.push_back(start);
 
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::AddToPath;
-                s.m_node = start;
-                addStep(s);
-            }
+            addStep(AlgorithmStep {StepType::AddToPath, start});
 
             std::reverse(m_path.begin(), m_path.end());
+
             return std::nullopt;
         }
 
@@ -145,14 +117,8 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
             for(const auto& [edgeId, neighbour]: adjList[current]) {
                 auto it = edges.find(edgeId);
                 if(it != edges.end()) {
-
-                    {
-                        AlgorithmStep s;
-                        s.m_type = StepType::ExamineEdge;
-                        s.m_from = current;
-                        s.m_to   = neighbour;
-                        addStep(s);
-                    }
+                    addStep(
+                        AlgorithmStep {StepType::ExamineEdge, std::nullopt, current, neighbour});
 
                     int tentativeG = gScore[current] + it->second.getWeight();
 
@@ -161,12 +127,7 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
                         gScore[neighbour] = tentativeG;
                         fScore[neighbour] = tentativeG + heuristic(neighbour, goal);
 
-                        {
-                            AlgorithmStep s;
-                            s.m_type = StepType::UpdateDistance;
-                            s.m_node = neighbour;
-                            addStep(s);
-                        }
+                        addStep(AlgorithmStep {StepType::UpdateDistance, neighbour});
 
                         pq.emplace(fScore[neighbour], neighbour);
                     }
