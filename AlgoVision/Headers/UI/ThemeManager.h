@@ -17,7 +17,7 @@ public:
     void setTheme(Theme);
 
 private:
-    Theme     m_currentTheme {Theme::DARK};
+    Theme     m_currentTheme{Theme::DARK};
     QSettings m_settings;
 
     void loadTheme();

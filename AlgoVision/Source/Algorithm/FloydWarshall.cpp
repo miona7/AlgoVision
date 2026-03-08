@@ -5,12 +5,12 @@ FloydWarshall::FloydWarshall(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> FloydWarshall::checkConditions() const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
-                               "Graph is not initialized or empty."};
+        return AlgorithmError{AlgorithmErrorType::GraphNotInitialized,
+                              "Graph is not initialized or empty."};
     }
 
     if(!m_graph->isDirected() || !m_graph->isWeighted()) {
-        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
+        return AlgorithmError{AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     return std::nullopt;
@@ -123,8 +123,8 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
 
     for(const auto& [i, _]: nodes) {
         if(m_distances[i][i] < 0) {
-            return AlgorithmError {AlgorithmErrorType::GraphHasNegativeCycle,
-                                   "Graph contains a negative cycle."};
+            return AlgorithmError{AlgorithmErrorType::GraphHasNegativeCycle,
+                                  "Graph contains a negative cycle."};
         }
     }
 

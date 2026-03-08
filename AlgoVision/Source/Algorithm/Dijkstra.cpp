@@ -5,24 +5,24 @@ Dijkstra::Dijkstra(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
-                               "Graph is not initialized or empty."};
+        return AlgorithmError{AlgorithmErrorType::GraphNotInitialized,
+                              "Graph is not initialized or empty."};
     }
 
     if(!m_graph->isWeighted()) {
-        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
+        return AlgorithmError{AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        return AlgorithmError {AlgorithmErrorType::StartNodeMissing,
-                               "Start node does not exist in the graph."};
+        return AlgorithmError{AlgorithmErrorType::StartNodeMissing,
+                              "Start node does not exist in the graph."};
     }
 
     auto edges = m_graph->getEdges();
     for(const auto& [_, edge]: edges) {
         if(edge.getWeight() < 0) {
-            return AlgorithmError {
+            return AlgorithmError{
                 AlgorithmErrorType::NegativeEdgeWeights,
                 "Dijkstra cannot be applied to graphs with negative edge weights."};
         }
