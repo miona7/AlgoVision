@@ -39,30 +39,14 @@ void DFS::dfs(unsigned nodeId) {
     m_visited[nodeId] = true;
 
     m_order.push_back(nodeId);
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::VisitNode;
-        s.m_node = nodeId;
-        addStep(s);
-    }
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::ProcessNode;
-        s.m_node = nodeId;
-        addStep(s);
-    }
+
+    addStep(AlgorithmStep{StepType::VisitNode, nodeId});
+    addStep(AlgorithmStep{StepType::ProcessNode, nodeId});
 
     auto adjList = m_graph->getAdjacencyList();
     if(adjList.find(nodeId) != adjList.end()) {
         for(const auto& [_, neighbourId]: adjList[nodeId]) {
-
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::ExamineEdge;
-                s.m_from = nodeId;
-                s.m_to   = neighbourId;
-                addStep(s);
-            }
+            addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, nodeId, neighbourId});
 
             if(!m_visited[neighbourId]) {
                 dfs(neighbourId);
