@@ -60,7 +60,7 @@ void Prim::prim() {
     pq.emplace(0, start);
     minDistance[start] = 0;
 
-    addStep(AlgorithmStep{StepType::UpdateDistance, start);
+    addStep(AlgorithmStep{StepType::UpdateDistance, start});
 
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
