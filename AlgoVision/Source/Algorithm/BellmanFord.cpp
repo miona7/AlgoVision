@@ -47,12 +47,7 @@ void BellmanFord::bellmanFord(unsigned start) {
 
     m_minDistance[start] = 0;
 
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::UpdateDistance;
-        s.m_node = start;
-        addStep(s);
-    }
+    addStep(AlgorithmStep{StepType::UpdateDistance, start});
 
     unsigned v = nodes.size();
 
@@ -63,42 +58,18 @@ void BellmanFord::bellmanFord(unsigned start) {
             unsigned u = edge.startNode();
             unsigned v = edge.endNode();
             int      w = edge.getWeight();
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::VisitNode;
-                s.m_node = u;
-                addStep(s);
-            }
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::ProcessNode; // using as "pass k"
-                s.m_node = u;
-                addStep(s);
-            }
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::ExamineEdge;
-                s.m_from = u;
-                s.m_to   = v;
-                addStep(s);
-            }
+
+            addStep(AlgorithmStep{StepType::VisitNode, u});
+            addStep(AlgorithmStep{StepType::ProcessNode, u}); // using as "pass k"
+            addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, u, v});
+
             if(m_minDistance[u] != std::numeric_limits<int>::max() &&
                m_minDistance[u] + w < m_minDistance[v]) {
                 m_minDistance[v] = m_minDistance[u] + w;
                 wasRelaxed       = true;
-                {
-                    AlgorithmStep s;
-                    s.m_type = StepType::RelaxEdge;
-                    s.m_from = u;
-                    s.m_to   = v;
-                    addStep(s);
-                }
-                {
-                    AlgorithmStep s;
-                    s.m_type = StepType::UpdateDistance;
-                    s.m_node = v;
-                    addStep(s);
-                }
+
+                addStep(AlgorithmStep{StepType::RelaxEdge, std::nullopt, u, v});
+                addStep(AlgorithmStep{StepType::UpdateDistance, v});
             }
         }
         if(!wasRelaxed) {
