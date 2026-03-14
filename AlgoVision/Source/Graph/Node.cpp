@@ -33,7 +33,7 @@ void Node::setState(NodeState state) {
         return;
     }
     m_state = state;
-    notifyObservers(*this); // obavestavamo sve posmatrace da se stanje promenilo
+    notifyObservers(*this);
 }
 
 void Node::setName(const QString& newName) {
