@@ -60,12 +60,7 @@ void Prim::prim() {
     pq.emplace(0, start);
     minDistance[start] = 0;
 
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::UpdateDistance;
-        s.m_node = start;
-        addStep(s);
-    }
+    addStep(AlgorithmStep{StepType::UpdateDistance, start);
 
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
@@ -77,36 +72,17 @@ void Prim::prim() {
         if(!inTree[currentNode]) {
             inTree[currentNode] = true;
 
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::VisitNode;
-                s.m_node = currentNode;
-                addStep(s);
-            }
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::ProcessNode;
-                s.m_node = currentNode;
-                addStep(s);
-            }
+            addStep(AlgorithmStep{StepType::VisitNode, currentNode});
+            addStep(AlgorithmStep{StepType::ProcessNode, currentNode});
 
             if(parent[currentNode]) {
-                AlgorithmStep s;
-                s.m_type = StepType::SelectEdge;
-                s.m_from = parent[currentNode];
-                s.m_to   = currentNode;
-                addStep(s);
+                addStep(AlgorithmStep{StepType::SelectEdge, std::nullopt, parent[currentNode], currentNode});
             }
 
             for(const auto& [edgeId, neighbourId]: adjList[currentNode]) {
                 if(!inTree[neighbourId]) {
-                    {
-                        AlgorithmStep s;
-                        s.m_type = StepType::ExamineEdge;
-                        s.m_from = currentNode;
-                        s.m_to   = neighbourId;
-                        addStep(s);
-                    }
+                    addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, currentNode, neighbourId});
+
                     auto it = edges.find(edgeId);
                     if(it != edges.end()) {
                         int weight = it->second.getWeight();
@@ -114,12 +90,8 @@ void Prim::prim() {
                             minDistance[neighbourId] = weight;
                             parent[neighbourId]      = currentNode;
                             pq.emplace(minDistance[neighbourId], neighbourId);
-                            {
-                                AlgorithmStep s;
-                                s.m_type = StepType::UpdateDistance;
-                                s.m_node = neighbourId;
-                                addStep(s);
-                            }
+
+                            addStep(AlgorithmStep{StepType::UpdateDistance, neighbourId});
                         }
                     }
                 }
@@ -135,6 +107,7 @@ void Prim::prim() {
         }
     }
 }
+
 QString Prim::resultString() const {
     return QString("Total MST weight: %1").arg(m_totalWeight);
 }
