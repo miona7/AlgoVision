@@ -50,29 +50,12 @@ void BFS::bfs(unsigned start) {
 
         q.pop();
 
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::VisitNode;
-            s.m_node = current;
-            addStep(s);
-        }
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::ProcessNode;
-            s.m_node = current;
-            addStep(s);
-        }
+        addStep(AlgorithmStep{StepType::VisitNode, current});
+        addStep(AlgorithmStep{StepType::ProcessNode, current});
 
         if(adjList.find(current) != adjList.end()) {
             for(const auto& [_, neighbourId]: adjList[current]) {
-
-                {
-                    AlgorithmStep s;
-                    s.m_type = StepType::ExamineEdge;
-                    s.m_from = current;
-                    s.m_to   = neighbourId;
-                    addStep(s);
-                }
+                addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, current, neighbourId});
 
                 if(!m_visited[neighbourId]) {
                     m_visited[neighbourId] = true;
@@ -89,7 +72,8 @@ const std::map<unsigned, bool>& BFS::getVisited() const {
 
 QString BFS::resultString() const {
     QString res = "BFS order: ";
-    for(unsigned v: m_order)
+    for(unsigned v: m_order) {
         res += QString::number(v) + " ";
+    }
     return res;
 }
