@@ -32,7 +32,6 @@ QPushButton:hover, QToolButton:hover {
     background-color: #A6E0C8;
 }
 
-/* Tab widget (desni panel) */
 QTabWidget::pane {
     background-color: #DFF5EA;
 }
