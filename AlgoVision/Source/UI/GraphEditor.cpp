@@ -1,31 +1,5 @@
 #include "GraphEditor.h"
 
-namespace {
-    class LambdaCommand : public QUndoCommand {
-    public:
-        LambdaCommand(std::function<void()> redoFn, std::function<void()> undoFn,
-                      const QString& text = "")
-            : m_redo(std::move(redoFn)), m_undo(std::move(undoFn)) {
-            setText(text);
-        }
-
-        void redo() override {
-            if(m_redo) {
-                m_redo();
-            }
-        }
-        void undo() override {
-            if(m_undo) {
-                m_undo();
-            }
-        }
-
-    private:
-        std::function<void()> m_redo;
-        std::function<void()> m_undo;
-    };
-} // namespace
-
 GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController, QWidget* parent)
     : m_graphController(graphController), QWidget(parent) {
 
