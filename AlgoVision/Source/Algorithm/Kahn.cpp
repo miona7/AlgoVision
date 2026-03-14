@@ -59,18 +59,8 @@ std::optional<AlgorithmError> Kahn::kahn() {
 
         m_sorted.push_back(node);
 
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::ProcessNode;
-            s.m_node = node;
-            addStep(s);
-        }
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::AddToTopologicalOrder;
-            s.m_node = node;
-            addStep(s);
-        }
+        addStep(AlgorithmStep{StepType::ProcessNode, node});
+        addStep(AlgorithmStep{StepType::AddToTopologicalOrder, node});
 
         if(adjList.find(node) != adjList.end()) {
             for(const auto& [edge, neighbour]: adjList[node]) {
