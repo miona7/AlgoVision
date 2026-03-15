@@ -27,12 +27,12 @@ protected:
     void wheelEvent(QWheelEvent* event) override;
 
 private:
-    GraphView::State m_state {GraphView::State::IDLE};
+    GraphView::State m_state{GraphView::State::IDLE};
 
     // pan state (in scene coordinates)
     QPoint m_lastMousePos;
 
-    qreal m_zoomFactor {1.15};
+    qreal m_zoomFactor{1.15};
 
     // used for returning to previous state after fast pan (right click drag)
     GraphView::State m_oldState;

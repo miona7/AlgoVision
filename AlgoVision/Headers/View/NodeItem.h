@@ -68,13 +68,13 @@ private:
     // in scene coordinates, used to save old node position(center) before move command
     QPointF m_oldCenter;
 
-    qreal m_radius {AppConstants::defaultRadius};
-    qreal m_borderWidth {AppConstants::defaultBorderWidth};
-    bool  m_hasChangePosition {false};
-    bool  m_nodeSelected {false};
-    bool  m_ignoreNextMouseRealese {false};
+    qreal m_radius{AppConstants::defaultRadius};
+    qreal m_borderWidth{AppConstants::defaultBorderWidth};
+    bool  m_hasChangePosition{false};
+    bool  m_nodeSelected{false};
+    bool  m_ignoreNextMouseRealese{false};
 
-    unsigned m_observerId {0};
+    unsigned m_observerId{0};
 
     const QColor calculateColor() const;
     void         onNodeUpdated();

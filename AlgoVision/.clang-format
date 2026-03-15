@@ -10,7 +10,8 @@ NamespaceIndentation: All
 
 # otvorena zagrada u istom redu
 BreakBeforeBraces: Attach
-SpaceBeforeCpp11BracedList: true
+# SpaceBeforeCpp11BracedList: true
+SpaceBeforeCpp11BracedList: false
 
 # obavezne zagrade za if / else / petlje
 AllowShortIfStatementsOnASingleLine: false

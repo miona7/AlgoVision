@@ -49,7 +49,7 @@ private slots:
 
 protected:
     Edge*             m_modelEdge;
-    EditableTextItem* m_weight {nullptr};
+    EditableTextItem* m_weight{nullptr};
     bool              m_hasWeight;
 
     NodeItem* m_sourceNode;
@@ -57,10 +57,10 @@ protected:
     QPointF   m_sourcePoint;
     QPointF   m_destPoint;
 
-    qreal m_penWidth {2};
-    qreal m_shapeStroke {20.0};
+    qreal m_penWidth{2};
+    qreal m_shapeStroke{20.0};
 
-    unsigned m_observerId {0};
+    unsigned m_observerId{0};
 
     void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
     const QColor calculateColor() const;

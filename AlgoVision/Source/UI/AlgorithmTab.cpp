@@ -122,8 +122,8 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             const auto& nodes = graph->getNodes();
             if(!m_startNodeEdit->text().isEmpty()) {
                 if(nodes.find(newConfig.m_startNode) == nodes.end()) {
-                    AlgorithmError err {AlgorithmErrorType::StartNodeMissing,
-                                        "The specified start node does not exist in the graph."};
+                    AlgorithmError err{AlgorithmErrorType::StartNodeMissing,
+                                       "The specified start node does not exist in the graph."};
                     showAlgorithmErrorDialog(err);
                     return;
                 }
@@ -131,8 +131,8 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
 
             if(!m_endNodeEdit->text().isEmpty()) {
                 if(nodes.find(newConfig.m_endNode) == nodes.end()) {
-                    AlgorithmError err {AlgorithmErrorType::GoalNodeMissing,
-                                        "The specified end node does not exist in the graph."};
+                    AlgorithmError err{AlgorithmErrorType::GoalNodeMissing,
+                                       "The specified end node does not exist in the graph."};
                     showAlgorithmErrorDialog(err);
                     return;
                 }

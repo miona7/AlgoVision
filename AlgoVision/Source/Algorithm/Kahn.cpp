@@ -5,12 +5,12 @@ Kahn::Kahn(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> Kahn::checkConditions() const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
-                               "Graph is not initialized or empty."};
+        return AlgorithmError{AlgorithmErrorType::GraphNotInitialized,
+                              "Graph is not initialized or empty."};
     }
 
     if(!m_graph->isDirected()) {
-        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
+        return AlgorithmError{AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     return std::nullopt;
@@ -59,18 +59,8 @@ std::optional<AlgorithmError> Kahn::kahn() {
 
         m_sorted.push_back(node);
 
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::ProcessNode;
-            s.m_node = node;
-            addStep(s);
-        }
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::AddToTopologicalOrder;
-            s.m_node = node;
-            addStep(s);
-        }
+        addStep(AlgorithmStep{StepType::ProcessNode, node});
+        addStep(AlgorithmStep{StepType::AddToTopologicalOrder, node});
 
         if(adjList.find(node) != adjList.end()) {
             for(const auto& [edge, neighbour]: adjList[node]) {
@@ -83,7 +73,7 @@ std::optional<AlgorithmError> Kahn::kahn() {
     }
 
     if(m_sorted.size() != nodes.size()) {
-        return AlgorithmError {AlgorithmErrorType::GraphHasCycle, "Graph contains a cycle."};
+        return AlgorithmError{AlgorithmErrorType::GraphHasCycle, "Graph contains a cycle."};
     }
 
     return std::nullopt;

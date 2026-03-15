@@ -76,9 +76,9 @@ private slots:
     void setEditGraphSceneTrigger(bool, EditableTextItem* = nullptr);
 
 private:
-    NodeItem*         m_firstNodeSelect {nullptr};
-    EditableTextItem* m_editLabel {nullptr};
-    State             m_state {GraphScene::State::ADD};
+    NodeItem*         m_firstNodeSelect{nullptr};
+    EditableTextItem* m_editLabel{nullptr};
+    State             m_state{GraphScene::State::ADD};
     State             m_previousState;
 
     // structure only used as helper for operations, not owning elements

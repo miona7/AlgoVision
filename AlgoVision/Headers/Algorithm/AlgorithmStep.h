@@ -49,7 +49,7 @@ enum class StepType {
  */
 
 struct AlgorithmStep {
-    StepType m_type {StepType::DefaultType};
+    StepType m_type{StepType::DefaultType};
 
     std::optional<unsigned> m_node;
     std::optional<unsigned> m_from;
