@@ -5,12 +5,12 @@ FloydWarshall::FloydWarshall(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> FloydWarshall::checkConditions() const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
-                               "Graph is not initialized or empty."};
+        return AlgorithmError{AlgorithmErrorType::GraphNotInitialized,
+                              "Graph is not initialized or empty."};
     }
 
     if(!m_graph->isDirected() || !m_graph->isWeighted()) {
-        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
+        return AlgorithmError{AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     return std::nullopt;
@@ -51,69 +51,39 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
     }
 
     for(const auto& [k, _]: nodes) {
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::VisitNode;
-            s.m_node = k;
-            addStep(s);
-        }
-        {
-            AlgorithmStep s;
-            s.m_type = StepType::ProcessNode;
-            s.m_node = k;
-            addStep(s);
-        }
+        addStep(AlgorithmStep{StepType::VisitNode, k});
+        addStep(AlgorithmStep{StepType::ProcessNode, k});
+
         for(const auto& [i, _]: nodes) {
             if(m_distances[i][k] != std::numeric_limits<int>::max()) {
                 auto* edge = m_graph->getEdge(i, k);
                 if(edge != nullptr) {
-                    AlgorithmStep s;
-                    s.m_type = StepType::ExamineEdge;
-                    s.m_from = i;
-                    s.m_to   = k;
-                    addStep(s);
+                    addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, i, k});
                 }
+
                 for(const auto& [j, _]: nodes) {
                     if(m_distances[k][j] != std::numeric_limits<int>::max()) {
                         auto* edge = m_graph->getEdge(k, j);
                         if(edge != nullptr) {
-                            AlgorithmStep s;
-                            s.m_type = StepType::ExamineEdge;
-                            s.m_from = k;
-                            s.m_to   = j;
-                            addStep(s);
+                            addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, k, j});
                         }
+
                         int throughK = m_distances[i][k] + m_distances[k][j];
                         if(throughK < m_distances[i][j]) {
                             m_distances[i][j] = throughK;
-                            {
-                                AlgorithmStep s;
-                                s.m_type = StepType::UpdateDistance;
-                                s.m_node = i;
-                                addStep(s);
-                            }
+                            addStep(AlgorithmStep{StepType::UpdateDistance, i});
+
                             auto* edge = m_graph->getEdge(i, k);
                             if(edge != nullptr) {
-                                AlgorithmStep s;
-                                s.m_type = StepType::SelectEdge;
-                                s.m_from = i;
-                                s.m_to   = k;
-                                addStep(s);
+                                addStep(AlgorithmStep{StepType::SelectEdge, std::nullopt, i, k});
                             }
+
                             edge = m_graph->getEdge(k, j);
                             if(edge != nullptr) {
-                                AlgorithmStep s;
-                                s.m_type = StepType::SelectEdge;
-                                s.m_from = k;
-                                s.m_to   = j;
-                                addStep(s);
+                                addStep(AlgorithmStep{StepType::SelectEdge, std::nullopt, k, j});
                             }
-                            {
-                                AlgorithmStep s;
-                                s.m_type = StepType::UpdateDistance;
-                                s.m_node = j;
-                                addStep(s);
-                            }
+
+                            addStep(AlgorithmStep{StepType::UpdateDistance, j});
                         }
                     }
                 }
@@ -123,8 +93,8 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
 
     for(const auto& [i, _]: nodes) {
         if(m_distances[i][i] < 0) {
-            return AlgorithmError {AlgorithmErrorType::GraphHasNegativeCycle,
-                                   "Graph contains a negative cycle."};
+            return AlgorithmError{AlgorithmErrorType::GraphHasNegativeCycle,
+                                  "Graph contains a negative cycle."};
         }
     }
 

@@ -5,24 +5,24 @@ Dijkstra::Dijkstra(const std::shared_ptr<Graph> g) : Algorithm(g) {
 
 std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
     if(m_graph == nullptr || m_graph->getNodes().empty()) {
-        return AlgorithmError {AlgorithmErrorType::GraphNotInitialized,
-                               "Graph is not initialized or empty."};
+        return AlgorithmError{AlgorithmErrorType::GraphNotInitialized,
+                              "Graph is not initialized or empty."};
     }
 
     if(!m_graph->isWeighted()) {
-        return AlgorithmError {AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
+        return AlgorithmError{AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid."};
     }
 
     auto nodes = m_graph->getNodes();
     if(nodes.find(start) == nodes.end()) {
-        return AlgorithmError {AlgorithmErrorType::StartNodeMissing,
-                               "Start node does not exist in the graph."};
+        return AlgorithmError{AlgorithmErrorType::StartNodeMissing,
+                              "Start node does not exist in the graph."};
     }
 
     auto edges = m_graph->getEdges();
     for(const auto& [_, edge]: edges) {
         if(edge.getWeight() < 0) {
-            return AlgorithmError {
+            return AlgorithmError{
                 AlgorithmErrorType::NegativeEdgeWeights,
                 "Dijkstra cannot be applied to graphs with negative edge weights."};
         }
@@ -60,12 +60,7 @@ void Dijkstra::dijkstra(unsigned start) {
     pq.emplace(0, start);
     minDistance[start] = 0;
 
-    {
-        AlgorithmStep s;
-        s.m_type = StepType::UpdateDistance;
-        s.m_node = start;
-        addStep(s);
-    }
+    addStep(AlgorithmStep{StepType::UpdateDistance, start});
 
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
@@ -77,41 +72,20 @@ void Dijkstra::dijkstra(unsigned start) {
         if(!finished[currentNode]) {
             finished[currentNode] = true;
 
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::VisitNode;
-                s.m_node = currentNode;
-                addStep(s);
-            }
-            {
-                AlgorithmStep s;
-                s.m_type = StepType::ProcessNode;
-                s.m_node = currentNode;
-                addStep(s);
-            }
+            addStep(AlgorithmStep{StepType::VisitNode, currentNode});
+            addStep(AlgorithmStep{StepType::ProcessNode, currentNode});
 
             for(const auto& [edgeId, neighbourId]: adjList[currentNode]) {
                 auto it = edges.find(edgeId);
                 if(it != edges.end()) {
                     int weight = it->second.getWeight();
 
-                    {
-                        AlgorithmStep s;
-                        s.m_type = StepType::ExamineEdge;
-                        s.m_from = currentNode;
-                        s.m_to   = neighbourId;
-                        addStep(s);
-                    }
+                    addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, currentNode, neighbourId});
 
                     if(currentDistance + weight < minDistance[neighbourId]) {
                         minDistance[neighbourId] = currentDistance + weight;
 
-                        {
-                            AlgorithmStep s;
-                            s.m_type = StepType::UpdateDistance;
-                            s.m_node = neighbourId;
-                            addStep(s);
-                        }
+                        addStep(AlgorithmStep{StepType::UpdateDistance, neighbourId});
 
                         pq.emplace(minDistance[neighbourId], neighbourId);
                     }

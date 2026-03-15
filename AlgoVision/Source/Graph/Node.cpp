@@ -1,7 +1,7 @@
 #include "Node.h"
 
 Node::Node(unsigned id, double x, double y)
-    : m_id(id), m_name(QString::number(id)), m_position {x, y} {
+    : m_id(id), m_name(QString::number(id)), m_position{x, y} {
 }
 
 unsigned Node::getId() const {
@@ -33,7 +33,7 @@ void Node::setState(NodeState state) {
         return;
     }
     m_state = state;
-    notifyObservers(*this); // obavestavamo sve posmatrace da se stanje promenilo
+    notifyObservers(*this);
 }
 
 void Node::setName(const QString& newName) {

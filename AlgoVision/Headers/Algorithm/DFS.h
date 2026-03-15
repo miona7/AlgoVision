@@ -19,7 +19,7 @@ public:
 
 private:
     std::map<unsigned, bool> m_visited;
-    std::vector<int>         m_order;
+    std::vector<unsigned>    m_order;
 
     void dfs(unsigned);
 };
