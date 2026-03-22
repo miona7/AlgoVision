@@ -196,7 +196,7 @@ void MainWindow::onCreateGraphTriggered() {
 void MainWindow::onSaveGraphTriggered() {
     auto* currentEditor = qobject_cast<GraphEditor*>(m_tabWidget->currentWidget());
     if(currentEditor == nullptr) {
-        QMessageBox::warning(this, "error", "no active graph editor!");
+        QMessageBox::warning(this, "Error", "No active graph editor!");
         return;
     }
 
@@ -216,7 +216,7 @@ void MainWindow::onSaveGraphTriggered() {
 
     auto graph = currentEditor->graphController()->graph();
     if(graph == nullptr) {
-        QMessageBox::warning(this, "error", "graph is not initialized!");
+        QMessageBox::warning(this, "Error", "Graph is not initialized!");
         return;
     }
 
@@ -229,12 +229,11 @@ void MainWindow::onSaveGraphTriggered() {
                 tabInfo.m_isModified = false;
                 m_tabWidget->setTabText(index, QFileInfo(filePath).fileName());
                 m_tabWidget->setTabToolTip(index, filePath);
-                QMessageBox::information(this, "saved", "graph saved to: " + filePath);
+                QMessageBox::information(this, "Saved", "Graph saved to: " + filePath);
                 saveThread->deleteLater();
             });
-
     connect(saveThread, &SaveFileWorker::failed, this, [this, saveThread](const QString& error) {
-        QMessageBox::warning(this, "error", "could not save file: " + error);
+        QMessageBox::warning(this, "Error", "Could not save file: " + error);
         saveThread->deleteLater();
     });
 
@@ -244,7 +243,7 @@ void MainWindow::onSaveGraphTriggered() {
 void MainWindow::onSaveImageTriggered() {
     auto* currentEditor = qobject_cast<GraphEditor*>(m_tabWidget->currentWidget());
     if(currentEditor == nullptr) {
-        QMessageBox::warning(this, "error", "no active graph editor!");
+        QMessageBox::warning(this, "Error", "No active graph editor!");
         return;
     }
 
@@ -279,9 +278,9 @@ void MainWindow::onSaveImageTriggered() {
         m_tabWidget->setTabToolTip(index, tabInfo.m_imagePath.isEmpty() ? "unsaved image"
                                                                         : tabInfo.m_imagePath);
 
-        QMessageBox::information(this, "saved", "image saved to: " + filePath);
+        QMessageBox::information(this, "Saved", "Image saved to: " + filePath);
     } else {
-        QMessageBox::warning(this, "error", "could not save image: " + filePath);
+        QMessageBox::warning(this, "Error", "Could not save image: " + filePath);
     }
 }
 
@@ -384,7 +383,7 @@ void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool d
 }
 
 void MainWindow::onGraphLoadFailed(const QString& error) {
-    QMessageBox::warning(this, "load error", error);
+    QMessageBox::warning(this, "Load error", error);
 }
 
 void MainWindow::connectGraphModifiedSignal(GraphEditor* editor) {
