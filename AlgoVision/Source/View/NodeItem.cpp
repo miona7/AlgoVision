@@ -1,13 +1,12 @@
 #include "NodeItem.h"
 
-NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
+NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode), m_label(new EditableTextItem(this)) {
     setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
     setAcceptedMouseButtons(Qt::LeftButton);
     setZValue(-1);
     updateNodePosition();
 
     // node name
-    m_label = new EditableTextItem(this);
     m_label->setPlainText(m_modelNode->getName());
     m_label->setTextWidth(2 * m_radius);
     m_label->setDefaultTextColor(Qt::black);
@@ -15,7 +14,6 @@ NodeItem::NodeItem(Node* modelNode) : m_modelNode(modelNode) {
     m_label->centerText();
     connect(m_label, &EditableTextItem::textCommited, this, &NodeItem::onNameChanged);
 
-    // observer
     if(m_modelNode != nullptr) {
         m_observerId = m_modelNode->addObserver([this](Node&) { this->onNodeUpdated(); });
     }
@@ -39,8 +37,8 @@ void NodeItem::setModelNode(Node* newModelNode) {
 }
 
 QRectF NodeItem::boundingRect() const {
-    return QRectF(-m_radius - m_borderWidth, -m_radius - m_borderWidth,
-                  2 * (m_radius + m_borderWidth), 2 * (m_radius + m_borderWidth));
+    return QRectF{-m_radius - m_borderWidth, -m_radius - m_borderWidth,
+                  2 * (m_radius + m_borderWidth), 2 * (m_radius + m_borderWidth)};
 }
 
 QPainterPath NodeItem::shape() const {
