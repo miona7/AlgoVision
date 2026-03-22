@@ -1,11 +1,11 @@
 #ifndef BELLMANFORD_H
 #define BELLMANFORD_H
 
-#include <limits>
 #include <map>
+#include <vector>
+#include <limits>
 #include <memory>
 #include <optional>
-#include <vector>
 
 #include "Algorithm.h"
 
