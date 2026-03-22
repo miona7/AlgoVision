@@ -62,8 +62,8 @@ private slots:
     void onNameChanged(const QString&) const;
 
 private:
-    Node*             m_modelNode;
-    EditableTextItem* m_label;
+    Node*             m_modelNode{nullptr};
+    EditableTextItem* m_label{nullptr};
     QSet<EdgeItem*>   m_edges;
     // in scene coordinates, used to save old node position(center) before move command
     QPointF m_oldCenter;

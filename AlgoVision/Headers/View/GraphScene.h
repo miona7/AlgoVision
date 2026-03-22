@@ -19,7 +19,6 @@ class GraphScene : public QGraphicsScene {
     Q_OBJECT
 public:
     explicit GraphScene(QObject* = nullptr);
-
     /*
         ADD -> adding nodes and edges
         REMOVE -> removing nodes and edges

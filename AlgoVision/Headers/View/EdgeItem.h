@@ -47,12 +47,12 @@ private slots:
     void onEdgeWeightChanged(const QString&) const;
 
 protected:
-    Edge*             m_modelEdge;
+    Edge*             m_modelEdge{nullptr};
     EditableTextItem* m_weight{nullptr};
-    bool              m_hasWeight;
+    bool              m_hasWeight{false};
 
-    NodeItem* m_sourceNode;
-    NodeItem* m_destNode;
+    NodeItem* m_sourceNode{nullptr};
+    NodeItem* m_destNode{nullptr};
     QPointF   m_sourcePoint;
     QPointF   m_destPoint;
 
