@@ -45,10 +45,10 @@ private slots:
     void onZoomOutRequestTrigger();
 
 private:
-    QUndoStack*                      m_undoStack       = nullptr;
-    GraphEditTab*                    m_editTab         = nullptr;
-    QLabel*                          m_leftPlaceholder = nullptr;
-    GraphView*                       m_view            = nullptr;
+    QUndoStack*                      m_undoStack{nullptr};
+    GraphEditTab*                    m_editTab         {nullptr};
+    QLabel*                          m_leftPlaceholder {nullptr};
+    GraphView*                       m_view            {nullptr};
     std::shared_ptr<GraphController> m_graphController;
 };
 

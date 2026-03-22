@@ -457,8 +457,8 @@ bool AlgorithmTab::AlgorithmConfig::operator!=(const AlgorithmConfig& other) con
 }
 
 AlgorithmTab::AlgorithmConfig AlgorithmTab::selectedConfig() const {
-    return {m_algorithmCombo->currentText(), m_startNodeEdit->text().toInt(),
-            m_endNodeEdit->text().toInt()};
+    return {m_algorithmCombo->currentText(), m_startNodeEdit->text().toUInt(),
+            m_endNodeEdit->text().toUInt()};
 }
 
 void AlgorithmTab::startTimerForPlay() {

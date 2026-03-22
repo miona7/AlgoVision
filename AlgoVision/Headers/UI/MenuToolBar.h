@@ -21,12 +21,12 @@ public:
     QAction* helpAction() const;
 
 private:
-    QAction* m_createGraphAction;
-    QAction* m_openGraphAction;
-    QAction* m_saveGraphAction;
-    QAction* m_saveImageAction;
-    QAction* m_changeThemeAction;
-    QAction* m_helpAction;
+    QAction* m_createGraphAction{nullptr};
+    QAction* m_openGraphAction{nullptr};
+    QAction* m_saveGraphAction{nullptr};
+    QAction* m_saveImageAction{nullptr};
+    QAction* m_changeThemeAction{nullptr};
+    QAction* m_helpAction{nullptr};
 
     void setStyle();
     void setOptionShortcuts();

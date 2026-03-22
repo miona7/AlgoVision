@@ -42,8 +42,8 @@ signals:
 private:
     struct AlgorithmConfig {
         QString m_algorithmName;
-        int     m_startNode;
-        int     m_endNode;
+        unsigned m_startNode;
+        unsigned m_endNode;
 
         bool operator==(const AlgorithmConfig&) const;
         bool operator!=(const AlgorithmConfig&) const;
@@ -53,39 +53,39 @@ private:
 
     enum class RunState { Idle, Playing, Paused, Finished };
 
-    QComboBox* m_algorithmCombo;
+    QComboBox* m_algorithmCombo{nullptr};
 
-    QWidget*   m_startRow;
-    QLabel*    m_startLabel;
-    QLineEdit* m_startNodeEdit;
+    QWidget*   m_startRow{nullptr};
+    QLabel*    m_startLabel{nullptr};
+    QLineEdit* m_startNodeEdit{nullptr};
 
-    QWidget*   m_endRow;
-    QLabel*    m_endLabel;
-    QLineEdit* m_endNodeEdit;
+    QWidget*   m_endRow{nullptr};
+    QLabel*    m_endLabel{nullptr};
+    QLineEdit* m_endNodeEdit{nullptr};
 
-    QLabel* m_noInputLabel;
+    QLabel* m_noInputLabel{nullptr};
 
-    QScrollArea* m_legendScroll;
+    QScrollArea* m_legendScroll{nullptr};
 
-    QVBoxLayout* m_legendLayout;
-    QWidget*     m_legendContainer;
+    QVBoxLayout* m_legendLayout{nullptr};
+    QWidget*     m_legendContainer{nullptr};
 
-    QPushButton* m_helpBtn;
+    QPushButton* m_helpBtn{nullptr};
 
-    QToolButton* m_prevBtn;
-    QToolButton* m_playBtn;
-    QToolButton* m_pauseBtn;
-    QToolButton* m_nextBtn;
-    QToolButton* m_restartBtn;
+    QToolButton* m_prevBtn{nullptr};
+    QToolButton* m_playBtn{nullptr};
+    QToolButton* m_pauseBtn{nullptr};
+    QToolButton* m_nextBtn{nullptr};
+    QToolButton* m_restartBtn{nullptr};
 
     std::shared_ptr<GraphController> m_graphController;
     AlgorithmStepApplier             m_applier;
     AlgorithmController              m_algorithmController;
-    AlgorithmWorker*                 m_worker = nullptr;
-    QTimer*                          m_timer  = nullptr;
-    RunState                         m_state  = RunState::Idle;
+    AlgorithmWorker*                 m_worker{nullptr};
+    QTimer*                          m_timer{nullptr};
+    RunState                         m_state{RunState::Idle};
     std::optional<AlgorithmConfig>   m_currentConfig;
-    bool                             m_graphEditAllowed = true;
+    bool                             m_graphEditAllowed{true};
 
     void     initLayout();
     void     initIcons();
