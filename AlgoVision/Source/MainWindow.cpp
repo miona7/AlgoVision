@@ -361,12 +361,7 @@ void MainWindow::onGraphLoadedNewTab(const QVariant& data, bool weighted, bool d
     editor->graphController()->scene()->applyTheme(m_themeManager->currentTheme());
     connectGraphModifiedSignal(editor);
 
-    TabInfo info;
-    info.m_editor          = editor;
-    info.m_filePath        = filePath;
-    info.m_isModified      = false;
-    info.m_imagePath       = "";
-    info.m_isImageModified = true;
+    TabInfo info{editor, filePath, false, "", true};
     m_tabs.insert(editor, info);
 
     QString tabName = QFileInfo(filePath).fileName();
