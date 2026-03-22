@@ -12,19 +12,18 @@
 #include <QUndoStack>
 #include <QWidget>
 
-#include <functional>
 #include <memory>
+#include <functional>
 
-#include "AlgorithmTab.h"
 #include "Graph.h"
-#include "GraphController.h"
 #include "GraphEditTab.h"
 #include "GraphScene.h"
 #include "GraphView.h"
+#include "AlgorithmTab.h"
+#include "GraphController.h"
 
 class GraphEditor : public QWidget {
     Q_OBJECT
-
 public:
     explicit GraphEditor(const std::shared_ptr<GraphController>&, QWidget* = nullptr);
     ~GraphEditor() override = default;

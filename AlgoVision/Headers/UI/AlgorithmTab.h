@@ -23,13 +23,12 @@
 
 #include <optional>
 
-#include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
 #include "GraphController.h"
+#include "AlgorithmController.h"
 
 class AlgorithmTab : public QWidget {
     Q_OBJECT
-
 public:
     explicit AlgorithmTab(std::shared_ptr<GraphController>, QWidget* = nullptr);
     ~AlgorithmTab() override = default;

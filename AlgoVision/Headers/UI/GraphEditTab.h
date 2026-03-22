@@ -12,7 +12,6 @@
 
 class GraphEditTab : public QWidget {
     Q_OBJECT
-
 public:
     explicit GraphEditTab(QWidget* = nullptr);
     ~GraphEditTab() override = default;

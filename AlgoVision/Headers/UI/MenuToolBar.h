@@ -9,7 +9,6 @@ class QAction;
 
 class MenuToolBar : public QToolBar {
     Q_OBJECT
-
 public:
     explicit MenuToolBar(QWidget* = nullptr);
     ~MenuToolBar() override = default;
