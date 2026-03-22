@@ -21,7 +21,7 @@ protected:
     void run() override;
 
 private:
-    Serializer* m_serializer = nullptr;
+    Serializer* m_serializer{nullptr};
     QString     m_filePath;
 };
 

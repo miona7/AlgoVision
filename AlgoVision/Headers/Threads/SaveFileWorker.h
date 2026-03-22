@@ -21,13 +21,13 @@ protected:
     void run() override;
 
 private:
-    Serializer* m_serializer = nullptr;
+    Serializer* m_serializer {nullptr};
     QString     m_filePath;
 
-    Serializable* m_serializable = nullptr;
+    Serializable* m_serializable{nullptr};
 
-    bool m_isWeighted = false;
-    bool m_isDirected = false;
+    bool m_isWeighted {false};
+    bool m_isDirected {false};
 };
 
 #endif // SAVEFILEWORKER_H
