@@ -1,11 +1,12 @@
 #ifndef LOADFILEWORKER_H
 #define LOADFILEWORKER_H
 
+#include <QObject>
 #include <QString>
 #include <QThread>
 
-#include "Serializable.h"
 #include "Serializer.h"
+#include "Serializable.h"
 
 class LoadFileWorker : public QThread {
     Q_OBJECT
@@ -20,7 +21,7 @@ protected:
     void run() override;
 
 private:
-    Serializer* m_serializer = nullptr;
+    Serializer* m_serializer{nullptr};
     QString     m_filePath;
 };
 

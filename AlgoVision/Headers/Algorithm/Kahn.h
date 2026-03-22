@@ -1,12 +1,11 @@
 #ifndef KAHN_H
 #define KAHN_H
 
-#include <iostream>
 #include <map>
-#include <memory>
-#include <optional>
 #include <queue>
 #include <vector>
+#include <memory>
+#include <optional>
 
 #include "Algorithm.h"
 

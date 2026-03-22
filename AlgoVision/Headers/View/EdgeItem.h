@@ -12,7 +12,6 @@ class NodeItem;
 
 class EdgeItem : public QGraphicsObject {
     Q_OBJECT
-
 public:
     EdgeItem(Edge*, NodeItem*, NodeItem*, bool = false);
     ~EdgeItem() override;
@@ -48,12 +47,12 @@ private slots:
     void onEdgeWeightChanged(const QString&) const;
 
 protected:
-    Edge*             m_modelEdge;
+    Edge*             m_modelEdge{nullptr};
     EditableTextItem* m_weight{nullptr};
-    bool              m_hasWeight;
+    bool              m_hasWeight{false};
 
-    NodeItem* m_sourceNode;
-    NodeItem* m_destNode;
+    NodeItem* m_sourceNode{nullptr};
+    NodeItem* m_destNode{nullptr};
     QPointF   m_sourcePoint;
     QPointF   m_destPoint;
 
@@ -62,9 +61,9 @@ protected:
 
     unsigned m_observerId{0};
 
-    void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
-    const QColor calculateColor() const;
-    void         onEdgeUpdated();
+    void   mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    QColor calculateColor() const;
+    void   onEdgeUpdated();
 
     QPointF getEdgeCenter() const;
     QPointF calculateNormal() const;

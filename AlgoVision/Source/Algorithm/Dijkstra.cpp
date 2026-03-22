@@ -80,7 +80,8 @@ void Dijkstra::dijkstra(unsigned start) {
                 if(it != edges.end()) {
                     int weight = it->second.getWeight();
 
-                    addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, currentNode, neighbourId});
+                    addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, currentNode,
+                                          neighbourId});
 
                     if(currentDistance + weight < minDistance[neighbourId]) {
                         minDistance[neighbourId] = currentDistance + weight;

@@ -14,13 +14,13 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     connect(redoCtrlY, &QShortcut::activated, m_undoStack, &QUndoStack::redo);
 
     // main splitter for the left and right page sides
-    QSplitter* splitter = new QSplitter(Qt::Horizontal, this);
+    auto* splitter = new QSplitter(Qt::Horizontal, this);
 
     m_view = new GraphView(m_graphController->scene(), this);
     splitter->addWidget(m_view);
 
     // right side
-    QTabWidget* rightTabs = new QTabWidget(splitter);
+    auto* rightTabs = new QTabWidget(splitter);
 
     m_editTab = new GraphEditTab(rightTabs);
 
@@ -38,20 +38,20 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
     splitter->setStretchFactor(1, 2);
 
     // layout for the whole GraphEditor
-    QHBoxLayout* layout = new QHBoxLayout(this);
+    auto* layout = new QHBoxLayout(this);
     layout->addWidget(splitter);
     // keyboard shortcuts
 
     // pan: Ctrl + P
-    QShortcut* panShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_P), this);
+    auto* panShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_P), this);
     connect(panShortcut, &QShortcut::activated, this, &GraphEditor::onPanRequestTrigger);
 
     // zoom in: Ctrl + '+'
-    QShortcut* zoomInShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Plus), this);
+    auto* zoomInShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Plus), this);
     connect(zoomInShortcut, &QShortcut::activated, this, &GraphEditor::onZoomInRequestTrigger);
 
     // zoom out: Ctrl + '-'
-    QShortcut* zoomOutShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), this);
+    auto* zoomOutShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Minus), this);
     connect(zoomOutShortcut, &QShortcut::activated, this, &GraphEditor::onZoomOutRequestTrigger);
 
     connect(m_editTab, &GraphEditTab::undoRequested, this, &GraphEditor::onUndoRequestTrigger);
@@ -93,6 +93,10 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
             &GraphEditor::onZoomOutRequestTrigger);
 }
 
+std::shared_ptr<GraphController> GraphEditor::graphController() const {
+    return m_graphController;
+}
+
 void GraphEditor::onAddRequestTrigger() {
     m_view->resetState();
     m_graphController->setAddSceneState();
@@ -131,8 +135,4 @@ void GraphEditor::onZoomInRequestTrigger() {
 void GraphEditor::onZoomOutRequestTrigger() {
     m_graphController->resetScene();
     m_view->zoomOut();
-}
-
-std::shared_ptr<GraphController> GraphEditor::graphController() const {
-    return m_graphController;
 }

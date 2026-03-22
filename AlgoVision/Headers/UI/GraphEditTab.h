@@ -12,10 +12,10 @@
 
 class GraphEditTab : public QWidget {
     Q_OBJECT
-
 public:
     explicit GraphEditTab(QWidget* = nullptr);
     ~GraphEditTab() override = default;
+
     QSlider* getNodeSizeSlider() const;
 
 signals:
@@ -35,19 +35,19 @@ public slots:
     void setGraphEditsAllowed(bool);
 
 private:
-    QPushButton* m_addBtn;
-    QPushButton* m_removeBtn;
-    QPushButton* m_undoBtn;
-    QPushButton* m_redoBtn;
-    QPushButton* m_zoomInBtn;
-    QPushButton* m_zoomOutBtn;
-    QPushButton* m_panBtn;
-    QPushButton* m_clearBtn;
-    QSlider*     m_nodeSizeSlider;
+    QPushButton* m_addBtn{nullptr};
+    QPushButton* m_removeBtn{nullptr};
+    QPushButton* m_undoBtn{nullptr};
+    QPushButton* m_redoBtn{nullptr};
+    QPushButton* m_zoomInBtn{nullptr};
+    QPushButton* m_zoomOutBtn{nullptr};
+    QPushButton* m_panBtn{nullptr};
+    QPushButton* m_clearBtn{nullptr};
+    QSlider*     m_nodeSizeSlider{nullptr};
 
-    bool m_graphEditsAllowed = true;
-    bool m_canUndo           = false;
-    bool m_canRedo           = false;
+    bool m_graphEditsAllowed{true};
+    bool m_canUndo{false};
+    bool m_canRedo{false};
 
     void applyEditButtonsState();
     void initLayout();

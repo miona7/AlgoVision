@@ -1,35 +1,35 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QMainWindow>
+#include <QString>
+#include <QHash>
 #include <QCloseEvent>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFile>
 #include <QFileDialog>
 #include <QGroupBox>
-#include <QHash>
 #include <QJsonDocument>
-#include <QMainWindow>
+#include <QVariantMap>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QString>
 #include <QTabWidget>
 #include <QVBoxLayout>
-#include <QVariantMap>
 
 #include <iostream>
 #include <memory>
 
 #include "AppConstants.h"
-#include "Graph.h"
-#include "GraphController.h"
-#include "GraphEditor.h"
-#include "LoadFileWorker.h"
 #include "MenuToolBar.h"
+#include "ThemeManager.h"
+#include "LoadFileWorker.h"
 #include "SaveFileWorker.h"
 #include "Serializer.h"
-#include "ThemeManager.h"
+#include "GraphEditor.h"
+#include "GraphController.h"
+#include "Graph.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
@@ -43,14 +43,13 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
     struct TabInfo {
-        GraphEditor* m_editor;
+        GraphEditor* m_editor{nullptr};
         QString      m_filePath;
-        bool         m_isModified;
+        bool         m_isModified{false};
         QString      m_imagePath;
-        bool         m_isImageModified;
+        bool         m_isImageModified{false};
     };
 
     explicit MainWindow(QWidget* = nullptr);
@@ -75,12 +74,11 @@ protected:
 
 private:
     Ui::MainWindow*              m_ui;
-    MenuToolBar*                 m_menuToolBar = nullptr;
-    ThemeManager*                m_themeManager;
-    QTabWidget*                  m_tabWidget = nullptr;
+    MenuToolBar*                 m_menuToolBar{nullptr};
+    ThemeManager*                m_themeManager{nullptr};
+    QTabWidget*                  m_tabWidget{nullptr};
     QHash<GraphEditor*, TabInfo> m_tabs;
-
-    std::unique_ptr<Serializer> m_serializer;
+    std::unique_ptr<Serializer>  m_serializer;
 
     void initMenuToolBar();
 };

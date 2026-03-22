@@ -1,13 +1,13 @@
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 
+#include <vector>
 #include <memory>
 #include <optional>
-#include <vector>
 
-#include "AlgorithmError.h"
-#include "AlgorithmStep.h"
 #include "Graph.h"
+#include "AlgorithmStep.h"
+#include "AlgorithmError.h"
 
 class Algorithm {
 public:

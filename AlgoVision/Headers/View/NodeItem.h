@@ -1,23 +1,22 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
+#include <QPen>
+#include <QSet>
+#include <QPainter>
 #include <QGraphicsObject>
 #include <QGraphicsSceneEvent>
 #include <QGraphicsSceneMouseEvent>
-#include <QPainter>
-#include <QPen>
-#include <QSet>
 
-#include "AppConstants.h"
-#include "EdgeItem.h"
-#include "EditableTextItem.h"
 #include "Node.h"
+#include "EdgeItem.h"
+#include "AppConstants.h"
+#include "EditableTextItem.h"
 
 class EdgeItem;
 
 class NodeItem : public QGraphicsObject {
     Q_OBJECT
-
 public:
     explicit NodeItem(Node*);
     ~NodeItem() override;
@@ -62,8 +61,8 @@ private slots:
     void onNameChanged(const QString&) const;
 
 private:
-    Node*             m_modelNode;
-    EditableTextItem* m_label;
+    Node*             m_modelNode{nullptr};
+    EditableTextItem* m_label{nullptr};
     QSet<EdgeItem*>   m_edges;
     // in scene coordinates, used to save old node position(center) before move command
     QPointF m_oldCenter;
@@ -76,8 +75,8 @@ private:
 
     unsigned m_observerId{0};
 
-    const QColor calculateColor() const;
-    void         onNodeUpdated();
+    QColor calculateColor() const;
+    void   onNodeUpdated();
 };
 
 #endif // NODEITEM_H

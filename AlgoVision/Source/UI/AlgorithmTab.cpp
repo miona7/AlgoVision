@@ -5,17 +5,16 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
       m_startLabel(new QLabel("start node:", this)), m_startNodeEdit(new QLineEdit(this)),
       m_endRow(new QWidget(this)), m_endLabel(new QLabel("goal node:", this)),
       m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
+      m_legendScroll(new QScrollArea(this)), m_legendContainer(new QWidget()),
       m_helpBtn(new QPushButton("graph type help", this)), m_prevBtn(new QToolButton(this)),
       m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),
       m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)),
       m_graphController(graphController), m_applier(m_graphController->graph()),
       m_algorithmController(m_applier) {
 
-    m_legendContainer = new QWidget;
-    m_legendLayout    = new QVBoxLayout(m_legendContainer);
+    m_legendLayout = new QVBoxLayout(m_legendContainer);
     m_legendLayout->setAlignment(Qt::AlignTop);
 
-    m_legendScroll = new QScrollArea(this);
     m_legendScroll->setWidget(m_legendContainer);
     m_legendScroll->setMinimumHeight(AppConstants::legendMinHeight);
     m_legendScroll->setWidgetResizable(true);
@@ -36,7 +35,6 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
             &AlgorithmTab::updateLegendForAlgorithm);
 
-    // help
     connect(m_helpBtn, &QPushButton::clicked, this, [this]() {
         QMessageBox msgBox(this);
         msgBox.setWindowTitle("Algorithm Tab Help");
@@ -139,7 +137,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             }
 
             m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph, newConfig.m_startNode,
-                                           newConfig.m_endNode);
+                                           newConfig.m_endNode, this);
 
             // worker -> contoller (errors)
             connect(m_worker, &AlgorithmWorker::algorithmErrorOccurred, &m_algorithmController,
@@ -193,6 +191,96 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
         updateControls();
         updateLegendForAlgorithm(m_algorithmCombo->currentText());
     });
+}
+
+void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
+
+    QString userHint;
+
+    switch(error.m_type) {
+    case AlgorithmErrorType::GraphNotInitialized:
+        userHint = "Please create a graph in the 'graph' tab before running an algorithm.";
+        break;
+    case AlgorithmErrorType::GraphTypeInvalid:
+        userHint = "Please consult the 'graph type help' button to see which graph types are "
+                   "supported.\n\n"
+                   "Then, choose one of the following:\n"
+                   "1) Click the 'create graph' button in the upper left corner to create a "
+                   "suitable graph, "
+                   "or clear the current graph from the scene in the 'graph' tab.\n"
+                   "2) Choose a compatible algorithm and run it on the existing graph.";
+        break;
+    case AlgorithmErrorType::StartNodeMissing:
+    case AlgorithmErrorType::GoalNodeMissing:
+        userHint =
+            "Please enter a valid node index or leave the field empty to use the default behavior.";
+        break;
+    case AlgorithmErrorType::NegativeEdgeWeights:
+        userHint = "Please remove negative weights from the graph.";
+        break;
+    case AlgorithmErrorType::NoPathFound:
+        userHint = "Please choose different nodes or modify the graph.";
+        break;
+    case AlgorithmErrorType::GraphHasNegativeCycle:
+        userHint = "Please remove the cycle before running this algorithm.";
+        break;
+    case AlgorithmErrorType::GraphHasCycle:
+        userHint = "Please modify the graph so it becomes acyclic.";
+        break;
+    case AlgorithmErrorType::GraphNotConnected:
+        userHint = "Please ensure all nodes are reachable.";
+        break;
+    }
+
+    QDialog dialog(this);
+    dialog.setWindowTitle("Algorithm cannot be executed");
+    dialog.setModal(true);
+
+    auto* layout = new QVBoxLayout(&dialog);
+
+    // algorithm message
+    auto* mainText = new QLabel(QString::fromStdString(error.m_message));
+    QFont f        = mainText->font();
+    f.setBold(true);
+    mainText->setFont(f);
+    mainText->setWordWrap(true);
+
+    // user instructions
+    auto* detailsText = new QLabel(userHint);
+    detailsText->setWordWrap(true);
+
+    layout->addWidget(mainText);
+    layout->addSpacing(12);
+    layout->addWidget(detailsText);
+    layout->addStretch();
+
+    auto* okBtn = new QPushButton("OK");
+    connect(okBtn, &QPushButton::clicked, &dialog, &QDialog::accept);
+
+    layout->addWidget(okBtn, 0, Qt::AlignRight);
+
+    dialog.resize(AppConstants::graphTypeDialogErrorMinWidth, dialog.sizeHint().height());
+    dialog.setMinimumSize(AppConstants::graphTypeDialogErrorMinWidth,
+                          AppConstants::graphTypeDialogErrorMinHeight);
+
+    dialog.exec();
+
+    m_state = RunState::Idle;
+    updateControls();
+}
+
+bool AlgorithmTab::AlgorithmConfig::operator==(const AlgorithmConfig& other) const {
+    return m_algorithmName == other.m_algorithmName && m_startNode == other.m_startNode &&
+           m_endNode == other.m_endNode;
+}
+
+bool AlgorithmTab::AlgorithmConfig::operator!=(const AlgorithmConfig& other) const {
+    return !(*this == other);
+}
+
+AlgorithmTab::AlgorithmConfig AlgorithmTab::selectedConfig() const {
+    return {m_algorithmCombo->currentText(), m_startNodeEdit->text().toUInt(),
+            m_endNodeEdit->text().toUInt()};
 }
 
 void AlgorithmTab::initLayout() {
@@ -328,22 +416,49 @@ void AlgorithmTab::initLayout() {
     mainLayout->addStretch();
 }
 
-QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) {
-    QWidget* row    = new QWidget(this);
-    auto*    layout = new QHBoxLayout(row);
-    layout->setContentsMargins(2, 2, 2, 2);
+void AlgorithmTab::initIcons() {
+    m_prevBtn->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
+    m_playBtn->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    m_pauseBtn->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+    m_nextBtn->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
+    m_restartBtn->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
+}
 
-    QLabel* box = new QLabel;
-    box->setFixedSize(14, 14);
-    box->setStyleSheet(QString("background-color: %1; border: 1px solid black;").arg(color.name()));
+void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
+    const bool needsStart = algorithmName == "BFS" || algorithmName == "DFS" ||
+                            algorithmName == "Dijkstra" || algorithmName == "Bellman-Ford" ||
+                            algorithmName == "A* (Euclidean heuristic)";
 
-    QLabel* label = new QLabel(text);
+    const bool needsEnd = algorithmName == "A* (Euclidean heuristic)";
 
-    layout->addWidget(box);
-    layout->addWidget(label);
-    layout->addStretch();
+    // show/hide whole rows
+    if(!needsStart && !needsEnd) {
+        m_startNodeEdit->clear();
+        m_endNodeEdit->clear();
 
-    return row;
+        m_startRow->hide();
+        m_endRow->hide();
+        m_noInputLabel->show();
+        return;
+    }
+
+    m_noInputLabel->hide();
+
+    if(needsStart) {
+        m_startRow->show();
+        m_startNodeEdit->setPlaceholderText("default 0");
+    } else {
+        m_startNodeEdit->clear();
+        m_startRow->hide();
+    }
+
+    if(needsEnd) {
+        m_endRow->show();
+        m_endNodeEdit->setPlaceholderText("default 0");
+    } else {
+        m_endNodeEdit->clear();
+        m_endRow->hide();
+    }
 }
 
 void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
@@ -402,63 +517,22 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     }
 }
 
-void AlgorithmTab::initIcons() {
-    m_prevBtn->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
-    m_playBtn->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    m_pauseBtn->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-    m_nextBtn->setIcon(style()->standardIcon(QStyle::SP_MediaSkipForward));
-    m_restartBtn->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
-}
+QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) {
+    auto* row    = new QWidget(this);
+    auto* layout = new QHBoxLayout(row);
+    layout->setContentsMargins(2, 2, 2, 2);
 
-void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
-    const bool needsStart = algorithmName == "BFS" || algorithmName == "DFS" ||
-                            algorithmName == "Dijkstra" || algorithmName == "Bellman-Ford" ||
-                            algorithmName == "A* (Euclidean heuristic)";
+    auto* box = new QLabel;
+    box->setFixedSize(14, 14);
+    box->setStyleSheet(QString("background-color: %1; border: 1px solid black;").arg(color.name()));
 
-    const bool needsEnd = algorithmName == "A* (Euclidean heuristic)";
+    auto* label = new QLabel(text);
 
-    // show/hide whole rows
-    if(!needsStart && !needsEnd) {
-        m_startNodeEdit->clear();
-        m_endNodeEdit->clear();
+    layout->addWidget(box);
+    layout->addWidget(label);
+    layout->addStretch();
 
-        m_startRow->hide();
-        m_endRow->hide();
-        m_noInputLabel->show();
-        return;
-    }
-
-    m_noInputLabel->hide();
-
-    if(needsStart) {
-        m_startRow->show();
-        m_startNodeEdit->setPlaceholderText("default 0");
-    } else {
-        m_startNodeEdit->clear();
-        m_startRow->hide();
-    }
-
-    if(needsEnd) {
-        m_endRow->show();
-        m_endNodeEdit->setPlaceholderText("default 0");
-    } else {
-        m_endNodeEdit->clear();
-        m_endRow->hide();
-    }
-}
-
-bool AlgorithmTab::AlgorithmConfig::operator==(const AlgorithmConfig& other) const {
-    return m_algorithmName == other.m_algorithmName && m_startNode == other.m_startNode &&
-           m_endNode == other.m_endNode;
-}
-
-bool AlgorithmTab::AlgorithmConfig::operator!=(const AlgorithmConfig& other) const {
-    return !(*this == other);
-}
-
-AlgorithmTab::AlgorithmConfig AlgorithmTab::selectedConfig() const {
-    return {m_algorithmCombo->currentText(), m_startNodeEdit->text().toInt(),
-            m_endNodeEdit->text().toInt()};
+    return row;
 }
 
 void AlgorithmTab::startTimerForPlay() {
@@ -523,80 +597,4 @@ void AlgorithmTab::updateControls() {
         m_graphEditAllowed = allowGraphEdit;
         emit graphEditAllowedChanged(m_graphEditAllowed);
     }
-}
-
-void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
-
-    QString userHint;
-
-    switch(error.m_type) {
-    case AlgorithmErrorType::GraphNotInitialized:
-        userHint = "Please create a graph in the 'graph' tab before running an algorithm.";
-        break;
-    case AlgorithmErrorType::GraphTypeInvalid:
-        userHint = "Please consult the 'graph type help' button to see which graph types are "
-                   "supported.\n\n"
-                   "Then, choose one of the following:\n"
-                   "1) Click the 'create graph' button in the upper left corner to create a "
-                   "suitable graph, "
-                   "or clear the current graph from the scene in the 'graph' tab.\n"
-                   "2) Choose a compatible algorithm and run it on the existing graph.";
-        break;
-    case AlgorithmErrorType::StartNodeMissing:
-    case AlgorithmErrorType::GoalNodeMissing:
-        userHint =
-            "Please enter a valid node index or leave the field empty to use the default behavior.";
-        break;
-    case AlgorithmErrorType::NegativeEdgeWeights:
-        userHint = "Please remove negative weights from the graph.";
-        break;
-    case AlgorithmErrorType::NoPathFound:
-        userHint = "Please choose different nodes or modify the graph.";
-        break;
-    case AlgorithmErrorType::GraphHasNegativeCycle:
-        userHint = "Please remove the cycle before running this algorithm.";
-        break;
-    case AlgorithmErrorType::GraphHasCycle:
-        userHint = "Please modify the graph so it becomes acyclic.";
-        break;
-    case AlgorithmErrorType::GraphNotConnected:
-        userHint = "Please ensure all nodes are reachable.";
-        break;
-    }
-
-    QDialog dialog(this);
-    dialog.setWindowTitle("Algorithm cannot be executed");
-    dialog.setModal(true);
-
-    auto* layout = new QVBoxLayout(&dialog);
-
-    // algorithm message
-    QLabel* mainText = new QLabel(QString::fromStdString(error.m_message));
-    QFont   f        = mainText->font();
-    f.setBold(true);
-    mainText->setFont(f);
-    mainText->setWordWrap(true);
-
-    // user instructions
-    QLabel* detailsText = new QLabel(userHint);
-    detailsText->setWordWrap(true);
-
-    layout->addWidget(mainText);
-    layout->addSpacing(12);
-    layout->addWidget(detailsText);
-    layout->addStretch();
-
-    QPushButton* okBtn = new QPushButton("OK");
-    connect(okBtn, &QPushButton::clicked, &dialog, &QDialog::accept);
-
-    layout->addWidget(okBtn, 0, Qt::AlignRight);
-
-    dialog.resize(AppConstants::graphTypeDialogErrorMinWidth, dialog.sizeHint().height());
-    dialog.setMinimumSize(AppConstants::graphTypeDialogErrorMinWidth,
-                          AppConstants::graphTypeDialogErrorMinHeight);
-
-    dialog.exec();
-
-    m_state = RunState::Idle;
-    updateControls();
 }

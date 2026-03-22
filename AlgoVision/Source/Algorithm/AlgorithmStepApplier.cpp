@@ -38,62 +38,23 @@ void AlgorithmStepApplier::undo(const AlgorithmStep& step) {
     case StepType::UpdateDistance:
     case StepType::AddToPath:
     case StepType::AddToTopologicalOrder:
-    case StepType::AssignComponent:
+    case StepType::AssignComponent: {
         if(step.m_node && step.m_prevNodeState.has_value()) {
             m_graph->getNode(step.m_node.value())->setState(step.m_prevNodeState.value());
         }
         break;
+    }
     case StepType::ExamineEdge:
     case StepType::RelaxEdge:
-    case StepType::SelectEdge:
+    case StepType::SelectEdge: {
         if(step.m_from && step.m_to && step.m_prevEdgeState.has_value()) {
             m_graph->getEdge(step.m_from.value(), step.m_to.value())
                 ->setState(step.m_prevEdgeState.value());
         }
         break;
+    }
     default:
         break;
-    }
-}
-
-void AlgorithmStepApplier::check(const AlgorithmStep& step) const {
-    switch(step.m_type) {
-    case StepType::DefaultType:
-    case StepType::VisitNode:
-    case StepType::ProcessNode:
-    case StepType::UpdateDistance:
-    case StepType::AddToPath:
-    case StepType::AddToTopologicalOrder:
-    case StepType::AssignComponent:
-        if(!step.m_node.has_value()) {
-            throw std::logic_error("Missing Node state!");
-        }
-        break;
-
-    case StepType::ExamineEdge:
-    case StepType::RelaxEdge:
-    case StepType::SelectEdge:
-        if(!step.m_from.has_value() || !step.m_to.has_value()) {
-            throw std::logic_error("Missing Edge state!");
-        }
-        break;
-    }
-}
-
-void AlgorithmStepApplier::setGraph(std::shared_ptr<Graph> graph) {
-    m_graph = graph;
-}
-
-void AlgorithmStepApplier::resetGraphState() {
-    if(m_graph == nullptr) {
-        return;
-    }
-
-    for(auto* node: m_graph->getNodesMutable()) {
-        node->setState(NodeState::Default);
-    }
-    for(auto* edge: m_graph->getEdgesMutable()) {
-        edge->setState(EdgeState::Default);
     }
 }
 
@@ -126,5 +87,49 @@ EdgeState AlgorithmStepApplier::stepToEdgeState(const StepType t) const {
         return EdgeState::Selected;
     default:
         return EdgeState::Default;
+    }
+}
+
+void AlgorithmStepApplier::setGraph(const std::shared_ptr<Graph> graph) {
+    m_graph = graph;
+}
+
+void AlgorithmStepApplier::resetGraphState() {
+    if(m_graph == nullptr) {
+        return;
+    }
+
+    for(auto* node: m_graph->getNodesMutable()) {
+        node->setState(NodeState::Default);
+    }
+    for(auto* edge: m_graph->getEdgesMutable()) {
+        edge->setState(EdgeState::Default);
+    }
+}
+
+void AlgorithmStepApplier::check(const AlgorithmStep& step) const {
+    switch(step.m_type) {
+    case StepType::DefaultType:
+    case StepType::VisitNode:
+    case StepType::ProcessNode:
+    case StepType::UpdateDistance:
+    case StepType::AddToPath:
+    case StepType::AddToTopologicalOrder:
+    case StepType::AssignComponent: {
+        if(!step.m_node.has_value()) {
+            throw std::logic_error("Missing Node state!");
+        }
+        break;
+    }
+    case StepType::ExamineEdge:
+    case StepType::RelaxEdge:
+    case StepType::SelectEdge: {
+        if(!step.m_from.has_value() || !step.m_to.has_value()) {
+            throw std::logic_error("Missing Edge state!");
+        }
+        break;
+    }
+    default:
+        break;
     }
 }

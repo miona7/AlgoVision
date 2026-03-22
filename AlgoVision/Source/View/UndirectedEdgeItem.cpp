@@ -5,13 +5,6 @@ UndirectedEdgeItem::UndirectedEdgeItem(Edge* modelEdge, NodeItem* sourceNode, No
     : EdgeItem(modelEdge, sourceNode, destNode, hasWeight) {
 }
 
-QPainterPath UndirectedEdgeItem::edgePath() const {
-    QPainterPath path;
-    path.moveTo(m_sourcePoint);
-    path.lineTo(m_destPoint);
-    return path;
-}
-
 QRectF UndirectedEdgeItem::boundingRect() const {
     qreal offset = AppConstants::BaseEdgeWidth * AppConstants::NodeScale;
     return edgePath().boundingRect().adjusted(-offset, -offset, offset, offset);
@@ -31,4 +24,11 @@ void UndirectedEdgeItem::paint(QPainter* painter, const QStyleOptionGraphicsItem
     pen.setWidthF(AppConstants::BaseEdgeWidth * AppConstants::NodeScale);
     painter->setPen(pen);
     painter->drawPath(edgePath());
+}
+
+QPainterPath UndirectedEdgeItem::edgePath() const {
+    QPainterPath path;
+    path.moveTo(m_sourcePoint);
+    path.lineTo(m_destPoint);
+    return path;
 }

@@ -1,10 +1,10 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <QString>
 #include <QVariant>
 #include <QVariantList>
 #include <QVariantMap>
-#include <QVector>
 
 #include <map>
 #include <set>
@@ -52,10 +52,10 @@ public:
     void clear();
 
 protected:
-    unsigned                                         m_nodeId     = 0;
-    unsigned                                         m_edgeId     = 0;
-    unsigned                                         m_numOfNodes = 0;
-    unsigned                                         m_numOfEdges = 0;
+    unsigned                                         m_nodeId{0};
+    unsigned                                         m_edgeId{0};
+    unsigned                                         m_numOfNodes{0};
+    unsigned                                         m_numOfEdges{0};
     std::map<unsigned, std::map<unsigned, unsigned>> m_adjacencyList;
     std::map<unsigned, Node>                         m_nodes;
     std::map<unsigned, Edge>                         m_edges;

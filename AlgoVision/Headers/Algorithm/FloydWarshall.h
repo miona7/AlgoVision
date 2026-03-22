@@ -1,14 +1,12 @@
-#ifndef FW_H
-#define FW_H
+#ifndef FLOYDWARSHALL_H
+#define FLOYDWARSHALL_H
 
-#include <iostream>
-#include <limits>
 #include <map>
-#include <memory>
+#include <queue>
+#include <limits>
 #include <optional>
 
 #include "Algorithm.h"
-#include "BellmanFord.h"
 
 class FloydWarshall : public Algorithm {
 public:
@@ -25,4 +23,4 @@ private:
     std::optional<AlgorithmError> floydWarshall();
 };
 
-#endif // FW_H
+#endif // FLOYDWARSHALL_H
