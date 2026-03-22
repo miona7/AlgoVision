@@ -20,7 +20,7 @@ public:
     QString resultString() const override;
 
 private:
-    bool                    m_hasNegativeCycle = false;
+    bool                    m_hasNegativeCycle {false};
     std::map<unsigned, int> m_minDistance;
     QString                 m_resultString;
 

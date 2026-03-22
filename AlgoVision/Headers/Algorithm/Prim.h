@@ -19,7 +19,7 @@ public:
     QString resultString() const override;
 
 private:
-    int m_totalWeight = 0;
+    int m_totalWeight {0};
 
     void prim();
 };

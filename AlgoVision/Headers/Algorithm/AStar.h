@@ -25,7 +25,7 @@ public:
 
 private:
     std::vector<unsigned> m_path;
-    int                   m_totalCost = 0;
+    int                   m_totalCost {0};
 
     std::optional<AlgorithmError> aStar(unsigned, unsigned);
     int                           heuristic(unsigned, unsigned) const;
