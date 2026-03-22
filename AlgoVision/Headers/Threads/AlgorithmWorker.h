@@ -8,10 +8,6 @@
 #include <memory>
 
 #include "AStar.h"
-#include "AlgorithmController.h"
-#include "AlgorithmError.h"
-#include "AlgorithmStep.h"
-#include "AlgorithmStepApplier.h"
 #include "BFS.h"
 #include "BellmanFord.h"
 #include "DFS.h"
@@ -21,6 +17,10 @@
 #include "Kahn.h"
 #include "Prim.h"
 #include "Tarjan.h"
+#include "AlgorithmStep.h"
+#include "AlgorithmError.h"
+#include "AlgorithmStepApplier.h"
+#include "AlgorithmController.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"

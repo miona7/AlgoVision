@@ -5,8 +5,8 @@
 #include <QString>
 #include <QThread>
 
-#include "Serializable.h"
 #include "Serializer.h"
+#include "Serializable.h"
 
 class LoadFileWorker : public QThread {
     Q_OBJECT
