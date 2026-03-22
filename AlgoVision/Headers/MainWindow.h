@@ -43,7 +43,6 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
-
 public:
     struct TabInfo {
         GraphEditor* m_editor{nullptr};
@@ -75,9 +74,9 @@ protected:
 
 private:
     Ui::MainWindow*              m_ui;
-    MenuToolBar*                 m_menuToolBar {nullptr};
+    MenuToolBar*                 m_menuToolBar{nullptr};
     ThemeManager*                m_themeManager{nullptr};
-    QTabWidget*                  m_tabWidget {nullptr};
+    QTabWidget*                  m_tabWidget{nullptr};
     QHash<GraphEditor*, TabInfo> m_tabs;
 
     std::unique_ptr<Serializer> m_serializer;

@@ -70,6 +70,10 @@ MainWindow::MainWindow(QWidget* parent)
     connect(btnCreateGraph, &QPushButton::clicked, this, &MainWindow::onCreateGraphTriggered);
 }
 
+MainWindow::~MainWindow() {
+    delete m_ui;
+}
+
 void MainWindow::showStartPage() {
     m_ui->stackedWidget->setCurrentWidget(m_ui->startPage);
     this->setWindowTitle(QString::fromLatin1(AppConstants::startPageTitle));
@@ -81,10 +85,6 @@ void MainWindow::showStartPage() {
     if(m_menuToolBar != nullptr) {
         m_menuToolBar->hide();
     }
-}
-
-MainWindow::~MainWindow() {
-    delete m_ui;
 }
 
 void MainWindow::onOpenGraphTriggered() {
@@ -317,35 +317,13 @@ void MainWindow::onChangeThemeTriggered() {
     }
 }
 
-void MainWindow::initMenuToolBar() {
-    if(m_menuToolBar != nullptr) {
-        return;
-    }
-
-    m_menuToolBar = new MenuToolBar(this);
-    m_menuToolBar->setMovable(false);
-    addToolBar(Qt::TopToolBarArea, m_menuToolBar);
-
-    connect(m_menuToolBar->openGraphAction(), &QAction::triggered, this,
-            &MainWindow::onOpenGraphTriggered);
-    connect(m_menuToolBar->createGraphAction(), &QAction::triggered, this,
-            &MainWindow::onCreateGraphTriggered);
-    connect(m_menuToolBar->saveGraphAction(), &QAction::triggered, this,
-            &MainWindow::onSaveGraphTriggered);
-    connect(m_menuToolBar->saveImageAction(), &QAction::triggered, this,
-            &MainWindow::onSaveImageTriggered);
-    connect(m_menuToolBar->changeThemeAction(), &QAction::triggered, this,
-            &MainWindow::onChangeThemeTriggered);
-
-    connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
-}
-
 void MainWindow::onHelpTriggered() {
     QString helpText =
         "<h3>General info</h3>"
 
         "<p>"
-        "This app is designed with the intention of being used as a learning tool and an interactive "
+        "This app is designed with the intention of being used as a learning tool and an "
+        "interactive "
         "<b>visualizer</b> while studying graph algorithms."
         "</p>"
 
@@ -354,14 +332,16 @@ void MainWindow::onHelpTriggered() {
         "<li>"
         "Use buttons from the toolbar to change the theme colors of the app (purple, black, mint), "
         "to create a brand new graph, and even import one of yours as a <b>.json</b> file, "
-        "to save your graph (as <b>.json</b>), or save an image of the scene with the colors of the current "
+        "to save your graph (as <b>.json</b>), or save an image of the scene with the colors of "
+        "the current "
         "state of nodes and branches.<br>"
         "</li>"
 
         "<li>"
         "There are two tabs in the right menu — <b>Graph</b> and <b>Algorithm</b>."
         "<br><br>"
-        "Use the <b>Graph tab</b> if you want to interact with the graph — enter add or delete mode "
+        "Use the <b>Graph tab</b> if you want to interact with the graph — enter add or delete "
+        "mode "
         "(for nodes and branches), change the node size, "
         "or if you want to interact with the scene — undo, redo, zoom in/out, pan, or clear."
         "<br><br>"
@@ -489,4 +469,27 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     } else {
         event->accept();
     }
+}
+
+void MainWindow::initMenuToolBar() {
+    if(m_menuToolBar != nullptr) {
+        return;
+    }
+
+    m_menuToolBar = new MenuToolBar(this);
+    m_menuToolBar->setMovable(false);
+    addToolBar(Qt::TopToolBarArea, m_menuToolBar);
+
+    connect(m_menuToolBar->openGraphAction(), &QAction::triggered, this,
+            &MainWindow::onOpenGraphTriggered);
+    connect(m_menuToolBar->createGraphAction(), &QAction::triggered, this,
+            &MainWindow::onCreateGraphTriggered);
+    connect(m_menuToolBar->saveGraphAction(), &QAction::triggered, this,
+            &MainWindow::onSaveGraphTriggered);
+    connect(m_menuToolBar->saveImageAction(), &QAction::triggered, this,
+            &MainWindow::onSaveImageTriggered);
+    connect(m_menuToolBar->changeThemeAction(), &QAction::triggered, this,
+            &MainWindow::onChangeThemeTriggered);
+
+    connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
 }
