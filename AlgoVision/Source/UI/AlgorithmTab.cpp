@@ -139,7 +139,7 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
             }
 
             m_worker = new AlgorithmWorker(newConfig.m_algorithmName, graph, newConfig.m_startNode,
-                                           newConfig.m_endNode);
+                                           newConfig.m_endNode, this);
 
             // worker -> contoller (errors)
             connect(m_worker, &AlgorithmWorker::algorithmErrorOccurred, &m_algorithmController,
