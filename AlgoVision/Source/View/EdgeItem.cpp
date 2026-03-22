@@ -32,7 +32,6 @@ void EdgeItem::initEdgeWeight() {
 }
 
 void EdgeItem::adjust() {
-
     QLineF line(mapFromItem(m_sourceNode, 0, 0), mapFromItem(m_destNode, 0, 0));
     qreal  length = line.length();
 
@@ -179,7 +178,7 @@ QPointF EdgeItem::getWeightPosition() const {
     auto  normal = calculateNormal();
     auto  center = getEdgeCenter();
     qreal offset = 10;
-    return QPointF(center.x() - offset * normal.x(), center.y() - offset * normal.y());
+    return QPointF{center.x() - offset * normal.x(), center.y() - offset * normal.y()};
 }
 
 // remove edge by clicking on it
@@ -187,7 +186,7 @@ void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
     emit edgeSelected(this);
 }
 
-const QColor EdgeItem::calculateColor() const {
+QColor EdgeItem::calculateColor() const {
     if(m_modelEdge == nullptr) {
         return Qt::black; // fallback if edge does not exist
     }

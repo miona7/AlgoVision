@@ -192,7 +192,7 @@ qreal NodeItem::radius() const {
     return m_radius;
 }
 
-const QColor NodeItem::calculateColor() const {
+QColor NodeItem::calculateColor() const {
     if(m_nodeSelected) {
         return Qt::red;
     }
