@@ -9,9 +9,9 @@
  * to record changes to nodes and edges during algorithm execution for visualization purposes.
  */
 
+#include <optional>
 #include <string>
 #include <vector>
-#include <optional>
 
 #include "Edge.h"
 #include "Node.h"

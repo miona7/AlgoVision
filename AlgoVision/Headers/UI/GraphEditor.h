@@ -12,15 +12,15 @@
 #include <QUndoStack>
 #include <QWidget>
 
-#include <memory>
 #include <functional>
+#include <memory>
 
+#include "AlgorithmTab.h"
 #include "Graph.h"
+#include "GraphController.h"
 #include "GraphEditTab.h"
 #include "GraphScene.h"
 #include "GraphView.h"
-#include "AlgorithmTab.h"
-#include "GraphController.h"
 
 class GraphEditor : public QWidget {
     Q_OBJECT
@@ -46,9 +46,9 @@ private slots:
 
 private:
     QUndoStack*                      m_undoStack{nullptr};
-    GraphEditTab*                    m_editTab         {nullptr};
-    QLabel*                          m_leftPlaceholder {nullptr};
-    GraphView*                       m_view            {nullptr};
+    GraphEditTab*                    m_editTab{nullptr};
+    QLabel*                          m_leftPlaceholder{nullptr};
+    GraphView*                       m_view{nullptr};
     std::shared_ptr<GraphController> m_graphController;
 };
 

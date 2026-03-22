@@ -61,9 +61,9 @@ protected:
 
     unsigned m_observerId{0};
 
-    void         mousePressEvent(QGraphicsSceneMouseEvent*) override;
+    void   mousePressEvent(QGraphicsSceneMouseEvent*) override;
     QColor calculateColor() const;
-    void         onEdgeUpdated();
+    void   onEdgeUpdated();
 
     QPointF getEdgeCenter() const;
     QPointF calculateNormal() const;

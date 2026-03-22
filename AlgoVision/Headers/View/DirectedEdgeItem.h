@@ -1,13 +1,13 @@
 #ifndef DIRECTEDEDGEITEM_H
 #define DIRECTEDEDGEITEM_H
 
-#include <QPen>
 #include <QPainter>
+#include <QPen>
 
 #include <cmath>
 
-#include "EdgeItem.h"
 #include "AppConstants.h"
+#include "EdgeItem.h"
 
 class DirectedEdgeItem : public EdgeItem {
 public:

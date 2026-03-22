@@ -2,8 +2,8 @@
 #define THEME_H
 
 #include <QFile>
-#include <QString>
 #include <QSettings>
+#include <QString>
 
 class ThemeManager {
 public:

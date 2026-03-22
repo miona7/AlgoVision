@@ -45,8 +45,8 @@ private:
     QSlider*     m_nodeSizeSlider{nullptr};
 
     bool m_graphEditsAllowed{true};
-    bool m_canUndo           {false};
-    bool m_canRedo           {false};
+    bool m_canUndo{false};
+    bool m_canRedo{false};
 
     void applyEditButtonsState();
     void initLayout();

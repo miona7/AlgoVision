@@ -23,9 +23,9 @@
 
 #include <optional>
 
+#include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
 #include "GraphController.h"
-#include "AlgorithmController.h"
 
 class AlgorithmTab : public QWidget {
     Q_OBJECT
@@ -41,7 +41,7 @@ signals:
 
 private:
     struct AlgorithmConfig {
-        QString m_algorithmName;
+        QString  m_algorithmName;
         unsigned m_startNode;
         unsigned m_endNode;
 

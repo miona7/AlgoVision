@@ -1,11 +1,11 @@
 #ifndef ALGORITHMSTEPAPPLIER_H
 #define ALGORITHMSTEPAPPLIER_H
 
-#include <memory>
 #include <exception>
+#include <memory>
 
-#include "Graph.h"
 #include "AlgorithmStep.h"
+#include "Graph.h"
 
 /**
  * @class AlgorithmStepApplier

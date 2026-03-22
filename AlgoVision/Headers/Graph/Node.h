@@ -35,8 +35,8 @@ private:
     unsigned                  m_id;
     QString                   m_name;
     std::pair<double, double> m_position; // node coordinates
-    NodeState                 m_state          {NodeState::Default};
-    int                       m_componentColor {-1};
+    NodeState                 m_state{NodeState::Default};
+    int                       m_componentColor{-1};
 };
 
 #endif // NODE_H

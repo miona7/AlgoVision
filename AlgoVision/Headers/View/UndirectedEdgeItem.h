@@ -1,11 +1,11 @@
 #ifndef UNDIRECTEDEDGEITEM_H
 #define UNDIRECTEDEDGEITEM_H
 
-#include <QPen>
 #include <QPainter>
+#include <QPen>
 
-#include "EdgeItem.h"
 #include "AppConstants.h"
+#include "EdgeItem.h"
 
 class UndirectedEdgeItem : public EdgeItem {
 public:

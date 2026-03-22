@@ -2,10 +2,10 @@
 #define KAHN_H
 
 #include <map>
-#include <queue>
-#include <vector>
 #include <memory>
 #include <optional>
+#include <queue>
+#include <vector>
 
 #include "Algorithm.h"
 

@@ -24,7 +24,7 @@ private:
     unsigned  m_id;
     unsigned  m_idStartNode;
     unsigned  m_idEndNode;
-    EdgeState m_state {EdgeState::Default};
+    EdgeState m_state{EdgeState::Default};
 };
 
 #endif // EDGE_H

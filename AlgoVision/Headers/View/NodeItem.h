@@ -77,7 +77,7 @@ private:
     unsigned m_observerId{0};
 
     QColor calculateColor() const;
-    void         onNodeUpdated();
+    void   onNodeUpdated();
 };
 
 #endif // NODEITEM_H
