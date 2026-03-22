@@ -44,7 +44,7 @@ signals:
 private:
     AlgorithmStepApplier&      m_applier;
     std::vector<AlgorithmStep> m_steps;
-    int                        m_currentIndex = -1;
+    int                        m_currentIndex {-1};
 
     std::vector<AlgorithmStep> m_undoStack;
     std::vector<AlgorithmStep> m_redoStack;

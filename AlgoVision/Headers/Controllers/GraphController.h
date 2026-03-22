@@ -76,7 +76,7 @@ public slots:
 private:
     std::shared_ptr<Graph>      m_graph;
     std::unique_ptr<GraphScene> m_scene     = std::make_unique<GraphScene>();
-    QUndoStack*                 m_undoStack = nullptr;
+    QUndoStack*                 m_undoStack {nullptr};
 
     void connectScene() const;
 };
