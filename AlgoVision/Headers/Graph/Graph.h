@@ -1,10 +1,10 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <QString>
 #include <QVariant>
-#include <QVariantList>
 #include <QVariantMap>
-#include <QVector>
+#include <QVariantList>
 
 #include <map>
 #include <set>

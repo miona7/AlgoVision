@@ -1,8 +1,6 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-#include <iostream>
-
 #include "Observable.h"
 
 enum class EdgeState { Default, Examined, Relaxed, Selected };

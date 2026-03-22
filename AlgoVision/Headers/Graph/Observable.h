@@ -1,8 +1,8 @@
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
-#include <functional>
 #include <map>
+#include <functional>
 
 /**
  * @class Observable

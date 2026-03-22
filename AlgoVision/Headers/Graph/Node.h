@@ -2,7 +2,6 @@
 #define NODE_H
 
 #include <QString>
-#include <iostream>
 
 #include "Observable.h"
 
