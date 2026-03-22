@@ -49,26 +49,6 @@ void EdgeItem::adjust() {
     adjustPointsGeometry();
 }
 
-void EdgeItem::connectNodes() {
-    if(m_sourceNode != nullptr) {
-        m_sourceNode->addEdge(this);
-    }
-
-    if(m_destNode != nullptr) {
-        m_destNode->addEdge(this);
-    }
-}
-
-void EdgeItem::disconnectNodes() {
-    if(m_sourceNode != nullptr) {
-        m_sourceNode->removeEdge(this);
-    }
-
-    if(m_destNode != nullptr) {
-        m_destNode->removeEdge(this);
-    }
-}
-
 void EdgeItem::adjustPointsGeometry() {
     QLineF line(mapFromItem(m_sourceNode, 0, 0), mapFromItem(m_destNode, 0, 0));
     qreal  length     = line.length();
@@ -120,24 +100,24 @@ void EdgeItem::adjustWeightGeometry() const {
     }
 }
 
-void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
-    event->accept();
+void EdgeItem::connectNodes() {
+    if(m_sourceNode != nullptr) {
+        m_sourceNode->addEdge(this);
+    }
 
-    if(m_hasWeight) {
-        m_weight->startEditing();
+    if(m_destNode != nullptr) {
+        m_destNode->addEdge(this);
     }
 }
 
-void EdgeItem::onEdgeWeightChanged(const QString& name) const {
-    emit editEdgeWeightRequest(this, name);
-}
+void EdgeItem::disconnectNodes() {
+    if(m_sourceNode != nullptr) {
+        m_sourceNode->removeEdge(this);
+    }
 
-EditableTextItem* EdgeItem::weight() const {
-    return m_weight;
-}
-
-void EdgeItem::setWeight(EditableTextItem* newWeight) {
-    m_weight = newWeight;
+    if(m_destNode != nullptr) {
+        m_destNode->removeEdge(this);
+    }
 }
 
 Edge* EdgeItem::modelEdge() const {
@@ -156,29 +136,28 @@ void EdgeItem::setHasWeight(bool newHasWeight) {
     m_hasWeight = newHasWeight;
 }
 
-QPointF EdgeItem::getEdgeCenter() const {
-    return edgePath().pointAtPercent(0.5);
+EditableTextItem* EdgeItem::weight() const {
+    return m_weight;
 }
 
-QPointF EdgeItem::calculateNormal() const {
-    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
-    QPointF normal(-line.y(), line.x());
-    qreal   length = std::hypot(normal.x(), normal.y());
+void EdgeItem::setWeight(EditableTextItem* newWeight) {
+    m_weight = newWeight;
+}
 
-    if(qFuzzyCompare(length, 0.0)) {
-        normal *= 0.0;
-    } else {
-        normal /= length;
+void EdgeItem::updateSize() {
+    if(!m_hasWeight || m_weight == nullptr) {
+        return;
     }
 
-    return normal;
+    QFont f = m_weight->font();
+    f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
+    m_weight->setFont(f);
+
+    adjustWeightGeometry();
 }
 
-QPointF EdgeItem::getWeightPosition() const {
-    auto  normal = calculateNormal();
-    auto  center = getEdgeCenter();
-    qreal offset = 10;
-    return QPointF{center.x() - offset * normal.x(), center.y() - offset * normal.y()};
+void EdgeItem::onEdgeWeightChanged(const QString& name) const {
+    emit editEdgeWeightRequest(this, name);
 }
 
 // remove edge by clicking on it
@@ -210,14 +189,35 @@ void EdgeItem::onEdgeUpdated() {
     update();
 }
 
-void EdgeItem::updateSize() {
-    if(!m_hasWeight || m_weight == nullptr) {
-        return;
+QPointF EdgeItem::getEdgeCenter() const {
+    return edgePath().pointAtPercent(0.5);
+}
+
+QPointF EdgeItem::calculateNormal() const {
+    QPointF line(m_destPoint.x() - m_sourcePoint.x(), m_destPoint.y() - m_sourcePoint.y());
+    QPointF normal(-line.y(), line.x());
+    qreal   length = std::hypot(normal.x(), normal.y());
+
+    if(qFuzzyCompare(length, 0.0)) {
+        normal *= 0.0;
+    } else {
+        normal /= length;
     }
 
-    QFont f = m_weight->font();
-    f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
-    m_weight->setFont(f);
+    return normal;
+}
 
-    adjustWeightGeometry();
+QPointF EdgeItem::getWeightPosition() const {
+    auto  normal = calculateNormal();
+    auto  center = getEdgeCenter();
+    qreal offset = 10;
+    return QPointF{center.x() - offset * normal.x(), center.y() - offset * normal.y()};
+}
+
+void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
+    event->accept();
+
+    if(m_hasWeight) {
+        m_weight->startEditing();
+    }
 }

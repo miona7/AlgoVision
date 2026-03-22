@@ -6,19 +6,18 @@
 
 #include <map>
 
-#include "DirectedEdgeItem.h"
 #include "Edge.h"
-#include "EdgeItem.h"
-#include "EditableTextItem.h"
 #include "Node.h"
 #include "NodeItem.h"
-#include "ThemeManager.h"
+#include "EdgeItem.h"
+#include "DirectedEdgeItem.h"
 #include "UndirectedEdgeItem.h"
+#include "EditableTextItem.h"
+#include "ThemeManager.h"
 
 class GraphScene : public QGraphicsScene {
     Q_OBJECT
 public:
-    explicit GraphScene(QObject* = nullptr);
     /*
         ADD -> adding nodes and edges
         REMOVE -> removing nodes and edges
@@ -26,6 +25,8 @@ public:
        activated IDLE -> all scene interactions are disabled
     */
     enum class State { ADD, REMOVE, EDIT, IDLE };
+
+    explicit GraphScene(QObject* = nullptr);
 
     void updateNodeScalling();
 

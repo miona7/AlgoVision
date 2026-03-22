@@ -36,6 +36,61 @@ void NodeItem::setModelNode(Node* newModelNode) {
     m_modelNode = newModelNode;
 }
 
+qreal NodeItem::radius() const {
+    return m_radius;
+}
+
+void NodeItem::setNodeSelected(bool newNodeSelected) {
+    m_nodeSelected = newNodeSelected;
+    update();
+}
+
+void NodeItem::updateSize() {
+    prepareGeometryChange();
+    m_radius      = AppConstants::defaultRadius * AppConstants::NodeScale;
+    m_borderWidth = AppConstants::defaultBorderWidth * AppConstants::NodeScale;
+
+    update();
+
+    for(auto* edge: m_edges) {
+        if(edge != nullptr) {
+            edge->adjust();
+        }
+    }
+
+    QFont f = m_label->font();
+    f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
+    m_label->setFont(f);
+
+    m_label->setTextWidth(2 * m_radius);
+    m_label->centerText();
+}
+
+void NodeItem::addEdge(EdgeItem* edgeItem) {
+    m_edges.insert(edgeItem);
+}
+
+void NodeItem::removeEdge(EdgeItem* edgeItem) {
+    m_edges.remove(edgeItem);
+}
+
+void NodeItem::updateNodePosition() {
+    m_oldCenter = QPointF(m_modelNode->getPosition().first, m_modelNode->getPosition().second);
+    setPos(m_oldCenter);
+}
+
+EditableTextItem* NodeItem::label() const {
+    return m_label;
+}
+
+void NodeItem::setLabel(EditableTextItem* newLabel) {
+    m_label = newLabel;
+}
+
+const QSet<EdgeItem*>& NodeItem::edges() const {
+    return m_edges;
+}
+
 QRectF NodeItem::boundingRect() const {
     return QRectF{-m_radius - m_borderWidth, -m_radius - m_borderWidth,
                   2 * (m_radius + m_borderWidth), 2 * (m_radius + m_borderWidth)};
@@ -132,62 +187,6 @@ void NodeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
 
 void NodeItem::onNameChanged(const QString& name) const {
     emit editNodeNameRequest(this, name);
-}
-
-EditableTextItem* NodeItem::label() const {
-    return m_label;
-}
-
-void NodeItem::setLabel(EditableTextItem* newLabel) {
-    m_label = newLabel;
-}
-
-const QSet<EdgeItem*>& NodeItem::edges() const {
-    return m_edges;
-}
-
-void NodeItem::setNodeSelected(bool newNodeSelected) {
-    m_nodeSelected = newNodeSelected;
-    update();
-}
-
-void NodeItem::updateSize() {
-
-    prepareGeometryChange();
-    m_radius      = AppConstants::defaultRadius * AppConstants::NodeScale;
-    m_borderWidth = AppConstants::defaultBorderWidth * AppConstants::NodeScale;
-
-    update();
-
-    for(auto* edge: m_edges) {
-        if(edge != nullptr) {
-            edge->adjust();
-        }
-    }
-
-    QFont f = m_label->font();
-    f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
-    m_label->setFont(f);
-
-    m_label->setTextWidth(2 * m_radius);
-    m_label->centerText();
-}
-
-void NodeItem::addEdge(EdgeItem* edgeItem) {
-    m_edges.insert(edgeItem);
-}
-
-void NodeItem::removeEdge(EdgeItem* edgeItem) {
-    m_edges.remove(edgeItem);
-}
-
-void NodeItem::updateNodePosition() {
-    m_oldCenter = QPointF(m_modelNode->getPosition().first, m_modelNode->getPosition().second);
-    setPos(m_oldCenter);
-}
-
-qreal NodeItem::radius() const {
-    return m_radius;
 }
 
 QColor NodeItem::calculateColor() const {

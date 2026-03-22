@@ -1,23 +1,22 @@
 #ifndef NODEITEM_H
 #define NODEITEM_H
 
+#include <QPen>
+#include <QSet>
+#include <QPainter>
 #include <QGraphicsObject>
 #include <QGraphicsSceneEvent>
 #include <QGraphicsSceneMouseEvent>
-#include <QPainter>
-#include <QPen>
-#include <QSet>
 
-#include "AppConstants.h"
-#include "EdgeItem.h"
-#include "EditableTextItem.h"
 #include "Node.h"
+#include "EdgeItem.h"
+#include "AppConstants.h"
+#include "EditableTextItem.h"
 
 class EdgeItem;
 
 class NodeItem : public QGraphicsObject {
     Q_OBJECT
-
 public:
     explicit NodeItem(Node*);
     ~NodeItem() override;

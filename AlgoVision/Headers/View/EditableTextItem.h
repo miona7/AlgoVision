@@ -1,9 +1,9 @@
 #ifndef EDITABLETEXTITEM_H
 #define EDITABLETEXTITEM_H
 
-#include <QGraphicsTextItem>
 #include <QKeyEvent>
 #include <QTextCursor>
+#include <QGraphicsTextItem>
 
 class EditableTextItem : public QGraphicsTextItem {
     Q_OBJECT
