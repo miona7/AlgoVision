@@ -23,9 +23,9 @@
 
 #include <optional>
 
-#include "AlgorithmController.h"
 #include "AlgorithmWorker.h"
 #include "GraphController.h"
+#include "AlgorithmController.h"
 
 class AlgorithmTab : public QWidget {
     Q_OBJECT

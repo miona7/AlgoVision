@@ -23,6 +23,10 @@ GraphEditTab::GraphEditTab(QWidget* parent)
     m_redoBtn->setEnabled(false);
 }
 
+QSlider* GraphEditTab::getNodeSizeSlider() const {
+    return m_nodeSizeSlider;
+}
+
 void GraphEditTab::setUndoEnabled(bool enabled) {
     m_canUndo = enabled;
     applyEditButtonsState();
@@ -31,6 +35,20 @@ void GraphEditTab::setUndoEnabled(bool enabled) {
 void GraphEditTab::setRedoEnabled(bool enabled) {
     m_canRedo = enabled;
     applyEditButtonsState();
+}
+
+void GraphEditTab::setGraphEditsAllowed(bool allowed) {
+    m_graphEditsAllowed = allowed;
+    applyEditButtonsState();
+}
+
+void GraphEditTab::applyEditButtonsState() {
+    m_addBtn->setEnabled(m_graphEditsAllowed);
+    m_removeBtn->setEnabled(m_graphEditsAllowed);
+    m_clearBtn->setEnabled(m_graphEditsAllowed);
+
+    m_undoBtn->setEnabled(m_graphEditsAllowed && m_canUndo);
+    m_redoBtn->setEnabled(m_graphEditsAllowed && m_canRedo);
 }
 
 void GraphEditTab::initLayout() {
@@ -89,22 +107,4 @@ void GraphEditTab::initLayout() {
     mainLayout->addWidget(nodeBox);
 
     mainLayout->addStretch();
-}
-
-QSlider* GraphEditTab::getNodeSizeSlider() const {
-    return m_nodeSizeSlider;
-}
-
-void GraphEditTab::setGraphEditsAllowed(bool allowed) {
-    m_graphEditsAllowed = allowed;
-    applyEditButtonsState();
-}
-
-void GraphEditTab::applyEditButtonsState() {
-    m_addBtn->setEnabled(m_graphEditsAllowed);
-    m_removeBtn->setEnabled(m_graphEditsAllowed);
-    m_clearBtn->setEnabled(m_graphEditsAllowed);
-
-    m_undoBtn->setEnabled(m_graphEditsAllowed && m_canUndo);
-    m_redoBtn->setEnabled(m_graphEditsAllowed && m_canRedo);
 }

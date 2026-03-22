@@ -12,15 +12,15 @@
 #include <QUndoStack>
 #include <QWidget>
 
-#include <functional>
 #include <memory>
+#include <functional>
 
-#include "AlgorithmTab.h"
 #include "Graph.h"
-#include "GraphController.h"
-#include "GraphEditTab.h"
-#include "GraphScene.h"
 #include "GraphView.h"
+#include "GraphScene.h"
+#include "AlgorithmTab.h"
+#include "GraphEditTab.h"
+#include "GraphController.h"
 
 class GraphEditor : public QWidget {
     Q_OBJECT

@@ -93,6 +93,10 @@ GraphEditor::GraphEditor(const std::shared_ptr<GraphController>& graphController
             &GraphEditor::onZoomOutRequestTrigger);
 }
 
+std::shared_ptr<GraphController> GraphEditor::graphController() const {
+    return m_graphController;
+}
+
 void GraphEditor::onAddRequestTrigger() {
     m_view->resetState();
     m_graphController->setAddSceneState();
@@ -131,8 +135,4 @@ void GraphEditor::onZoomInRequestTrigger() {
 void GraphEditor::onZoomOutRequestTrigger() {
     m_graphController->resetScene();
     m_view->zoomOut();
-}
-
-std::shared_ptr<GraphController> GraphEditor::graphController() const {
-    return m_graphController;
 }

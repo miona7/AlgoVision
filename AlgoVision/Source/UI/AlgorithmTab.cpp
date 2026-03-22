@@ -195,6 +195,96 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     });
 }
 
+void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
+
+    QString userHint;
+
+    switch(error.m_type) {
+    case AlgorithmErrorType::GraphNotInitialized:
+        userHint = "Please create a graph in the 'graph' tab before running an algorithm.";
+        break;
+    case AlgorithmErrorType::GraphTypeInvalid:
+        userHint = "Please consult the 'graph type help' button to see which graph types are "
+                   "supported.\n\n"
+                   "Then, choose one of the following:\n"
+                   "1) Click the 'create graph' button in the upper left corner to create a "
+                   "suitable graph, "
+                   "or clear the current graph from the scene in the 'graph' tab.\n"
+                   "2) Choose a compatible algorithm and run it on the existing graph.";
+        break;
+    case AlgorithmErrorType::StartNodeMissing:
+    case AlgorithmErrorType::GoalNodeMissing:
+        userHint =
+            "Please enter a valid node index or leave the field empty to use the default behavior.";
+        break;
+    case AlgorithmErrorType::NegativeEdgeWeights:
+        userHint = "Please remove negative weights from the graph.";
+        break;
+    case AlgorithmErrorType::NoPathFound:
+        userHint = "Please choose different nodes or modify the graph.";
+        break;
+    case AlgorithmErrorType::GraphHasNegativeCycle:
+        userHint = "Please remove the cycle before running this algorithm.";
+        break;
+    case AlgorithmErrorType::GraphHasCycle:
+        userHint = "Please modify the graph so it becomes acyclic.";
+        break;
+    case AlgorithmErrorType::GraphNotConnected:
+        userHint = "Please ensure all nodes are reachable.";
+        break;
+    }
+
+    QDialog dialog(this);
+    dialog.setWindowTitle("Algorithm cannot be executed");
+    dialog.setModal(true);
+
+    auto* layout = new QVBoxLayout(&dialog);
+
+    // algorithm message
+    QLabel* mainText = new QLabel(QString::fromStdString(error.m_message));
+    QFont   f        = mainText->font();
+    f.setBold(true);
+    mainText->setFont(f);
+    mainText->setWordWrap(true);
+
+    // user instructions
+    QLabel* detailsText = new QLabel(userHint);
+    detailsText->setWordWrap(true);
+
+    layout->addWidget(mainText);
+    layout->addSpacing(12);
+    layout->addWidget(detailsText);
+    layout->addStretch();
+
+    QPushButton* okBtn = new QPushButton("OK");
+    connect(okBtn, &QPushButton::clicked, &dialog, &QDialog::accept);
+
+    layout->addWidget(okBtn, 0, Qt::AlignRight);
+
+    dialog.resize(AppConstants::graphTypeDialogErrorMinWidth, dialog.sizeHint().height());
+    dialog.setMinimumSize(AppConstants::graphTypeDialogErrorMinWidth,
+                          AppConstants::graphTypeDialogErrorMinHeight);
+
+    dialog.exec();
+
+    m_state = RunState::Idle;
+    updateControls();
+}
+
+bool AlgorithmTab::AlgorithmConfig::operator==(const AlgorithmConfig& other) const {
+    return m_algorithmName == other.m_algorithmName && m_startNode == other.m_startNode &&
+           m_endNode == other.m_endNode;
+}
+
+bool AlgorithmTab::AlgorithmConfig::operator!=(const AlgorithmConfig& other) const {
+    return !(*this == other);
+}
+
+AlgorithmTab::AlgorithmConfig AlgorithmTab::selectedConfig() const {
+    return {m_algorithmCombo->currentText(), m_startNodeEdit->text().toUInt(),
+            m_endNodeEdit->text().toUInt()};
+}
+
 void AlgorithmTab::initLayout() {
     auto* mainLayout = new QVBoxLayout(this);
 
@@ -328,80 +418,6 @@ void AlgorithmTab::initLayout() {
     mainLayout->addStretch();
 }
 
-QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) {
-    QWidget* row    = new QWidget(this);
-    auto*    layout = new QHBoxLayout(row);
-    layout->setContentsMargins(2, 2, 2, 2);
-
-    QLabel* box = new QLabel;
-    box->setFixedSize(14, 14);
-    box->setStyleSheet(QString("background-color: %1; border: 1px solid black;").arg(color.name()));
-
-    QLabel* label = new QLabel(text);
-
-    layout->addWidget(box);
-    layout->addWidget(label);
-    layout->addStretch();
-
-    return row;
-}
-
-void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
-    QLayoutItem* child = nullptr;
-    while((child = m_legendLayout->takeAt(0)) != nullptr) {
-        delete child->widget();
-        delete child;
-    }
-
-    QLabel* title = new QLabel("<b>Legend</b>");
-    m_legendLayout->addWidget(title);
-
-    m_legendLayout->addWidget(new QLabel("<b>Nodes</b>"));
-    m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
-
-    if(name != "Kahn") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
-    }
-
-    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" ||
-       name == "Floyd-Warshall" || name == "Prim" || name == "Tarjan") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::darkMagenta, "Distance updated"));
-    }
-
-    if(name == "A* (Euclidean heuristic)") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::green, "In final path"));
-    }
-
-    if(name == "Kahn") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::darkYellow, "Added to topological order"));
-    }
-
-    if(name == "Tarjan") {
-        m_legendLayout->addWidget(new QLabel("Each component is colored differently."));
-    }
-
-    if(name != "Kahn") {
-        m_legendLayout->addWidget(new QLabel("<b>Edges</b>"));
-        m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Examined"));
-    }
-
-    if(name == "Bellman-Ford") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Relaxed"));
-    }
-
-    if(name == "A* (Euclidean heuristic)") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
-    }
-
-    if(name == "Floyd-Warshall") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::red, "Used to update distance between nodes"));
-    }
-
-    if(name == "Prim") {
-        m_legendLayout->addWidget(makeLegendItem(Qt::red, "In minimum spanning tree"));
-    }
-}
-
 void AlgorithmTab::initIcons() {
     m_prevBtn->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
     m_playBtn->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
@@ -447,18 +463,78 @@ void AlgorithmTab::updateUiForAlgorithm(const QString& algorithmName) {
     }
 }
 
-bool AlgorithmTab::AlgorithmConfig::operator==(const AlgorithmConfig& other) const {
-    return m_algorithmName == other.m_algorithmName && m_startNode == other.m_startNode &&
-           m_endNode == other.m_endNode;
+void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
+    QLayoutItem* child = nullptr;
+    while((child = m_legendLayout->takeAt(0)) != nullptr) {
+        delete child->widget();
+        delete child;
+    }
+
+    QLabel* title = new QLabel("<b>Legend</b>");
+    m_legendLayout->addWidget(title);
+
+    m_legendLayout->addWidget(new QLabel("<b>Nodes</b>"));
+    m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Active"));
+
+    if(name != "Kahn") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Visited"));
+    }
+
+    if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" ||
+        name == "Floyd-Warshall" || name == "Prim" || name == "Tarjan") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::darkMagenta, "Distance updated"));
+    }
+
+    if(name == "A* (Euclidean heuristic)") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::green, "In final path"));
+    }
+
+    if(name == "Kahn") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::darkYellow, "Added to topological order"));
+    }
+
+    if(name == "Tarjan") {
+        m_legendLayout->addWidget(new QLabel("Each component is colored differently."));
+    }
+
+    if(name != "Kahn") {
+        m_legendLayout->addWidget(new QLabel("<b>Edges</b>"));
+        m_legendLayout->addWidget(makeLegendItem(Qt::blue, "Examined"));
+    }
+
+    if(name == "Bellman-Ford") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::yellow, "Relaxed"));
+    }
+
+    if(name == "A* (Euclidean heuristic)") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::red, "In final path"));
+    }
+
+    if(name == "Floyd-Warshall") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::red, "Used to update distance between nodes"));
+    }
+
+    if(name == "Prim") {
+        m_legendLayout->addWidget(makeLegendItem(Qt::red, "In minimum spanning tree"));
+    }
 }
 
-bool AlgorithmTab::AlgorithmConfig::operator!=(const AlgorithmConfig& other) const {
-    return !(*this == other);
-}
+QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) {
+    QWidget* row    = new QWidget(this);
+    auto*    layout = new QHBoxLayout(row);
+    layout->setContentsMargins(2, 2, 2, 2);
 
-AlgorithmTab::AlgorithmConfig AlgorithmTab::selectedConfig() const {
-    return {m_algorithmCombo->currentText(), m_startNodeEdit->text().toUInt(),
-            m_endNodeEdit->text().toUInt()};
+    QLabel* box = new QLabel;
+    box->setFixedSize(14, 14);
+    box->setStyleSheet(QString("background-color: %1; border: 1px solid black;").arg(color.name()));
+
+    QLabel* label = new QLabel(text);
+
+    layout->addWidget(box);
+    layout->addWidget(label);
+    layout->addStretch();
+
+    return row;
 }
 
 void AlgorithmTab::startTimerForPlay() {
@@ -523,80 +599,4 @@ void AlgorithmTab::updateControls() {
         m_graphEditAllowed = allowGraphEdit;
         emit graphEditAllowedChanged(m_graphEditAllowed);
     }
-}
-
-void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
-
-    QString userHint;
-
-    switch(error.m_type) {
-    case AlgorithmErrorType::GraphNotInitialized:
-        userHint = "Please create a graph in the 'graph' tab before running an algorithm.";
-        break;
-    case AlgorithmErrorType::GraphTypeInvalid:
-        userHint = "Please consult the 'graph type help' button to see which graph types are "
-                   "supported.\n\n"
-                   "Then, choose one of the following:\n"
-                   "1) Click the 'create graph' button in the upper left corner to create a "
-                   "suitable graph, "
-                   "or clear the current graph from the scene in the 'graph' tab.\n"
-                   "2) Choose a compatible algorithm and run it on the existing graph.";
-        break;
-    case AlgorithmErrorType::StartNodeMissing:
-    case AlgorithmErrorType::GoalNodeMissing:
-        userHint =
-            "Please enter a valid node index or leave the field empty to use the default behavior.";
-        break;
-    case AlgorithmErrorType::NegativeEdgeWeights:
-        userHint = "Please remove negative weights from the graph.";
-        break;
-    case AlgorithmErrorType::NoPathFound:
-        userHint = "Please choose different nodes or modify the graph.";
-        break;
-    case AlgorithmErrorType::GraphHasNegativeCycle:
-        userHint = "Please remove the cycle before running this algorithm.";
-        break;
-    case AlgorithmErrorType::GraphHasCycle:
-        userHint = "Please modify the graph so it becomes acyclic.";
-        break;
-    case AlgorithmErrorType::GraphNotConnected:
-        userHint = "Please ensure all nodes are reachable.";
-        break;
-    }
-
-    QDialog dialog(this);
-    dialog.setWindowTitle("Algorithm cannot be executed");
-    dialog.setModal(true);
-
-    auto* layout = new QVBoxLayout(&dialog);
-
-    // algorithm message
-    QLabel* mainText = new QLabel(QString::fromStdString(error.m_message));
-    QFont   f        = mainText->font();
-    f.setBold(true);
-    mainText->setFont(f);
-    mainText->setWordWrap(true);
-
-    // user instructions
-    QLabel* detailsText = new QLabel(userHint);
-    detailsText->setWordWrap(true);
-
-    layout->addWidget(mainText);
-    layout->addSpacing(12);
-    layout->addWidget(detailsText);
-    layout->addStretch();
-
-    QPushButton* okBtn = new QPushButton("OK");
-    connect(okBtn, &QPushButton::clicked, &dialog, &QDialog::accept);
-
-    layout->addWidget(okBtn, 0, Qt::AlignRight);
-
-    dialog.resize(AppConstants::graphTypeDialogErrorMinWidth, dialog.sizeHint().height());
-    dialog.setMinimumSize(AppConstants::graphTypeDialogErrorMinWidth,
-                          AppConstants::graphTypeDialogErrorMinHeight);
-
-    dialog.exec();
-
-    m_state = RunState::Idle;
-    updateControls();
 }

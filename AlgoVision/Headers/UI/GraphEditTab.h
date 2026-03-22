@@ -15,6 +15,7 @@ class GraphEditTab : public QWidget {
 public:
     explicit GraphEditTab(QWidget* = nullptr);
     ~GraphEditTab() override = default;
+
     QSlider* getNodeSizeSlider() const;
 
 signals:
