@@ -5,8 +5,8 @@
 
 #include <vector>
 
-#include "AlgorithmError.h"
 #include "AlgorithmStep.h"
+#include "AlgorithmError.h"
 #include "AlgorithmStepApplier.h"
 
 /**
