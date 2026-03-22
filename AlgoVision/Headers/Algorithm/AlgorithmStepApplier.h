@@ -1,11 +1,11 @@
-#ifndef ASA_H
-#define ASA_H
+#ifndef ALGORITHMSTEPAPPLIER_H
+#define ALGORITHMSTEPAPPLIER_H
 
-#include <exception>
 #include <memory>
+#include <exception>
 
-#include "AlgorithmStep.h"
 #include "Graph.h"
+#include "AlgorithmStep.h"
 
 /**
  * @class AlgorithmStepApplier
@@ -25,7 +25,7 @@ public:
     NodeState stepToNodeState(const StepType) const;
     EdgeState stepToEdgeState(const StepType) const;
 
-    void setGraph(std::shared_ptr<Graph>);
+    void setGraph(const std::shared_ptr<Graph>);
 
     void resetGraphState();
 
@@ -35,4 +35,4 @@ private:
     void check(const AlgorithmStep&) const;
 };
 
-#endif // ASA_H
+#endif // ALGORITHMSTEPAPPLIER_H

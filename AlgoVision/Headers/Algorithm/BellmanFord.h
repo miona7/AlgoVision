@@ -1,12 +1,11 @@
-#ifndef BF_H
-#define BF_H
+#ifndef BELLMANFORD_H
+#define BELLMANFORD_H
 
-#include <iostream>
-#include <limits>
 #include <map>
+#include <vector>
+#include <limits>
 #include <memory>
 #include <optional>
-#include <vector>
 
 #include "Algorithm.h"
 
@@ -28,4 +27,4 @@ private:
     void bellmanFord(unsigned);
 };
 
-#endif // BF_H
+#endif // BELLMANFORD_H

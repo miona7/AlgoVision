@@ -1,12 +1,11 @@
 #ifndef TARJAN_H
 #define TARJAN_H
 
-#include <iostream>
 #include <map>
-#include <memory>
-#include <optional>
 #include <stack>
 #include <vector>
+#include <memory>
+#include <optional>
 
 #include "Algorithm.h"
 
