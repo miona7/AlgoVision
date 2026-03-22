@@ -5,8 +5,35 @@ MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()),
       m_tabWidget(new QTabWidget(this)), m_serializer(std::make_unique<Serializer>()) {
     m_ui->setupUi(this);
+    this->setStyleSheet(m_themeManager->styleSheet());
+
+    showStartPage();
+
+    this->setMinimumWidth(AppConstants::windowMinWidth);
+    this->setMinimumHeight(AppConstants::windowMinHeight);
+    this->resize(QSize(AppConstants::windowWidth, AppConstants::windowHeight));
+
+    QWidget* startPage = m_ui->startPage;
+
+    auto* startLayout = new QHBoxLayout(startPage);
+    startLayout->setAlignment(Qt::AlignCenter);
+    startLayout->setSpacing(AppConstants::btnSpacing);
+
+    auto* btnOpenGraph = new QPushButton("open graph", startPage);
+    btnOpenGraph->setObjectName("newOpenGraph");
+    btnOpenGraph->setFixedSize(QSize(AppConstants::btnSize, AppConstants::btnSize));
+    startLayout->addWidget(btnOpenGraph);
+
+    auto* btnCreateGraph = new QPushButton("create graph", startPage);
+    btnCreateGraph->setObjectName("newCreateGraph");
+    btnCreateGraph->setFixedSize(QSize(AppConstants::btnSize, AppConstants::btnSize));
+    startLayout->addWidget(btnCreateGraph);
+
+    connect(btnOpenGraph, &QPushButton::clicked, this, &MainWindow::onOpenGraphTriggered);
+    connect(btnCreateGraph, &QPushButton::clicked, this, &MainWindow::onCreateGraphTriggered);
 
     m_tabWidget->setTabsClosable(true);
+    m_ui->stackedWidget->addWidget(m_tabWidget);
     connect(m_tabWidget, &QTabWidget::tabCloseRequested, this, [this](int index) {
         QWidget* widget = m_tabWidget->widget(index);
         auto*    editor = qobject_cast<GraphEditor*>(widget);
@@ -37,35 +64,6 @@ MainWindow::MainWindow(QWidget* parent)
             showStartPage();
         }
     });
-
-    m_ui->stackedWidget->addWidget(m_tabWidget);
-
-    this->setStyleSheet(m_themeManager->styleSheet());
-
-    showStartPage();
-
-    this->setMinimumWidth(AppConstants::windowMinWidth);
-    this->setMinimumHeight(AppConstants::windowMinHeight);
-    this->resize(QSize(AppConstants::windowWidth, AppConstants::windowHeight));
-
-    QWidget* startPage = m_ui->startPage;
-
-    auto* startLayout = new QHBoxLayout(startPage);
-    startLayout->setAlignment(Qt::AlignCenter);
-    startLayout->setSpacing(AppConstants::btnSpacing);
-
-    auto* btnOpenGraph = new QPushButton("open graph", startPage);
-    btnOpenGraph->setObjectName("newOpenGraph");
-    btnOpenGraph->setFixedSize(QSize(AppConstants::btnSize, AppConstants::btnSize));
-    startLayout->addWidget(btnOpenGraph);
-
-    auto* btnCreateGraph = new QPushButton("create graph", startPage);
-    btnCreateGraph->setObjectName("newCreateGraph");
-    btnCreateGraph->setFixedSize(QSize(AppConstants::btnSize, AppConstants::btnSize));
-    startLayout->addWidget(btnCreateGraph);
-
-    connect(btnOpenGraph, &QPushButton::clicked, this, &MainWindow::onOpenGraphTriggered);
-    connect(btnCreateGraph, &QPushButton::clicked, this, &MainWindow::onCreateGraphTriggered);
 }
 
 MainWindow::~MainWindow() {
