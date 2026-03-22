@@ -12,7 +12,6 @@ class NodeItem;
 
 class EdgeItem : public QGraphicsObject {
     Q_OBJECT
-
 public:
     EdgeItem(Edge*, NodeItem*, NodeItem*, bool = false);
     ~EdgeItem() override;

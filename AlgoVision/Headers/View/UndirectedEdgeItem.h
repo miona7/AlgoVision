@@ -1,11 +1,11 @@
-#ifndef UNDIRECTED_EDGEITEM_H
-#define UNDIRECTED_EDGEITEM_H
+#ifndef UNDIRECTEDEDGEITEM_H
+#define UNDIRECTEDEDGEITEM_H
 
-#include <QPainter>
 #include <QPen>
+#include <QPainter>
 
-#include "AppConstants.h"
 #include "EdgeItem.h"
+#include "AppConstants.h"
 
 class UndirectedEdgeItem : public EdgeItem {
 public:
@@ -17,4 +17,4 @@ public:
     QPainterPath edgePath() const override;
 };
 
-#endif // UNDIRECTED_EDGEITEM_H
+#endif // UNDIRECTEDEDGEITEM_H
