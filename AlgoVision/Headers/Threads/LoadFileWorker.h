@@ -1,8 +1,9 @@
 #ifndef LOADFILEWORKER_H
 #define LOADFILEWORKER_H
 
-#include <QString>
+#include <QObject>
 #include <QThread>
+#include <QString>
 
 #include "Serializable.h"
 #include "Serializer.h"

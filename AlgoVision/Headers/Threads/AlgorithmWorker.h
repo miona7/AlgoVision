@@ -1,14 +1,11 @@
-#ifndef WORKER_H
-#define WORKER_H
+#ifndef ALGORITHMWORKER_H
+#define ALGORITHMWORKER_H
 
 #include <QObject>
 #include <QThread>
+#include <QString>
 
 #include "AStar.h"
-#include "AlgorithmController.h"
-#include "AlgorithmError.h"
-#include "AlgorithmStep.h"
-#include "AlgorithmStepApplier.h"
 #include "BFS.h"
 #include "BellmanFord.h"
 #include "DFS.h"
@@ -18,6 +15,10 @@
 #include "Kahn.h"
 #include "Prim.h"
 #include "Tarjan.h"
+#include "AlgorithmError.h"
+#include "AlgorithmStep.h"
+#include "AlgorithmStepApplier.h"
+#include "AlgorithmController.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
@@ -38,7 +39,7 @@
 class AlgorithmWorker : public QThread {
     Q_OBJECT
 public:
-    AlgorithmWorker(const QString&, const std::shared_ptr<Graph>, unsigned = 0, unsigned = 0);
+    AlgorithmWorker(const QString&, const std::shared_ptr<Graph>, unsigned = 0, unsigned = 0, QObject* = nullptr);
 
 signals:
     void stepsReady(const std::vector<AlgorithmStep>&);
@@ -55,4 +56,4 @@ private:
     unsigned               m_end;
 };
 
-#endif // WORKER_H
+#endif // ALGORITHMWORKER_H
