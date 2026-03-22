@@ -5,17 +5,16 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
       m_startLabel(new QLabel("start node:", this)), m_startNodeEdit(new QLineEdit(this)),
       m_endRow(new QWidget(this)), m_endLabel(new QLabel("goal node:", this)),
       m_endNodeEdit(new QLineEdit(this)), m_noInputLabel(new QLabel(this)),
+      m_legendScroll(new QScrollArea(this)), m_legendContainer(new QWidget()),
       m_helpBtn(new QPushButton("graph type help", this)), m_prevBtn(new QToolButton(this)),
       m_playBtn(new QToolButton(this)), m_pauseBtn(new QToolButton(this)),
       m_nextBtn(new QToolButton(this)), m_restartBtn(new QToolButton(this)),
       m_graphController(graphController), m_applier(m_graphController->graph()),
       m_algorithmController(m_applier) {
 
-    m_legendContainer = new QWidget;
-    m_legendLayout    = new QVBoxLayout(m_legendContainer);
+    m_legendLayout = new QVBoxLayout(m_legendContainer);
     m_legendLayout->setAlignment(Qt::AlignTop);
 
-    m_legendScroll = new QScrollArea(this);
     m_legendScroll->setWidget(m_legendContainer);
     m_legendScroll->setMinimumHeight(AppConstants::legendMinHeight);
     m_legendScroll->setWidgetResizable(true);
@@ -36,7 +35,6 @@ AlgorithmTab::AlgorithmTab(std::shared_ptr<GraphController> graphController, QWi
     connect(m_algorithmCombo, &QComboBox::currentTextChanged, this,
             &AlgorithmTab::updateLegendForAlgorithm);
 
-    // help
     connect(m_helpBtn, &QPushButton::clicked, this, [this]() {
         QMessageBox msgBox(this);
         msgBox.setWindowTitle("Algorithm Tab Help");
@@ -241,14 +239,14 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
     auto* layout = new QVBoxLayout(&dialog);
 
     // algorithm message
-    QLabel* mainText = new QLabel(QString::fromStdString(error.m_message));
-    QFont   f        = mainText->font();
+    auto* mainText = new QLabel(QString::fromStdString(error.m_message));
+    QFont f        = mainText->font();
     f.setBold(true);
     mainText->setFont(f);
     mainText->setWordWrap(true);
 
     // user instructions
-    QLabel* detailsText = new QLabel(userHint);
+    auto* detailsText = new QLabel(userHint);
     detailsText->setWordWrap(true);
 
     layout->addWidget(mainText);
@@ -256,7 +254,7 @@ void AlgorithmTab::showAlgorithmErrorDialog(const AlgorithmError& error) {
     layout->addWidget(detailsText);
     layout->addStretch();
 
-    QPushButton* okBtn = new QPushButton("OK");
+    auto* okBtn = new QPushButton("OK");
     connect(okBtn, &QPushButton::clicked, &dialog, &QDialog::accept);
 
     layout->addWidget(okBtn, 0, Qt::AlignRight);
@@ -481,7 +479,7 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
     }
 
     if(name == "Dijkstra" || name == "Bellman-Ford" || name == "A* (Euclidean heuristic)" ||
-        name == "Floyd-Warshall" || name == "Prim" || name == "Tarjan") {
+       name == "Floyd-Warshall" || name == "Prim" || name == "Tarjan") {
         m_legendLayout->addWidget(makeLegendItem(Qt::darkMagenta, "Distance updated"));
     }
 
@@ -520,15 +518,15 @@ void AlgorithmTab::updateLegendForAlgorithm(const QString& name) {
 }
 
 QWidget* AlgorithmTab::makeLegendItem(const QColor& color, const QString& text) {
-    QWidget* row    = new QWidget(this);
-    auto*    layout = new QHBoxLayout(row);
+    auto* row    = new QWidget(this);
+    auto* layout = new QHBoxLayout(row);
     layout->setContentsMargins(2, 2, 2, 2);
 
-    QLabel* box = new QLabel;
+    auto* box = new QLabel;
     box->setFixedSize(14, 14);
     box->setStyleSheet(QString("background-color: %1; border: 1px solid black;").arg(color.name()));
 
-    QLabel* label = new QLabel(text);
+    auto* label = new QLabel(text);
 
     layout->addWidget(box);
     layout->addWidget(label);
