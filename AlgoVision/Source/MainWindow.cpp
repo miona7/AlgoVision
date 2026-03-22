@@ -2,12 +2,10 @@
 #include "ui_MainWindow.h"
 
 MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()) {
+    : QMainWindow(parent), m_ui(new Ui::MainWindow), m_themeManager(new ThemeManager()),
+      m_tabWidget(new QTabWidget(this)), m_serializer(std::make_unique<Serializer>()) {
     m_ui->setupUi(this);
 
-    m_serializer = std::make_unique<Serializer>();
-
-    m_tabWidget = new QTabWidget(this);
     m_tabWidget->setTabsClosable(true);
     connect(m_tabWidget, &QTabWidget::tabCloseRequested, this, [this](int index) {
         QWidget* widget = m_tabWidget->widget(index);
@@ -23,10 +21,10 @@ MainWindow::MainWindow(QWidget* parent)
                         .arg(m_tabWidget->tabText(index)),
                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
-                if(reply == QMessageBox::Cancel) {
-                    return;
-                } else if(reply == QMessageBox::Yes) {
+                if(reply == QMessageBox::Yes) {
                     onSaveGraphTriggered();
+                } else if(reply == QMessageBox::Cancel) {
+                    return;
                 }
             }
 

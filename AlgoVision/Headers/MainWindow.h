@@ -78,8 +78,7 @@ private:
     ThemeManager*                m_themeManager{nullptr};
     QTabWidget*                  m_tabWidget{nullptr};
     QHash<GraphEditor*, TabInfo> m_tabs;
-
-    std::unique_ptr<Serializer> m_serializer;
+    std::unique_ptr<Serializer>  m_serializer;
 
     void initMenuToolBar();
 };
