@@ -1,12 +1,12 @@
-#ifndef ALGORITHM_CONTROLLER_H
-#define ALGORITHM_CONTROLLER_H
+#ifndef ALGORITHMCONTROLLER_H
+#define ALGORITHMCONTROLLER_H
 
 #include <QObject>
 
 #include <vector>
 
-#include "AlgorithmError.h"
 #include "AlgorithmStep.h"
+#include "AlgorithmError.h"
 #include "AlgorithmStepApplier.h"
 
 /**
@@ -55,4 +55,4 @@ private:
     void redo();
 };
 
-#endif // ALGORITHM_CONTROLLER_H
+#endif // ALGORITHMCONTROLLER_H

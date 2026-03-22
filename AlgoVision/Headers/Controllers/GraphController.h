@@ -1,16 +1,16 @@
-#ifndef GRAPH_CONTROLLER_H
-#define GRAPH_CONTROLLER_H
+#ifndef GRAPHCONTROLLER_H
+#define GRAPHCONTROLLER_H
 
 #include <QObject>
-#include <QUndoCommand>
 #include <QUndoStack>
+#include <QUndoCommand>
 
 #include <memory>
 
-#include "EdgeItem.h"
-#include "EditableTextItem.h"
 #include "Graph.h"
+#include "EdgeItem.h"
 #include "GraphScene.h"
+#include "EditableTextItem.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
@@ -18,7 +18,6 @@
 
 class GraphController : public QObject {
     Q_OBJECT
-
 public:
     explicit GraphController(QObject* = nullptr);
 
@@ -82,4 +81,4 @@ private:
     void connectScene() const;
 };
 
-#endif // GRAPH_CONTROLLER_H
+#endif // GRAPHCONTROLLER_H
