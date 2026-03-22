@@ -1,13 +1,12 @@
-#ifndef EDITABLE_TEXTITEM_H
-#define EDITABLE_TEXTITEM_H
+#ifndef EDITABLETEXTITEM_H
+#define EDITABLETEXTITEM_H
 
-#include <QGraphicsTextItem>
 #include <QKeyEvent>
 #include <QTextCursor>
+#include <QGraphicsTextItem>
 
 class EditableTextItem : public QGraphicsTextItem {
     Q_OBJECT
-
 public:
     explicit EditableTextItem(QGraphicsItem* = nullptr);
 
@@ -36,4 +35,4 @@ private:
     QPointF m_center;
 };
 
-#endif
+#endif // EDITABLETEXTITEM_H

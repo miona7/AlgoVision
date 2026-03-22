@@ -19,12 +19,12 @@ MenuToolBar::MenuToolBar(QWidget* parent)
     setOptionShortcuts();
 }
 
-QAction* MenuToolBar::openGraphAction() const {
-    return m_openGraphAction;
-}
-
 QAction* MenuToolBar::createGraphAction() const {
     return m_createGraphAction;
+}
+
+QAction* MenuToolBar::openGraphAction() const {
+    return m_openGraphAction;
 }
 
 QAction* MenuToolBar::saveGraphAction() const {

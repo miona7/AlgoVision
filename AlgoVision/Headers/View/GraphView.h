@@ -1,8 +1,9 @@
-#ifndef GRAPH_VIEW_H
-#define GRAPH_VIEW_H
+#ifndef GRAPHVIEW_H
+#define GRAPHVIEW_H
 
-#include <QGraphicsView>
 #include <QScrollBar>
+#include <QGraphicsView>
+
 #include <qevent.h>
 
 class GraphView : public QGraphicsView {
@@ -40,4 +41,4 @@ private:
     void init();
 };
 
-#endif // GRAPH_VIEW
+#endif // GRAPHVIEW_H

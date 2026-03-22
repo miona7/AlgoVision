@@ -1,15 +1,15 @@
-#ifndef DIRECTED_EDGEITEM_H
-#define DIRECTED_EDGEITEM_H
+#ifndef DIRECTEDEDGEITEM_H
+#define DIRECTEDEDGEITEM_H
 
-#include <QPainter>
 #include <QPen>
+#include <QPainter>
+
 #include <cmath>
 
-#include "AppConstants.h"
 #include "EdgeItem.h"
+#include "AppConstants.h"
 
 class DirectedEdgeItem : public EdgeItem {
-
 public:
     DirectedEdgeItem(Edge*, NodeItem*, NodeItem*, bool = false);
 
@@ -27,4 +27,4 @@ private:
     QPainterPath arrowPath(const QPainterPath&) const;
 };
 
-#endif // DIRECTED_EDGEITEM_H
+#endif // DIRECTEDEDGEITEM_H

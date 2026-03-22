@@ -1,8 +1,6 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-#include <iostream>
-
 #include "Observable.h"
 
 enum class EdgeState { Default, Examined, Relaxed, Selected };
@@ -26,7 +24,7 @@ private:
     unsigned  m_id;
     unsigned  m_idStartNode;
     unsigned  m_idEndNode;
-    EdgeState m_state = EdgeState::Default;
+    EdgeState m_state{EdgeState::Default};
 };
 
 #endif // EDGE_H

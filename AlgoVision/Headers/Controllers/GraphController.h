@@ -1,16 +1,16 @@
-#ifndef GRAPH_CONTROLLER_H
-#define GRAPH_CONTROLLER_H
+#ifndef GRAPHCONTROLLER_H
+#define GRAPHCONTROLLER_H
 
 #include <QObject>
-#include <QUndoCommand>
 #include <QUndoStack>
+#include <QUndoCommand>
 
 #include <memory>
 
-#include "EdgeItem.h"
-#include "EditableTextItem.h"
 #include "Graph.h"
 #include "GraphScene.h"
+#include "EdgeItem.h"
+#include "EditableTextItem.h"
 #include "UnweightedDirectedGraph.h"
 #include "UnweightedUndirectedGraph.h"
 #include "WeightedDirectedGraph.h"
@@ -18,7 +18,6 @@
 
 class GraphController : public QObject {
     Q_OBJECT
-
 public:
     explicit GraphController(QObject* = nullptr);
 
@@ -76,10 +75,10 @@ public slots:
 
 private:
     std::shared_ptr<Graph>      m_graph;
-    std::unique_ptr<GraphScene> m_scene     = std::make_unique<GraphScene>();
-    QUndoStack*                 m_undoStack = nullptr;
+    std::unique_ptr<GraphScene> m_scene = std::make_unique<GraphScene>();
+    QUndoStack*                 m_undoStack{nullptr};
 
     void connectScene() const;
 };
 
-#endif // GRAPH_CONTROLLER_H
+#endif // GRAPHCONTROLLER_H

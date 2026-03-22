@@ -36,6 +36,7 @@ BraceWrapping:
 
 # linije
 ColumnLimit: 100
+SortIncludes: false
 
 # pokazivaci i reference uz tip
 PointerAlignment: Left

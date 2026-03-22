@@ -76,12 +76,14 @@ void Prim::prim() {
             addStep(AlgorithmStep{StepType::ProcessNode, currentNode});
 
             if(parent[currentNode]) {
-                addStep(AlgorithmStep{StepType::SelectEdge, std::nullopt, parent[currentNode], currentNode});
+                addStep(AlgorithmStep{StepType::SelectEdge, std::nullopt, parent[currentNode],
+                                      currentNode});
             }
 
             for(const auto& [edgeId, neighbourId]: adjList[currentNode]) {
                 if(!inTree[neighbourId]) {
-                    addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, currentNode, neighbourId});
+                    addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, currentNode,
+                                          neighbourId});
 
                     auto it = edges.find(edgeId);
                     if(it != edges.end()) {

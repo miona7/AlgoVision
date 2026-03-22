@@ -4,6 +4,19 @@ GraphScene::GraphScene(QObject* parent) : QGraphicsScene(parent) {
     setSceneRect(0, 0, 3000, 3000);
 }
 
+void GraphScene::updateNodeScalling() {
+    for(auto* item: items()) {
+        if(auto* n = dynamic_cast<NodeItem*>(item)) {
+            n->updateSize();
+        }
+
+        if(auto* e = dynamic_cast<EdgeItem*>(item)) {
+            e->updateSize();
+        }
+    }
+    update();
+}
+
 void GraphScene::setState(GraphScene::State state) {
     m_state = state;
 }
@@ -33,71 +46,6 @@ void GraphScene::clear() {
     resetScene();
     m_nodeItems.clear();
     QGraphicsScene::clear();
-}
-
-void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    if(m_state == GraphScene::State::IDLE) {
-        event->accept();
-        return;
-    }
-
-    if(m_state == GraphScene::State::EDIT) {
-        m_editLabel->finishEditing(true);
-        event->accept();
-        return;
-    }
-
-    const auto     clickPos = event->scenePos();
-    QGraphicsItem* item     = itemAt(clickPos, QTransform());
-
-    if(item == nullptr && m_state == GraphScene::State::ADD) {
-        if(m_firstNodeSelect != nullptr) {
-            emit addNodeAndEdgeRequest(clickPos, m_firstNodeSelect);
-        } else {
-            emit addNodeRequest(clickPos);
-        }
-
-        event->accept();
-        return;
-    }
-
-    QGraphicsScene::mousePressEvent(event);
-}
-
-void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
-    if(m_state == GraphScene::State::REMOVE || m_state == GraphScene::State::EDIT ||
-       GraphScene::m_state == State::IDLE) {
-        event->accept();
-        return;
-    }
-
-    QGraphicsScene::mouseDoubleClickEvent(event);
-}
-
-void GraphScene::onNodeSelectTrigger(NodeItem* node) {
-    if(m_state == GraphScene::State::ADD || m_state == GraphScene::State::EDIT) {
-        selectNode(node);
-    }
-
-    if(m_state == GraphScene::State::REMOVE) {
-        emit removeNodeRequest(node);
-    }
-}
-
-void GraphScene::onEdgeSelectTrigger(EdgeItem* edge) {
-    if(m_state == GraphScene::State::REMOVE) {
-        emit removeEdgeRequest(edge);
-    }
-}
-
-void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
-    if(edit) {
-        m_state     = GraphScene::State::EDIT;
-        m_editLabel = label;
-    } else {
-        m_state     = GraphScene::State::ADD;
-        m_editLabel = nullptr;
-    }
 }
 
 void GraphScene::addNode(Node* nodeModel) {
@@ -183,19 +131,19 @@ void GraphScene::removeEdge(EdgeItem* edge) {
     delete edge;
 }
 
-EdgeItem* GraphScene::findEdgeItemById(unsigned edgeId) const {
-    const QList<QGraphicsItem*> all = items();
-    for(QGraphicsItem* it: all) {
-        auto* edgeItem = dynamic_cast<EdgeItem*>(it);
-        if(edgeItem == nullptr || edgeItem->modelEdge() == nullptr) {
-            continue;
-        }
-
-        if(edgeItem->modelEdge()->getId() == edgeId) {
-            return edgeItem;
-        }
+void GraphScene::applyTheme(ThemeManager::Theme theme) {
+    switch(theme) {
+    case ThemeManager::Theme::LIGHT:
+        setBackgroundBrush(QColor(245, 245, 245));
+        break;
+    case ThemeManager::Theme::DARK:
+        setBackgroundBrush(QColor(60, 60, 60));
+        break;
+    case ThemeManager::Theme::PURPLE:
+        setBackgroundBrush(QColor(90, 70, 120));
+        break;
     }
-    return nullptr;
+    update();
 }
 
 NodeItem* GraphScene::findNodeItemById(const unsigned id) const {
@@ -221,6 +169,86 @@ EdgeItem* GraphScene::findEdgeItemByNodes(unsigned from, unsigned to) const {
     return nullptr;
 }
 
+EdgeItem* GraphScene::findEdgeItemById(unsigned edgeId) const {
+    const QList<QGraphicsItem*> all = items();
+    for(QGraphicsItem* it: all) {
+        auto* edgeItem = dynamic_cast<EdgeItem*>(it);
+        if(edgeItem == nullptr || edgeItem->modelEdge() == nullptr) {
+            continue;
+        }
+
+        if(edgeItem->modelEdge()->getId() == edgeId) {
+            return edgeItem;
+        }
+    }
+    return nullptr;
+}
+
+void GraphScene::onNodeSelectTrigger(NodeItem* node) {
+    if(m_state == GraphScene::State::ADD || m_state == GraphScene::State::EDIT) {
+        selectNode(node);
+    }
+
+    if(m_state == GraphScene::State::REMOVE) {
+        emit removeNodeRequest(node);
+    }
+}
+
+void GraphScene::onEdgeSelectTrigger(EdgeItem* edge) {
+    if(m_state == GraphScene::State::REMOVE) {
+        emit removeEdgeRequest(edge);
+    }
+}
+
+void GraphScene::setEditGraphSceneTrigger(bool edit, EditableTextItem* label) {
+    if(edit) {
+        m_state     = GraphScene::State::EDIT;
+        m_editLabel = label;
+    } else {
+        m_state     = GraphScene::State::ADD;
+        m_editLabel = nullptr;
+    }
+}
+
+void GraphScene::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    if(m_state == GraphScene::State::IDLE) {
+        event->accept();
+        return;
+    }
+
+    if(m_state == GraphScene::State::EDIT) {
+        m_editLabel->finishEditing(true);
+        event->accept();
+        return;
+    }
+
+    const auto     clickPos = event->scenePos();
+    QGraphicsItem* item     = itemAt(clickPos, QTransform());
+
+    if(item == nullptr && m_state == GraphScene::State::ADD) {
+        if(m_firstNodeSelect != nullptr) {
+            emit addNodeAndEdgeRequest(clickPos, m_firstNodeSelect);
+        } else {
+            emit addNodeRequest(clickPos);
+        }
+
+        event->accept();
+        return;
+    }
+
+    QGraphicsScene::mousePressEvent(event);
+}
+
+void GraphScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
+    if(m_state == GraphScene::State::REMOVE || m_state == GraphScene::State::EDIT ||
+       GraphScene::m_state == State::IDLE) {
+        event->accept();
+        return;
+    }
+
+    QGraphicsScene::mouseDoubleClickEvent(event);
+}
+
 void GraphScene::selectNode(NodeItem* node) {
     // node is selected
     if(m_firstNodeSelect == nullptr) {
@@ -236,32 +264,4 @@ void GraphScene::selectNode(NodeItem* node) {
 
     // other node is selected
     emit addEdgeRequest(m_firstNodeSelect, node);
-}
-
-void GraphScene::updateNodeScalling() {
-    for(auto* item: items()) {
-        if(auto* n = dynamic_cast<NodeItem*>(item)) {
-            n->updateSize();
-        }
-
-        if(auto* e = dynamic_cast<EdgeItem*>(item)) {
-            e->updateSize();
-        }
-    }
-    update();
-}
-
-void GraphScene::applyTheme(ThemeManager::Theme theme) {
-    switch(theme) {
-    case ThemeManager::Theme::LIGHT:
-        setBackgroundBrush(QColor(245, 245, 245));
-        break;
-    case ThemeManager::Theme::DARK:
-        setBackgroundBrush(QColor(60, 60, 60));
-        break;
-    case ThemeManager::Theme::PURPLE:
-        setBackgroundBrush(QColor(90, 70, 120));
-        break;
-    }
-    update();
 }

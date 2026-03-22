@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(AlgoVision VERSION 0.1 LANGUAGES CXX)
 
-option(BUILD_TESTS_ONLY "Build only the test targets, skip main application" OFF) # dodato
+option(BUILD_TESTS_ONLY "Build only the test targets, skip main application" OFF)
 
 include(FetchContent)
 
@@ -83,7 +83,7 @@ qt_add_resources(RESOURCES
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PROJECT_SOURCES})
 
-if(NOT BUILD_TESTS_ONLY) # dodato
+if(NOT BUILD_TESTS_ONLY)
     if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         qt_add_executable(AlgoVision
             MANUAL_FINALIZATION
@@ -152,7 +152,7 @@ if(NOT BUILD_TESTS_ONLY) # dodato
         qt_finalize_executable(AlgoVision)
     endif()
 
-endif() # dodato
+endif()
 
 add_executable(AlgoVisionTests
     Source/Graph/Graph.cpp

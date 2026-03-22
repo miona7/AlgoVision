@@ -1,14 +1,13 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
-#include <cmath>
-#include <iostream>
-#include <limits>
 #include <map>
-#include <memory>
-#include <optional>
 #include <queue>
 #include <vector>
+#include <cmath>
+#include <limits>
+#include <memory>
+#include <optional>
 
 #include "Algorithm.h"
 #include "AlgorithmError.h"
@@ -26,7 +25,7 @@ public:
 
 private:
     std::vector<unsigned> m_path;
-    int                   m_totalCost = 0;
+    int                   m_totalCost{0};
 
     std::optional<AlgorithmError> aStar(unsigned, unsigned);
     int                           heuristic(unsigned, unsigned) const;

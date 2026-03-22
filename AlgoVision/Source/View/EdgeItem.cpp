@@ -32,7 +32,6 @@ void EdgeItem::initEdgeWeight() {
 }
 
 void EdgeItem::adjust() {
-
     QLineF line(mapFromItem(m_sourceNode, 0, 0), mapFromItem(m_destNode, 0, 0));
     qreal  length = line.length();
 
@@ -48,26 +47,6 @@ void EdgeItem::adjust() {
         m_sourcePoint = m_destPoint = line.p1();
     }
     adjustPointsGeometry();
-}
-
-void EdgeItem::connectNodes() {
-    if(m_sourceNode != nullptr) {
-        m_sourceNode->addEdge(this);
-    }
-
-    if(m_destNode != nullptr) {
-        m_destNode->addEdge(this);
-    }
-}
-
-void EdgeItem::disconnectNodes() {
-    if(m_sourceNode != nullptr) {
-        m_sourceNode->removeEdge(this);
-    }
-
-    if(m_destNode != nullptr) {
-        m_destNode->removeEdge(this);
-    }
 }
 
 void EdgeItem::adjustPointsGeometry() {
@@ -121,24 +100,24 @@ void EdgeItem::adjustWeightGeometry() const {
     }
 }
 
-void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
-    event->accept();
+void EdgeItem::connectNodes() {
+    if(m_sourceNode != nullptr) {
+        m_sourceNode->addEdge(this);
+    }
 
-    if(m_hasWeight) {
-        m_weight->startEditing();
+    if(m_destNode != nullptr) {
+        m_destNode->addEdge(this);
     }
 }
 
-void EdgeItem::onEdgeWeightChanged(const QString& name) const {
-    emit editEdgeWeightRequest(this, name);
-}
+void EdgeItem::disconnectNodes() {
+    if(m_sourceNode != nullptr) {
+        m_sourceNode->removeEdge(this);
+    }
 
-EditableTextItem* EdgeItem::weight() const {
-    return m_weight;
-}
-
-void EdgeItem::setWeight(EditableTextItem* newWeight) {
-    m_weight = newWeight;
+    if(m_destNode != nullptr) {
+        m_destNode->removeEdge(this);
+    }
 }
 
 Edge* EdgeItem::modelEdge() const {
@@ -155,6 +134,59 @@ bool EdgeItem::hasWeight() const {
 
 void EdgeItem::setHasWeight(bool newHasWeight) {
     m_hasWeight = newHasWeight;
+}
+
+EditableTextItem* EdgeItem::weight() const {
+    return m_weight;
+}
+
+void EdgeItem::setWeight(EditableTextItem* newWeight) {
+    m_weight = newWeight;
+}
+
+void EdgeItem::updateSize() {
+    if(!m_hasWeight || m_weight == nullptr) {
+        return;
+    }
+
+    QFont f = m_weight->font();
+    f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
+    m_weight->setFont(f);
+
+    adjustWeightGeometry();
+}
+
+void EdgeItem::onEdgeWeightChanged(const QString& name) const {
+    emit editEdgeWeightRequest(this, name);
+}
+
+// remove edge by clicking on it
+void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+    emit edgeSelected(this);
+}
+
+QColor EdgeItem::calculateColor() const {
+    if(m_modelEdge == nullptr) {
+        return Qt::black; // fallback if edge does not exist
+    }
+
+    switch(m_modelEdge->getState()) {
+    case EdgeState::Examined:
+        return Qt::blue;
+    case EdgeState::Relaxed:
+        return Qt::yellow;
+    case EdgeState::Selected:
+        return Qt::red;
+    default:
+        return Qt::black;
+    }
+}
+
+void EdgeItem::onEdgeUpdated() {
+    if(scene() == nullptr) {
+        return;
+    }
+    update();
 }
 
 QPointF EdgeItem::getEdgeCenter() const {
@@ -179,46 +211,13 @@ QPointF EdgeItem::getWeightPosition() const {
     auto  normal = calculateNormal();
     auto  center = getEdgeCenter();
     qreal offset = 10;
-    return QPointF(center.x() - offset * normal.x(), center.y() - offset * normal.y());
+    return QPointF{center.x() - offset * normal.x(), center.y() - offset * normal.y()};
 }
 
-// remove edge by clicking on it
-void EdgeItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-    emit edgeSelected(this);
-}
+void EdgeItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event) {
+    event->accept();
 
-const QColor EdgeItem::calculateColor() const {
-    if(m_modelEdge == nullptr) {
-        return Qt::black; // fallback if edge does not exist
+    if(m_hasWeight) {
+        m_weight->startEditing();
     }
-
-    switch(m_modelEdge->getState()) {
-    case EdgeState::Examined:
-        return Qt::blue;
-    case EdgeState::Relaxed:
-        return Qt::yellow;
-    case EdgeState::Selected:
-        return Qt::red;
-    default:
-        return Qt::black;
-    }
-}
-
-void EdgeItem::onEdgeUpdated() {
-    if(scene() == nullptr) {
-        return;
-    }
-    update();
-}
-
-void EdgeItem::updateSize() {
-    if(!m_hasWeight || m_weight == nullptr) {
-        return;
-    }
-
-    QFont f = m_weight->font();
-    f.setPointSizeF(AppConstants::BaseFontSize * AppConstants::NodeScale);
-    m_weight->setFont(f);
-
-    adjustWeightGeometry();
 }

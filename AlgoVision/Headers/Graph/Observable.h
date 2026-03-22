@@ -1,8 +1,8 @@
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
-#include <functional>
 #include <map>
+#include <functional>
 
 /**
  * @class Observable
@@ -58,7 +58,7 @@ protected:
     }
 
 private:
-    unsigned                     m_id = 0;    /**< Counter for assigning unique observer IDs */
+    unsigned                     m_id{0};     /**< Counter for assigning unique observer IDs */
     std::map<unsigned, Observer> m_observers; /**< Map of observer ID to observer function */
 };
 
