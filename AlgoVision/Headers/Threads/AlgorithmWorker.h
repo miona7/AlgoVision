@@ -5,6 +5,8 @@
 #include <QThread>
 #include <QString>
 
+#include <memory>
+
 #include "AStar.h"
 #include "BFS.h"
 #include "BellmanFord.h"
