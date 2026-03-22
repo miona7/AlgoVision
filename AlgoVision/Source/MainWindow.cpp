@@ -52,7 +52,7 @@ MainWindow::MainWindow(QWidget* parent)
                     onSaveGraphTriggered();
                 } else if(reply == QMessageBox::Cancel) {
                     return;
-                }
+                } // no
             }
 
             m_tabWidget->removeTab(index);
@@ -414,7 +414,6 @@ void MainWindow::connectGraphModifiedSignal(GraphEditor* editor) {
 void MainWindow::closeEvent(QCloseEvent* event) {
     QStringList unsavedTabs;
 
-    // check all tabs
     for(auto it = m_tabs.begin(); it != m_tabs.end(); ++it) {
         if(it.value().m_isModified) {
             QString name;
@@ -436,7 +435,6 @@ void MainWindow::closeEvent(QCloseEvent* event) {
                                   QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
         if(reply == QMessageBox::Yes) {
-            // save every unsaved tab
             for(auto it = m_tabs.begin(); it != m_tabs.end(); ++it) {
                 if(it.value().m_isModified) {
                     m_tabWidget->setCurrentWidget(it.key());
@@ -473,6 +471,5 @@ void MainWindow::initMenuToolBar() {
             &MainWindow::onSaveImageTriggered);
     connect(m_menuToolBar->changeThemeAction(), &QAction::triggered, this,
             &MainWindow::onChangeThemeTriggered);
-
     connect(m_menuToolBar->helpAction(), &QAction::triggered, this, &MainWindow::onHelpTriggered);
 }
