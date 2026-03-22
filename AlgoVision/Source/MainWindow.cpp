@@ -93,9 +93,7 @@ void MainWindow::onOpenGraphTriggered() {
     auto* loadThread = new LoadFileWorker(m_serializer.get(), filePath, this);
 
     connect(loadThread, &LoadFileWorker::loaded, this, &MainWindow::onGraphLoadedNewTab);
-
     connect(loadThread, &LoadFileWorker::failed, this, &MainWindow::onGraphLoadFailed);
-
     connect(loadThread, &QThread::finished, loadThread, &QObject::deleteLater);
 
     loadThread->start();
@@ -112,31 +110,32 @@ void MainWindow::onCreateGraphTriggered() {
     dialog.setSizeGripEnabled(true);
     dialog.setWindowFlags(dialog.windowFlags() | Qt::WindowMinMaxButtonsHint);
 
-    QVBoxLayout* mainLayout = new QVBoxLayout(&dialog);
+    auto* mainLayout    = new QVBoxLayout(&dialog);
+    auto* typeGroup     = new QGroupBox("Graph Type", &dialog);
+    auto* typeLayout    = new QVBoxLayout(typeGroup);
+    auto* directedBtn   = new QRadioButton("Directed", typeGroup);
+    auto* undirectedBtn = new QRadioButton("Undirected", typeGroup);
 
-    QGroupBox*    typeGroup     = new QGroupBox("Graph Type", &dialog);
-    QVBoxLayout*  typeLayout    = new QVBoxLayout(typeGroup);
-    QRadioButton* directedBtn   = new QRadioButton("Directed", typeGroup);
-    QRadioButton* undirectedBtn = new QRadioButton("Undirected", typeGroup);
     undirectedBtn->setChecked(true);
     typeLayout->addWidget(directedBtn);
     typeLayout->addWidget(undirectedBtn);
     mainLayout->addWidget(typeGroup);
 
-    QGroupBox*    weightGroup   = new QGroupBox("Weight", &dialog);
-    QVBoxLayout*  weightLayout  = new QVBoxLayout(weightGroup);
-    QRadioButton* weightedBtn   = new QRadioButton("Weighted", weightGroup);
-    QRadioButton* unweightedBtn = new QRadioButton("Unweighted", weightGroup);
+    auto* weightGroup   = new QGroupBox("Weight", &dialog);
+    auto* weightLayout  = new QVBoxLayout(weightGroup);
+    auto* weightedBtn   = new QRadioButton("Weighted", weightGroup);
+    auto* unweightedBtn = new QRadioButton("Unweighted", weightGroup);
+
     unweightedBtn->setChecked(true);
     weightLayout->addWidget(weightedBtn);
     weightLayout->addWidget(unweightedBtn);
     mainLayout->addWidget(weightGroup);
 
-    QDialogButtonBox* buttons = new QDialogButtonBox(
-        QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &dialog);
+    auto* buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+                                         Qt::Horizontal, &dialog);
     mainLayout->addWidget(buttons);
-    QObject::connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
-    QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+    connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
 
     bool directed = false;
     bool weighted = false;
@@ -173,17 +172,11 @@ void MainWindow::onCreateGraphTriggered() {
     editor->graphController()->scene()->applyTheme(m_themeManager->currentTheme());
     connectGraphModifiedSignal(editor);
 
-    TabInfo info;
-    info.m_editor          = editor;
-    info.m_filePath        = "";
-    info.m_isModified      = true;
-    info.m_imagePath       = "";
-    info.m_isImageModified = true;
+    TabInfo info{editor, "", true, "", true};
     m_tabs.insert(editor, info);
 
     int index = m_tabWidget->addTab(editor, "untitled*");
     m_tabWidget->setCurrentIndex(index);
-
     m_tabWidget->setCurrentWidget(editor);
 
     if(!m_tabWidget->isVisible()) {
