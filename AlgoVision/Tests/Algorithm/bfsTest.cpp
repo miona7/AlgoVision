@@ -38,7 +38,7 @@ void runBFSLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNode) {
     const std::vector<StepType> expectedSteps = {StepType::VisitNode, StepType::ProcessNode,
                                                  StepType::ExamineEdge};
 
-    auto err = bfs.execute(startNode);
+    auto err = bfs.execute({startNode});
 
     REQUIRE_SUCCESS(err);
 
@@ -81,7 +81,7 @@ TEST_CASE("BFS on Unweighted Directed Graph", "[BFS]") {
     g->addEdge(1, 2);
 
     BFS  bfs(g);
-    auto err = bfs.execute(0);
+    auto err = bfs.execute({0});
 
     REQUIRE_SUCCESS(err);
     runBFSLoggingTest(g, 0);
@@ -98,7 +98,7 @@ TEST_CASE("BFS on Unweighted Undirected Graph", "[BFS]") {
     g->addEdge(1, 2);
 
     BFS  bfs(g);
-    auto err = bfs.execute(0);
+    auto err = bfs.execute({0});
 
     REQUIRE_SUCCESS(err);
     runBFSLoggingTest(g, 0);
@@ -115,7 +115,7 @@ TEST_CASE("BFS on Weighted Directed Graph", "[BFS]") {
     g->addEdge(1, 2, 7);
 
     BFS  bfs(g);
-    auto err = bfs.execute(0);
+    auto err = bfs.execute({0});
 
     REQUIRE_SUCCESS(err);
     runBFSLoggingTest(g, 0);
@@ -132,7 +132,7 @@ TEST_CASE("BFS on Weighted Undirected Graph", "[BFS]") {
     g->addEdge(1, 2, 4);
 
     BFS  bfs(g);
-    auto err = bfs.execute(0);
+    auto err = bfs.execute({0});
 
     REQUIRE_SUCCESS(err);
     runBFSLoggingTest(g, 0);
@@ -144,7 +144,7 @@ TEST_CASE("BFS throws for invalid start node", "[BFS]") {
     g->addNode(2);
 
     BFS  bfs(g);
-    auto err = bfs.execute(0);
+    auto err = bfs.execute({0});
     REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing,
                   "Start node does not exist in the graph.");
 }

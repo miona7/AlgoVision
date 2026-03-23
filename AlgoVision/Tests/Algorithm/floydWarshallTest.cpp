@@ -41,7 +41,7 @@ void runFloydWarshallLoggingTest(const std::shared_ptr<Graph>& g) {
                                                  StepType::ExamineEdge, StepType::SelectEdge,
                                                  StepType::UpdateDistance};
 
-    auto err = fw.execute();
+    auto err = fw.execute({});
 
     REQUIRE_SUCCESS(err);
 
@@ -94,7 +94,7 @@ TEST_CASE("Floyd-Warshall throws on undirected graph", "[FLOYD_WARSHALL]") {
 
     FloydWarshall fw(g);
 
-    auto err = fw.execute();
+    auto err = fw.execute({});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
@@ -104,7 +104,7 @@ TEST_CASE("Floyd-Warshall throws on empty graph", "[FLOYD_WARSHALL]") {
 
     FloydWarshall fw(g);
 
-    auto err = fw.execute();
+    auto err = fw.execute({});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized,
                   "Graph is not initialized or empty.");
@@ -123,7 +123,7 @@ TEST_CASE("Floyd-Warshall detects negative cycle", "[FLOYD_WARSHALL]") {
 
     FloydWarshall fw(g);
 
-    auto err = fw.execute();
+    auto err = fw.execute({});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphHasNegativeCycle,
                   "Graph contains a negative cycle.");

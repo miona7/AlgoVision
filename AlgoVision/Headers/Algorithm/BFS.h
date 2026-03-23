@@ -13,10 +13,10 @@ public:
     explicit BFS(const std::shared_ptr<Graph>);
 
     std::optional<AlgorithmError> checkConditions(unsigned) const;
-    std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
+    std::optional<AlgorithmError> execute(const AlgorithmParams&) override;
 
+    QString getResultString() const override;
     const std::map<unsigned, bool>& getVisited() const;
-    QString                         resultString() const override;
 
 private:
     std::map<unsigned, bool> m_visited;

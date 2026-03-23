@@ -13,9 +13,9 @@ public:
     explicit Dijkstra(const std::shared_ptr<Graph>);
 
     std::optional<AlgorithmError> checkConditions(unsigned) const;
-    std::optional<AlgorithmError> execute(unsigned, unsigned = 0) override;
+    std::optional<AlgorithmError> execute(const AlgorithmParams&) override;
 
-    QString resultString() const override;
+    QString getResultString() const override;
 
 private:
     QString m_resultString;

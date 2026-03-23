@@ -41,7 +41,7 @@ void runPrimLoggingTest(const std::shared_ptr<Graph>& g) {
                                                  StepType::ExamineEdge, StepType::UpdateDistance,
                                                  StepType::SelectEdge};
 
-    auto err = prim.execute();
+    auto err = prim.execute({});
 
     REQUIRE_SUCCESS(err);
 
@@ -97,7 +97,7 @@ TEST_CASE("Prim throws on disconnected graph", "[PRIM]") {
 
     Prim prim(g);
 
-    auto err = prim.execute();
+    auto err = prim.execute({});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotConnected, "Graph is not connected");
 }
@@ -112,7 +112,7 @@ TEST_CASE("Prim throws on directed graph", "[PRIM]") {
 
     Prim prim(g);
 
-    auto err = prim.execute();
+    auto err = prim.execute({});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
@@ -122,7 +122,7 @@ TEST_CASE("Prim throws on empty graph", "[PRIM]") {
 
     Prim prim(g);
 
-    auto err = prim.execute();
+    auto err = prim.execute({});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized,
                   "Graph is not initialized or empty.");

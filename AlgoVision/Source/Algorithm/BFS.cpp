@@ -18,7 +18,9 @@ std::optional<AlgorithmError> BFS::checkConditions(unsigned start) const {
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> BFS::execute(unsigned idStartNode, unsigned) {
+std::optional<AlgorithmError> BFS::execute(const AlgorithmParams& params) {
+    auto idStartNode = params.m_startNode.has_value() ? params.m_startNode.value() : 0;
+
     if(auto err = checkConditions(idStartNode)) {
         return err;
     }
@@ -70,7 +72,7 @@ const std::map<unsigned, bool>& BFS::getVisited() const {
     return m_visited;
 }
 
-QString BFS::resultString() const {
+QString BFS::getResultString() const {
     QString res = "BFS order: ";
     for(unsigned v: m_order) {
         res += QString::number(v) + " ";

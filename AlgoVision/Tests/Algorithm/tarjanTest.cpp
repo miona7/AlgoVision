@@ -41,7 +41,7 @@ void runTarjanLoggingTest(const std::shared_ptr<Graph>& g) {
                                                  StepType::ExamineEdge, StepType::UpdateDistance,
                                                  StepType::AssignComponent};
 
-    auto err = tarjan.execute();
+    auto err = tarjan.execute({});
 
     REQUIRE_NOTHROW(err);
 
@@ -99,7 +99,7 @@ TEST_CASE("Tarjan throws on undirected graph", "[TARJAN]") {
 
     Tarjan tarjan(g);
 
-    auto err = tarjan.execute();
+    auto err = tarjan.execute({});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
@@ -109,7 +109,7 @@ TEST_CASE("Tarjan throws on empty graph", "[TARJAN]") {
 
     Tarjan tarjan(g);
 
-    auto err = tarjan.execute();
+    auto err = tarjan.execute({});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphNotInitialized,
                   "Graph is not initialized or empty.");

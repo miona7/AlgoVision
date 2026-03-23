@@ -16,7 +16,7 @@ std::optional<AlgorithmError> FloydWarshall::checkConditions() const {
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> FloydWarshall::execute(unsigned, unsigned) {
+std::optional<AlgorithmError> FloydWarshall::execute(const AlgorithmParams&) {
     if(auto err = checkConditions()) {
         return err;
     }
@@ -101,7 +101,7 @@ std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
     return std::nullopt;
 }
 
-QString FloydWarshall::resultString() const {
+QString FloydWarshall::getResultString() const {
     QString res = "All-pairs shortest distances:\n";
 
     for(const auto& [i, row]: m_distances) {
