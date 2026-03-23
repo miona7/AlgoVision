@@ -34,7 +34,7 @@ void runKahnLoggingTest(const std::shared_ptr<UnweightedDirectedGraph> g) {
                                                  StepType::AddToTopologicalOrder};
 
     // act
-    auto err = kahn.execute();
+    auto err = kahn.execute({});
 
     // assert
     REQUIRE_SUCCESS(err);
@@ -82,7 +82,7 @@ TEST_CASE("Kahn topological sort on acyclic graph", "[KAHN]") {
     int  expectedSize = 5;
 
     // act
-    auto err = kahn.execute();
+    auto err = kahn.execute({});
 
     // assert
     REQUIRE_SUCCESS(err);
@@ -117,7 +117,7 @@ TEST_CASE("Kahn throws on cyclic graph", "[KAHN]") {
     Kahn kahn(graph);
 
     // act
-    auto err = kahn.execute();
+    auto err = kahn.execute({});
 
     // assert
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphHasCycle, "Graph contains a cycle.");

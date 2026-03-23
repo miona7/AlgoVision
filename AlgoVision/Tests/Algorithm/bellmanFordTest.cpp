@@ -41,7 +41,7 @@ void runBellmanFordLoggingTest(const std::shared_ptr<Graph>& g, unsigned startNo
                                                  StepType::ExamineEdge, StepType::RelaxEdge,
                                                  StepType::UpdateDistance};
 
-    auto err = bf.execute(startNode);
+    auto err = bf.execute({startNode});
     REQUIRE_SUCCESS(err);
 
     const auto& steps = bf.getSteps();
@@ -77,7 +77,7 @@ TEST_CASE("Bellman-Ford throws on invalid start node", "[BELLMAN_FORD]") {
     g->addEdge(1, 2, 5);
 
     BellmanFord bf(g);
-    auto        err = bf.execute(0);
+    auto        err = bf.execute({0});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing,
                   "Start node does not exist in the graph.");
@@ -91,7 +91,7 @@ TEST_CASE("Bellman-Ford throws on unweighted graph", "[BELLMAN_FORD]") {
     g->addEdge(1, 2);
 
     BellmanFord bf(g);
-    auto        err = bf.execute(1);
+    auto        err = bf.execute({1});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
@@ -108,7 +108,7 @@ TEST_CASE("Bellman-Ford detects negative cycle", "[BELLMAN_FORD]") {
     g->addEdge(3, 1, -1);
 
     BellmanFord bf(g);
-    auto        err = bf.execute(1);
+    auto        err = bf.execute({1});
 
     REQUIRE_SUCCESS(err);
     REQUIRE(bf.hasNegativeCycle());

@@ -11,13 +11,22 @@
 
 class Algorithm {
 public:
+    struct Params {
+        std::optional<unsigned> m_startNode;
+        std::optional<unsigned> m_endNode;
+
+        Params() = default;
+        Params(unsigned start) : m_startNode(start) {}
+        Params(unsigned start, unsigned end) : m_startNode(start), m_endNode(end) {}
+    };
+    using AlgorithmParams = Algorithm::Params;
+
     explicit Algorithm(const std::shared_ptr<Graph>);
     virtual ~Algorithm() = default;
 
-    virtual std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) = 0;
+    virtual std::optional<AlgorithmError> execute(const AlgorithmParams&) = 0;
 
-    virtual QString resultString() const = 0;
-
+    virtual QString getResultString() const = 0;
     const std::vector<AlgorithmStep>& getSteps() const;
 
 protected:

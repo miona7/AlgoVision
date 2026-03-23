@@ -16,7 +16,7 @@ std::optional<AlgorithmError> Tarjan::checkConditions() const {
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> Tarjan::execute(unsigned, unsigned) {
+std::optional<AlgorithmError> Tarjan::execute(const AlgorithmParams&) {
     if(auto err = checkConditions()) {
         return err;
     }
@@ -118,6 +118,6 @@ void Tarjan::init() {
     }
 }
 
-QString Tarjan::resultString() const {
+QString Tarjan::getResultString() const {
     return QString("Number of SCC: %1").arg(m_numComponents);
 }
