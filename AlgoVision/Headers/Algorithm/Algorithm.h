@@ -32,7 +32,6 @@ public:
 protected:
     std::shared_ptr<Graph>     m_graph;
     std::vector<AlgorithmStep> m_steps;
-    QString                    m_resultString;
 
     void addStep(const AlgorithmStep&);
     void clearSteps();
