@@ -15,7 +15,7 @@ public:
     std::optional<AlgorithmError> checkConditions(unsigned) const;
     std::optional<AlgorithmError> execute(const AlgorithmParams&) override;
 
-    QString getResultString() const override;
+    QString                         getResultString() const override;
     const std::map<unsigned, bool>& getVisited() const;
 
 private:

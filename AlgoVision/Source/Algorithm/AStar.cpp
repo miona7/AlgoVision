@@ -37,7 +37,7 @@ std::optional<AlgorithmError> AStar::checkConditions(unsigned start, unsigned go
 
 std::optional<AlgorithmError> AStar::execute(const AlgorithmParams& params) {
     auto start = params.m_startNode.has_value() ? params.m_startNode.value() : 0;
-    auto goal = params.m_endNode.has_value() ? params.m_endNode.value() : 0;
+    auto goal  = params.m_endNode.has_value() ? params.m_endNode.value() : 0;
 
     if(auto err = checkConditions(start, goal)) {
         return err;
@@ -45,11 +45,7 @@ std::optional<AlgorithmError> AStar::execute(const AlgorithmParams& params) {
 
     clearSteps();
 
-    if(auto err = aStar(start, goal)) {
-        return err;
-    }
-
-    return std::nullopt;
+    return aStar(start, goal);
 }
 
 std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {

@@ -23,11 +23,7 @@ std::optional<AlgorithmError> Kahn::execute(const AlgorithmParams&) {
 
     clearSteps();
 
-    if(auto err = kahn()) {
-        return err;
-    }
-
-    return std::nullopt;
+    return kahn();
 }
 
 std::optional<AlgorithmError> Kahn::kahn() {

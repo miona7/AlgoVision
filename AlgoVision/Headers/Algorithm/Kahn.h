@@ -16,7 +16,7 @@ public:
     std::optional<AlgorithmError> checkConditions() const;
     std::optional<AlgorithmError> execute(const AlgorithmParams&) override;
 
-    QString getResultString() const override;
+    QString                      getResultString() const override;
     const std::vector<unsigned>& getSorted() const;
 
 private:
