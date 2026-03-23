@@ -17,7 +17,7 @@ public:
     std::optional<AlgorithmError> execute(const AlgorithmParams&) override;
 
     QString getResultString() const override;
-    bool hasNegativeCycle() const;
+    bool    hasNegativeCycle() const;
 
 private:
     bool                    m_hasNegativeCycle{false};

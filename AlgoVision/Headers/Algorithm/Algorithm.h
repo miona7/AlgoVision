@@ -16,8 +16,10 @@ public:
         std::optional<unsigned> m_endNode;
 
         Params() = default;
-        Params(unsigned start) : m_startNode(start) {}
-        Params(unsigned start, unsigned end) : m_startNode(start), m_endNode(end) {}
+        Params(unsigned start) : m_startNode(start) {
+        }
+        Params(unsigned start, unsigned end) : m_startNode(start), m_endNode(end) {
+        }
     };
     using AlgorithmParams = Algorithm::Params;
 
@@ -26,7 +28,7 @@ public:
 
     virtual std::optional<AlgorithmError> execute(const AlgorithmParams&) = 0;
 
-    virtual QString getResultString() const = 0;
+    virtual QString                   getResultString() const = 0;
     const std::vector<AlgorithmStep>& getSteps() const;
 
 protected:
