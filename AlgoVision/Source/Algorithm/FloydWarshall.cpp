@@ -23,11 +23,7 @@ std::optional<AlgorithmError> FloydWarshall::execute(const AlgorithmParams&) {
 
     clearSteps();
 
-    if(auto err = floydWarshall()) {
-        return err;
-    }
-
-    return std::nullopt;
+    return floydWarshall();
 }
 
 std::optional<AlgorithmError> FloydWarshall::floydWarshall() {
