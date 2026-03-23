@@ -40,7 +40,7 @@ void runDijkstraLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) 
                                                  StepType::ExamineEdge, StepType::UpdateDistance};
 
     // act
-    auto err = dijkstra.execute(startNode);
+    auto err = dijkstra.execute({startNode});
 
     // assert
     REQUIRE_SUCCESS(err);
@@ -84,7 +84,7 @@ TEST_CASE("Dijkstra on Unweighted Directed Graph", "[DIJKSTRA]") {
 
     Dijkstra dijkstra(udg);
 
-    auto err = dijkstra.execute(1);
+    auto err = dijkstra.execute({1});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::GraphTypeInvalid, "Graph type is invalid.");
 }
@@ -104,7 +104,7 @@ TEST_CASE("Dijkstra on Weighted Directed Graph", "[DIJKSTRA]") {
 
     Dijkstra dijkstra(wdg);
 
-    auto err = dijkstra.execute(1);
+    auto err = dijkstra.execute({1});
 
     REQUIRE_SUCCESS(err);
 }
@@ -123,7 +123,7 @@ TEST_CASE("Dijkstra on Weighted Undirected Graph", "[DIJKSTRA]") {
 
     Dijkstra dijkstra(wug);
 
-    auto err = dijkstra.execute(1);
+    auto err = dijkstra.execute({1});
 
     REQUIRE_SUCCESS(err);
 }
@@ -135,7 +135,7 @@ TEST_CASE("Dijkstra with invalid start node", "[DIJKSTRA]") {
 
     Dijkstra dijkstra(udg);
 
-    auto err = dijkstra.execute(0);
+    auto err = dijkstra.execute({0});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing,
                   "Start node does not exist in the graph.");
@@ -152,7 +152,7 @@ TEST_CASE("Dijkstra on graph with negative edges", "[DIJKSTRA]") {
 
     Dijkstra dijkstra(wdg);
 
-    auto err = dijkstra.execute(1);
+    auto err = dijkstra.execute({1});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights,
                   "Dijkstra cannot be applied to graphs with negative edge weights.");

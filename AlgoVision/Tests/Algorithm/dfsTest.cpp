@@ -39,7 +39,7 @@ void runDFSLoggingTest(const std::shared_ptr<Graph> g, unsigned startNode) {
                                                  StepType::ExamineEdge};
 
     // act
-    auto err = dfs.execute(startNode);
+    auto err = dfs.execute({startNode});
 
     // assert
     REQUIRE_SUCCESS(err);
@@ -86,7 +86,7 @@ TEST_CASE("DFS on Unweighted Directed Graph", "[DFS]") {
 
     DFS dfs(graph);
 
-    auto err = dfs.execute(1);
+    auto err = dfs.execute({1});
 
     REQUIRE_SUCCESS(err);
 }
@@ -105,7 +105,7 @@ TEST_CASE("DFS on Unweighted Undirected Graph", "[DFS]") {
 
     DFS dfs(graph);
 
-    auto err = dfs.execute(1);
+    auto err = dfs.execute({1});
 
     REQUIRE_SUCCESS(err);
 }
@@ -124,7 +124,7 @@ TEST_CASE("DFS on Weighted Directed Graph", "[DFS]") {
 
     DFS dfs(graph);
 
-    auto err = dfs.execute(1);
+    auto err = dfs.execute({1});
 
     REQUIRE_SUCCESS(err);
 }
@@ -143,7 +143,7 @@ TEST_CASE("DFS on Weighted Undirected Graph", "[DFS]") {
 
     DFS dfs(graph);
 
-    auto err = dfs.execute(1);
+    auto err = dfs.execute({1});
 
     REQUIRE_SUCCESS(err);
 }
@@ -155,7 +155,7 @@ TEST_CASE("DFS throws for invalid start node", "[DFS]") {
 
     DFS dfs(graph);
 
-    auto err = dfs.execute(0);
+    auto err = dfs.execute({0});
 
     REQUIRE_ERROR(err, AlgorithmErrorType::StartNodeMissing,
                   "Start node does not exist in the graph.");

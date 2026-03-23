@@ -44,7 +44,7 @@ void runAStarLoggingTest(const std::shared_ptr<WeightedDirectedGraph> g, unsigne
                                                  StepType::SelectEdge, StepType::UpdateDistance};
 
     // act
-    auto err = astar.execute(startNode, goalNode);
+    auto err = astar.execute({startNode, goalNode});
 
     // assert
     REQUIRE_SUCCESS(err);
@@ -92,7 +92,7 @@ TEST_CASE("A*: simple path exists", "[AStar]") {
     int                   expectedCost = 6;
 
     // act
-    auto err = astar.execute(1, 4);
+    auto err = astar.execute({1, 4});
 
     // assert
     REQUIRE_SUCCESS(err);
@@ -124,7 +124,7 @@ TEST_CASE("A*: finds shortest path in simple graph", "[AStar]") {
     int                   expectedCost  = 3;
 
     // act
-    auto err = astar.execute(1, 4);
+    auto err = astar.execute({1, 4});
 
     // assert
     REQUIRE_SUCCESS(err);
@@ -147,7 +147,7 @@ TEST_CASE("A*: no path exists", "[AStar]") {
     AStar astar(g);
 
     // act
-    auto err = astar.execute(1, 2);
+    auto err = astar.execute({1, 2});
 
     // assert
     REQUIRE_ERROR(err, AlgorithmErrorType::NoPathFound,
@@ -165,7 +165,7 @@ TEST_CASE("A*: negative edge weight", "[AStar]") {
     AStar astar(g);
 
     // act
-    auto err = astar.execute(1, 2);
+    auto err = astar.execute({1, 2});
 
     // assert
     REQUIRE_ERROR(err, AlgorithmErrorType::NegativeEdgeWeights,
