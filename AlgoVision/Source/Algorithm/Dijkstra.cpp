@@ -31,7 +31,9 @@ std::optional<AlgorithmError> Dijkstra::checkConditions(unsigned start) const {
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> Dijkstra::execute(unsigned idStartNode, unsigned) {
+std::optional<AlgorithmError> Dijkstra::execute(const AlgorithmParams& params) {
+    auto idStartNode = params.m_startNode.has_value() ? params.m_startNode.value() : 0;
+
     if(auto err = checkConditions(idStartNode)) {
         return err;
     }
@@ -105,6 +107,6 @@ void Dijkstra::dijkstra(unsigned start) {
         }
     }
 }
-QString Dijkstra::resultString() const {
+QString Dijkstra::getResultString() const {
     return m_resultString;
 }

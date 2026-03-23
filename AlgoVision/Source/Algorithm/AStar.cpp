@@ -35,7 +35,9 @@ std::optional<AlgorithmError> AStar::checkConditions(unsigned start, unsigned go
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> AStar::execute(unsigned start, unsigned goal) {
+std::optional<AlgorithmError> AStar::execute(const AlgorithmParams& params) {
+    auto start = params.m_startNode.has_value() ? params.m_startNode.value() : 0;
+    auto goal = params.m_endNode.has_value() ? params.m_endNode.value() : 0;
 
     if(auto err = checkConditions(start, goal)) {
         return err;
@@ -162,6 +164,6 @@ int AStar::getTotalCost() const {
     return m_totalCost;
 }
 
-QString AStar::resultString() const {
+QString AStar::getResultString() const {
     return QString("Total path cost: %1").arg(m_totalCost);
 }

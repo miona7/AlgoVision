@@ -16,7 +16,7 @@ std::optional<AlgorithmError> Kahn::checkConditions() const {
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> Kahn::execute(unsigned, unsigned) {
+std::optional<AlgorithmError> Kahn::execute(const AlgorithmParams&) {
     if(auto err = checkConditions()) {
         return err;
     }
@@ -83,7 +83,7 @@ const std::vector<unsigned>& Kahn::getSorted() const {
     return m_sorted;
 }
 
-QString Kahn::resultString() const {
+QString Kahn::getResultString() const {
     QString result = "Topological order:\n";
 
     for(size_t i = 0; i < m_sorted.size(); ++i) {

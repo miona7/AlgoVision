@@ -16,7 +16,7 @@ std::optional<AlgorithmError> Prim::checkConditions() const {
     BFS      bfs(m_graph);
     unsigned start = m_graph->getNodes().begin()->first;
 
-    if(auto err = bfs.execute(start)) {
+    if(auto err = bfs.execute(AlgorithmParams{start})) {
         return err;
     }
 
@@ -29,7 +29,7 @@ std::optional<AlgorithmError> Prim::checkConditions() const {
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> Prim::execute(unsigned, unsigned) {
+std::optional<AlgorithmError> Prim::execute(const AlgorithmParams&) {
     if(auto err = checkConditions()) {
         return err;
     }
@@ -110,6 +110,6 @@ void Prim::prim() {
     }
 }
 
-QString Prim::resultString() const {
+QString Prim::getResultString() const {
     return QString("Total MST weight: %1").arg(m_totalWeight);
 }

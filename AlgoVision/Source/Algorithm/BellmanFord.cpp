@@ -22,7 +22,8 @@ std::optional<AlgorithmError> BellmanFord::checkConditions(unsigned start) const
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> BellmanFord::execute(unsigned idStartNode, unsigned) {
+std::optional<AlgorithmError> BellmanFord::execute(const AlgorithmParams& params) {
+    auto idStartNode = params.m_startNode.has_value() ? params.m_startNode.value() : 0;
 
     if(auto err = checkConditions(idStartNode)) {
         return err;
@@ -109,6 +110,6 @@ bool BellmanFord::hasNegativeCycle() const {
     return m_hasNegativeCycle;
 }
 
-QString BellmanFord::resultString() const {
+QString BellmanFord::getResultString() const {
     return m_resultString;
 }

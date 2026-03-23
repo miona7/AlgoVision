@@ -18,7 +18,9 @@ std::optional<AlgorithmError> DFS::checkConditions(unsigned start) const {
     return std::nullopt;
 }
 
-std::optional<AlgorithmError> DFS::execute(unsigned idStartNode, unsigned) {
+std::optional<AlgorithmError> DFS::execute(const AlgorithmParams& params) {
+    auto idStartNode = params.m_startNode.has_value() ? params.m_startNode.value() : 0;
+
     if(auto err = checkConditions(idStartNode)) {
         return err;
     }
@@ -59,7 +61,7 @@ const std::map<unsigned, bool>& DFS::getVisited() const {
     return m_visited;
 }
 
-QString DFS::resultString() const {
+QString DFS::getResultString() const {
     QString res = "DFS order: ";
     for(unsigned v: m_order) {
         res += QString::number(v) + " ";

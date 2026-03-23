@@ -29,12 +29,12 @@ void AlgorithmWorker::run() {
     }
 
     if(alg != nullptr) {
-        if(auto err = alg->execute()) {
+        if(auto err = alg->execute({m_start, m_end})) {
             emit algorithmErrorOccurred(*err);
             return;
         }
 
         emit stepsReady(alg->getSteps());
-        emit resultReady(alg->resultString());
+        emit resultReady(alg->getResultString());
     }
 }

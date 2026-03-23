@@ -17,11 +17,11 @@ public:
     explicit AStar(const std::shared_ptr<Graph>);
 
     std::optional<AlgorithmError> checkConditions(unsigned, unsigned) const;
-    std::optional<AlgorithmError> execute(unsigned, unsigned) override;
+    std::optional<AlgorithmError> execute(const AlgorithmParams&) override;
 
+    QString getResultString() const override;
     const std::vector<unsigned>& getPath() const;
     int                          getTotalCost() const;
-    QString                      resultString() const override;
 
 private:
     std::vector<unsigned> m_path;

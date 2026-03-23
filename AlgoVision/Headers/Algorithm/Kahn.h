@@ -14,10 +14,10 @@ public:
     explicit Kahn(const std::shared_ptr<Graph>);
 
     std::optional<AlgorithmError> checkConditions() const;
-    std::optional<AlgorithmError> execute(unsigned = 0, unsigned = 0) override;
+    std::optional<AlgorithmError> execute(const AlgorithmParams&) override;
 
+    QString getResultString() const override;
     const std::vector<unsigned>& getSorted() const;
-    QString                      resultString() const override;
 
 private:
     std::vector<unsigned> m_sorted;
