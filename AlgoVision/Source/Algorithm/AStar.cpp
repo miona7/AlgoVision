@@ -64,8 +64,9 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
         f[id] = std::numeric_limits<int>::max();
     }
 
-    g[start] = 0;
-    f[start] = heuristic(start, goal);
+    g[start]      = 0;
+    double factor = calculateScalingFactor();
+    f[start]      = heuristic(start, goal, factor);
 
     addStep(AlgorithmStep{StepType::UpdateDistance, start});
 
@@ -118,14 +119,14 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
                         openList.insert(neighbour);
                         parent[neighbour] = current;
                         g[neighbour]      = g[current] + it->second.getWeight();
-                        f[neighbour]      = g[neighbour] + heuristic(neighbour, goal);
+                        f[neighbour]      = g[neighbour] + heuristic(neighbour, goal, factor);
                         pq.emplace(f[neighbour], neighbour);
 
                         addStep(AlgorithmStep{StepType::UpdateDistance, neighbour});
                     } else if(g[neighbour] > g[current] + it->second.getWeight()) {
                         parent[neighbour] = current;
                         g[neighbour]      = g[current] + it->second.getWeight();
-                        f[neighbour]      = g[neighbour] + heuristic(neighbour, goal);
+                        f[neighbour]      = g[neighbour] + heuristic(neighbour, goal, factor);
                         pq.emplace(f[neighbour], neighbour);
 
                         addStep(AlgorithmStep{StepType::UpdateDistance, neighbour});
@@ -174,7 +175,7 @@ double AStar::calculateScalingFactor() const {
     return (count > 0) ? (totalDistance / count) : 1.0;
 }
 
-int AStar::heuristic(unsigned node, unsigned goal) const {
+int AStar::heuristic(unsigned node, unsigned goal, double factor) const {
     auto nodes  = m_graph->getNodes();
     auto itNode = nodes.find(node);
     auto itGoal = nodes.find(goal);
@@ -184,7 +185,6 @@ int AStar::heuristic(unsigned node, unsigned goal) const {
         auto [x2, y2] = itGoal->second.getPosition();
 
         double rawDist = std::sqrt(std::pow(x1 - x2, 2) + std::pow(y1 - y2, 2));
-        double factor  = calculateScalingFactor();
 
         // normalise value
         return static_cast<int>(rawDist / factor);

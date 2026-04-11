@@ -30,7 +30,7 @@ private:
 
     std::optional<AlgorithmError> aStar(unsigned, unsigned);
     double                        calculateScalingFactor() const;
-    int                           heuristic(unsigned, unsigned) const;
+    int                           heuristic(unsigned, unsigned, double) const;
 };
 
 #endif // ASTAR_H
