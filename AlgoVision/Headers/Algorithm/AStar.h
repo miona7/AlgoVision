@@ -29,6 +29,7 @@ private:
     int                   m_totalCost{0};
 
     std::optional<AlgorithmError> aStar(unsigned, unsigned);
+    double                        calculateScalingFactor() const;
     int                           heuristic(unsigned, unsigned) const;
 };
 
