@@ -50,28 +50,31 @@ std::optional<AlgorithmError> AStar::execute(const AlgorithmParams& params) {
 
 std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
     m_path.clear();
-    std::map<unsigned, int>      gScore; // real cost of path from start to current node
-    std::map<unsigned, int>      fScore; // estimated cost from start to goal via current node
+
+    std::set<unsigned> openList = {start};
+    std::set<unsigned> closedList;
+
+    std::map<unsigned, int> g; // minimal found cost of path from start to current node
+    std::map<unsigned, int> f; // estimated cost from start to goal via current node -> f = g + h
     std::map<unsigned, unsigned> parent;
-    std::map<unsigned, bool>     visited;
 
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
-        gScore[id]  = std::numeric_limits<int>::max();
-        fScore[id]  = std::numeric_limits<int>::max();
-        visited[id] = false;
+        g[id] = std::numeric_limits<int>::max();
+        f[id] = std::numeric_limits<int>::max();
     }
 
-    gScore[start] = 0;
-    fScore[start] = heuristic(start, goal);
+    g[start] = 0;
+    f[start] = heuristic(start, goal);
 
     addStep(AlgorithmStep{StepType::UpdateDistance, start});
 
-    // min-heap -> pair<fscore, node>
+    // min-heap -> pair<f, node>
     std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
                         std::greater<>>
         pq;
-    pq.emplace(fScore[start], start);
+    pq.emplace(f[start], start);
+
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
 
@@ -79,17 +82,11 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
         auto [_, current] = pq.top();
         pq.pop();
 
-        if(visited[current]) {
-            continue;
-        }
-
-        visited[current] = true;
-
         addStep(AlgorithmStep{StepType::VisitNode, current});
         addStep(AlgorithmStep{StepType::ProcessNode, current});
 
         if(current == goal) {
-            m_totalCost = gScore[current];
+            m_totalCost = g[current];
 
             // path reconstruction
             while(current != start) {
@@ -101,7 +98,6 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
 
                 current = parent[current];
             }
-
             m_path.push_back(start);
 
             addStep(AlgorithmStep{StepType::AddToPath, start});
@@ -117,24 +113,65 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
                 if(it != edges.end()) {
                     addStep(AlgorithmStep{StepType::ExamineEdge, std::nullopt, current, neighbour});
 
-                    int tentativeG = gScore[current] + it->second.getWeight();
-
-                    if(tentativeG < gScore[neighbour]) {
+                    if(openList.find(neighbour) == openList.end() &&
+                       closedList.find(neighbour) == closedList.end()) {
+                        openList.insert(neighbour);
                         parent[neighbour] = current;
-                        gScore[neighbour] = tentativeG;
-                        fScore[neighbour] = tentativeG + heuristic(neighbour, goal);
+                        g[neighbour]      = g[current] + it->second.getWeight();
+                        f[neighbour]      = g[neighbour] + heuristic(neighbour, goal);
+                        pq.emplace(f[neighbour], neighbour);
+
+                        addStep(AlgorithmStep{StepType::UpdateDistance, neighbour});
+                    } else if(g[neighbour] > g[current] + it->second.getWeight()) {
+                        parent[neighbour] = current;
+                        g[neighbour]      = g[current] + it->second.getWeight();
+                        f[neighbour]      = g[neighbour] + heuristic(neighbour, goal);
+                        pq.emplace(f[neighbour], neighbour);
 
                         addStep(AlgorithmStep{StepType::UpdateDistance, neighbour});
 
-                        pq.emplace(fScore[neighbour], neighbour);
+                        if(closedList.find(neighbour) != closedList.end()) {
+                            closedList.erase(neighbour);
+                            openList.insert(neighbour);
+                        }
                     }
                 }
             }
         }
+        openList.erase(current);
+        closedList.insert(current);
     }
 
     return AlgorithmError{AlgorithmErrorType::NoPathFound,
                           "No path exists between start and goal nodes."};
+}
+
+double AStar::calculateScalingFactor() const {
+    auto edges = m_graph->getEdges();
+    if(edges.empty()) {
+        return 1.0;
+    }
+
+    double totalDistance = 0.0;
+    int    count         = 0;
+
+    auto nodes = m_graph->getNodes();
+    for(const auto& [id, edge]: edges) {
+        auto u = nodes.find(edge.startNode());
+        auto v = nodes.find(edge.endNode());
+
+        if(u != nodes.end() && v != nodes.end()) {
+            auto [x1, y1] = u->second.getPosition();
+            auto [x2, y2] = v->second.getPosition();
+
+            // euclidian distance beetwen nodes in pixels
+            totalDistance += std::sqrt(std::pow(x1 - x2, 2) + std::pow(y1 - y2, 2));
+            count++;
+        }
+    }
+
+    // average distance in pixels
+    return (count > 0) ? (totalDistance / count) : 1.0;
 }
 
 int AStar::heuristic(unsigned node, unsigned goal) const {
@@ -146,7 +183,11 @@ int AStar::heuristic(unsigned node, unsigned goal) const {
         auto [x1, y1] = itNode->second.getPosition();
         auto [x2, y2] = itGoal->second.getPosition();
 
-        return static_cast<int>(std::sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
+        double rawDist = std::sqrt(std::pow(x1 - x2, 2) + std::pow(y1 - y2, 2));
+        double factor  = calculateScalingFactor();
+
+        // normalise value
+        return static_cast<int>(rawDist / factor);
     }
 
     return 0; // fallback heuristic

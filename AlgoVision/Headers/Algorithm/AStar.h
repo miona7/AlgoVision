@@ -1,6 +1,7 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
+#include <set>
 #include <map>
 #include <queue>
 #include <vector>
@@ -28,6 +29,7 @@ private:
     int                   m_totalCost{0};
 
     std::optional<AlgorithmError> aStar(unsigned, unsigned);
+    double                        calculateScalingFactor() const;
     int                           heuristic(unsigned, unsigned) const;
 };
 
