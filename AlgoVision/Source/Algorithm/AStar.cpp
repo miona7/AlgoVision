@@ -50,28 +50,31 @@ std::optional<AlgorithmError> AStar::execute(const AlgorithmParams& params) {
 
 std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
     m_path.clear();
-    std::map<unsigned, int>      gScore; // real cost of path from start to current node
-    std::map<unsigned, int>      fScore; // estimated cost from start to goal via current node
+
+    std::set<unsigned> openList = {start};
+    std::set<unsigned> closedList;
+
+    std::map<unsigned, int> g; // minimal found cost of path from start to current node
+    std::map<unsigned, int> f; // estimated cost from start to goal via current node -> f = g + h
     std::map<unsigned, unsigned> parent;
-    std::map<unsigned, bool>     visited;
 
     auto nodes = m_graph->getNodes();
     for(const auto& [id, _]: nodes) {
-        gScore[id]  = std::numeric_limits<int>::max();
-        fScore[id]  = std::numeric_limits<int>::max();
-        visited[id] = false;
+        g[id] = std::numeric_limits<int>::max();
+        f[id] = std::numeric_limits<int>::max();
     }
 
-    gScore[start] = 0;
-    fScore[start] = heuristic(start, goal);
+    g[start] = 0;
+    f[start] = heuristic(start, goal);
 
     addStep(AlgorithmStep{StepType::UpdateDistance, start});
 
-    // min-heap -> pair<fscore, node>
+    // min-heap -> pair<f, node>
     std::priority_queue<std::pair<int, unsigned>, std::vector<std::pair<int, unsigned>>,
                         std::greater<>>
         pq;
-    pq.emplace(fScore[start], start);
+    pq.emplace(f[start], start);
+
     auto adjList = m_graph->getAdjacencyList();
     auto edges   = m_graph->getEdges();
 
@@ -79,17 +82,11 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
         auto [_, current] = pq.top();
         pq.pop();
 
-        if(visited[current]) {
-            continue;
-        }
-
-        visited[current] = true;
-
         addStep(AlgorithmStep{StepType::VisitNode, current});
         addStep(AlgorithmStep{StepType::ProcessNode, current});
 
         if(current == goal) {
-            m_totalCost = gScore[current];
+            m_totalCost = g[current];
 
             // path reconstruction
             while(current != start) {
@@ -101,7 +98,6 @@ std::optional<AlgorithmError> AStar::aStar(unsigned start, unsigned goal) {
 
                 current = parent[current];
             }
-
             m_path.push_back(start);
 
             addStep(AlgorithmStep{StepType::AddToPath, start});

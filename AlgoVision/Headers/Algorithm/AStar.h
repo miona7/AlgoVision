@@ -1,6 +1,7 @@
 #ifndef ASTAR_H
 #define ASTAR_H
 
+#include <set>
 #include <map>
 #include <queue>
 #include <vector>
